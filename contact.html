@@ -123,7 +123,7 @@
 
     <main id="main-content">
         <section class="contact-section">
-            <h1 class="page-title" id="pageTitle">Initiate<br>Project.</h1>
+            <h1 class="page-title" id="pageTitle">Let's work.</h1>
 
             <!-- Direct channels — primary contact strip -->
             <div class="direct-strip" id="directStrip">
@@ -155,7 +155,7 @@
                 </a>
             </div>
 
-            <div class="form-preamble">Or describe the project in detail:</div>
+            <div class="form-preamble">Or describe the project below:</div>
 
             <div class="contact-grid">
 
@@ -427,29 +427,17 @@
             btn.classList.add('loading');
             btn.disabled = true;
 
-            // ── Web3Forms (free, no backend needed) ──────────────────────────
-            // Get your free access key at https://web3forms.com — paste it below
-            const WEB3FORMS_KEY = 'd1f05dab-40ce-421a-9ef0-73d03a1a8c7a';
-
             try {
-                const res = await fetch('https://api.web3forms.com/submit', {
+                const res = await fetch('/api/contact', {
                     method:  'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body:    JSON.stringify({
-                        access_key:   WEB3FORMS_KEY,
-                        name,
-                        email,
-                        replyto:      email,
-                        from_name:    name,
-                        subject:      'New enquiry: ' + inquiry_type + ' — mohithraisrivastav.com',
-                        message:      'Inquiry Type: ' + inquiry_type + '\nBudget: ' + budget + '\n\nMessage:\n' + message
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ name, email, inquiry_type, message, budget })
                 });
 
                 const data = await res.json();
 
-                if (!res.ok || !data.success) {
-                    throw new Error(data.message || 'Something went wrong.');
+                if (!res.ok || !data.ok) {
+                    throw new Error(data.error || 'Something went wrong.');
                 }
 
                 // Success
@@ -486,17 +474,9 @@
             const form = document.getElementById('contactForm');
             const ack  = document.getElementById('acknowledgement');
 
-            // Populate receipt
-            document.getElementById('ackName').textContent    = name;
-            document.getElementById('ackEmail').textContent   = email;
-            document.getElementById('ackSubject').textContent = inquiry_type || 'General Enquiry';
-            document.getElementById('ackTime').textContent    = new Date().toLocaleString('en-IN', {
-                day: '2-digit', month: 'short', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            }) + ' IST';
             document.getElementById('ackBody').textContent = simulated
-                ? "Message received. Replies may be delayed as email delivery is not active in this environment."
-                : "Your transmission has reached the studio. I'll respond personally within 24–48 hours. An acknowledgement has also been sent to your inbox.";
+                ? "Message received. I'll reply as soon as possible."
+                : "Your message is with me. A confirmation has been sent to your inbox. I'll reply within 24–48 hours — usually sooner.";
 
             // Swap form → acknowledgement
             gsap.to(form, {
