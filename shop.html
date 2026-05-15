@@ -2891,9 +2891,24 @@
 <div id="arSheet" role="dialog" aria-modal="true" aria-label="View print in augmented reality">
   <div class="ar-bar">
     <span class="ar-bar-title" id="arTitle"></span>
-    <button class="ar-close" onclick="closeArSheet()" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="ar-icon-pill" id="arGuideBtn" onclick="toggleArGuide()" aria-label="Alignment guide" title="Alignment guide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="16" height="16"><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <button class="ar-icon-pill" id="arResetBtn" onclick="resetArOrientation()" aria-label="Straighten" title="Straighten">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M3 12a9 9 0 1 0 9-9"/><polyline points="3 4 3 12 11 12"/></svg>
+      </button>
+      <button class="ar-close" onclick="closeArSheet()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- alignment guide: plumb + level reference for the in-page preview -->
+  <div id="arGuide" aria-hidden="true">
+    <div class="ar-guide-v"></div>
+    <div class="ar-guide-h"></div>
+    <div class="ar-guide-dot"></div>
   </div>
 
   <model-viewer id="arViewer"
