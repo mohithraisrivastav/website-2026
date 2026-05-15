@@ -1824,6 +1824,9 @@
         });
 
         /* ══ AR SHEET (model-viewer) ═════════════════════════════ */
+        /* Bump on EVERY /ar regeneration so iOS Quick Look fetches fresh
+           USDZ instead of its cached copy at the same URL. */
+        window.AR_MODEL_VER = '2';
         (function() {
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
@@ -1929,10 +1932,13 @@
                 function applyNative(sz, isDefault) {
                     window.__arNative = false;
                     var sc = slug(sz.label);
-                    var perGlb = 'ar/' + id + '-' + sc + '.glb';
-                    var perUsd = 'ar/' + id + '-' + sc + '.usdz';
-                    var canGlb = 'ar/' + id + '.glb';
-                    var canUsd = 'ar/' + id + '.usdz';
+                    /* AR_MODEL_VER busts iOS Quick Look's aggressive USDZ
+                       URL cache. BUMP THIS whenever you regenerate /ar. */
+                    var v  = '?v=' + (window.AR_MODEL_VER || '1');
+                    var perGlb = 'ar/' + id + '-' + sc + '.glb'  + v;
+                    var perUsd = 'ar/' + id + '-' + sc + '.usdz' + v;
+                    var canGlb = 'ar/' + id + '.glb'  + v;
+                    var canUsd = 'ar/' + id + '.usdz' + v;
 
                     function use(glb, usdz) {
                         viewer.setAttribute('src', glb);
