@@ -3,9 +3,6 @@
   "functions": {
     "api/*.js": {
       "maxDuration": 10
-    },
-    "api/_lib/*.js": {
-      "maxDuration": 10
     }
   },
   "rewrites": [
