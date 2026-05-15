@@ -116,7 +116,7 @@
                 <span>Vol. 01 / 2022 &mdash; 2024</span>
             </div>
             <div class="hero-top-right">
-                <span>8 Films</span>
+                <span>3 Films</span>
                 <span class="dash"></span>
                 <span>Documentary &mdash; Architecture &mdash; Essay</span>
             </div>
@@ -267,14 +267,31 @@
   platform: 'vimeo',
   videoId: '1180402778',
   thumbnail: '',
-  desc: 'A companion film to the fine art series. Burnt earth, cracked glass, and silence across the seven prints.',
-  synopsis: 'Shot across fourteen days in the Majorda fields and a single Assagao studio, Resurface tracks the making of seven prints &mdash; from collected burnt-field debris to the final scanned surface. The film speaks in pauses; the work speaks in texture.',
-  credits: 'Director &mdash; Mohith Rai Srivastav\nCamera &mdash; Self\nSound &mdash; Ambient / field recordings\nColour &mdash; In-house',
+  desc: 'A private residence in Siridao, filmed across two seasons. Monsoon first. Then sun. Then the days both arrived at once.',
+  synopsis: 'Casa Kosha sits in Siridao, Goa. Mohith filmed it twice: first in the monsoon, when rain ran across the surfaces and the interior held a soft green light; then in the dry season, when the house filled with sun and moving air. Some days the weather kept shifting mid-shoot. Cushions went in and out. Floors were dried and reset, five times in a single afternoon. He followed the rhythm of the house instead of the schedule. This film holds that time: rain, sun, waiting, light.',
+  credits: 'Director &mdash; Mohith Rai Srivastav\nCamera &mdash; Self\nSound &mdash; Ambient / field recordings\nColour &mdash; In-house\nArchitecture &mdash; Amit and Associates\nLandscaping &mdash; Daniel D\'souza\nClient &mdash; Randeria Family',
   tech: 'Sony FX3 &mdash; 4K &mdash; 16:9\nAudio &mdash; Binaural field\nEdit &mdash; DaVinci Resolve'
 },
            {
   num: '02',
+  title: 'Khazaan',
+  category: 'documentary',
+  categoryLabel: 'Landscape &mdash; Essay',
+  year: '2025',
+  duration: '1:24',
+  runtime: '1 min 24 sec',
+  platform: 'youtube',
+  videoId: 's_C9mT7Nl5o',
+  thumbnail: '',
+  desc: 'An aerial essay on Goa\'s ancient salt pans. Centuries-old bunds and tidal gates, still working.',
+  synopsis: 'Khazaans are Goa\'s ancient salt pans, a network of earthen bunds and tidal gates built near Panjim. The system moves with the tides, manages flooding, and has done so without interruption for centuries. Shot from the air during a heritage walk organised by Royal Enfield Garage Cafe, with insights from Tallulah D\'Silva. One afternoon above something old-world engineers figured out long before the word sustainable existed.',
+  credits: 'Director &mdash; Mohith Rai Srivastav\nCamera &mdash; DJI AIR 3S\nSound &mdash; Ambient / field recordings\nColour &mdash; In-house\nHeritage Walk &mdash; Royal Enfield Garage Cafe\nInsights &mdash; Tallulah D\'Silva',
+  tech: 'DJI AIR 3S &mdash; 4K &mdash; 16:9\nAudio &mdash; Ambient field'
+},
+           {
+  num: '03',
   title: 'Villa de Fairmount',
+
   category: 'architecture',
   categoryLabel: 'Architecture &mdash; Document',
   year: '2024',
@@ -317,6 +334,23 @@ function getEmbedUrl(item) {
     }
 
     return `https://player.vimeo.com/video/${item.videoId}?autoplay=1&title=0&byline=0&portrait=0&color=ffffff`;
+}
+
+function getReelEmbedUrl(r) {
+    const id = r.videoId || r.vimeoId;
+    if (r.platform === 'youtube') {
+        return 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
+    }
+    return 'https://player.vimeo.com/video/' + id + '?autoplay=1&title=0&byline=0&portrait=0&color=ffffff';
+}
+
+function getReelThumbnail(r) {
+    if (r.thumbnail) return r.thumbnail;
+    const id = r.videoId || r.vimeoId;
+    if (r.platform === 'youtube') {
+        return 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
+    }
+    return '';
 }
 
 /* ======================================================
@@ -471,12 +505,11 @@ filterBtns.forEach(btn => {
                     iframe.allow = 'autoplay; fullscreen; picture-in-picture';
                     iframe.allowFullscreen = true;
                     iframe.style.cssText   = 'width:100%;height:100%;border:0;display:block;';
-                    iframe.src = 'https://player.vimeo.com/video/' + r.vimeoId +
-                                 '?autoplay=1&title=0&byline=0&portrait=0&color=ffffff';
+                    iframe.src = getReelEmbedUrl(r);
                     card.appendChild(iframe);
                 } else {
                     // Side: thumbnail, click navigates
-                    card.style.backgroundImage    = 'url(' + r.thumbnail + ')';
+                    card.style.backgroundImage    = 'url(' + getReelThumbnail(r) + ')';
                     card.style.backgroundSize     = 'cover';
                     card.style.backgroundPosition = 'center';
                     // onclick reads current data-pos at click time — always navigates toward center
@@ -546,7 +579,7 @@ filterBtns.forEach(btn => {
                 if (oldCenter) {
                     var fi = oldCenter.querySelector('iframe');
                     if (fi) { fi.src = ''; fi.remove(); }
-                    oldCenter.style.backgroundImage    = 'url(' + reels[prevIdx].thumbnail + ')';
+                    oldCenter.style.backgroundImage    = 'url(' + getReelThumbnail(reels[prevIdx]) + ')';
                     oldCenter.style.backgroundSize     = 'cover';
                     oldCenter.style.backgroundPosition = 'center';
                 }
@@ -561,7 +594,7 @@ filterBtns.forEach(btn => {
                     recycled.style.transition = 'none';
                     recycled.dataset.pos = String(dir === 1 ? 3 : -3);
                     var farIdx = ((nextIdx + (dir === 1 ? 2 : -2)) % reels.length + reels.length) % reels.length;
-                    recycled.style.backgroundImage    = 'url(' + reels[farIdx].thumbnail + ')';
+                    recycled.style.backgroundImage    = 'url(' + getReelThumbnail(reels[farIdx]) + ')';
                     recycled.style.backgroundSize     = 'cover';
                     recycled.style.backgroundPosition = 'center';
                     var rfi = recycled.querySelector('iframe');
@@ -593,8 +626,7 @@ filterBtns.forEach(btn => {
                             iframe.allow = 'autoplay; fullscreen; picture-in-picture';
                             iframe.allowFullscreen = true;
                             iframe.style.cssText   = 'width:100%;height:100%;border:0;display:block;';
-                            iframe.src = 'https://player.vimeo.com/video/' + reels[nextIdx].vimeoId +
-                                         '?autoplay=1&title=0&byline=0&portrait=0&color=ffffff';
+                            iframe.src = getReelEmbedUrl(reels[nextIdx]);
                             newCenter.appendChild(iframe);
                         }
                     }, 500);
@@ -691,11 +723,12 @@ filterBtns.forEach(btn => {
         ====================================================== */
         const reels = [
             {
-                num: '01', title: 'Light on Laterite',
-                tag: 'Architecture &mdash; 2024',
-                duration: '0:45',
-                vimeoId: '1180402778',
-                thumbnail: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=600&q=85&ar=9:16&crop=top',
+                num: '01', title: 'St. Augustine Church',
+                tag: 'Heritage &mdash; Aerial',
+                duration: '',
+                platform: 'youtube',
+                videoId: '9fAAQh-5GkA',
+                thumbnail: '',
             },
             {
                 num: '02', title: 'Monsoon Walk',
@@ -727,7 +760,7 @@ filterBtns.forEach(btn => {
             },
             {
                 num: '06', title: 'Stairwell',
-                tag: ' Interior &mdash; 2022',
+                tag: 'Interior &mdash; 2022',
                 duration: '0:27',
                 vimeoId: '637481975',
                 thumbnail: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=85',
@@ -740,11 +773,11 @@ filterBtns.forEach(btn => {
             const countEl = document.getElementById('reelsCount');
             if (!track) return;
             countEl.textContent = reels.length + ' Reels';
-            track.innerHTML = reels.map(r => 
+            track.innerHTML = reels.map(r =>
 `
                 <div class="reel-card" onclick="openReel('${r.num}')">
                     <div class="reel-thumb">
-                        <img src="${r.thumbnail}" alt="${r.title}" loading="lazy" draggable="false">
+                        <img src="${getReelThumbnail(r)}" alt="${r.title}" loading="lazy" draggable="false">
                         <span class="reel-num-badge">${r.num}</span>
                         <span class="reel-dur">${r.duration}</span>
                         <div class="reel-play-btn"></div>
