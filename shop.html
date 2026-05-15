@@ -225,6 +225,130 @@
             line-height: 1.6; font-weight: 300;
         }
 
+        /* ── View in Room trigger button (mobile + tablet only) ── */
+        @media (hover: hover) and (pointer: fine) {
+            .rv-trigger-btn { display: none !important; }
+        }
+        .rv-trigger-btn {
+            display: flex; align-items: center; gap: 8px;
+            margin-top: 10px; width: 100%;
+            background: transparent;
+            border: 1.5px solid rgba(26,22,18,0.18);
+            color: rgba(26,22,18,0.65);
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; padding: 13px 20px;
+            cursor: pointer; transition: border-color 0.2s, color 0.2s;
+            justify-content: center;
+        }
+        .rv-trigger-btn:hover {
+            border-color: #1A1612; color: #1A1612;
+        }
+
+        /* ── Room Viewer overlay ── */
+        #roomViewer {
+            display: none; position: fixed; inset: 0; z-index: 99999;
+            background: #000; flex-direction: column;
+            overscroll-behavior: none;
+        }
+        #roomViewer.rv-open { display: flex; }
+
+        #rvVideo {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        /* ── Print overlay ── */
+        #rvPrintWrap {
+            position: absolute; cursor: grab;
+            user-select: none; touch-action: none;
+            filter: drop-shadow(0 12px 48px rgba(0,0,0,0.55));
+            transition: filter 0.2s;
+        }
+        #rvPrintWrap.rv-dragging { cursor: grabbing; }
+        #rvPrintWrap.rv-framed {
+            outline: 14px solid #f2ece0;
+            outline-offset: 0;
+            box-shadow: 0 0 0 15px #f2ece0, 0 0 0 17px rgba(0,0,0,0.25), 0 24px 80px rgba(0,0,0,0.7);
+        }
+        #rvPrint {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover; pointer-events: none;
+        }
+
+        /* ── UI chrome ── */
+        .rv-ui {
+            position: absolute; inset: 0;
+            pointer-events: none;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .rv-top, .rv-bottom { pointer-events: auto; padding: 20px 24px; }
+        .rv-top {
+            display: flex; align-items: center; justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, transparent 100%);
+        }
+        .rv-bottom {
+            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding-bottom: 32px;
+        }
+        .rv-title {
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: rgba(255,255,255,0.8);
+        }
+        .rv-top-right { display: flex; gap: 8px; }
+        .rv-icon-btn {
+            background: none; border: none; color: rgba(255,255,255,0.85);
+            cursor: pointer; padding: 4px; line-height: 1;
+        }
+        .rv-icon-btn:hover { color: #fff; }
+        .rv-pill-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.22);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; padding: 8px 14px; border-radius: 40px;
+            cursor: pointer; backdrop-filter: blur(6px);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .rv-pill-btn:hover { background: rgba(255,255,255,0.22); }
+        .rv-pill-btn.rv-framed-active {
+            background: rgba(207,162,70,0.35);
+            border-color: #CFA246; color: #CFA246;
+        }
+        .rv-size-info {
+            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+        }
+        .rv-hint {
+            font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+
+        /* ── No camera state ── */
+        #rvNoCam {
+            display: none; position: absolute; inset: 0;
+            background: #1A1612;
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 16px; padding: 40px; text-align: center;
+        }
+        .rv-nocam-icon { color: rgba(247,243,236,0.25); margin-bottom: 8px; }
+        #rvNoCam p {
+            font-size: 1rem; color: rgba(247,243,236,0.7);
+            max-width: 260px; line-height: 1.7;
+        }
+        .rv-allow-btn {
+            background: #CFA246; color: #1A1612; border: none;
+            padding: 14px 32px; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; font-size: 0.8rem; cursor: pointer;
+            margin-top: 4px;
+        }
+        .rv-allow-btn:hover { background: #d4a94f; }
+        .rv-nocam-hint {
+            font-size: 0.72rem; color: rgba(247,243,236,0.3);
+            letter-spacing: 1px;
+        }
+
     </style>
 </head>
 <body>
@@ -270,6 +394,10 @@
                         <button class="action-btn" id="modalAddBtn">Add to Cart</button>
                         <button class="action-btn buy-now-btn" id="modalBuyBtn">Buy Now</button>
                     </div>
+                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="View this print in your room">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                        View in Your Room
+                    </button>
 
                     <div class="modal-reassurance" id="modalReassurance"></div>
                     <p class="modal-description" id="modalDescription"></p>
@@ -1050,6 +1178,20 @@
 
             }
 
+            /* ── View in Room button (prints only) ── */
+            var rvBtn = document.getElementById('modalRoomBtn');
+            if (p.origW) {
+                rvBtn.style.display = 'flex';
+                var rvImg = imgPath(p.images[0]);
+                var rvAspW = p.origW, rvAspH = p.origH;
+                var rvDimLabel = p.specs && p.specs['Dimensions'] ? p.specs['Dimensions'] : '';
+                rvBtn.onclick = function() {
+                    openRoomViewer(rvImg, rvDimLabel, rvAspW, rvAspH);
+                };
+            } else {
+                rvBtn.style.display = 'none';
+            }
+
             /* ── Reassurance strip below buy buttons (prints only) ── */
             var reassuranceEl = document.getElementById('modalReassurance');
             reassuranceEl.innerHTML = '';
@@ -1363,6 +1505,206 @@
         document.querySelectorAll('.product-card').forEach(function(card) {
             card.addEventListener('click', function() { _modalTrigger = card; });
         });
+
+        /* ══════════════════════════════════════════════════════
+           ROOM VIEWER
+           ══════════════════════════════════════════════════════ */
+        (function() {
+            var rvStream = null;
+            var rvPos    = { x: 0, y: 0 };
+            var rvSize   = 260;   /* current print width, px */
+            var rvAspect = 1;     /* origW / origH */
+            var isDragging      = false;
+            var dragOffset      = { x: 0, y: 0 };
+            var isFramed        = false;
+            var pinchStart      = 0;
+            var pinchSizeStart  = 0;
+
+            /* ── open ── */
+            window.openRoomViewer = function(imgSrc, dimLabel, aspW, aspH) {
+                var overlay = document.getElementById('roomViewer');
+                var print   = document.getElementById('rvPrint');
+                var sizeEl  = document.getElementById('rvSizeInfo');
+
+                rvAspect = (aspW && aspH) ? aspW / aspH : 1;
+                print.src = imgSrc;
+                if (dimLabel) sizeEl.textContent = dimLabel.replace(/&mdash;/g, '×').replace('—', '×');
+
+                /* initial size: 38% of the shorter viewport edge */
+                rvSize  = Math.min(window.innerWidth, window.innerHeight) * 0.38;
+                rvPos.x = (window.innerWidth  - rvSize) / 2;
+                rvPos.y = (window.innerHeight - rvSize / rvAspect) / 2;
+
+                updateRvTransform();
+                overlay.classList.add('rv-open');
+                document.body.style.overflow = 'hidden';
+                startRvCamera();
+            };
+
+            /* ── close ── */
+            window.closeRoomViewer = function() {
+                document.getElementById('roomViewer').classList.remove('rv-open');
+                document.body.style.overflow = '';
+                if (rvStream) {
+                    rvStream.getTracks().forEach(function(t) { t.stop(); });
+                    rvStream = null;
+                }
+                /* reset frame state */
+                isFramed = false;
+                document.getElementById('rvPrintWrap').classList.remove('rv-framed');
+                document.getElementById('rvFrameBtn').classList.remove('rv-framed-active');
+            };
+
+            /* ── camera ── */
+            window.startRvCamera = function() {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    document.getElementById('rvNoCam').style.display = 'flex';
+                    return;
+                }
+                navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }
+                }).then(function(stream) {
+                    rvStream = stream;
+                    var v = document.getElementById('rvVideo');
+                    v.srcObject = stream;
+                    document.getElementById('rvNoCam').style.display = 'none';
+                }).catch(function() {
+                    document.getElementById('rvNoCam').style.display = 'flex';
+                });
+            };
+
+            /* ── frame toggle ── */
+            window.toggleRvFrame = function() {
+                isFramed = !isFramed;
+                document.getElementById('rvPrintWrap').classList.toggle('rv-framed', isFramed);
+                document.getElementById('rvFrameBtn').classList.toggle('rv-framed-active', isFramed);
+            };
+
+            /* ── save snapshot ── */
+            window.saveRvSnapshot = function() {
+                var canvas = document.createElement('canvas');
+                canvas.width  = window.innerWidth;
+                canvas.height = window.innerHeight;
+                var ctx = canvas.getContext('2d');
+
+                /* draw camera frame */
+                var vid = document.getElementById('rvVideo');
+                if (vid.readyState >= 2) ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+
+                /* draw frame border if active */
+                var wrap = document.getElementById('rvPrintWrap');
+                var rect = wrap.getBoundingClientRect();
+                if (isFramed) {
+                    var b = 14;
+                    ctx.fillStyle = '#f2ece0';
+                    ctx.fillRect(rect.left - b, rect.top - b, rect.width + b*2, rect.height + b*2);
+                }
+
+                /* draw print */
+                var printEl = document.getElementById('rvPrint');
+                try {
+                    ctx.drawImage(printEl, rect.left, rect.top, rect.width, rect.height);
+                } catch(e) { /* cross-origin guard */ }
+
+                /* download */
+                try {
+                    var link = document.createElement('a');
+                    link.download = 'room-view.jpg';
+                    link.href = canvas.toDataURL('image/jpeg', 0.92);
+                    link.click();
+                } catch(e) {
+                    alert('Use your device\'s screenshot button to save this view.');
+                }
+            };
+
+            /* ── position + size ── */
+            function updateRvTransform() {
+                var wrap = document.getElementById('rvPrintWrap');
+                wrap.style.left   = rvPos.x + 'px';
+                wrap.style.top    = rvPos.y + 'px';
+                wrap.style.width  = rvSize  + 'px';
+                wrap.style.height = (rvSize / rvAspect) + 'px';
+            }
+
+            function clampSize(s) {
+                return Math.max(80, Math.min(s, window.innerWidth * 0.92));
+            }
+
+            /* ── mouse drag ── */
+            var wrap = document.getElementById('rvPrintWrap');
+
+            wrap.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                dragOffset.x = e.clientX - rvPos.x;
+                dragOffset.y = e.clientY - rvPos.y;
+                wrap.classList.add('rv-dragging');
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                rvPos.x = e.clientX - dragOffset.x;
+                rvPos.y = e.clientY - dragOffset.y;
+                updateRvTransform();
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (!isDragging) return;
+                isDragging = false;
+                document.getElementById('rvPrintWrap').classList.remove('rv-dragging');
+            });
+
+            /* ── scroll to resize ── */
+            document.getElementById('roomViewer').addEventListener('wheel', function(e) {
+                e.preventDefault();
+                var step = e.deltaY > 0 ? -0.08 : 0.08;
+                rvSize = clampSize(rvSize * (1 + step));
+                updateRvTransform();
+            }, { passive: false });
+
+            /* ── touch: drag + pinch ── */
+            wrap.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    dragOffset.x = e.touches[0].clientX - rvPos.x;
+                    dragOffset.y = e.touches[0].clientY - rvPos.y;
+                } else if (e.touches.length === 2) {
+                    isDragging = false;
+                    pinchStart     = pinchDist(e.touches);
+                    pinchSizeStart = rvSize;
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            wrap.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 1 && isDragging) {
+                    rvPos.x = e.touches[0].clientX - dragOffset.x;
+                    rvPos.y = e.touches[0].clientY - dragOffset.y;
+                    updateRvTransform();
+                } else if (e.touches.length === 2) {
+                    var d = pinchDist(e.touches);
+                    rvSize = clampSize(pinchSizeStart * (d / pinchStart));
+                    updateRvTransform();
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            wrap.addEventListener('touchend', function() { isDragging = false; });
+
+            function pinchDist(touches) {
+                var dx = touches[0].clientX - touches[1].clientX;
+                var dy = touches[0].clientY - touches[1].clientY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            /* ── keyboard close ── */
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.getElementById('roomViewer').classList.contains('rv-open')) {
+                    window.closeRoomViewer();
+                }
+            });
+        })();
+        /* ══════════════════════════════════════════════════════ */
 
         function closeProductModal() {
             var modal = document.getElementById('productModal');
@@ -1984,6 +2326,47 @@
         });
 
 </script>
+<!-- ── Room Viewer Overlay ─────────────────────────────── -->
+<div id="roomViewer" aria-label="View print in your room" role="dialog" aria-modal="true">
+  <video id="rvVideo" autoplay playsinline muted></video>
+
+  <div id="rvPrintWrap">
+    <img id="rvPrint" src="" alt="Print preview" draggable="false">
+  </div>
+
+  <div class="rv-ui">
+    <div class="rv-top">
+      <button class="rv-icon-btn" onclick="closeRoomViewer()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <span class="rv-title">View in Room</span>
+      <div class="rv-top-right">
+        <button class="rv-pill-btn" id="rvFrameBtn" onclick="toggleRvFrame()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+          Frame
+        </button>
+        <button class="rv-pill-btn rv-save" onclick="saveRvSnapshot()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+          Save
+        </button>
+      </div>
+    </div>
+    <div class="rv-bottom">
+      <div class="rv-size-info" id="rvSizeInfo"></div>
+      <div class="rv-hint">Drag to position &nbsp;·&nbsp; Pinch or scroll to resize</div>
+    </div>
+  </div>
+
+  <div id="rvNoCam">
+    <div class="rv-nocam-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" width="40" height="40"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    </div>
+    <p>Allow camera access to see this print in your room.</p>
+    <button onclick="startRvCamera()" class="rv-allow-btn">Allow Camera</button>
+    <span class="rv-nocam-hint">We never record or store your camera feed.</span>
+  </div>
+</div>
+
 <script src="assets/js/currency.js"></script>
 <script src="assets/js/cart.js"></script>
 <script src="assets/js/site.js"></script>
