@@ -253,6 +253,19 @@
             position: absolute; inset: 0; width: 100%; height: 100%;
             object-fit: cover;
         }
+        /* sample gallery wall — used when camera is unavailable */
+        #roomViewer.rv-sample-wall {
+            background:
+                radial-gradient(ellipse 120% 80% at 50% 18%, rgba(255,255,255,0.06) 0%, transparent 60%),
+                linear-gradient(176deg, #d8d2c6 0%, #cdc6b8 42%, #bdb5a4 100%);
+        }
+        #roomViewer.rv-sample-wall #rvVideo { display: none; }
+        #roomViewer.rv-sample-wall::after {
+            content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+            height: 26%;
+            background: linear-gradient(to top, rgba(120,110,92,0.32) 0%, transparent 100%);
+            pointer-events: none;
+        }
 
         /* Print */
         #rvPrintWrap {
@@ -1655,7 +1668,11 @@
                 document.getElementById('rvFrameBtn').classList.remove('rv-on');
 
                 document.getElementById('rvNoCam').style.display = 'none';
-                document.getElementById('roomViewer').classList.add('rv-open');
+                var rvEl = document.getElementById('roomViewer');
+                rvEl.classList.remove('rv-sample-wall');
+                var vEl = document.getElementById('rvVideo');
+                if (vEl) vEl.style.display = '';
+                rvEl.classList.add('rv-open');
                 document.body.style.overflow = 'hidden';
 
                 /* fade print in after a beat */
@@ -1665,7 +1682,8 @@
 
                 showChrome();
                 startRvCamera();
-                startRvOrientation();
+                /* orientation is requested only AFTER camera succeeds —
+                   requesting both in the same gesture makes iOS kill the camera prompt */
             };
 
             /* ── close ── */
@@ -1703,7 +1721,11 @@
                         var v = document.getElementById('rvVideo');
                         v.srcObject = stream;
                         v.play().catch(function(){});
+                        v.style.display = '';
+                        document.getElementById('roomViewer').classList.remove('rv-sample-wall');
                         nc.style.display = 'none';
+                        /* now safe to request orientation — separate gesture window */
+                        setTimeout(startRvOrientation, 400);
                     });
                 }
 
@@ -1715,17 +1737,29 @@
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
                     if (denied) {
-                        p.innerHTML = 'Camera access was denied.<br><br><span style="font-size:0.82rem;font-style:normal;opacity:0.55;line-height:1.7;display:block;">Go to <strong>Settings → Safari → Camera</strong><br>and set this site to Allow.</span>';
-                        if (b) b.style.display = 'none';
+                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">To use your own room, enable camera in<br><strong>Settings → Safari → Camera</strong>.</span>';
                     } else if (err.name === 'NotFoundError') {
                         p.textContent = 'No camera found on this device.';
-                        if (b) b.style.display = 'none';
                     } else {
-                        p.textContent = 'Could not access the camera. Try reloading the page.';
-                        if (b) { b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
+                        p.textContent = 'Camera could not start.';
+                    }
+                    if (b) {
+                        b.style.display = '';
+                        b.textContent = 'View on a Sample Wall';
+                        b.onclick = window.useRvSampleWall;
                     }
                     nc.style.display = 'flex';
                 });
+            };
+
+            /* ── sample wall fallback ── */
+            window.useRvSampleWall = function() {
+                document.getElementById('rvNoCam').style.display = 'none';
+                var v = document.getElementById('rvVideo');
+                if (v) v.style.display = 'none';
+                document.getElementById('roomViewer').classList.add('rv-sample-wall');
+                document.getElementById('rvPrintWrap').classList.add('rv-visible');
+                showChrome();
             };
 
             /* ── frame ── */
