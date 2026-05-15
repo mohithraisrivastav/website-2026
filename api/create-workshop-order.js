@@ -7,8 +7,8 @@ const Razorpay = require('razorpay');
 
 // Workshop fees in paise (INR × 100) — keep in sync with frontend
 const WORKSHOP_FEES = {
-    '1day': 350000,   // ₹3,500
-    '3day': 1150000,  // ₹11,500
+    '1day': 360000,   // ₹3,600
+    '3day': 1140000,  // ₹11,400
     '7day': 2400000   // ₹24,000
 };
 
@@ -59,6 +59,7 @@ module.exports = async (req, res) => {
 
     } catch (err) {
         console.error('create-workshop-order error:', err);
-        return res.status(500).json({ error: err.message || 'Order creation failed' });
+        const detail = err?.error?.description || err?.message || 'Order creation failed';
+        return res.status(500).json({ error: detail });
     }
 };

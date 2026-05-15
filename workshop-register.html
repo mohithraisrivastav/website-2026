@@ -530,8 +530,8 @@
                     }
                 })
             });
-            if (!orderRes.ok) throw new Error('Could not create order. Please try again.');
             const order = await orderRes.json();
+            if (!orderRes.ok) throw new Error(order.error || 'Could not create order. Please try again.');
 
             setLoader(false);
 
