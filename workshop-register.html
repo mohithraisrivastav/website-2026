@@ -531,7 +531,7 @@
                 })
             });
             const order = await orderRes.json();
-            if (!orderRes.ok) throw new Error(order.error || 'Could not create order. Please try again.');
+            if (!orderRes.ok) throw new Error(order.error || order.message || JSON.stringify(order));
 
             setLoader(false);
 
