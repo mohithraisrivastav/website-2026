@@ -22,7 +22,7 @@
 
 <nav class="navbar">
     <a href="index.html" class="logo-link">
-        <img src="images/Mohith LOGO.webp" alt="Logo" class="logo">
+        <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="logo">
     </a>
     <div class="nav-brand">
         <span class="name">Mohith Rai Srivastav</span>
@@ -354,14 +354,14 @@
             label: 'One‑Day Immersion',
             title: 'The One‑Day\nImmersion',
             blurb: 'A single day of guided noticing. You’ll be walked through a chosen site — a fort wall, a laterite quarry, a monsoon courtyard — and taught to slow down, listen, and record.',
-            meta: { Format: '1 Day', 'Group Size': '12 max', Location: 'Goa, India', Date: '7 June 2026', Fee: '₹3,500 per person' },
+            meta: { Format: '1 Day', 'Group Size': '12 max', Location: 'Goa, India', Date: '7 June 2026', Fee: '₹3,600 per person' },
             pdf: ''
         },
         '3day': {
             label: 'Three‑Day Intensive',
             title: 'The Three‑Day\nIntensive',
             blurb: 'A weekend of deeper immersion on one site, with group critique, mentoring, and a mini‑project in your medium.',
-            meta: { Format: '3 Days', 'Group Size': '12 max', Location: 'Goa, India', Date: '19 to 21 June 2026', Fee: '₹11,500 per person' },
+            meta: { Format: '3 Days', 'Group Size': '12 max', Location: 'Goa, India', Date: '19 to 21 June 2026', Fee: '₹11,400 per person' },
             pdf: ''
         },
         '7day': {
@@ -481,17 +481,17 @@
 
     /* ── Payment flow ─────────────────────────────────────── */
     // Workshop fee amounts in paise (INR × 100)
-    const WORKSHOP_FEES_PAISE = { '1day': 350000, '3day': 1150000, '7day': 2400000 };
+    const WORKSHOP_FEES_PAISE = { '1day': 360000, '3day': 1140000, '7day': 2400000 };
 
     let razorpayKeyPromise = null;
+    const RAZORPAY_KEY_FALLBACK = 'rzp_live_SnSDb6pnYeccsB';
+
     function loadRazorpayKey() {
         if (!razorpayKeyPromise) {
             razorpayKeyPromise = fetch('/api/config')
-                .then(r => r.ok ? r.json() : Promise.reject('Config load failed'))
-                .then(cfg => {
-                    if (!cfg.razorpayKeyId) throw new Error('Razorpay key not configured.');
-                    return cfg.razorpayKeyId;
-                });
+                .then(r => r.ok ? r.json() : Promise.reject())
+                .then(cfg => cfg.razorpayKeyId || RAZORPAY_KEY_FALLBACK)
+                .catch(() => RAZORPAY_KEY_FALLBACK);
         }
         return razorpayKeyPromise;
     }
@@ -604,7 +604,10 @@
             setLoader(false);
             btn.disabled = false;
             btn.textContent = 'Submit Application →';
-            showError(err.message || 'Something went wrong. Please try again.');
+            const isNetworkErr = err instanceof TypeError && /fetch/i.test(err.message);
+            showError(isNetworkErr
+                ? 'Unable to reach the payment server. Please check your connection and try again.'
+                : (err.message || 'Something went wrong. Please try again.'));
         }
     }
 

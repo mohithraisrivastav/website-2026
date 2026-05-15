@@ -97,7 +97,7 @@
 <div id="page-curtain"></div>
 
     <nav class="navbar">
-        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="logo"></a>
         <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
         <div class="nav-links-container">
             <ul class="nav-links">
@@ -356,9 +356,9 @@
                         <li>Field journal to keep</li>
                         <li>Capped at 12 people</li>
                     </ul>
-                    <a href="workshop-register.html?type=1day" class="jdt-cta" id="jdtCta">Apply Now &rarr;</a>
+                    <button class="jdt-cta" id="jdtCta" onclick="window.location.href=this.dataset.href" data-href="workshop-register.html?type=1day">Apply now &rarr;</button>
                     <div class="journey-nav">
-                        <button id="jPrev" disabled>&larr; Prev</button>
+                        <button id="jPrev" disabled>&larr; Previous</button>
                         <button id="jNext">Next &rarr;</button>
                         <div class="counter" id="jCounter">01 / 03</div>
                     </div>
@@ -451,7 +451,7 @@
                         <span class="faq-icon" aria-hidden="true">+</span>
                     </button>
                     <div class="faq-answer-wrap">
-                        <div class="faq-answer">Email <a href="mailto:info@mohithraisrivastav.com">info@mohithraisrivastav.com</a>. Tell us your name, what you make, and which date works for you. We'll send you payment details and the location 48 hours before.</div>
+                        <div class="faq-answer">Click "Apply now" above, choose your format, and fill in the short form. Payment is taken securely at checkout. You'll receive a confirmation email immediately. The location is sent 48 hours before the session.</div>
                     </div>
                 </div>
 
@@ -527,8 +527,8 @@
         <path d="M2,7 C50,4 110,9 180,6 C230,4 258,8 278,6" stroke="#F7F3ED" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     </svg>
     <p class="wcta-body" style="margin-bottom: 32px;">Places are capped at twelve people. All three formats are open.</p>
-    <a href="workshop-register.html?type=1day" class="wcta-btn" style="font-size: 1rem; padding: 22px 48px;">Apply now →</a>
-    <p style="margin-top: 16px; font-size: 0.9rem; color: rgba(252,250,246,0.6);">You will receive a short intake form. Mohith responds within 48 hours.</p>
+    <button class="wcta-btn" style="font-size: 1rem; padding: 22px 48px; cursor: pointer;" onclick="window.location.href='workshop-register.html?type=1day'">Apply now →</button>
+    <p style="margin-top: 16px; font-size: 0.9rem; color: rgba(252,250,246,0.6);">Payment is taken securely at checkout. The location is confirmed 48 hours before.</p>
     <p class="wcta-availability" style="margin-top: 28px;">
         <span class="wcta-dot"></span> Next cohort · June 2026 · Goa
     </p>
@@ -770,7 +770,7 @@
             jDate.innerText = d.date;
             jFeaturesList.innerHTML = d.features.map(f => `<li>${f}</li>`).join('');
             jCta.innerHTML = d.cta + ' &rarr;';
-            jCta.href = d.href;
+            jCta.dataset.href = d.href;
             jCounter.innerText = (i + 1).toString().padStart(2, '0') + ' / 03';
             jProgress.style.width = ((i + 1) / journeyData.length * 100) + '%';
             jPrev.disabled = i === 0;

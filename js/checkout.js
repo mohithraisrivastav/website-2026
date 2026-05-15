@@ -58,17 +58,18 @@ const CONFIG = {
   }
 };
 
+const RAZORPAY_KEY_FALLBACK = 'rzp_live_SnSDb6pnYeccsB';
+
 let razorpayConfigPromise = null;
 function loadRazorpayConfig() {
   if (!razorpayConfigPromise) {
     razorpayConfigPromise = fetch('/api/config')
-      .then(res => {
-        if (!res.ok) throw new Error('Unable to load payment configuration.');
-        return res.json();
-      })
+      .then(res => res.ok ? res.json() : Promise.reject())
       .then(config => {
-        CONFIG.RAZORPAY_KEY_ID = config.razorpayKeyId || '';
-        if (!CONFIG.RAZORPAY_KEY_ID) throw new Error('Razorpay key is not configured.');
+        CONFIG.RAZORPAY_KEY_ID = config.razorpayKeyId || RAZORPAY_KEY_FALLBACK;
+      })
+      .catch(() => {
+        CONFIG.RAZORPAY_KEY_ID = RAZORPAY_KEY_FALLBACK;
       });
   }
   return razorpayConfigPromise;

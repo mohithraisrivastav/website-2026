@@ -347,7 +347,7 @@
     </div>
 
     <nav class="navbar">
-        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="logo"></a>
         <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
         <div class="nav-links-container">
             <ul class="nav-links">
@@ -1048,23 +1048,6 @@
                     detailsEl.appendChild(div);
                 });
 
-                /* ── Provenance narrative block ── */
-                if (p.provenance) {
-                    var prov = p.provenance;
-                    var provDiv = document.createElement('div');
-                    provDiv.className = 'modal-provenance';
-                    provDiv.innerHTML =
-                        '<div class="mprov-header">'
-                        + '<span class="mprov-label">Provenance</span>'
-                        + '<button class="mprov-pdf-btn" onclick="printProvenance(\'' + id + '\')">Download as PDF →</button>'
-                        + '</div>'
-                        + '<div class="mprov-fields">'
-                        + '<div class="mprov-field"><span class="mprov-key">Location</span><span class="mprov-val">' + prov.location + '</span></div>'
-                        + '<div class="mprov-field"><span class="mprov-key">Light</span><span class="mprov-val">' + prov.light + '</span></div>'
-                        + '</div>'
-                        + '<div class="mprov-narrative"><p>' + prov.frame + '</p></div>';
-                    detailsEl.appendChild(provDiv);
-                }
             }
 
             /* ── Reassurance strip below buy buttons (prints only) ── */
