@@ -209,16 +209,33 @@ function buildScene(image, wIn, hIn) {
   return scene;
 }
 
-async function exportGLB(scene) {
-  const exporter = new GLTFExporter();
-  const result = await exporter.parseAsync(scene, { binary: true });
-  return result; /* ArrayBuffer */
+/* version-agnostic: parseAsync isn't present in every three build,
+   so fall back to the callback API which is */
+function exportGLB(scene) {
+  const ex = new GLTFExporter();
+  const opts = { binary: true };
+  if (typeof ex.parseAsync === 'function') {
+    return ex.parseAsync(scene, opts);
+  }
+  return new Promise(function (resolve, reject) {
+    try {
+      ex.parse(scene, function (r) { resolve(r); }, function (e) { reject(e); }, opts);
+    } catch (e1) {
+      /* very old signature: parse(input, onDone, options) */
+      try { ex.parse(scene, function (r) { resolve(r); }, opts); }
+      catch (e2) { reject(e2); }
+    }
+  });
 }
 
-async function exportUSDZ(scene) {
-  const exporter = new USDZExporter();
-  const result = await exporter.parseAsync(scene);
-  return result; /* Uint8Array */
+function exportUSDZ(scene) {
+  const ex = new USDZExporter();
+  if (typeof ex.parseAsync === 'function') {
+    return ex.parseAsync(scene);
+  }
+  /* in builds without parseAsync, parse() itself is async (Promise<Uint8Array>) */
+  const r = ex.parse(scene);
+  return (r && typeof r.then === 'function') ? r : Promise.resolve(r);
 }
 
 document.getElementById('goBtn').addEventListener('click', async () => {

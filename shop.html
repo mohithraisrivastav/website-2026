@@ -137,10 +137,22 @@
       return scene;
     }
 
+    function glbExport(scene) {
+      var ex = new GLTFExporter(), opts = { binary: true };
+      if (typeof ex.parseAsync === 'function') return ex.parseAsync(scene, opts);
+      return new Promise(function (resolve, reject) {
+        try {
+          ex.parse(scene, function (r) { resolve(r); }, function (e) { reject(e); }, opts);
+        } catch (e1) {
+          try { ex.parse(scene, function (r) { resolve(r); }, opts); }
+          catch (e2) { reject(e2); }
+        }
+      });
+    }
+
     window.__buildArGLB = function(imgUrl, wIn, hIn) {
       return loadImage(imgUrl).then(function(image) {
-        var scene = buildScene(image, wIn, hIn);
-        return new GLTFExporter().parseAsync(scene, { binary: true });
+        return glbExport(buildScene(image, wIn, hIn));
       }).then(function(glb) {
         var blob = new Blob([glb], { type: 'model/gltf-binary' });
         return URL.createObjectURL(blob);
