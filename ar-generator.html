@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     AR ASSET GENERATOR  —  run this locally, once.
+     Open in a browser FROM THE SITE (so images/ resolves):
+       https://your-site/ar-generator.html
+       or via a local server at the site root.
+     It builds a matte-black framed, borderless print model at
+     true real-world scale for every artwork and downloads a
+     single ar-files.zip. Unzip it at the site root so it
+     creates /ar/<id>.glb and /ar/<id>.usdz.
+     Re-run only when you add or change prints.
+     Keep CATALOG in sync with products{} in shop.html.
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AR Asset Generator — Studio Tool</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: #14110d; color: #f3ede0;
+    font-family: 'Inter', system-ui, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .wrap { width: 100%; max-width: 560px; }
+  h1 {
+    font-family: Georgia, serif; font-weight: 400;
+    font-size: 1.6rem; letter-spacing: 0.5px; margin: 0 0 6px;
+  }
+  .sub { color: rgba(243,237,224,0.5); font-size: 0.85rem; line-height: 1.7; margin: 0 0 28px; }
+  button {
+    background: #CFA246; color: #14110d; border: none;
+    padding: 15px 30px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; font-size: 0.78rem; cursor: pointer;
+    transition: background 0.2s; width: 100%;
+  }
+  button:hover { background: #d8ad52; }
+  button:disabled { opacity: 0.4; cursor: default; }
+  .log {
+    margin-top: 24px; background: #0d0b08; border: 1px solid rgba(243,237,224,0.08);
+    border-radius: 6px; padding: 16px; font-size: 0.78rem; line-height: 1.9;
+    max-height: 320px; overflow-y: auto; font-family: ui-monospace, monospace;
+  }
+  .log .ok  { color: #8fbf6f; }
+  .log .err { color: #d98f8f; }
+  .log .dim { color: rgba(243,237,224,0.4); }
+  .steps {
+    margin: 24px 0 0; padding: 18px 20px; background: rgba(207,162,70,0.07);
+    border-left: 2px solid #CFA246; font-size: 0.82rem; line-height: 1.8;
+    color: rgba(243,237,224,0.75);
+  }
+  .steps strong { color: #f3ede0; }
+  code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 3px; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>AR Asset Generator</h1>
+  <p class="sub">
+    Builds a matte-black framed, borderless print at true real-world
+    scale for every artwork. Outputs one <code>ar-files.zip</code> with a
+    <code>.glb</code> (Android) and <code>.usdz</code> (iPhone) per print.
+  </p>
+
+  <button id="goBtn">Generate AR Files</button>
+
+  <div class="log" id="log"><span class="dim">Ready. Make sure this page is opened from the site root so <code>images/</code> resolves.</span></div>
+
+  <div class="steps">
+    <strong>After it downloads:</strong><br>
+    1. Unzip <code>ar-files.zip</code> at the site root.<br>
+    2. It creates an <code>/ar</code> folder with all files.<br>
+    3. Commit &amp; deploy. The Shop AR button picks them up automatically.<br>
+    <strong>Re-run only when you add or change a print.</strong>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
+
+/* ── CATALOG — keep in sync with products{} in shop.html ──
+   id, source image (use the clean full-bleed artwork = images[0]),
+   real print size in inches (origW × origH).                       */
+const CATALOG = [
+  { id: 'cosmic-return',     img: 'Cosmic Return.webp',     w: 42, h: 31.5 },
+  { id: 'burnt-earth',       img: 'Burnt Earth.jpg',        w: 32, h: 24   },
+  { id: 'chromatic-rupture', img: 'Chromatic Rupture.jpg',  w: 32, h: 24   },
+  { id: 'after-the-fall',    img: 'After The Fall.jpg',     w: 32, h: 25.5 },
+  { id: 'cracked-spectrum',  img: 'Cracked Spectrum.jpg',   w: 32, h: 21.3 },
+  { id: 'still-organism',    img: 'The Still Organism.jpg', w: 24, h: 32   },
+  { id: 'forgotten-skin',    img: 'The Forgotten Skin.jpg', w: 24, h: 32   },
+  { id: 'erosion',           img: 'Erosion.jpg',            w: 24, h: 32   },
+  { id: 'imprint',           img: 'Imprint.jpg',            w: 24, h: 32   }
+];
+
+const IN_TO_M     = 0.0254;
+const FRAME_BORDER = 0.018;  /* 1.8cm matte black border        */
+const FRAME_DEPTH  = 0.032;  /* 3.2cm depth — reads as a frame  */
+
+const logEl = document.getElementById('log');
+function log(msg, cls) {
+  const s = document.createElement('div');
+  if (cls) s.className = cls;
+  s.innerHTML = msg;
+  logEl.appendChild(s);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function loadImage(src) {
+  return new Promise((res, rej) => {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = () => res(im);
+    im.onerror = () => rej(new Error('Image not found: ' + src));
+    im.src = src;
+  });
+}
+
+/* Build a borderless print in a thin matte-black frame, true scale */
+function buildScene(image, wIn, hIn) {
+  const scene = new THREE.Scene();
+
+  const artW = wIn * IN_TO_M;
+  const artH = hIn * IN_TO_M;
+  const outW = artW + FRAME_BORDER * 2;
+  const outH = artH + FRAME_BORDER * 2;
+
+  /* matte black frame body */
+  const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
+    new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
+  );
+  scene.add(frame);
+
+  /* the print face — slight sheen, borderless (fills the opening) */
+  const tex = new THREE.Texture(image);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  tex.anisotropy = 8;
+
+  const art = new THREE.Mesh(
+    new THREE.PlaneGeometry(artW, artH),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+  );
+  art.position.z = FRAME_DEPTH / 2 + 0.0012;
+  scene.add(art);
+
+  return scene;
+}
+
+async function exportGLB(scene) {
+  const exporter = new GLTFExporter();
+  const result = await exporter.parseAsync(scene, { binary: true });
+  return result; /* ArrayBuffer */
+}
+
+async function exportUSDZ(scene) {
+  const exporter = new USDZExporter();
+  const result = await exporter.parseAsync(scene);
+  return result; /* Uint8Array */
+}
+
+document.getElementById('goBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('goBtn');
+  btn.disabled = true;
+  logEl.innerHTML = '';
+
+  const zip = new JSZip();
+  const arDir = zip.folder('ar');
+  let okCount = 0;
+
+  for (const item of CATALOG) {
+    try {
+      log('<span class="dim">▸</span> ' + item.id + ' …');
+      const image = await loadImage('images/' + item.img);
+
+      const glb = await exportGLB(buildScene(image, item.w, item.h));
+      arDir.file(item.id + '.glb', glb);
+
+      const usdz = await exportUSDZ(buildScene(image, item.w, item.h));
+      arDir.file(item.id + '.usdz', usdz);
+
+      okCount++;
+      log('<span class="ok">✓ ' + item.id + '</span> &nbsp;<span class="dim">'
+          + item.w + '×' + item.h + ' in · glb + usdz</span>', null);
+    } catch (e) {
+      log('<span class="err">✕ ' + item.id + ' — ' + e.message + '</span>', null);
+    }
+  }
+
+  log('<span class="dim">Packing zip…</span>');
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'ar-files.zip'; a.click();
+  URL.revokeObjectURL(url);
+
+  log('<span class="ok">● Done — ' + okCount + '/' + CATALOG.length
+      + ' prints. ar-files.zip downloaded.</span>');
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

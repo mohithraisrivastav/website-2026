@@ -57,6 +57,8 @@
 
     <link rel="stylesheet" href="assets/css/pages/shop.css">
     <script src="assets/js/translate.js" defer></script>
+    <!-- model-viewer: native AR Quick Look (iOS) + Scene Viewer (Android) -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
     <style>
         /* ── Detail accordion (Framing / Packaging / Delivery / Returns) ── */
         .md-accordion {
@@ -241,6 +243,84 @@
             justify-content: center;
         }
         .rv-trigger-btn:hover { border-color: #1A1612; color: #1A1612; }
+
+        /* ══ AR SHEET (model-viewer) ══════════════════════════════ */
+        #arSheet {
+            display: none; position: fixed; inset: 0; z-index: 99998;
+            background: radial-gradient(ellipse 130% 90% at 50% 22%, #1c1812 0%, #100d0a 70%);
+            flex-direction: column;
+        }
+        #arSheet.ar-open { display: flex; }
+
+        .ar-bar {
+            position: absolute; top: 0; left: 0; right: 0; z-index: 4;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 22px 24px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+        }
+        .ar-bar-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic; font-weight: 300;
+            font-size: 1.15rem; color: rgba(247,243,236,0.88);
+        }
+        .ar-close {
+            background: rgba(255,255,255,0.08); border: none;
+            width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.85); cursor: pointer;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .ar-close:hover { background: rgba(255,255,255,0.16); }
+
+        #arViewer {
+            flex: 1; width: 100%; height: 100%;
+            --poster-color: transparent;
+            background: transparent;
+        }
+
+        .ar-foot {
+            position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+            padding: 40px 24px 38px;
+            background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+            pointer-events: none;
+        }
+        .ar-dim {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic; font-weight: 300;
+            font-size: clamp(1rem, 3.4vw, 1.35rem);
+            color: rgba(247,243,236,0.7); letter-spacing: 0.02em;
+        }
+        /* The real AR launch button — premium, brand */
+        #arLaunch {
+            pointer-events: auto;
+            display: flex; align-items: center; gap: 11px;
+            background: #CFA246; color: #14110d; border: none;
+            padding: 16px 34px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 3.5px; text-transform: uppercase; cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+        }
+        #arLaunch:hover { background: #d8ad52; }
+        #arLaunch:active { transform: scale(0.98); }
+        #arLaunch svg { width: 17px; height: 17px; }
+        .ar-hint {
+            font-size: 0.66rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(247,243,236,0.32);
+        }
+        /* model-viewer's own AR button (Android Scene Viewer entry) — hidden, we use ours */
+        #arViewer::part(default-ar-button) { display: none; }
+
+        /* loading shimmer */
+        .ar-loading {
+            position: absolute; inset: 0; z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(247,243,236,0.35);
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 1.05rem; letter-spacing: 0.5px;
+            pointer-events: none; transition: opacity 0.4s;
+        }
+        .ar-loading.ar-gone { opacity: 0; }
 
         /* ══ ROOM VIEWER ══════════════════════════════════════════ */
         #roomViewer {
@@ -1257,8 +1337,9 @@
                     var parts = s.str.replace(/&mdash;|—/g,'×').split('×').map(function(v){ return parseFloat(v); });
                     return { label: s.label, w: parts[0] || p.origW, h: parts[1] || p.origH };
                 });
+                var rvId = id, rvTitle = p.title;
                 rvBtn.onclick = function() {
-                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList);
+                    openArSheet(rvId, rvTitle, rvImg, rvAspW, rvAspH, rvSizeList);
                 };
             } else {
                 rvBtn.style.display = 'none';
@@ -1577,6 +1658,97 @@
         document.querySelectorAll('.product-card').forEach(function(card) {
             card.addEventListener('click', function() { _modalTrigger = card; });
         });
+
+        /* ══ AR SHEET (model-viewer) ═════════════════════════════ */
+        (function() {
+            var arProbed = false, arAssetsOk = false;
+            var pending  = null;
+
+            /* Does an AR file exist for this print? (HEAD check, cached) */
+            function assetExists(url) {
+                return fetch(url, { method: 'HEAD' })
+                    .then(function(r){ return r.ok; })
+                    .catch(function(){ return false; });
+            }
+
+            window.openArSheet = function(id, title, img, wIn, hIn, sizeList) {
+                var glb  = 'ar/' + id + '.glb';
+                var usdz = 'ar/' + id + '.usdz';
+
+                assetExists(glb).then(function(ok) {
+                    if (!ok) {
+                        /* No AR model yet — fall back to the camera overlay */
+                        openRoomViewer(img, wIn, hIn, sizeList);
+                        return;
+                    }
+
+                    var sheet  = document.getElementById('arSheet');
+                    var viewer = document.getElementById('arViewer');
+                    var load   = document.getElementById('arLoading');
+
+                    document.getElementById('arTitle').textContent   = title;
+                    document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
+
+                    load.classList.remove('ar-gone');
+                    load.textContent = 'Preparing the print…';
+
+                    viewer.setAttribute('src', glb);
+                    viewer.setAttribute('ios-src', usdz);
+                    viewer.setAttribute('alt', title + ' — framed fine art print');
+                    viewer.setAttribute('poster', img);
+
+                    sheet.classList.add('ar-open');
+                    document.body.style.overflow = 'hidden';
+
+                    viewer.addEventListener('load', function onL() {
+                        load.classList.add('ar-gone');
+                        viewer.removeEventListener('load', onL);
+                    });
+
+                    /* hint text: depends on whether native AR is available */
+                    var hint = document.getElementById('arHint');
+                    if (viewer.canActivateAR) {
+                        hint.textContent = 'Point your phone at the wall';
+                    } else {
+                        hint.textContent = 'Drag to rotate · Open on your phone for live AR';
+                    }
+                });
+            };
+
+            window.closeArSheet = function() {
+                var sheet  = document.getElementById('arSheet');
+                var viewer = document.getElementById('arViewer');
+                sheet.classList.remove('ar-open');
+                document.body.style.overflow = '';
+                /* free the model */
+                viewer.removeAttribute('src');
+                viewer.removeAttribute('ios-src');
+            };
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var viewer = document.getElementById('arViewer');
+                var launch = document.getElementById('arLaunch');
+
+                launch.addEventListener('click', function() {
+                    if (viewer.canActivateAR) {
+                        viewer.activateAR();
+                    } else {
+                        /* desktop / unsupported: nudge the model so they see it's 3D */
+                        viewer.cameraOrbit = '15deg 80deg 105%';
+                        document.getElementById('arHint').textContent =
+                            'Live AR needs a phone. Drag to explore the framed print.';
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' &&
+                        document.getElementById('arSheet').classList.contains('ar-open')) {
+                        window.closeArSheet();
+                    }
+                });
+            });
+        })();
+        /* ══ end AR Sheet ════════════════════════════════════════ */
 
         /* ══ ROOM VIEWER JS ══════════════════════════════════════ */
         (function() {
@@ -2477,6 +2649,42 @@
         });
 
 </script>
+<!-- ── AR Sheet (native AR Quick Look / Scene Viewer) ──── -->
+<div id="arSheet" role="dialog" aria-modal="true" aria-label="View print in augmented reality">
+  <div class="ar-bar">
+    <span class="ar-bar-title" id="arTitle"></span>
+    <button class="ar-close" onclick="closeArSheet()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <model-viewer id="arViewer"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="wall"
+    ar-scale="fixed"
+    camera-controls
+    touch-action="pan-y"
+    shadow-intensity="1.1"
+    shadow-softness="0.9"
+    exposure="1.05"
+    environment-image="neutral"
+    interaction-prompt="none"
+    disable-tap>
+  </model-viewer>
+
+  <div class="ar-loading" id="arLoading">Preparing the print…</div>
+
+  <div class="ar-foot">
+    <div class="ar-dim" id="arDimText"></div>
+    <button id="arLaunch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      See it on your wall
+    </button>
+    <span class="ar-hint" id="arHint">Point your phone at the wall</span>
+  </div>
+</div>
+
 <!-- ── Room Viewer ──────────────────────────────────────── -->
 <div id="roomViewer" role="dialog" aria-modal="true" aria-label="View print in your room">
   <video id="rvVideo" autoplay playsinline muted></video>
