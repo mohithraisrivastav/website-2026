@@ -131,6 +131,38 @@ function loadImage(src) {
   });
 }
 
+const MAX_TEX = 2048;  /* cap texture — only lever on file weight for flat art */
+
+/* Downscale + re-encode the artwork onto a capped canvas.
+   A flat plane's mesh is trivial; the texture is the whole file. */
+function prepTextureCanvas(image) {
+  let w = image.naturalWidth, h = image.naturalHeight;
+  const scale = Math.min(1, MAX_TEX / Math.max(w, h));
+  w = Math.round(w * scale);
+  h = Math.round(h * scale);
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(image, 0, 0, w, h);
+  return c;
+}
+
+/* Soft radial contact shadow — read as the frame meeting the wall */
+function shadowCanvas() {
+  const S = 512;
+  const c = document.createElement('canvas');
+  c.width = S; c.height = S;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(S/2, S/2, S*0.18, S/2, S/2, S*0.5);
+  g.addColorStop(0,   'rgba(0,0,0,0.42)');
+  g.addColorStop(0.6, 'rgba(0,0,0,0.18)');
+  g.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, S, S);
+  return c;
+}
+
 /* Build a borderless print in a thin matte-black frame, true scale */
 function buildScene(image, wIn, hIn) {
   const scene = new THREE.Scene();
@@ -140,6 +172,18 @@ function buildScene(image, wIn, hIn) {
   const outW = artW + FRAME_BORDER * 2;
   const outH = artH + FRAME_BORDER * 2;
 
+  /* baked soft contact shadow, just behind the frame against the wall */
+  const shTex = new THREE.CanvasTexture(shadowCanvas());
+  const shadow = new THREE.Mesh(
+    new THREE.PlaneGeometry(outW * 1.42, outH * 1.42),
+    new THREE.MeshBasicMaterial({
+      map: shTex, transparent: true, opacity: 0.9,
+      depthWrite: false
+    })
+  );
+  shadow.position.set(0.012, -0.016, -FRAME_DEPTH / 2 - 0.004);
+  scene.add(shadow);
+
   /* matte black frame body */
   const frame = new THREE.Mesh(
     new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
@@ -147,10 +191,9 @@ function buildScene(image, wIn, hIn) {
   );
   scene.add(frame);
 
-  /* the print face — slight sheen, borderless (fills the opening) */
-  const tex = new THREE.Texture(image);
+  /* the print face — capped texture, slight sheen, borderless */
+  const tex = new THREE.CanvasTexture(prepTextureCanvas(image));
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.needsUpdate = true;
   tex.anisotropy = 8;
 
   const art = new THREE.Mesh(

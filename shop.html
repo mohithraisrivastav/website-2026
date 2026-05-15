@@ -1663,6 +1663,19 @@
         (function() {
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
+            var arSession = null;
+
+            /* analytics — no-ops if no gtag/dataLayer present */
+            function track(event, params) {
+                try {
+                    if (typeof window.gtag === 'function') {
+                        window.gtag('event', event, params || {});
+                    }
+                    (window.dataLayer = window.dataLayer || []).push(
+                        Object.assign({ event: event }, params || {})
+                    );
+                } catch (e) {}
+            }
 
             /* Does an AR file exist for this print? (HEAD check, cached) */
             function assetExists(url) {
@@ -1699,6 +1712,8 @@
 
                     sheet.classList.add('ar-open');
                     document.body.style.overflow = 'hidden';
+                    arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
+                    track('ar_open', { item_id: id, item_name: title });
 
                     viewer.addEventListener('load', function onL() {
                         load.classList.add('ar-gone');
@@ -1708,7 +1723,7 @@
                     /* hint text: depends on whether native AR is available */
                     var hint = document.getElementById('arHint');
                     if (viewer.canActivateAR) {
-                        hint.textContent = 'Point your phone at the wall';
+                        hint.textContent = 'Move your phone slowly to find a wall';
                     } else {
                         hint.textContent = 'Drag to rotate · Open on your phone for live AR';
                     }
@@ -1720,6 +1735,14 @@
                 var viewer = document.getElementById('arViewer');
                 sheet.classList.remove('ar-open');
                 document.body.style.overflow = '';
+                if (arSession) {
+                    track('ar_close', {
+                        item_id: arSession.id,
+                        item_name: arSession.title,
+                        seconds: Math.round((Date.now() - arSession.t0) / 1000)
+                    });
+                    arSession = null;
+                }
                 /* free the model */
                 viewer.removeAttribute('src');
                 viewer.removeAttribute('ios-src');
@@ -1731,12 +1754,23 @@
 
                 launch.addEventListener('click', function() {
                     if (viewer.canActivateAR) {
+                        if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
                     } else {
                         /* desktop / unsupported: nudge the model so they see it's 3D */
                         viewer.cameraOrbit = '15deg 80deg 105%';
                         document.getElementById('arHint').textContent =
                             'Live AR needs a phone. Drag to explore the framed print.';
+                    }
+                });
+
+                /* track when native AR session actually starts/ends */
+                viewer.addEventListener('ar-status', function(e) {
+                    if (!arSession) return;
+                    if (e.detail.status === 'session-started') {
+                        track('ar_session_start', { item_id: arSession.id, item_name: arSession.title });
+                    } else if (e.detail.status === 'not-presenting') {
+                        track('ar_session_end', { item_id: arSession.id, item_name: arSession.title });
                     }
                 });
 
@@ -2665,9 +2699,10 @@
     ar-scale="fixed"
     camera-controls
     touch-action="pan-y"
-    shadow-intensity="1.1"
-    shadow-softness="0.9"
-    exposure="1.05"
+    shadow-intensity="1.15"
+    shadow-softness="0.95"
+    exposure="1.0"
+    tone-mapping="commerce"
     environment-image="neutral"
     interaction-prompt="none"
     disable-tap>
