@@ -194,8 +194,39 @@
 
     <!-- Confirmation screen -->
     <div class="confirmation" id="confirmationScreen">
+        <div class="conf-tick">
+            <svg viewBox="0 0 72 72" width="56" height="56">
+                <circle cx="36" cy="36" r="30" fill="none" stroke="#CFA246" stroke-width="2"/>
+                <polyline points="20,37 30,47 52,25" fill="none" stroke="#CFA246" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
         <h2>Application Received.</h2>
-        <p id="confBody">Thank you. I'll reply within 48 hours to discuss details and next steps.</p>
+        <p>I'll reply within 48 hours to confirm your spot and share next steps.</p>
+
+        <div class="conf-receipt">
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Workshop</span>
+                <span class="conf-receipt-val" id="confWorkshop"></span>
+            </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Cohort</span>
+                <span class="conf-receipt-val" id="confCohort"></span>
+            </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Fee</span>
+                <span class="conf-receipt-val" id="confFee"></span>
+            </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Name</span>
+                <span class="conf-receipt-val" id="confName"></span>
+            </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Reply to</span>
+                <span class="conf-receipt-val" id="confEmail"></span>
+            </div>
+        </div>
+        <p class="conf-note">Fee is due only after your spot is confirmed. Payment details come with the confirmation email.</p>
+
         <div class="conf-actions">
             <button class="conf-btn" id="confDownloadBtn" onclick="triggerDownload()" hidden aria-hidden="true">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -203,7 +234,6 @@
             </button>
             <a href="workshops.html" class="conf-btn conf-back">Back to Workshops</a>
         </div>
-        <p class="conf-email-note" id="confEmailNote"></p>
     </div>
 </main>
 
@@ -368,6 +398,8 @@
     renderWorkshop(currentType);
 
     /* ── Form submission ──────────────────────────────────── */
+    const WEB3FORMS_KEY = 'd1f05dab-40ce-421a-9ef0-73d03a1a8c7a';
+
     function showError(msg) {
         const el = document.getElementById('errorMsg');
         el.textContent = msg;
@@ -411,44 +443,79 @@
         btn.disabled = true;
         btn.textContent = 'Submitting…';
 
-        const isLocal = window.location.protocol === 'file:' ||
-                        window.location.hostname === 'localhost' ||
-                        window.location.hostname === '127.0.0.1';
+        const data = Object.fromEntries(new FormData(form));
+        const w = WORKSHOPS[currentType];
+        const workshopLabel = w ? w.label : data.workshopTitle;
+        const fee = w ? Object.values(w.meta).find(v => v.includes('₹') || v.includes('per person')) || '' : '';
 
-        if (!isLocal) {
-            try {
-                const data = Object.fromEntries(new FormData(form));
-                const response = await fetch('/api/register-workshop', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (!response.ok) throw new Error('Server error');
-            } catch (err) {
-                showError('Something went wrong. Please try again or email info@mohithraisrivastav.com');
-                btn.disabled = false;
-                btn.textContent = 'Submit Application →';
-                return;
-            }
+        const messageBody = [
+            `Workshop: ${workshopLabel}`,
+            `Cohort: ${data.cohort}`,
+            `Fee: ${fee}`,
+            `---`,
+            `Name: ${data.name}`,
+            `Email: ${data.email}`,
+            `Phone: ${data.phone}`,
+            `City: ${data.city}, ${data.country} ${data.pincode}`,
+            `Experience: ${data.experience}`,
+            `Medium: ${data.medium || '—'}`,
+            `Source: ${data.source || '—'}`,
+            `---`,
+            `What draws them here:`,
+            data.motivation
+        ].join('\n');
+
+        try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    access_key: WEB3FORMS_KEY,
+                    name: data.name,
+                    email: data.email,
+                    replyto: data.email,
+                    from_name: data.name,
+                    subject: `Workshop Application: ${workshopLabel} — ${data.cohort}`,
+                    message: messageBody,
+                    botcheck: false
+                })
+            });
+            const result = await res.json();
+            if (!result.success) throw new Error(result.message || 'Submission failed');
+        } catch (err) {
+            showError('Something went wrong. Please try again or email info@mohithraisrivastav.com');
+            btn.disabled = false;
+            btn.textContent = 'Submit Application →';
+            return;
         }
 
         showConfirmation();
     }
 
     function showConfirmation() {
+        const form = document.getElementById('regForm');
+        const w = WORKSHOPS[currentType];
+        const name = form.querySelector('[name="name"]').value || '';
+        const email = form.querySelector('[name="email"]').value || '';
+        const cohort = form.querySelector('[name="cohort"]').value || '';
+        const fee = w ? (w.meta['Fee'] || '') : '';
+
+        // Populate receipt rows
+        document.getElementById('confWorkshop').textContent = w ? w.label : '';
+        document.getElementById('confCohort').textContent = cohort;
+        document.getElementById('confFee').textContent = fee;
+        document.getElementById('confName').textContent = name;
+        document.getElementById('confEmail').textContent = email;
+
         document.getElementById('regContainer').style.display = 'none';
         const conf = document.getElementById('confirmationScreen');
         conf.classList.add('show');
-
-        const email = document.querySelector('[name="email"]').value || 'your email';
-        document.getElementById('confEmailNote').innerHTML =
-            `We will reply at <strong>${email}</strong> with confirmation details and the brochure.`;
+        conf.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         const downloadBtn = document.getElementById('confDownloadBtn');
-        const hasBrochure = Boolean(WORKSHOPS[currentType] && WORKSHOPS[currentType].pdf);
+        const hasBrochure = Boolean(w && w.pdf);
         downloadBtn.hidden = !hasBrochure;
         downloadBtn.setAttribute('aria-hidden', hasBrochure ? 'false' : 'true');
-        conf.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function triggerDownload() {

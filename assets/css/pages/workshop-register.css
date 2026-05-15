@@ -184,6 +184,33 @@
             border-color: rgba(26, 22, 18,0.2); background: transparent; color: #666;
         }
         .conf-back:hover { border-color: #1A1612; color: #1A1612; background: transparent; }
+        .conf-tick { margin-bottom: 28px; }
+        .conf-receipt {
+            margin: 0 auto 32px;
+            max-width: 480px;
+            border: 1px solid rgba(207,162,70,0.25);
+            border-radius: 4px;
+            overflow: hidden;
+            text-align: left;
+        }
+        .conf-receipt-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            gap: 16px;
+        }
+        .conf-receipt-row:last-child { border-bottom: none; }
+        .conf-receipt-label {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #CFA246; flex-shrink: 0;
+        }
+        .conf-receipt-val {
+            font-size: 0.95rem; color: #1A1612; text-align: right;
+        }
+        .conf-note {
+            font-size: 0.82rem !important; color: #999 !important;
+            margin-bottom: 32px !important;
+        }
         .conf-email-note {
             margin-top: 24px; font-size: 0.85rem; color: #888; line-height: 1.7;
         }

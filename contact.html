@@ -216,35 +216,14 @@
 
                     <!-- Acknowledgement Receipt (shown after success) -->
                     <div class="acknowledgement" id="acknowledgement">
-                        <div>
-                            <div class="ack-label">Transmission Sent</div>
-                        </div>
                         <div class="tick-wrap">
                             <svg viewBox="0 0 72 72" width="72" height="72">
                                 <circle class="tick-circle" id="tickCircle" cx="36" cy="36" r="30"/>
                                 <polyline class="tick-check" id="tickCheck" points="20,37 30,47 52,25"/>
                             </svg>
                         </div>
-                        <div class="ack-title">Message received.</div>
-                        <div class="ack-body" id="ackBody">Your transmission has reached the studio. I'll respond personally within 24–48 hours. An acknowledgement has also been sent to your inbox.</div>
-                        <div class="ack-receipt" id="ackReceipt">
-                            <div class="ack-receipt-row">
-                                <span class="r-label">From</span>
-                                <span class="r-value" id="ackName">—</span>
-                            </div>
-                            <div class="ack-receipt-row">
-                                <span class="r-label">Email</span>
-                                <span class="r-value" id="ackEmail">—</span>
-                            </div>
-                            <div class="ack-receipt-row">
-                                <span class="r-label">Inquiry</span>
-                                <span class="r-value" id="ackSubject">—</span>
-                            </div>
-                            <div class="ack-receipt-row">
-                                <span class="r-label">Received</span>
-                                <span class="r-value" id="ackTime">—</span>
-                            </div>
-                        </div>
+                        <div class="ack-title">Got it, thank you.</div>
+                        <div class="ack-body" id="ackBody">I read every message myself. I'll get back to you within a day or two — usually sooner.</div>
                         <button class="ack-new-btn" onclick="resetForm()">Send another message</button>
                     </div>
                 </div>
@@ -459,16 +438,18 @@
                         access_key:   WEB3FORMS_KEY,
                         name,
                         email,
-                        subject:      'New enquiry: ' + inquiry_type,
-                        message:      'Inquiry Type: ' + inquiry_type + '\nBudget: ' + budget + '\n\n' + message,
-                        botcheck:     honeypot
+                        replyto:      email,
+                        from_name:    name,
+                        subject:      'New enquiry: ' + inquiry_type + ' — mohithraisrivastav.com',
+                        message:      'Inquiry Type: ' + inquiry_type + '\nBudget: ' + budget + '\n\nMessage:\n' + message,
+                        botcheck:     false   // honeypot already passed client-side; tell Web3Forms this is human
                     })
                 });
 
                 const data = await res.json();
 
                 if (!res.ok || !data.success) {
-                    throw new Error(data.message || 'Something went wrong. Please try again.');
+                    throw new Error(data.message || 'Something went wrong.');
                 }
 
                 // Success
@@ -476,10 +457,20 @@
                 showAcknowledgement({ name, email, inquiry_type });
 
             } catch (err) {
-                const msg = (err instanceof TypeError)
-                    ? 'Could not reach the server. Please email directly: info@mohithraisrivastav.com'
-                    : (err.message || 'Something went wrong. Please try again.');
-                showError(msg);
+                // Fallback: mailto link so the message is never lost
+                const mailBody = encodeURIComponent(
+                    'Name: ' + name + '\nEmail: ' + email +
+                    '\nInquiry: ' + inquiry_type + '\nBudget: ' + budget +
+                    '\n\nMessage:\n' + message
+                );
+                const mailtoLink = 'mailto:info@mohithraisrivastav.com'
+                    + '?subject=' + encodeURIComponent('Enquiry: ' + inquiry_type)
+                    + '&body=' + mailBody;
+
+                const errEl = document.getElementById('formError');
+                errEl.innerHTML = 'Send failed. <a href="' + mailtoLink
+                    + '" style="color:inherit;text-decoration:underline;">Click here to send via email app</a> instead.';
+                errEl.classList.add('visible');
                 btn.classList.remove('loading');
                 btn.disabled = false;
             }
