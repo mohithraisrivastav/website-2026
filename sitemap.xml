@@ -1,151 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Core pages -->
+  <!-- Core Pages -->
   <url>
-    <loc>https://mohithraisrivastav.com/</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.mohithraisrivastav.com/</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/about.html</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://mohithraisrivastav.com/work.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/about.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/shop.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/work.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/photography.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/workshops.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/film.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/film.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/resurface.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/journal.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/workshops.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/shop.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/contact.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/blog.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 
+  <!-- Essays -->
   <url>
-    <loc>https://mohithraisrivastav.com/contact.html</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <!-- Project pages -->
-  <url>
-    <loc>https://mohithraisrivastav.com/Work/casa-kosha.html</loc>
-    <lastmod>2026-05-15</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://mohithraisrivastav.com/Work/eleve-eco-resort.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/essay-01.html</loc>
+    <lastmod>2024-10-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/secure-meters.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/essay-02.html</loc>
+    <lastmod>2024-09-22</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/iim-bangalore.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/essay-03.html</loc>
+    <lastmod>2024-08-08</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/essay-04.html</loc>
+    <lastmod>2024-06-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
 
+  <!-- Project Case Studies -->
   <url>
-    <loc>https://mohithraisrivastav.com/Work/seven-doors.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/casa-kosha.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/solo-house.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/anokhi.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/sawantwadi-palace.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/baithak.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/rio-estillo.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/iim-bangalore.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/baithak.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/sawantwadi-palace.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/anokhi.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/seven-doors.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/villa-lluvia.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/villa-lluvia.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/vaivi-space-designs.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/solo-house.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
-
   <url>
-    <loc>https://mohithraisrivastav.com/Work/2010-design-house.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <loc>https://www.mohithraisrivastav.com/Work/eleve-eco-resort.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/Work/vaivi-space-designs.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/Work/rio-estillo.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mohithraisrivastav.com/Work/secure-meters.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>

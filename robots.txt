@@ -1,16 +1,16 @@
 User-agent: *
 Allow: /
 
-# Transactional & utility pages — no indexing needed
+# Block transaction and internal pages
 Disallow: /checkout.html
 Disallow: /order-success.html
 Disallow: /order-failed.html
-Disallow: /workshop-register.html
-Disallow: /shop1.html
+Disallow: /membership.html
+Disallow: /journal.html
+Disallow: /shop-demo.html
+Disallow: /nav-flowchart.html
+Disallow: /audit-report.html
+Disallow: /assets.html
+Disallow: /ar-generator.html
 
-# Backend & assets
-Disallow: /api/
-Disallow: /js/
-Disallow: /.backup/
-
-Sitemap: https://mohithraisrivastav.com/sitemap.xml
+Sitemap: https://www.mohithraisrivastav.com/sitemap.xml
