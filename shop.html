@@ -1654,6 +1654,7 @@
                 document.getElementById('rvPrintWrap').classList.remove('rv-framed');
                 document.getElementById('rvFrameBtn').classList.remove('rv-on');
 
+                document.getElementById('rvNoCam').style.display = 'none';
                 document.getElementById('roomViewer').classList.add('rv-open');
                 document.body.style.overflow = 'hidden';
 
@@ -1679,33 +1680,58 @@
 
             /* ── camera ── */
             window.startRvCamera = function() {
-                var nc=document.getElementById('rvNoCam'), p=nc.querySelector('p'), b=nc.querySelector('.rv-allow-btn');
-                if (!window.isSecureContext) {
-                    p.textContent='Camera requires HTTPS. Open the live site on your phone.';
-                    if(b) b.style.display='none'; nc.style.display='flex'; return;
+                var nc = document.getElementById('rvNoCam');
+                var p  = nc.querySelector('p');
+                var b  = nc.querySelector('.rv-allow-btn');
+
+                /* reset from any previous failed state */
+                nc.style.display = 'none';
+                if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; }
+
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    p.textContent = 'Camera is not supported in this browser.';
+                    if (b) b.style.display = 'none';
+                    nc.style.display = 'flex';
+                    return;
                 }
-                if (!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) {
-                    p.textContent='Your browser does not support camera access.';
-                    if(b) b.style.display='none'; nc.style.display='flex'; return;
+
+                /* try rear camera, fall back to any camera */
+                function tryCamera(constraints) {
+                    return navigator.mediaDevices.getUserMedia(constraints)
+                    .then(function(stream) {
+                        rvStream = stream;
+                        var v = document.getElementById('rvVideo');
+                        v.srcObject = stream;
+                        v.play().catch(function(){});
+                        nc.style.display = 'none';
+                    });
                 }
-                navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ideal:'environment'} } })
-                .then(function(stream){
-                    rvStream=stream;
-                    var v=document.getElementById('rvVideo');
-                    v.srcObject=stream; v.play().catch(function(){});
-                    nc.style.display='none';
-                }).catch(function(err){
-                    if(err.name==='NotAllowedError'||err.name==='PermissionDeniedError'){
-                        p.textContent='Camera was denied. Enable it in your browser settings.';
-                        if(b) b.style.display='none';
-                    } else if(err.name==='NotFoundError'){
-                        p.textContent='No camera found on this device.';
-                        if(b) b.style.display='none';
+
+                tryCamera({ video: { facingMode: { ideal: 'environment' } } })
+                .catch(function() {
+                    /* rear camera failed — try any camera */
+                    return tryCamera({ video: true });
+                })
+                .catch(function(err) {
+                    var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
+                    if (denied) {
+                        p.textContent = 'Camera access was denied.';
+                        if (b) {
+                            b.textContent = 'Open Settings';
+                            b.style.display = '';
+                            b.onclick = function() {
+                                /* iOS: prompt user to open Settings manually */
+                                alert('To allow camera: open your phone\'s Settings → Safari (or your browser) → Camera → Allow for this site.');
+                            };
+                        }
+                    } else if (err.name === 'NotFoundError') {
+                        p.textContent = 'No camera found on this device.';
+                        if (b) b.style.display = 'none';
                     } else {
-                        p.textContent='Could not start camera.';
-                        if(b) b.textContent='Try Again';
+                        p.textContent = 'Could not access the camera. Try reloading the page.';
+                        if (b) { b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     }
-                    nc.style.display='flex';
+                    nc.style.display = 'flex';
                 });
             };
 
