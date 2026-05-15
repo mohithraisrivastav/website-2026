@@ -125,7 +125,12 @@ function loadImage(src) {
   return new Promise((res, rej) => {
     const im = new Image();
     im.crossOrigin = 'anonymous';
-    im.onload = () => res(im);
+    im.onload = async () => {
+      /* onload fires before a large image is DECODED — drawing it now
+         yields a blank canvas. decode() guarantees the pixels exist. */
+      try { if (im.decode) await im.decode(); } catch (e) {}
+      res(im);
+    };
     im.onerror = () => rej(new Error('Image not found: ' + src));
     im.src = src;
   });
@@ -133,9 +138,10 @@ function loadImage(src) {
 
 const MAX_TEX = 2048;  /* cap texture — only lever on file weight for flat art */
 
-/* Downscale + re-encode the artwork onto a capped canvas.
-   A flat plane's mesh is trivial; the texture is the whole file. */
-function prepTextureCanvas(image) {
+/* Downscale, then re-encode as a real <img> element. GLTFExporter only
+   embeds textures whose source is an HTMLImageElement — canvas-sourced
+   textures are silently dropped by some exporter builds → blank print. */
+function prepImageEl(image) {
   let w = image.naturalWidth, h = image.naturalHeight;
   const scale = Math.min(1, MAX_TEX / Math.max(w, h));
   w = Math.round(w * scale);
@@ -145,7 +151,16 @@ function prepTextureCanvas(image) {
   const ctx = c.getContext('2d');
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(image, 0, 0, w, h);
-  return c;
+  const dataUrl = c.toDataURL('image/jpeg', 0.86);
+  return new Promise((res, rej) => {
+    const out = new Image();
+    out.onload = async () => {
+      try { if (out.decode) await out.decode(); } catch (e) {}
+      res(out);
+    };
+    out.onerror = () => rej(new Error('texture re-encode failed'));
+    out.src = dataUrl;
+  });
 }
 
 /* Soft radial contact shadow — read as the frame meeting the wall */
@@ -164,17 +179,13 @@ function shadowCanvas() {
 }
 
 /* Build a borderless print in a thin matte-black frame, true scale */
-function buildScene(image, wIn, hIn) {
+async function buildScene(image, wIn, hIn) {
   const scene = new THREE.Scene();
 
   const artW = wIn * IN_TO_M;
   const artH = hIn * IN_TO_M;
   const outW = artW + FRAME_BORDER * 2;
   const outH = artH + FRAME_BORDER * 2;
-
-  /* NO baked shadow plane — it bloated the bounding box (1.42× and behind
-     the frame), which broke wall seating, scale, and native manipulation.
-     Quick Look / Scene Viewer render their own real contact shadow. */
 
   /* matte black frame body — bounding box = exactly the framed print */
   const frame = new THREE.Mesh(
@@ -183,10 +194,12 @@ function buildScene(image, wIn, hIn) {
   );
   scene.add(frame);
 
-  /* the print face — capped texture, slight sheen, borderless */
-  const tex = new THREE.CanvasTexture(prepTextureCanvas(image));
+  /* the print face — decoded, downscaled, real <img> texture */
+  const texImg = await prepImageEl(image);
+  const tex = new THREE.Texture(texImg);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
+  tex.needsUpdate = true;
 
   const art = new THREE.Mesh(
     new THREE.PlaneGeometry(artW, artH),
@@ -241,10 +254,11 @@ document.getElementById('goBtn').addEventListener('click', async () => {
       log('<span class="dim">▸</span> ' + item.id + ' …');
       const image = await loadImage('images/' + item.img);
 
-      const glb = await exportGLB(buildScene(image, item.w, item.h));
+      const scene = await buildScene(image, item.w, item.h);
+      const glb = await exportGLB(scene);
       arDir.file(item.id + '.glb', glb);
 
-      const usdz = await exportUSDZ(buildScene(image, item.w, item.h));
+      const usdz = await exportUSDZ(scene);
       arDir.file(item.id + '.usdz', usdz);
 
       okCount++;

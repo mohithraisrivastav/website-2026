@@ -79,12 +79,17 @@
       return new Promise(function(res, rej) {
         var im = new Image();
         im.crossOrigin = 'anonymous';
-        im.onload = function(){ res(im); };
+        im.onload = function(){
+          /* onload precedes DECODE for large images → blank draw */
+          if (im.decode) { im.decode().then(function(){ res(im); }, function(){ res(im); }); }
+          else res(im);
+        };
         im.onerror = function(){ rej(new Error('image load failed')); };
         im.src = src;
       });
     }
-    function texCanvas(image) {
+    /* downscale → real <img> (exporters skip canvas-sourced textures) */
+    function prepImageEl(image) {
       var w = image.naturalWidth, h = image.naturalHeight;
       var s = Math.min(1, MAX_TEX / Math.max(w, h));
       w = Math.round(w * s); h = Math.round(h * s);
@@ -93,7 +98,16 @@
       var x = c.getContext('2d');
       x.imageSmoothingQuality = 'high';
       x.drawImage(image, 0, 0, w, h);
-      return c;
+      var dataUrl = c.toDataURL('image/jpeg', 0.86);
+      return new Promise(function(res, rej) {
+        var out = new Image();
+        out.onload = function(){
+          if (out.decode) { out.decode().then(function(){ res(out); }, function(){ res(out); }); }
+          else res(out);
+        };
+        out.onerror = function(){ rej(new Error('texture re-encode failed')); };
+        out.src = dataUrl;
+      });
     }
     function buildScene(image, wIn, hIn) {
       var scene = new THREE.Scene();
@@ -109,16 +123,19 @@
       );
       scene.add(frame);
 
-      var tex = new THREE.CanvasTexture(texCanvas(image));
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = 8;
-      var art = new THREE.Mesh(
-        new THREE.PlaneGeometry(artW, artH),
-        new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
-      );
-      art.position.z = FRAME_DEPTH / 2 + 0.0012;
-      scene.add(art);
-      return scene;
+      return prepImageEl(image).then(function(texImg) {
+        var tex = new THREE.Texture(texImg);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        tex.needsUpdate = true;
+        var art = new THREE.Mesh(
+          new THREE.PlaneGeometry(artW, artH),
+          new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+        );
+        art.position.z = FRAME_DEPTH / 2 + 0.0012;
+        scene.add(art);
+        return scene;
+      });
     }
 
     function glbExport(scene) {
@@ -135,12 +152,13 @@
     }
 
     window.__buildArGLB = function(imgUrl, wIn, hIn) {
-      return loadImage(imgUrl).then(function(image) {
-        return glbExport(buildScene(image, wIn, hIn));
-      }).then(function(glb) {
-        var blob = new Blob([glb], { type: 'model/gltf-binary' });
-        return URL.createObjectURL(blob);
-      });
+      return loadImage(imgUrl)
+        .then(function(image) { return buildScene(image, wIn, hIn); })
+        .then(function(scene) { return glbExport(scene); })
+        .then(function(glb) {
+          var blob = new Blob([glb], { type: 'model/gltf-binary' });
+          return URL.createObjectURL(blob);
+        });
     };
     </script>
     <style>
