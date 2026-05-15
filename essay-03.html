@@ -65,10 +65,19 @@
   <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
   <div class="nav-links-container">
     <ul class="nav-links">
-      <li><a href="about.html">About</a></li>
-      <li><a href="work.html">Work</a></li>
-      <li><a href="film.html">Films</a></li>
-      <li><a href="journal.html" class="active">Journal</a></li>
+      <li class="nav-has-dropdown"><a href="work.html">Work</a>
+          <ul class="nav-dropdown">
+              <li><a href="photography.html">Photography</a></li>
+              <li><a href="film.html">Films</a></li>
+          </ul>
+      </li>
+      <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+          <ul class="nav-dropdown">
+              <li><a href="about.html">About</a></li>
+              <li><a href="journal.html" class="active">Journal</a></li>
+              <li><a href="resurface.html">Resurface</a></li>
+          </ul>
+      </li>
       <li><a href="workshops.html">Workshops</a></li>
       <li><a href="shop.html">Shop</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -78,14 +87,25 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="about.html" onclick="toggleMenu()">About</a>
-  <a href="work.html" onclick="toggleMenu()">Work</a>
-  <a href="film.html" onclick="toggleMenu()">Films</a>
-  <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+  <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+  <div class="mobile-nav-group">
+      <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+      <div class="mobile-nav-children">
+          <a href="photography.html" onclick="toggleMenu()">Photography</a>
+          <a href="film.html" onclick="toggleMenu()">Films</a>
+      </div>
+  </div>
+  <div class="mobile-nav-group">
+      <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+      <div class="mobile-nav-children">
+          <a href="about.html" onclick="toggleMenu()">About</a>
+          <a href="journal.html" onclick="toggleMenu()" class="active">Journal</a>
+          <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+      </div>
+  </div>
   <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
   <a href="shop.html" onclick="toggleMenu()">Shop</a>
   <a href="contact.html" onclick="toggleMenu()">Contact</a>
-  <a href="#" onclick="toggleMenu();toggleCart();return false;">Cart</a>
 </div>
 <div class="global-back-bar essay-back">
   <a href="journal.html" class="global-back-link" onclick="if(document.referrer&&document.referrer!==window.location.href){history.back();return false;}"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Journal</a>
