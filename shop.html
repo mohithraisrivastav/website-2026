@@ -1715,15 +1715,8 @@
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
                     if (denied) {
-                        p.textContent = 'Camera access was denied.';
-                        if (b) {
-                            b.textContent = 'Open Settings';
-                            b.style.display = '';
-                            b.onclick = function() {
-                                /* iOS: prompt user to open Settings manually */
-                                alert('To allow camera: open your phone\'s Settings → Safari (or your browser) → Camera → Allow for this site.');
-                            };
-                        }
+                        p.innerHTML = 'Camera access was denied.<br><br><span style="font-size:0.82rem;font-style:normal;opacity:0.55;line-height:1.7;display:block;">Go to <strong>Settings → Safari → Camera</strong><br>and set this site to Allow.</span>';
+                        if (b) b.style.display = 'none';
                     } else if (err.name === 'NotFoundError') {
                         p.textContent = 'No camera found on this device.';
                         if (b) b.style.display = 'none';
