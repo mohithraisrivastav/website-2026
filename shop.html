@@ -434,6 +434,27 @@
             font-size: clamp(1rem, 3.4vw, 1.35rem);
             color: rgba(247,243,236,0.7); letter-spacing: 0.02em;
         }
+        .ar-size-chips {
+            pointer-events: auto;
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+        }
+        .ar-size-chip {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(247,243,236,0.7);
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; padding: 8px 15px; border-radius: 40px;
+            cursor: pointer; backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .ar-size-chip:hover { background: rgba(255,255,255,0.14); }
+        .ar-size-chip.ar-sz-on {
+            background: rgba(207,162,70,0.26);
+            border-color: rgba(207,162,70,0.6);
+            color: #CFA246;
+        }
+        .ar-size-chip[disabled] { opacity: 0.4; pointer-events: none; }
         /* The real AR launch button — premium, brand */
         #arLaunch {
             pointer-events: auto;
@@ -1832,12 +1853,13 @@
                 return /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|Twitter|TikTok|Musical|Snapchat|Pinterest|LinkedInApp|WhatsApp/i.test(ua);
             }
 
-            window.openArSheet = function(id, title, img, wIn, hIn) {
+            window.openArSheet = function(id, title, img, wIn, hIn, sizeList) {
                 var sheet  = document.getElementById('arSheet');
                 var viewer = document.getElementById('arViewer');
                 var load   = document.getElementById('arLoading');
                 var launch = document.getElementById('arLaunch');
                 var hintEl = document.getElementById('arHint');
+                var chipsEl = document.getElementById('arSizeChips');
 
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
@@ -1861,6 +1883,7 @@
                     launch.innerHTML =
                         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link';
                     hintEl.textContent = 'Then paste it into Chrome or Safari';
+                    chipsEl.innerHTML = '';
                     return;
                 }
 
@@ -1885,75 +1908,126 @@
                     viewer.removeEventListener('load', onL);
                 });
 
-                /* native AR needs REAL hosted urls — OS apps can't read blobs */
-                var hostedGlb  = 'ar/' + id + '.glb';
-                var hostedUsdz = 'ar/' + id + '.usdz';
-                window.__arNative = false;
-
-                function enableHostedAR() {
-                    /* swap the blob preview for the hosted model so Quick Look /
-                       Scene Viewer can actually fetch it */
-                    viewer.setAttribute('src', hostedGlb);
-                    viewer.setAttribute('ios-src', hostedUsdz);
-                    window.__arNative = true;
-                    setTimeout(function() {
-                        document.getElementById('arHint').textContent =
-                            viewer.canActivateAR
-                                ? 'Move your phone slowly to find a wall'
-                                : 'Drag to explore · open on a phone for live AR';
-                    }, 400);
+                /* ── sizes ── */
+                var sizes = (sizeList && sizeList.length)
+                    ? sizeList.slice()
+                    : [{ label: 'Standard', w: wIn, h: hIn }];
+                var defIdx = 0;
+                for (var si = 0; si < sizes.length; si++) {
+                    if (Math.abs(sizes[si].w - wIn) < 0.01 && Math.abs(sizes[si].h - hIn) < 0.01) {
+                        defIdx = si; break;
+                    }
                 }
 
-                function checkHosted() {
-                    fetch(hostedGlb, { method: 'HEAD' })
-                        .then(function(r) {
-                            if (r.ok) {
-                                enableHostedAR();
-                            } else {
-                                document.getElementById('arHint').textContent =
-                                    'Drag to explore — live wall AR coming soon';
-                            }
+                function slug(s) {
+                    return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                }
+
+                /* native AR needs REAL hosted urls — blobs can't drive it.
+                   Preview-only scope: per-size hosted file if it exists, else
+                   the canonical file (only meaningful at the default size). */
+                function applyNative(sz, isDefault) {
+                    window.__arNative = false;
+                    var sc = slug(sz.label);
+                    var perGlb = 'ar/' + id + '-' + sc + '.glb';
+                    var perUsd = 'ar/' + id + '-' + sc + '.usdz';
+                    var canGlb = 'ar/' + id + '.glb';
+                    var canUsd = 'ar/' + id + '.usdz';
+
+                    function use(glb, usdz) {
+                        viewer.setAttribute('src', glb);
+                        viewer.setAttribute('ios-src', usdz);
+                        window.__arNative = true;
+                        setTimeout(function() {
+                            hintEl.textContent = viewer.canActivateAR
+                                ? 'Move your phone slowly to find a wall'
+                                : 'Drag to explore · open on a phone for live AR';
+                        }, 400);
+                    }
+                    function canonicalAttempt() {
+                        if (!isDefault) {
+                            hintEl.textContent =
+                                'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
+                            return;
+                        }
+                        fetch(canGlb, { method: 'HEAD' })
+                            .then(function(r) {
+                                if (r.ok) use(canGlb, canUsd);
+                                else hintEl.textContent = 'Drag to explore — live wall AR coming soon';
+                            })
+                            .catch(function() {
+                                hintEl.textContent = 'Drag to explore — live wall AR coming soon';
+                            });
+                    }
+                    fetch(perGlb, { method: 'HEAD' })
+                        .then(function(r) { if (r.ok) use(perGlb, perUsd); else canonicalAttempt(); })
+                        .catch(canonicalAttempt);
+                }
+
+                var buildCache = {};   /* key "wxh" -> blob url */
+
+                function buildAt(sz, isDefault) {
+                    document.getElementById('arDimText').textContent =
+                        sz.w + ' × ' + sz.h + ' inches · true size';
+                    load.classList.remove('ar-gone');
+                    load.textContent = 'Building the framed print…';
+                    hintEl.textContent = 'Building the framed print…';
+
+                    function mountBlob(url) {
+                        /* blob preview always shows the SELECTED true size */
+                        viewer.setAttribute('src', url);
+                        applyNative(sz, isDefault);
+                    }
+
+                    var key = sz.w + 'x' + sz.h;
+                    if (buildCache[key]) { mountBlob(buildCache[key]); return; }
+
+                    if (typeof window.__buildArGLB !== 'function') {
+                        load.textContent = '3D engine still loading — try again in a moment.';
+                        return;
+                    }
+
+                    var settled = false;
+                    var watchdog = setTimeout(function() {
+                        if (settled) return;
+                        settled = true;
+                        load.textContent = 'This is taking long on this device — try reloading.';
+                        track('ar_build_timeout', { item_id: id });
+                    }, 18000);
+
+                    window.__buildArGLB(img, sz.w, sz.h)
+                        .then(function(url) {
+                            if (settled) return;
+                            settled = true; clearTimeout(watchdog);
+                            buildCache[key] = url; mountBlob(url);
                         })
-                        .catch(function() {
-                            document.getElementById('arHint').textContent =
-                                'Drag to explore — live wall AR coming soon';
+                        .catch(function(e) {
+                            if (settled) return;
+                            settled = true; clearTimeout(watchdog);
+                            load.textContent = 'Could not build the 3D model.';
+                            track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
                         });
                 }
 
-                function mount(glbUrl) {
-                    /* blob = instant in-page 3D preview (same sandbox, always works) */
-                    viewer.setAttribute('src', glbUrl);
-                    /* then see if the real hosted model exists for native AR */
-                    checkHosted();
-                }
-
-                if (glbCache[id]) { mount(glbCache[id]); return; }
-
-                if (typeof window.__buildArGLB !== 'function') {
-                    load.textContent = '3D engine still loading — try again in a moment.';
-                    return;
-                }
-
-                var settled = false;
-                var watchdog = setTimeout(function() {
-                    if (settled) return;
-                    settled = true;
-                    load.textContent = 'This is taking long on this device — try reloading.';
-                    track('ar_build_timeout', { item_id: id });
-                }, 18000);
-
-                window.__buildArGLB(img, wIn, hIn)
-                    .then(function(url) {
-                        if (settled) return;
-                        settled = true; clearTimeout(watchdog);
-                        glbCache[id] = url; mount(url);
-                    })
-                    .catch(function(e) {
-                        if (settled) return;
-                        settled = true; clearTimeout(watchdog);
-                        load.textContent = 'Could not build the 3D model.';
-                        track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
+                /* ── size chips ── */
+                chipsEl.innerHTML = '';
+                sizes.forEach(function(sz, idx) {
+                    var b = document.createElement('button');
+                    b.className = 'ar-size-chip' + (idx === defIdx ? ' ar-sz-on' : '');
+                    b.textContent = sz.label;
+                    b.addEventListener('click', function() {
+                        if (b.classList.contains('ar-sz-on')) return;
+                        Array.prototype.forEach.call(chipsEl.children, function(c) {
+                            c.classList.remove('ar-sz-on');
+                        });
+                        b.classList.add('ar-sz-on');
+                        track('ar_size_select', { item_id: id, size: sz.label, w: sz.w, h: sz.h });
+                        buildAt(sz, idx === defIdx);
                     });
+                    chipsEl.appendChild(b);
+                });
+
+                buildAt(sizes[defIdx], true);
             };
 
             window.closeArSheet = function() {
@@ -3036,6 +3110,7 @@
   <div class="ar-loading" id="arLoading">Preparing the print…</div>
 
   <div class="ar-foot">
+    <div class="ar-size-chips" id="arSizeChips"></div>
     <div class="ar-dim" id="arDimText"></div>
     <button id="arLaunch">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
