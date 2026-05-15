@@ -1767,15 +1767,52 @@
 
             /* cache built GLB blob URLs per print (per session) */
             var glbCache = {};
+            var arMode = 'ar';   /* 'ar' | 'inapp' */
+
+            /* In-app webviews (Instagram, Facebook, TikTok, etc.) destroy the
+               page when native AR launches and barely support the 3D pipeline.
+               Native AR must run from a real browser. */
+            function isInAppBrowser() {
+                var ua = navigator.userAgent || '';
+                return /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|Twitter|TikTok|Musical|Snapchat|Pinterest|LinkedInApp|WhatsApp/i.test(ua);
+            }
 
             window.openArSheet = function(id, title, img, wIn, hIn) {
                 var sheet  = document.getElementById('arSheet');
                 var viewer = document.getElementById('arViewer');
                 var load   = document.getElementById('arLoading');
+                var launch = document.getElementById('arLaunch');
+                var hintEl = document.getElementById('arHint');
 
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
-                document.getElementById('arHint').textContent    = 'Building the framed print…';
+
+                sheet.classList.add('ar-open');
+                document.body.style.overflow = 'hidden';
+                arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
+
+                /* ── in-app browser: cannot do native AR here ── */
+                if (isInAppBrowser()) {
+                    arMode = 'inapp';
+                    track('ar_inapp_blocked', { item_id: id, item_name: title });
+                    load.classList.remove('ar-gone');
+                    load.innerHTML =
+                        '<div style="max-width:300px;text-align:center;">'
+                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;">Open in your browser</div>'
+                      + '<div style="font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);">Live AR needs Chrome or Safari. '
+                      + 'Tap the <strong style="color:rgba(247,243,236,0.8);">⋮</strong> menu at the top of this screen and choose <strong style="color:rgba(247,243,236,0.8);">“Open in browser”</strong>.</div>'
+                      + '</div>';
+                    document.getElementById('arDimText').textContent = '';
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link';
+                    hintEl.textContent = 'Then paste it into Chrome or Safari';
+                    return;
+                }
+
+                arMode = 'ar';
+                launch.innerHTML =
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> See it on your wall';
+                hintEl.textContent = 'Building the framed print…';
 
                 load.classList.remove('ar-gone');
                 load.textContent = 'Building the framed print…';
@@ -1784,9 +1821,6 @@
                 viewer.setAttribute('alt', title + ' — framed fine art print');
                 viewer.setAttribute('poster', img);
 
-                sheet.classList.add('ar-open');
-                document.body.style.overflow = 'hidden';
-                arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
                 track('ar_open', { item_id: id, item_name: title });
 
                 viewer.addEventListener('load', function onL() {
@@ -1816,9 +1850,23 @@
                     return;
                 }
 
+                var settled = false;
+                var watchdog = setTimeout(function() {
+                    if (settled) return;
+                    settled = true;
+                    load.textContent = 'This is taking long on this device — try reloading.';
+                    track('ar_build_timeout', { item_id: id });
+                }, 18000);
+
                 window.__buildArGLB(img, wIn, hIn)
-                    .then(function(url) { glbCache[id] = url; mount(url); })
+                    .then(function(url) {
+                        if (settled) return;
+                        settled = true; clearTimeout(watchdog);
+                        glbCache[id] = url; mount(url);
+                    })
                     .catch(function(e) {
+                        if (settled) return;
+                        settled = true; clearTimeout(watchdog);
                         load.textContent = 'Could not build the 3D model.';
                         track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
                     });
@@ -1847,6 +1895,23 @@
                 var launch = document.getElementById('arLaunch');
 
                 launch.addEventListener('click', function() {
+                    /* in-app browser: copy the link so they can paste into a real browser */
+                    if (arMode === 'inapp') {
+                        var url = location.href;
+                        var done = function() {
+                            launch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Link Copied';
+                            document.getElementById('arHint').textContent = 'Paste into Chrome or Safari to view in AR';
+                            if (arSession) track('ar_link_copied', { item_id: arSession.id });
+                        };
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(url).then(done).catch(function() {
+                                window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                            });
+                        } else {
+                            window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                        }
+                        return;
+                    }
                     if (viewer.canActivateAR) {
                         if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
