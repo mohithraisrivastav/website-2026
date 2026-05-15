@@ -1828,19 +1828,46 @@
                     viewer.removeEventListener('load', onL);
                 });
 
-                function mount(glbUrl) {
-                    /* model-viewer auto-generates the iOS USDZ from this GLB —
-                       no ios-src needed, no /ar files, no overlay */
-                    viewer.setAttribute('src', glbUrl);
-                    var hint = document.getElementById('arHint');
-                    /* canActivateAR settles shortly after src is set */
+                /* native AR needs REAL hosted urls — OS apps can't read blobs */
+                var hostedGlb  = 'ar/' + id + '.glb';
+                var hostedUsdz = 'ar/' + id + '.usdz';
+                window.__arNative = false;
+
+                function enableHostedAR() {
+                    /* swap the blob preview for the hosted model so Quick Look /
+                       Scene Viewer can actually fetch it */
+                    viewer.setAttribute('src', hostedGlb);
+                    viewer.setAttribute('ios-src', hostedUsdz);
+                    window.__arNative = true;
                     setTimeout(function() {
-                        if (viewer.canActivateAR) {
-                            hint.textContent = 'Move your phone slowly to find a wall';
-                        } else {
-                            hint.textContent = 'Drag to rotate · Open on your phone for live AR';
-                        }
-                    }, 350);
+                        document.getElementById('arHint').textContent =
+                            viewer.canActivateAR
+                                ? 'Move your phone slowly to find a wall'
+                                : 'Drag to explore · open on a phone for live AR';
+                    }, 400);
+                }
+
+                function checkHosted() {
+                    fetch(hostedGlb, { method: 'HEAD' })
+                        .then(function(r) {
+                            if (r.ok) {
+                                enableHostedAR();
+                            } else {
+                                document.getElementById('arHint').textContent =
+                                    'Drag to explore — live wall AR coming soon';
+                            }
+                        })
+                        .catch(function() {
+                            document.getElementById('arHint').textContent =
+                                'Drag to explore — live wall AR coming soon';
+                        });
+                }
+
+                function mount(glbUrl) {
+                    /* blob = instant in-page 3D preview (same sandbox, always works) */
+                    viewer.setAttribute('src', glbUrl);
+                    /* then see if the real hosted model exists for native AR */
+                    checkHosted();
                 }
 
                 if (glbCache[id]) { mount(glbCache[id]); return; }
@@ -1915,11 +1942,17 @@
                     if (viewer.canActivateAR) {
                         if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
-                    } else {
-                        /* desktop / unsupported: nudge the model so they see it's 3D */
-                        viewer.cameraOrbit = '15deg 80deg 105%';
+                    } else if (!window.__arNative) {
+                        /* hosted .glb/.usdz not published yet — be honest */
+                        viewer.cameraOrbit = '12deg 82deg 108%';
                         document.getElementById('arHint').textContent =
-                            'Live AR needs a phone. Drag to explore the framed print.';
+                            'Live wall AR for this print is being published. Drag to explore in 3D.';
+                        if (arSession) track('ar_native_unpublished', { item_id: arSession.id });
+                    } else {
+                        /* hosted model exists but device has no AR (desktop) */
+                        viewer.cameraOrbit = '12deg 82deg 108%';
+                        document.getElementById('arHint').textContent =
+                            'Open on your phone for live wall AR. Drag to explore in 3D.';
                     }
                 });
 

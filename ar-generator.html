@@ -172,12 +172,15 @@ function buildScene(image, wIn, hIn) {
   const outW = artW + FRAME_BORDER * 2;
   const outH = artH + FRAME_BORDER * 2;
 
-  /* baked soft contact shadow, just behind the frame against the wall */
+  /* baked soft contact shadow, just behind the frame against the wall.
+     MeshStandardMaterial — USDZExporter does NOT support MeshBasicMaterial. */
   const shTex = new THREE.CanvasTexture(shadowCanvas());
   const shadow = new THREE.Mesh(
     new THREE.PlaneGeometry(outW * 1.42, outH * 1.42),
-    new THREE.MeshBasicMaterial({
+    new THREE.MeshStandardMaterial({
+      color: 0x000000,
       map: shTex, transparent: true, opacity: 0.9,
+      roughness: 1.0, metalness: 0.0,
       depthWrite: false
     })
   );
