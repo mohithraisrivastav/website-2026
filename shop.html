@@ -1630,7 +1630,9 @@
                 return Math.max(80, Math.min(s, window.innerWidth * 0.92));
             }
 
-            /* ── mouse drag ── */
+            /* ── bind events after DOM ready ── */
+            document.addEventListener('DOMContentLoaded', function() {
+
             var wrap = document.getElementById('rvPrintWrap');
 
             wrap.addEventListener('mousedown', function(e) {
@@ -1703,6 +1705,8 @@
                     window.closeRoomViewer();
                 }
             });
+
+            }); /* end DOMContentLoaded */
         })();
         /* ══════════════════════════════════════════════════════ */
 
