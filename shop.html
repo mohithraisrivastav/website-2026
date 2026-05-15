@@ -57,8 +57,96 @@
 
     <link rel="stylesheet" href="assets/css/pages/shop.css">
     <script src="assets/js/translate.js" defer></script>
+    <!-- import map for the on-demand 3D builder (must precede module scripts) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
     <!-- model-viewer: native AR Quick Look (iOS) + Scene Viewer (Android) -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+    <!-- on-demand framed-print 3D builder -->
+    <script type="module">
+    import * as THREE from 'three';
+    import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+    var IN_TO_M = 0.0254, FRAME_BORDER = 0.018, FRAME_DEPTH = 0.032, MAX_TEX = 2048;
+
+    function loadImage(src) {
+      return new Promise(function(res, rej) {
+        var im = new Image();
+        im.crossOrigin = 'anonymous';
+        im.onload = function(){ res(im); };
+        im.onerror = function(){ rej(new Error('image load failed')); };
+        im.src = src;
+      });
+    }
+    function texCanvas(image) {
+      var w = image.naturalWidth, h = image.naturalHeight;
+      var s = Math.min(1, MAX_TEX / Math.max(w, h));
+      w = Math.round(w * s); h = Math.round(h * s);
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      var x = c.getContext('2d');
+      x.imageSmoothingQuality = 'high';
+      x.drawImage(image, 0, 0, w, h);
+      return c;
+    }
+    function shadowCanvas() {
+      var S = 512, c = document.createElement('canvas');
+      c.width = S; c.height = S;
+      var x = c.getContext('2d');
+      var g = x.createRadialGradient(S/2, S/2, S*0.18, S/2, S/2, S*0.5);
+      g.addColorStop(0, 'rgba(0,0,0,0.42)');
+      g.addColorStop(0.6, 'rgba(0,0,0,0.18)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      x.fillStyle = g; x.fillRect(0, 0, S, S);
+      return c;
+    }
+    function buildScene(image, wIn, hIn) {
+      var scene = new THREE.Scene();
+      var artW = wIn * IN_TO_M, artH = hIn * IN_TO_M;
+      var outW = artW + FRAME_BORDER * 2, outH = artH + FRAME_BORDER * 2;
+
+      var shTex = new THREE.CanvasTexture(shadowCanvas());
+      var shadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(outW * 1.42, outH * 1.42),
+        new THREE.MeshBasicMaterial({ map: shTex, transparent: true, opacity: 0.9, depthWrite: false })
+      );
+      shadow.position.set(0.012, -0.016, -FRAME_DEPTH / 2 - 0.004);
+      scene.add(shadow);
+
+      var frame = new THREE.Mesh(
+        new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
+        new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
+      );
+      scene.add(frame);
+
+      var tex = new THREE.CanvasTexture(texCanvas(image));
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      var art = new THREE.Mesh(
+        new THREE.PlaneGeometry(artW, artH),
+        new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+      );
+      art.position.z = FRAME_DEPTH / 2 + 0.0012;
+      scene.add(art);
+      return scene;
+    }
+
+    window.__buildArGLB = function(imgUrl, wIn, hIn) {
+      return loadImage(imgUrl).then(function(image) {
+        var scene = buildScene(image, wIn, hIn);
+        return new GLTFExporter().parseAsync(scene, { binary: true });
+      }).then(function(glb) {
+        var blob = new Blob([glb], { type: 'model/gltf-binary' });
+        return URL.createObjectURL(blob);
+      });
+    };
+    </script>
     <style>
         /* ── Detail accordion (Framing / Packaging / Delivery / Returns) ── */
         .md-accordion {
@@ -1677,57 +1765,63 @@
                 } catch (e) {}
             }
 
-            /* Does an AR file exist for this print? (HEAD check, cached) */
-            function assetExists(url) {
-                return fetch(url, { method: 'HEAD' })
-                    .then(function(r){ return r.ok; })
-                    .catch(function(){ return false; });
-            }
+            /* cache built GLB blob URLs per print (per session) */
+            var glbCache = {};
 
-            window.openArSheet = function(id, title, img, wIn, hIn, sizeList) {
-                var glb  = 'ar/' + id + '.glb';
-                var usdz = 'ar/' + id + '.usdz';
+            window.openArSheet = function(id, title, img, wIn, hIn) {
+                var sheet  = document.getElementById('arSheet');
+                var viewer = document.getElementById('arViewer');
+                var load   = document.getElementById('arLoading');
 
-                assetExists(glb).then(function(ok) {
-                    if (!ok) {
-                        /* No AR model yet — fall back to the camera overlay */
-                        openRoomViewer(img, wIn, hIn, sizeList);
-                        return;
-                    }
+                document.getElementById('arTitle').textContent   = title;
+                document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
+                document.getElementById('arHint').textContent    = 'Building the framed print…';
 
-                    var sheet  = document.getElementById('arSheet');
-                    var viewer = document.getElementById('arViewer');
-                    var load   = document.getElementById('arLoading');
+                load.classList.remove('ar-gone');
+                load.textContent = 'Building the framed print…';
 
-                    document.getElementById('arTitle').textContent   = title;
-                    document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
+                viewer.removeAttribute('src');
+                viewer.setAttribute('alt', title + ' — framed fine art print');
+                viewer.setAttribute('poster', img);
 
-                    load.classList.remove('ar-gone');
-                    load.textContent = 'Preparing the print…';
+                sheet.classList.add('ar-open');
+                document.body.style.overflow = 'hidden';
+                arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
+                track('ar_open', { item_id: id, item_name: title });
 
-                    viewer.setAttribute('src', glb);
-                    viewer.setAttribute('ios-src', usdz);
-                    viewer.setAttribute('alt', title + ' — framed fine art print');
-                    viewer.setAttribute('poster', img);
-
-                    sheet.classList.add('ar-open');
-                    document.body.style.overflow = 'hidden';
-                    arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
-                    track('ar_open', { item_id: id, item_name: title });
-
-                    viewer.addEventListener('load', function onL() {
-                        load.classList.add('ar-gone');
-                        viewer.removeEventListener('load', onL);
-                    });
-
-                    /* hint text: depends on whether native AR is available */
-                    var hint = document.getElementById('arHint');
-                    if (viewer.canActivateAR) {
-                        hint.textContent = 'Move your phone slowly to find a wall';
-                    } else {
-                        hint.textContent = 'Drag to rotate · Open on your phone for live AR';
-                    }
+                viewer.addEventListener('load', function onL() {
+                    load.classList.add('ar-gone');
+                    viewer.removeEventListener('load', onL);
                 });
+
+                function mount(glbUrl) {
+                    /* model-viewer auto-generates the iOS USDZ from this GLB —
+                       no ios-src needed, no /ar files, no overlay */
+                    viewer.setAttribute('src', glbUrl);
+                    var hint = document.getElementById('arHint');
+                    /* canActivateAR settles shortly after src is set */
+                    setTimeout(function() {
+                        if (viewer.canActivateAR) {
+                            hint.textContent = 'Move your phone slowly to find a wall';
+                        } else {
+                            hint.textContent = 'Drag to rotate · Open on your phone for live AR';
+                        }
+                    }, 350);
+                }
+
+                if (glbCache[id]) { mount(glbCache[id]); return; }
+
+                if (typeof window.__buildArGLB !== 'function') {
+                    load.textContent = '3D engine still loading — try again in a moment.';
+                    return;
+                }
+
+                window.__buildArGLB(img, wIn, hIn)
+                    .then(function(url) { glbCache[id] = url; mount(url); })
+                    .catch(function(e) {
+                        load.textContent = 'Could not build the 3D model.';
+                        track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
+                    });
             };
 
             window.closeArSheet = function() {
