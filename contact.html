@@ -447,38 +447,31 @@
             btn.classList.add('loading');
             btn.disabled = true;
 
-            // Local / file:// environment — API endpoint not available, simulate success
-            const isLocal = window.location.protocol === 'file:' ||
-                            window.location.hostname === 'localhost' ||
-                            window.location.hostname === '127.0.0.1';
-
-            if (isLocal) {
-                _incrementSubmitCount();
-                setTimeout(() => {
-                    showAcknowledgement({ name, email, inquiry_type, simulated: true });
-                }, 900);
-                return;
-            }
+            // ── Web3Forms (free, no backend needed) ──────────────────────────
+            // Get your free access key at https://web3forms.com — paste it below
+            const WEB3FORMS_KEY = 'd1f05dab-40ce-421a-9ef0-73d03a1a8c7a';
 
             try {
-                const res = await fetch('/api/contact', {
+                const res = await fetch('https://api.web3forms.com/submit', {
                     method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body:    JSON.stringify({
-                        name, email, inquiry_type, message, budget,
-                        _honeypot: honeypot,   /* server should verify === '' */
-                        _elapsed:  elapsed     /* server can apply its own threshold */
+                        access_key:   WEB3FORMS_KEY,
+                        name,
+                        email,
+                        subject:      'New enquiry: ' + inquiry_type,
+                        message:      'Inquiry Type: ' + inquiry_type + '\nBudget: ' + budget + '\n\n' + message,
+                        botcheck:     honeypot
                     })
                 });
 
-                let data = {};
-                try { data = await res.json(); } catch (_) {}
+                const data = await res.json();
 
-                if (!res.ok) {
-                    throw new Error(data.error || 'Something went wrong. Please try again.');
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || 'Something went wrong. Please try again.');
                 }
 
-                // Success — show acknowledgement
+                // Success
                 _incrementSubmitCount();
                 showAcknowledgement({ name, email, inquiry_type });
 
