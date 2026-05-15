@@ -95,13 +95,14 @@ function fmt(n) {
 }
 
 // FIX: console.warn when product weight is missing — prevents silent undercharging
+// Handles dimension-suffixed names e.g. "After The Fall — Small (30×20 cm)"
 function getItemWeight(title) {
-  const w = CONFIG.PRODUCT_WEIGHTS[title];
-  if (typeof w !== 'number') {
-    console.warn(`[checkout] Unknown product weight for: "${title}" — using 0.8 kg fallback. Add it to CONFIG.PRODUCT_WEIGHTS.`);
-    return 0.8;
-  }
-  return w;
+  if (typeof CONFIG.PRODUCT_WEIGHTS[title] === 'number') return CONFIG.PRODUCT_WEIGHTS[title];
+  // Strip dimension suffix added at cart-add time (e.g. " — Small (30×20 cm)")
+  const base = title.replace(/\s+[—\-–].+$/, '').trim();
+  if (typeof CONFIG.PRODUCT_WEIGHTS[base] === 'number') return CONFIG.PRODUCT_WEIGHTS[base];
+  console.warn(`[checkout] Unknown product weight for: "${title}" — using 0.8 kg fallback. Add it to CONFIG.PRODUCT_WEIGHTS.`);
+  return 0.8;
 }
 
 function isDomestic() {

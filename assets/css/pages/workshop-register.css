@@ -5,6 +5,27 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Loader overlay */
+        .reg-loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(247,243,237,0.92);
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; gap: 20px;
+        }
+        .reg-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .reg-loader-spin {
+            width: 36px; height: 36px;
+            border: 2px solid rgba(207,162,70,0.2);
+            border-top-color: #CFA246;
+            border-radius: 50%;
+            animation: regSpin 0.8s linear infinite;
+        }
+        .reg-loader-text {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; color: #888;
+        }
+        @keyframes regSpin { to { transform: rotate(360deg); } }
+
 
         /* Page container */
         .page-container {

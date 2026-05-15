@@ -45,11 +45,19 @@ function resolveZone(customer) {
     return COUNTRY_ZONES[country] != null ? COUNTRY_ZONES[country] : 5;
 }
 
+function getWeight(title) {
+    if (typeof PRODUCT_WEIGHTS[title] === 'number') return PRODUCT_WEIGHTS[title];
+    // Strip dimension suffix e.g. " — Small (30×20 cm)"
+    const base = (title || '').replace(/\s+[—\-–].+$/, '').trim();
+    if (typeof PRODUCT_WEIGHTS[base] === 'number') return PRODUCT_WEIGHTS[base];
+    console.warn('[create-order] Unknown product weight for:', title, '— using 0.8 kg fallback');
+    return 0.8;
+}
+
 function computeTotal(items, customer) {
     const subtotal = items.reduce((s, i) => s + Number(i.price), 0);
     const totalWeight = items.reduce((w, i) => {
-        const pw = PRODUCT_WEIGHTS[i.title];
-        return w + (typeof pw === 'number' ? pw : 0.8);
+        return w + getWeight(i.title) * (i.qty || 1);
     }, 0);
 
     let shipping = 0;

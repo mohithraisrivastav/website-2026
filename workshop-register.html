@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/css/global.css">
 
     <link rel="stylesheet" href="assets/css/pages/workshop-register.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="assets/js/translate.js" defer></script>
 </head>
 <body>
@@ -56,6 +57,13 @@
     <a href="shop.html" onclick="toggleMenu()">Shop</a>
     <a href="contact.html" onclick="toggleMenu()">Contact</a>
     <a href="#" onclick="toggleMenu();toggleCart();return false;">Cart</a>
+</div>
+
+<div class="reg-loader" id="regLoader" style="display:none;">
+    <div class="reg-loader-inner">
+        <div class="reg-loader-spin"></div>
+        <div class="reg-loader-text">Processing</div>
+    </div>
 </div>
 
 <main id="main-content">
@@ -213,7 +221,7 @@
                 <span class="conf-receipt-val" id="confCohort"></span>
             </div>
             <div class="conf-receipt-row">
-                <span class="conf-receipt-label">Fee</span>
+                <span class="conf-receipt-label">Fee Paid</span>
                 <span class="conf-receipt-val" id="confFee"></span>
             </div>
             <div class="conf-receipt-row">
@@ -221,11 +229,19 @@
                 <span class="conf-receipt-val" id="confName"></span>
             </div>
             <div class="conf-receipt-row">
-                <span class="conf-receipt-label">Reply to</span>
+                <span class="conf-receipt-label">Email</span>
                 <span class="conf-receipt-val" id="confEmail"></span>
             </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Booking ID</span>
+                <span class="conf-receipt-val" id="confBookingId">—</span>
+            </div>
+            <div class="conf-receipt-row">
+                <span class="conf-receipt-label">Payment ID</span>
+                <span class="conf-receipt-val" id="confPaymentId" style="font-size:0.82rem; color:#888;"></span>
+            </div>
         </div>
-        <p class="conf-note">Fee is due only after your spot is confirmed. Payment details come with the confirmation email.</p>
+        <p class="conf-note">A confirmation email is on its way. If you don't see it in a few minutes, check your spam.</p>
 
         <div class="conf-actions">
             <button class="conf-btn" id="confDownloadBtn" onclick="triggerDownload()" hidden aria-hidden="true">
@@ -397,9 +413,7 @@
     // Initialize
     renderWorkshop(currentType);
 
-    /* ── Form submission ──────────────────────────────────── */
-    const WEB3FORMS_KEY = 'd1f05dab-40ce-421a-9ef0-73d03a1a8c7a';
-
+    /* ── Helpers ─────────────────────────────────────────── */
     function showError(msg) {
         const el = document.getElementById('errorMsg');
         el.textContent = msg;
@@ -407,105 +421,185 @@
         setTimeout(() => el.classList.remove('show'), 6000);
     }
 
-    async function submitRegistration() {
-        const form = document.getElementById('regForm');
-        const btn = document.getElementById('submitBtn');
+    function setLoader(on, text) {
+        const loader = document.getElementById('regLoader');
+        if (!loader) return;
+        loader.style.display = on ? 'flex' : 'none';
+        if (text) loader.querySelector('.reg-loader-text').textContent = text;
+    }
 
-        // Validation
+    /* ── Form validation ──────────────────────────────────── */
+    function validateForm() {
+        const form = document.getElementById('regForm');
         const required = [
-            { name: 'name', label: 'Full Name' },
-            { name: 'email', label: 'Email' },
-            { name: 'phone', label: 'Phone' },
-            { name: 'city', label: 'City' },
-            { name: 'country', label: 'Country' },
-            { name: 'pincode', label: 'Pincode / Postcode' },
+            { name: 'name',       label: 'Full Name' },
+            { name: 'email',      label: 'Email' },
+            { name: 'phone',      label: 'Phone' },
+            { name: 'city',       label: 'City' },
+            { name: 'country',    label: 'Country' },
+            { name: 'pincode',    label: 'Pincode / Postcode' },
             { name: 'experience', label: 'Experience' },
             { name: 'motivation', label: 'What draws you to this workshop?' },
-            { name: 'cohort', label: 'Preferred Cohort' }
+            { name: 'cohort',     label: 'Preferred Cohort' }
         ];
-
         for (const field of required) {
             const el = form.querySelector(`[name="${field.name}"]`);
             if (!el || !el.value.trim()) {
                 showError(`Please fill in: ${field.label}`);
                 el && el.focus();
-                return;
+                return false;
             }
         }
-
         const emailEl = form.querySelector('[name="email"]');
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
             showError('Please enter a valid email address.');
             emailEl.focus();
-            return;
+            return false;
         }
-
-        btn.disabled = true;
-        btn.textContent = 'Submitting…';
-
-        const data = Object.fromEntries(new FormData(form));
-        const w = WORKSHOPS[currentType];
-        const workshopLabel = w ? w.label : data.workshopTitle;
-        const fee = w ? Object.values(w.meta).find(v => v.includes('₹') || v.includes('per person')) || '' : '';
-
-        const messageBody = [
-            `Workshop: ${workshopLabel}`,
-            `Cohort: ${data.cohort}`,
-            `Fee: ${fee}`,
-            `---`,
-            `Name: ${data.name}`,
-            `Email: ${data.email}`,
-            `Phone: ${data.phone}`,
-            `City: ${data.city}, ${data.country} ${data.pincode}`,
-            `Experience: ${data.experience}`,
-            `Medium: ${data.medium || '—'}`,
-            `Source: ${data.source || '—'}`,
-            `---`,
-            `What draws them here:`,
-            data.motivation
-        ].join('\n');
-
-        try {
-            const res = await fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    access_key: WEB3FORMS_KEY,
-                    name: data.name,
-                    email: data.email,
-                    replyto: data.email,
-                    from_name: data.name,
-                    subject: `Workshop Application: ${workshopLabel} — ${data.cohort}`,
-                    message: messageBody,
-                    botcheck: false
-                })
-            });
-            const result = await res.json();
-            if (!result.success) throw new Error(result.message || 'Submission failed');
-        } catch (err) {
-            showError('Something went wrong. Please try again or email info@mohithraisrivastav.com');
-            btn.disabled = false;
-            btn.textContent = 'Submit Application →';
-            return;
-        }
-
-        showConfirmation();
+        return true;
     }
 
-    function showConfirmation() {
+    /* ── Payment flow ─────────────────────────────────────── */
+    // Workshop fee amounts in paise (INR × 100)
+    const WORKSHOP_FEES_PAISE = { '1day': 350000, '3day': 1150000, '7day': 2400000 };
+
+    let razorpayKeyPromise = null;
+    function loadRazorpayKey() {
+        if (!razorpayKeyPromise) {
+            razorpayKeyPromise = fetch('/api/config')
+                .then(r => r.ok ? r.json() : Promise.reject('Config load failed'))
+                .then(cfg => {
+                    if (!cfg.razorpayKeyId) throw new Error('Razorpay key not configured.');
+                    return cfg.razorpayKeyId;
+                });
+        }
+        return razorpayKeyPromise;
+    }
+
+    async function submitRegistration() {
+        if (!validateForm()) return;
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Processing…';
+        setLoader(true, 'Creating secure order…');
+
+        const form = document.getElementById('regForm');
+        const data = Object.fromEntries(new FormData(form));
+        const w = WORKSHOPS[currentType];
+
+        try {
+            // 1. Load Razorpay key
+            const rzpKey = await loadRazorpayKey();
+
+            // 2. Create workshop order on backend
+            const orderRes = await fetch('/api/create-workshop-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    workshopType: currentType,
+                    workshopLabel: w.label,
+                    cohort: data.cohort,
+                    customer: {
+                        name: data.name,
+                        email: data.email,
+                        phone: data.phone,
+                        city: data.city,
+                        country: data.country,
+                        pincode: data.pincode
+                    }
+                })
+            });
+            if (!orderRes.ok) throw new Error('Could not create order. Please try again.');
+            const order = await orderRes.json();
+
+            setLoader(false);
+
+            // 3. Open Razorpay
+            const rzp = new Razorpay({
+                key:         rzpKey,
+                amount:      order.amount,
+                currency:    order.currency || 'INR',
+                order_id:    order.id,
+                name:        'Mohith Rai Srivastav',
+                description: w.label + ' — ' + data.cohort,
+                image:       'images/Mohith LOGO.webp',
+                prefill: {
+                    name:    data.name,
+                    email:   data.email,
+                    contact: data.phone
+                },
+                theme: { color: '#000000' },
+
+                handler: async function(response) {
+                    setLoader(true, 'Confirming payment…');
+                    try {
+                        const verifyRes = await fetch('/api/verify-workshop-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_order_id:   response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature:  response.razorpay_signature,
+                                workshopType:  currentType,
+                                workshopLabel: w.label,
+                                workshopFee:   w.meta['Fee'] || '',
+                                cohort:        data.cohort,
+                                customer:      data,
+                                motivation:    data.motivation,
+                                medium:        data.medium || '',
+                                experience:    data.experience,
+                                source:        data.source || ''
+                            })
+                        });
+                        const result = await verifyRes.json();
+                        if (!result.success) throw new Error(result.error || 'Payment verification failed.');
+                        setLoader(false);
+                        showConfirmation(response.razorpay_payment_id, result.bookingId);
+                    } catch (err) {
+                        setLoader(false);
+                        showError('Payment received but confirmation failed. Email info@mohithraisrivastav.com with your payment ID: ' + response.razorpay_payment_id);
+                    }
+                },
+
+                modal: {
+                    ondismiss: function() {
+                        setLoader(false);
+                        btn.disabled = false;
+                        btn.textContent = 'Submit Application →';
+                    }
+                }
+            });
+
+            rzp.on('payment.failed', function(resp) {
+                setLoader(false);
+                btn.disabled = false;
+                btn.textContent = 'Submit Application →';
+                showError('Payment failed: ' + (resp.error.description || 'Please try again.'));
+            });
+
+            rzp.open();
+
+        } catch (err) {
+            setLoader(false);
+            btn.disabled = false;
+            btn.textContent = 'Submit Application →';
+            showError(err.message || 'Something went wrong. Please try again.');
+        }
+    }
+
+    /* ── Confirmation ─────────────────────────────────────── */
+    function showConfirmation(paymentId, bookingId) {
         const form = document.getElementById('regForm');
         const w = WORKSHOPS[currentType];
-        const name = form.querySelector('[name="name"]').value || '';
-        const email = form.querySelector('[name="email"]').value || '';
-        const cohort = form.querySelector('[name="cohort"]').value || '';
-        const fee = w ? (w.meta['Fee'] || '') : '';
 
-        // Populate receipt rows
         document.getElementById('confWorkshop').textContent = w ? w.label : '';
-        document.getElementById('confCohort').textContent = cohort;
-        document.getElementById('confFee').textContent = fee;
-        document.getElementById('confName').textContent = name;
-        document.getElementById('confEmail').textContent = email;
+        document.getElementById('confCohort').textContent   = form.querySelector('[name="cohort"]').value || '';
+        document.getElementById('confFee').textContent      = w ? (w.meta['Fee'] || '') : '';
+        document.getElementById('confName').textContent     = form.querySelector('[name="name"]').value || '';
+        document.getElementById('confEmail').textContent    = form.querySelector('[name="email"]').value || '';
+        document.getElementById('confPaymentId').textContent = paymentId || '';
+        if (bookingId) document.getElementById('confBookingId').textContent = bookingId;
 
         document.getElementById('regContainer').style.display = 'none';
         const conf = document.getElementById('confirmationScreen');
