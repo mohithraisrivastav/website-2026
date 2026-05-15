@@ -95,29 +95,13 @@
       x.drawImage(image, 0, 0, w, h);
       return c;
     }
-    function shadowCanvas() {
-      var S = 512, c = document.createElement('canvas');
-      c.width = S; c.height = S;
-      var x = c.getContext('2d');
-      var g = x.createRadialGradient(S/2, S/2, S*0.18, S/2, S/2, S*0.5);
-      g.addColorStop(0, 'rgba(0,0,0,0.42)');
-      g.addColorStop(0.6, 'rgba(0,0,0,0.18)');
-      g.addColorStop(1, 'rgba(0,0,0,0)');
-      x.fillStyle = g; x.fillRect(0, 0, S, S);
-      return c;
-    }
     function buildScene(image, wIn, hIn) {
       var scene = new THREE.Scene();
       var artW = wIn * IN_TO_M, artH = hIn * IN_TO_M;
       var outW = artW + FRAME_BORDER * 2, outH = artH + FRAME_BORDER * 2;
 
-      var shTex = new THREE.CanvasTexture(shadowCanvas());
-      var shadow = new THREE.Mesh(
-        new THREE.PlaneGeometry(outW * 1.42, outH * 1.42),
-        new THREE.MeshBasicMaterial({ map: shTex, transparent: true, opacity: 0.9, depthWrite: false })
-      );
-      shadow.position.set(0.012, -0.016, -FRAME_DEPTH / 2 - 0.004);
-      scene.add(shadow);
+      /* no baked shadow plane — bounding box must equal the framed print
+         or native AR seats, scales, and manipulates it wrong */
 
       var frame = new THREE.Mesh(
         new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),

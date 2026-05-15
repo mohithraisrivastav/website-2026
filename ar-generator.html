@@ -172,22 +172,11 @@ function buildScene(image, wIn, hIn) {
   const outW = artW + FRAME_BORDER * 2;
   const outH = artH + FRAME_BORDER * 2;
 
-  /* baked soft contact shadow, just behind the frame against the wall.
-     MeshStandardMaterial — USDZExporter does NOT support MeshBasicMaterial. */
-  const shTex = new THREE.CanvasTexture(shadowCanvas());
-  const shadow = new THREE.Mesh(
-    new THREE.PlaneGeometry(outW * 1.42, outH * 1.42),
-    new THREE.MeshStandardMaterial({
-      color: 0x000000,
-      map: shTex, transparent: true, opacity: 0.9,
-      roughness: 1.0, metalness: 0.0,
-      depthWrite: false
-    })
-  );
-  shadow.position.set(0.012, -0.016, -FRAME_DEPTH / 2 - 0.004);
-  scene.add(shadow);
+  /* NO baked shadow plane — it bloated the bounding box (1.42× and behind
+     the frame), which broke wall seating, scale, and native manipulation.
+     Quick Look / Scene Viewer render their own real contact shadow. */
 
-  /* matte black frame body */
+  /* matte black frame body — bounding box = exactly the framed print */
   const frame = new THREE.Mesh(
     new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
     new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
