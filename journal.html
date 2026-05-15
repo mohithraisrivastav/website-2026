@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Journal | Mohith Rai Srivastav</title>
+    <meta name="description" content="The Studio Journal &mdash; essays, field notes, and working thoughts from Mohith Rai Srivastav's practice as an architectural photographer.">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <script src="assets/js/translate.js" defer></script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-font-smoothing: antialiased; }
+        body { background-color: #F2EAD8; color: #1A1612; overflow-x: hidden; }
+
+        .cs-wrap {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 5vw 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cs-eyebrow {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #6F7A82;
+            margin-bottom: 32px;
+        }
+
+        .cs-heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 10vw, 10rem);
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            color: #1A1612;
+            margin-bottom: 40px;
+        }
+
+        .cs-heading em {
+            font-style: italic;
+            color: #4A3A33;
+        }
+
+        .cs-rule {
+            width: 40px;
+            height: 1px;
+            background: rgba(26, 22, 18, 0.2);
+            margin: 0 auto 36px;
+        }
+
+        .cs-body {
+            font-size: 0.9375rem;
+            font-weight: 400;
+            color: #4A3A33;
+            line-height: 1.8;
+            max-width: 440px;
+            letter-spacing: 0.3px;
+            margin-bottom: 48px;
+        }
+
+        .cs-form {
+            display: flex;
+            border: 1px solid rgba(26, 22, 18, 0.18);
+            overflow: hidden;
+            max-width: 360px;
+            width: 100%;
+            margin: 0 auto 16px;
+        }
+
+        .cs-form input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #1A1612;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 400;
+            padding: 14px 18px;
+            outline: none;
+        }
+
+        .cs-form input::placeholder { color: #6F7A82; }
+
+        .cs-form button {
+            background: #1A1612;
+            border: none;
+            color: #F2EAD8;
+            padding: 14px 22px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .cs-form button:hover { background: #4A3A33; }
+
+        .cs-form-note {
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: #6F7A82;
+            letter-spacing: 0.5px;
+        }
+
+        .cs-form-ok {
+            display: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #22c55e;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .cs-back {
+            display: inline-block;
+            margin-top: 56px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #6F7A82;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .cs-back:hover { color: #1A1612; }
+
+        /* Decorative corner marks */
+        .cs-corner {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: rgba(26, 22, 18, 0.1);
+            border-style: solid;
+        }
+
+        .cs-corner.tl { top: 40px; left: 5vw; border-width: 1px 0 0 1px; }
+        .cs-corner.tr { top: 40px; right: 5vw; border-width: 1px 1px 0 0; }
+        .cs-corner.bl { bottom: 40px; left: 5vw; border-width: 0 0 1px 1px; }
+        .cs-corner.br { bottom: 40px; right: 5vw; border-width: 0 1px 1px 0; }
+
+        @media (max-width: 600px) {
+            .cs-heading { margin-bottom: 28px; }
+            .cs-body { font-size: 0.875rem; }
+            .cs-corner { display: none; }
+        }
+    </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+    <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
+    <div class="nav-links-container">
+        <ul class="nav-links">
+            <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                <ul class="nav-dropdown">
+                    <li><a href="photography.html">Photography</a></li>
+                    <li><a href="film.html">Films</a></li>
+                </ul>
+            </li>
+            <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                <ul class="nav-dropdown">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="journal.html" class="active">Journal</a></li>
+                    <li><a href="resurface.html">Resurface</a></li>
+                </ul>
+            </li>
+            <li><a href="workshops.html">Workshops</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+    <div class="mobile-nav-group">
+        <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+        <div class="mobile-nav-children">
+            <a href="photography.html" onclick="toggleMenu()">Photography</a>
+            <a href="film.html" onclick="toggleMenu()">Films</a>
+        </div>
+    </div>
+    <div class="mobile-nav-group">
+        <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+        <div class="mobile-nav-children">
+            <a href="about.html" onclick="toggleMenu()">About</a>
+            <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+            <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+        </div>
+    </div>
+    <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+    <a href="shop.html" onclick="toggleMenu()">Shop</a>
+    <a href="contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+
+<main class="cs-wrap" id="main-content">
+    <div class="cs-corner tl"></div>
+    <div class="cs-corner tr"></div>
+    <div class="cs-corner bl"></div>
+    <div class="cs-corner br"></div>
+
+    <p class="cs-eyebrow">The Journal</p>
+    <h1 class="cs-heading">Coming<br><em>Soon.</em></h1>
+    <div class="cs-rule"></div>
+    <p class="cs-body">Essays, field notes, and working thoughts from the practice &mdash; written from the field. Subscribe to be notified when the first piece is published.</p>
+
+    <form class="cs-form" id="csForm">
+        <label for="csEmail" class="sr-only">Email address</label>
+        <input type="email" id="csEmail" placeholder="your@email.com" required>
+        <button type="submit">Notify me</button>
+    </form>
+    <p class="cs-form-note">Sent rarely. No noise.</p>
+    <p class="cs-form-ok" id="csFormOk">You're on the list.</p>
+
+    <a href="index.html" class="cs-back">&#8592; Back to Home</a>
+</main>
+
+<footer class="site-footer">
+    <div class="sf-cta">
+        <span class="sf-cta-label">Open for Commissions: 2026</span>
+        <h2 class="sf-heading">Let's Work<br>Together.</h2>
+        <a href="contact.html" class="sf-contact-btn">Start a Project &nbsp;&rarr;</a>
+    </div>
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link"><img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo"></a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &middot; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">&#8594;</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+    <div class="cart-header">
+        <h2>Your Selection</h2>
+        <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+    </div>
+    <div id="cartItemsList"></div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+
+<script>
+function toggleMenu() {
+    const m = document.getElementById('mobileMenu'), b = document.getElementById('hamburgerBtn');
+    m.classList.toggle('active'); b.classList.toggle('active');
+    b.setAttribute('aria-expanded', m.classList.contains('active').toString());
+    document.body.style.overflow = m.classList.contains('active') ? 'hidden' : '';
+}
+function toggleMobileDropdown(btn) {
+    btn.classList.toggle('open');
+    const c = btn.nextElementSibling;
+    if (c) c.classList.toggle('open');
+}
+
+const csForm = document.getElementById('csForm');
+if (csForm) {
+    csForm.addEventListener('submit', e => {
+        e.preventDefault();
+        csForm.style.display = 'none';
+        document.querySelector('.cs-form-note').style.display = 'none';
+        document.getElementById('csFormOk').style.display = 'block';
+    });
+}
+
+const sfForm = document.getElementById('sfForm');
+if (sfForm) {
+    sfForm.addEventListener('submit', e => {
+        e.preventDefault();
+        document.getElementById('sfFormOk').style.display = 'block';
+        e.target.reset();
+    });
+}
+</script>
+
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/cart.js"></script>
+</body>
+</html>

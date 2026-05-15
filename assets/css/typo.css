@@ -1,0 +1,151 @@
+/**
+ * Typography refinements - Step 4
+ * Applies globally across all pages via <link> in <head>.
+ */
+
+/* -- Font rendering ---------------------------------------------------------------- */
+html {
+  font-optical-sizing: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* -- Heading balance - prevents widows/orphans ------------------------------------ */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  word-break: break-word;
+}
+
+/* -- Body copy - balanced measure -------------------------------------------------- */
+p {
+  text-wrap: pretty;
+}
+
+/* -- Blockquotes - optical punctuation margin ------------------------------------- */
+blockquote {
+  hanging-punctuation: first last;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1;
+}
+
+/* -- Numeric elements - tabular + lining for alignment ---------------------------- */
+.price,
+.product-price,
+[class*="price"],
+.cart-count,
+.cf-num {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'kern' 1, 'tnum' 1, 'lnum' 1;
+}
+
+/* -- Manifesto / long-form copy - tighten over-spaced lines ----------------------- */
+.about-manifesto p {
+  line-height: 1.8 !important;
+  letter-spacing: 0 !important;
+  font-weight: 300;
+}
+
+/* -- Spaced uppercase labels - optical compensation -------------------------------- */
+.hero-spacer,
+.nav-brand .name,
+.nav-brand .sub,
+.nav-links a,
+[class*="category"],
+[class*="label"] {
+  font-feature-settings: 'kern' 1, 'cpsp' 1;
+}
+
+/* -- Pull-quote refinement --------------------------------------------------------- */
+.pull-quote blockquote {
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'onum' 1, 'swsh' 1;
+  hanging-punctuation: first;
+}
+
+/* -- Display headings - sub-pixel crispness ---------------------------------------- */
+h1 {
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1;
+}
+
+/* -- Italic text - proper glyph selection ------------------------------------------ */
+em, i, blockquote, .font-italic {
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'dlig' 1;
+}
+
+/* =====================================================================
+   GLOBAL POLISH - Step 9
+   ===================================================================== */
+
+/* -- Text selection ---------------------------------------------------------------- */
+::selection        { background: #CFA246; color: #1A1612; }
+::-moz-selection   { background: #CFA246; color: #1A1612; }
+
+/* -- Thin custom scrollbar --------------------------------------------------------- */
+::-webkit-scrollbar              { width: 4px; height: 4px; }
+::-webkit-scrollbar-track        { background: rgba(26, 22, 18, 0.06); }
+::-webkit-scrollbar-thumb        { background: rgba(26, 22, 18, 0.18); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover  { background: rgba(26, 22, 18, 0.32); }
+::-webkit-scrollbar-corner       { background: transparent; }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(26, 22, 18, 0.18) rgba(26, 22, 18, 0.06);
+}
+
+/* -- Focus ring - clean, accessible, on-brand --------------------------------------- */
+:focus-visible          {
+  outline: 2px solid #CFA246;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* -- Smooth image rendering -------------------------------------------------------- */
+img {
+  image-rendering: auto;
+  max-width: 100%;
+}
+
+/* -- Remove tap highlight on mobile ------------------------------------------------- */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* -- Respect reduced-motion preferences --------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:       0.01ms !important;
+    animation-iteration-count: 1     !important;
+    transition-duration:      0.01ms !important;
+    scroll-behavior:          auto   !important;
+  }
+}
+
+/* -- Long-form measure cap — keeps line lengths within comfortable reading range ----- */
+.reader-body,
+.reader-body p,
+.about-body p,
+.about-manifesto p,
+.workshop-body p,
+.essay-body p,
+.bio-text,
+.bio-paragraph,
+.modal-description,
+.jdt-focus,
+.intro-text p,
+.chapter-intro-text,
+.chapter-intro-text p,
+.concept .c-excerpt,
+.note-card .n-body,
+.pull-quote blockquote {
+  max-inline-size: 640px;
+  text-wrap: pretty;
+}
+
+/* -- Nav link letter-spacing hover -------------------------------------------------- */
+.nav-links a {
+  transition: opacity 0.25s ease, color 0.25s ease;
+}
+.nav-links a:hover {
+  opacity: 0.65;
+}

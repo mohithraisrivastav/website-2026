@@ -1,0 +1,827 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <title>Mohith Rai Srivastav | Architectural Photographer, Goa India</title>
+    <meta name="description" content="Mohith Rai Srivastav &mdash; architectural photographer based in Goa, India. Translating the built environment through a practice of slowness, materiality, and sustained attention.">
+    <meta name="keywords" content="architectural photographer, Goa, India, fine art photography, Mohith Rai Srivastav, Resurface series, archival prints">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mohithraisrivastav.com/">
+    <meta property="og:site_name" content="Mohith Rai Srivastav">
+    <meta property="og:title" content="Mohith Rai Srivastav | Architectural Photographer, Goa India">
+    <meta property="og:description" content="Translating the built environment through a practice of slowness, materiality, and sustained attention. Fine art prints and field workshops from Goa, India.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mohithraisrivastav.com/">
+    <meta property="og:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mohith Rai Srivastav | Architectural Photographer">
+    <meta name="twitter:description" content="Translating the built environment through a practice of slowness, materiality, and sustained attention.">
+    <meta name="twitter:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://mohithraisrivastav.com/#website",
+          "url": "https://mohithraisrivastav.com/",
+          "name": "Mohith Rai Srivastav",
+          "description": "Architectural photographer based in Goa, India"
+        },
+        {
+          "@type": "Person",
+          "@id": "https://mohithraisrivastav.com/#person",
+          "name": "Mohith Rai Srivastav",
+          "url": "https://mohithraisrivastav.com/",
+          "image": "https://mohithraisrivastav.com/images/Mohith.webp",
+          "jobTitle": "Architectural Photographer",
+          "description": "Architect by training, photographer by practice. Based in Goa, India.",
+          "address": { "@type": "PostalAddress", "addressLocality": "Goa", "addressCountry": "IN" },
+          "sameAs": [
+            "https://www.instagram.com/mohithraisrivastav/",
+            "https://www.linkedin.com/in/mohithraisrivastav/",
+            "https://vimeo.com/user140494679"
+          ]
+        }
+      ]
+    }
+    </script>
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+    <link rel="dns-prefetch" href="https://player.vimeo.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        /* Ensure special characters render with system font fallback */
+        body { font-variant-numeric: tabular-nums; }
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    </style>
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <style>
+.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+#slineCanvas{position:absolute;top:0;left:0;}
+
+
+        /* --- 1. Global Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 100%; }
+
+        body {
+            background-color: transparent; color: #1A1612; line-height: 1.7;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+        body > * { position: relative; z-index: 1; }
+
+        /* --- 5. Hero & Manifesto --- */
+        .hero-split {
+            min-height: 85vh; width: 100vw;
+            display: grid; grid-template-columns: 1fr 1fr;
+            align-items: center; padding: 0 5vw;
+            position: relative;
+        }
+        .hero-left { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; z-index: 10; min-width: 0; }
+        .hero-spacer { font-size: 0.875rem; font-weight: 600; letter-spacing: 5px; color: #5C4A3F; margin-bottom: 24px; text-transform: uppercase; opacity: 0; animation: slowFadeIn 2s ease 0.5s forwards; }
+        .hero-title { font-size: clamp(3rem, 6vw, 10rem); font-weight: 300; font-style: italic; line-height: 0.95; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+        
+        .hero-right { display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; height: 100%; gap: 20px; }
+        .viewfinder { width: 30vw; min-width: min(300px, 85vw); aspect-ratio: 4 / 5; overflow: hidden; position: relative; z-index: 2; box-shadow: 0 20px 50px rgba(0,0,0,0.8); opacity: 0; animation: slowFadeIn 3s ease 1s forwards; background: transparent; }
+        .viewfinder .parallax-media { position: absolute; width: 160%; height: 160%; top: -20%; left: -30%; object-fit: cover; border: none; pointer-events: none; filter: brightness(0.75); transition: filter 1.5s ease; }
+        .viewfinder:hover .parallax-media { filter: brightness(1); }
+
+        .hero-text { position: relative; bottom: auto; right: auto; z-index: 3; opacity: 0; align-self: flex-end; padding-right: 2px; }
+        .parallax-text { font-size: 1rem; font-weight: 600; letter-spacing: 4px; color: #4A3A33; text-transform: uppercase; }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            animation: slowFadeIn 2s ease 2.5s forwards;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .scroll-cue span {
+            font-size: 0.8625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #4A3A33;
+        }
+        .scroll-line {
+            width: 1px;
+            height: 52px;
+            background: rgba(74, 58, 51, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+        .scroll-dot {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 40%;
+            background: linear-gradient(to bottom, transparent, #4A3A33);
+            animation: scrollTravel 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes scrollTravel {
+            0%   { transform: translateY(-100%); opacity: 0; }
+            20%  { opacity: 1; }
+            80%  { opacity: 1; }
+            100% { transform: translateY(260%); opacity: 0; }
+        }
+
+        .about-manifesto { padding: 8vh 10%; text-align: center; max-width: 1000px; margin: 0 auto; }
+        .about-manifesto p { font-size: 2rem; font-weight: 300; color: #1A1612; letter-spacing: 1px; line-height: 1.5; }
+        .manifesto-link { display: inline-block; margin-top: 30px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; text-decoration: none; transition: 0.3s; }
+        .manifesto-link:hover { color: #1A1612; }
+
+        /* --- 6. Gallery --- */
+        .pinned-section { height: auto; overflow: visible; background: transparent; border-top: 1px solid #CFA246; cursor: default; padding: 7vh 8vw 10vh; }
+        .scroll-track { height: auto; display: block; width: 100%; padding: 0; }
+        .gallery-intro { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5vh; }
+        .gallery-intro h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; margin-bottom: 0; }
+        .gallery-intro p { font-size: 1rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; }
+        .gallery-explore-link { display: inline-block; font-size: 1rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 3px; transition: color 0.25s ease, border-color 0.25s ease; cursor: pointer; }
+        .gallery-explore-link:hover { color: #CFA246; border-color: #CFA246; }
+        a.work-link { display: block; text-decoration: none; width: 100%; margin-bottom: 3.5vw; }
+        a.work-link:last-child { margin-bottom: 0; }
+        .work-item { width: 100%; height: 78vh; position: relative; overflow: hidden; background-color: #000; cursor: pointer; border-radius: 6px; }
+        .work-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: filter 1.5s cubic-bezier(0.25, 1, 0.5, 1), transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .work-item:hover img { filter: brightness(1); transform: scale(1.03); }
+        .work-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 45%); pointer-events: none; }
+        .work-meta { position: absolute; bottom: 28px; left: 28px; z-index: 2; font-size: 0.8625rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,1); pointer-events: none; }
+
+        /* --- 7. Shop Preview --- */
+        .shop-preview { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+        .shop-preview-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; flex-wrap: wrap; gap: 30px; }
+        .shop-preview-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; line-height: 1; }
+        .shop-preview-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 0px; color: #4A3A33; text-transform: none; margin-top: 15px; max-width: 400px; line-height: 1.8; }
+        .shop-view-all { font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #1A1612; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 6px; transition: 0.3s; }
+        .shop-view-all:hover { color: #1A1612; border-color: #1A1612; }
+        .shop-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .shop-preview-card { cursor: pointer; text-decoration: none; color: inherit; }
+        .shop-preview-card .img-wrap { position: relative; aspect-ratio: 1/1; overflow: hidden; background: #E0D5C7; margin-bottom: 20px; }
+        .shop-preview-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.92); transition: 1.2s cubic-bezier(0.25, 1, 0.5, 1); }
+        .shop-preview-card:hover img { filter: brightness(1); transform: scale(1.03); }
+        .shop-preview-card h3 { font-size: 1.06rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1A1612; margin-bottom: 8px; }
+        .shop-preview-card .cat { font-size: 0.8625rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #4A3A33; margin-bottom: 10px; }
+        .shop-preview-card .price { font-size: 1rem; font-weight: 400; letter-spacing: 1px; color: #1A1612; }
+        @media (max-width: 1100px) {
+            .shop-preview { padding: 80px 5vw; }
+            .shop-preview-head h2 { font-size: 2.5rem; }
+            .shop-preview-grid { grid-template-columns: 1fr; gap: 60px; }
+        }
+
+        /* --- 8. Testimonials --- */
+.testimonials { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+.testimonials-head { margin-bottom: 80px; }
+.testimonials-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; line-height: 1; }
+.testimonials-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; margin-top: 20px; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+
+/* clean, box‑free testimonial */
+.testimonial {
+  background: transparent;
+  padding: 0 0 80px;
+  border: none;
+  box-shadow: none;
+  transform: none !important;
+}
+.testimonial:first-child {
+  padding-top: 0;
+}
+/* small orange dot centered between quotes */
+.testimonial:not(:first-child)::before {
+  content: '·';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: #CFA246;
+  line-height: 1;
+  opacity: 0.5;
+}
+.testimonial::before {
+  display: block;               /* overrides the original quote mark hide */
+}
+/* hide the original big “ if any */
+.testimonial .author {
+  border-top: none;
+  padding-top: 0;
+  text-align: right;
+  margin-top: 36px;
+}
+.testimonial blockquote {
+  font-family: var(--font-accent) !important;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  font-weight: 300;
+  color: #2C1F1A;
+  line-height: 1.9;
+  letter-spacing: 0.2px;
+  margin: 0 0 28px;
+  padding-left: 24px;                              /* space for the rule */
+  border-left: 2px solid rgba(207, 162, 70, 0.35);  /* quiet orange rule */
+  font-style: italic;
+}        /* --- 9. Pull Quote --- */
+        .pull-quote { padding: 10vh 8vw; background: transparent; border-top: 1px solid #CFA246; text-align: center; }
+        .pull-quote-inner { max-width: 860px; margin: 0 auto; }
+        .pull-quote blockquote { font-family: 'Cormorant Garamond', Georgia, serif !important; font-size: clamp(1.375rem, 1.9vw, 2.125rem); font-weight: 300; color: #1A1612; line-height: 1.6; letter-spacing: 0.2px; font-style: italic; }
+        .pull-quote blockquote::before { display: none; }
+        .pull-quote .attribution { margin-top: 28px; font-size: 0.8125rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; }
+        .pull-quote .attribution::before { content: '— '; color: #8B6914; }
+        @media (max-width: 640px) {
+            .pull-quote { padding: 8vh 6vw; }
+            .pull-quote blockquote { font-size: clamp(1.5rem, 5.5vw, 2rem); line-height: 1.5; }
+            .pull-quote .attribution { margin-top: 20px; }
+        }
+
+        @keyframes slowFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* -- Mobile fixes (= 640px) ----------------------------------- */
+        @media (max-width: 768px) {
+            /* Tablet adjustments */
+            .hero-title {
+                font-size: clamp(3.5rem, 6vw, 6rem) !important;
+            }
+            .hero-sub {
+                font-size: 1.8rem !important;
+            }
+            .track-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        @media (max-width: 640px) {
+            /* Hero */
+            .hero-split {
+                padding-top: 20px !important;
+                gap: 28px;
+            }
+            .hero-title {
+                font-size: clamp(3.5rem, 6vw, 6rem) !important;
+            }
+            .scroll-cue {
+                position: static !important;
+                transform: none !important;
+                margin-top: 32px;
+                align-self: center;
+            }
+
+            /* Manifesto */
+            .about-manifesto {
+                padding: 8vh 6% !important;
+            }
+            .about-manifesto p {
+                font-size: 1.18rem !important;
+                line-height: 1.9 !important;
+            }
+
+            /* Gallery — vertical on mobile */
+            .pinned-section { padding: 6vh 6vw 8vh; }
+            .gallery-intro { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 4vh; }
+            a.work-link { margin-bottom: 5vw; }
+            .work-item { height: 58vw; border-radius: 4px; }
+
+            /* Shop */
+            .shop-preview {
+                padding: 60px 5vw !important;
+            }
+            .shop-preview-grid {
+                gap: 30px !important;
+            }
+            .shop-preview-head {
+                margin-bottom: 36px !important;
+            }
+            .shop-preview-head h2 {
+                font-size: 2rem !important;
+            }
+
+            /* Testimonials */
+            .testimonials {
+                padding: 60px 5vw !important;
+            }
+            .testimonials-head {
+                margin-bottom: 44px !important;
+            }
+            .testimonials-head h2 {
+                font-size: 2rem !important;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+            .testimonial {
+                padding-bottom: 48px !important;
+                border-bottom: 1px solid rgba(207,162,70,0.2);
+                margin-bottom: 48px;
+            }
+            .testimonial:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0 !important;
+            }
+            .testimonial blockquote {
+                font-size: 1.05rem !important;
+            }
+
+            /* Pull quote */
+            .pull-quote {
+                padding: 70px 5vw !important;
+            }
+            .pull-quote blockquote::before {
+                font-size: 3.5rem !important;
+            }
+
+            /* Background decorative text &mdash; hide on small screens */
+            .scroll-bg-text {
+                display: none !important;
+            }
+        }
+
+        /* -- Scroll-linked background text ------------------------ */
+        main { position: relative; }
+        .scroll-bg-text {
+            position: absolute;
+            font-size: clamp(88px, 13vw, 180px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            color: #fff;
+            opacity: 0.03;
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+            line-height: 1;
+            z-index: 0;
+            will-change: transform;
+        }
+        #bg-arch   { top: 108vh; left: -2vw; }
+        #bg-resurf { top: 300vh; right: -2vw; }
+
+        /* -- Hero entry &mdash; GSAP takes over, neutralise CSS animations --- */
+        .hero-spacer, .viewfinder, .hero-text { animation: none !important; opacity: 0; }
+
+        /* -- Hero title overflow clip for line-rise reveal ------------ */
+        .hero-title { overflow: hidden; padding-bottom: 0.12em; }
+        .hero-title-inner { display: block; }
+
+        @media (max-width: 1100px) {
+            .hero-split { grid-template-columns: 1fr; height: auto; padding-top: 20px; gap: 50px; text-align: left; }
+            .hero-right { align-items: flex-start; }
+            .hero-text { position: relative; bottom: 0; right: 0; margin-top: 20px; }
+            .viewfinder { width: 100%; margin: 0; }
+            .gallery-intro { width: 70vw; }
+            .work-item { width: 100%; }
+        }
+        /* Mobile header fixes */
+        @media (max-width: 1100px) {
+            /* 1. Force hamburger to the right */
+            .nav-links-container {
+                flex: 1;
+                justify-content: flex-end;
+            }
+            .hamburger {
+                order: 3;
+                margin-left: auto;
+            }
+            /* 3. Prevent hero title from wrapping */
+            .hero-title,
+            .hero-title-inner,
+            .workshop-hero h1,
+            .shop-hero h1,
+            .work-hero h1,
+            .mobile-page-title,
+            .studio-header h1,
+            .page-title,
+            .assets-hero h1 {
+                white-space: normal !important;
+                word-break: normal !important;
+                hyphens: none !important;
+                font-size: clamp(2rem, 8vw, 3rem) !important;
+                line-height: 1.1 !important;
+            }
+        }
+    </style>
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+        <div class="cart-header"><h2>Your Selection</h2><button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button></div>
+        <div class="cart-items-list" id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="images/Mohith LOGO.webp" alt="Logo" class="logo">
+        </a>
+        
+        <div class="nav-brand">
+            <span class="name">Mohith Rai Srivastav</span>
+            <span class="sub">Architectural Photographer · Filmmaker · Educator</span>
+        </div>
+
+        <div class="nav-links-container">
+            <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li style="display:none"><a href="journal.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <button class="cart-icon" onclick="toggleCart()" aria-label="Open cart">
+                <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                <span class="cart-count" id="cartCountGlobal"></span>
+            </button>
+
+            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <main id="main-content">
+        <span class="scroll-bg-text" id="bg-arch" aria-hidden="true">ARCHITECTURE</span>
+        <span class="scroll-bg-text" id="bg-resurf" aria-hidden="true">RESURFACE</span>
+
+        <section class="hero-split" id="hero-section">
+            <div class="hero-left">
+                <div class="hero-spacer">S  e  e . &nbsp; S  h  a  p  e . &nbsp; B  u  i  l  d .</div>
+                <h1 class="hero-title">Translating</h1>
+                <h1 class="hero-title" style="color: #1A1612;">the built</h1>
+                <h1 class="hero-title">environment.</h1>
+            </div>
+
+            <div class="hero-right">
+                <div class="viewfinder">
+                    <iframe data-src="https://player.vimeo.com/video/900115166?background=1&autoplay=1&loop=1&byline=0&title=0" allow="autoplay; fullscreen" class="parallax-media" title="Background video: architectural photography reel" aria-hidden="true" tabindex="-1"></iframe>
+                </div>
+
+            </div>
+            <div class="scroll-cue" aria-hidden="true">
+                <span>Scroll</span>
+                <div class="scroll-line">
+                    <div class="scroll-dot"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="teaser" class="about-manifesto">
+            <p class="fade-up">
+                I trained as an architect. I photograph to understand — how a building holds light, where the built ends and the elemental begins. The two have never been as separate as the drawings suggest.
+            </p>
+            <a href="about.html" class="manifesto-link fade-up">About the Practice &rarr;</a>
+        </section>
+
+        <section id="work" class="pinned-section">
+    <div class="scroll-track">
+        <div class="gallery-intro">
+            <h2>Selected<br>Works</h2>
+            <a href="work.html" class="gallery-explore-link">View All Work →</a>
+        </div>
+        <a href="Work/eleve-eco-resort.html" class="work-link">
+            <div class="work-item">
+                <img src="Work/Projects/Eleve/_DSC2593-HDR-Edit.webp" alt="Elevé Eco Resort" class="track-img" loading="eager" fetchpriority="high">
+                <div class="work-meta">Elevé Eco Resort · Assagao</div>
+            </div>
+        </a>
+        <a href="Work/seven-doors.html" class="work-link">
+            <div class="work-item">
+                <img src="Work/Projects/Seven Doors/_DSC3972-HDR-2.webp" alt="Seven Doors" class="track-img" loading="lazy">
+                <div class="work-meta">Seven Doors · Pilerne Marra</div>
+            </div>
+        </a>
+        <a href="Work/solo-house.html" class="work-link">
+            <div class="work-item">
+                <img src="Work/Projects/Solo House/_DSC4373-HDR.webp" alt="Solo House" class="track-img" loading="lazy">
+                <div class="work-meta">Solo House · Goa</div>
+            </div>
+        </a>
+    </div>
+</section>
+
+
+        <section id="shop-preview" class="shop-preview">
+            <div class="shop-preview-head">
+                <div>
+                    <h2>The<br>Print Shop.</h2>
+                   <p class="shop-subtitle">Archival fine art prints, signed and numbered, in limited editions. Also available: <em>The Matter of Pause</em> monograph and the Explorer’s Deck.</p>
+                </div>
+                <a href="shop.html" class="shop-view-all">View All Editions &rarr;</a>
+            </div>
+            <div class="shop-preview-grid">
+                <a href="shop.html#cosmic-return" class="shop-preview-card">
+                    <div class="img-wrap"><img src="images/Cosmic Return.webp" alt="Cosmic Return — Resurface Series fine art print by Mohith Rai Srivastav" loading="lazy"></div>
+                    <div class="cat">Resurface Series / Fine Art Print</div>
+                    <h3>Cosmic Return</h3>
+                    <div class="price">&#8377;1,25,000 &middot; Edition of 2 + 1 AP</div>
+                </a>
+                <a href="shop.html#burnt-earth" class="shop-preview-card">
+                    <div class="img-wrap"><img src="images/Burnt Earth.webp" alt="Burnt Earth — Resurface Series fine art print by Mohith Rai Srivastav" loading="lazy"></div>
+                    <div class="cat">Resurface Series / Fine Art Print</div>
+                    <h3>Burnt Earth</h3>
+                    <div class="price">&#8377;1,25,000 &middot; Edition of 2 + 1 AP</div>
+                </a>
+                <a href="shop.html#chromatic-rupture" class="shop-preview-card">
+                    <div class="img-wrap"><img src="images/Chromatic Rupture.webp" alt="Chromatic Rupture — Resurface Series fine art print by Mohith Rai Srivastav" loading="lazy"></div>
+                    <div class="cat">Resurface Series / Fine Art Print</div>
+                    <h3>Chromatic Rupture</h3>
+                    <div class="price">&#8377;1,25,000 &middot; Edition of 2 + 1 AP</div>
+                </a>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <div class="testimonials-head">
+                <h2>Selected<br>Testimonials.</h2>
+                <p>Voices from collectors, curators & collaborators</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <blockquote>Mohith was an exceptional professional to work with. We worked on a collaborative live stream with colleagues and artists based internationally (India and UK). The site was challenging to work with because of power outages and signal failure but Mohith was great at problem-solving and had a strong work ethic with resolve throughout the 24 hour stream. Thank you! Hope we work together in the future!</blockquote>
+                    <div class="author">
+                        <div class="name">Georgia Taylor Aguilar</div>
+                        <div class="role">Exhibition and artist development Curator, UK</div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <blockquote>It's been an absolute pleasure working with Mohith. He is very meticulous with his work, is supremely discipline and has a keen eye with photography. He helped capture our rooms and the exteriors at The Sawantwadi Palace Boutique Art hotel beautifully.</blockquote>
+                    <div class="author">
+                        <div class="name">Shraddha Lakham Sawant Bhonsle</div>
+                        <div class="role">Mayor of Sawantwadi</div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <blockquote>Mohith has been an absolute pleasure to work with. He has a keen eye for detail and certainly mastery over light. His ability to capture the essence of a space has truly elevated our projects perception. His photographs not only showcase the design beautifully but also bring out the mood and character of each setting. 
+Mohith understands architectural storytelling and delivers stunning visuals that exceed expectations. His work has been instrumental in presenting our projects in the best light. We highly recommend him to anyone looking for exceptional photography.</blockquote>
+                    <div class="author">
+                        <div class="name">VAN</div>
+                        <div class="role">Architecture Practice, Goa</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pull-quote" class="pull-quote">
+            <div class="pull-quote-inner">
+                <blockquote>Architecture does not end where the building ends.<br>It continues in erosion, in light,<br>in the slow patience of matter.</blockquote>
+                <div class="attribution">Mohith Rai Srivastav</div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+    <div class="sf-cta">
+        <span class="sf-cta-label">Open for Commissions: 2026</span>
+        <h2 class="sf-heading">Let's Work<br>Together.</h2>
+        <a href="contact.html" class="sf-contact-btn">Start a Project &nbsp;&rarr;</a>
+    </div>
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link">
+              <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+            </a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">&rarr;</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.getElementById('hamburgerBtn');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+            burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+            if(menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Lenis + ScrollTrigger: must sync via gsap.ticker, not a manual RAF loop
+        const lenis = new Lenis({ duration: 0.9, easing: (t) => 1 - Math.pow(1 - t, 3) });
+        window.__lenis = lenis;
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        // Refresh ScrollTrigger after all images have loaded to prevent position miscalculations
+        // Also activate the deferred Vimeo iframe — loading it here keeps it off the critical path
+        window.addEventListener('load', () => {
+            ScrollTrigger.refresh();
+            const vimeo = document.querySelector('.viewfinder iframe[data-src]');
+            if (vimeo) vimeo.src = vimeo.dataset.src;
+        });
+
+        // -- Hero title: wrap text in inner span for line-rise reveal --------
+        document.querySelectorAll('.hero-title').forEach(el => {
+            const inner = document.createElement('span');
+            inner.className = 'hero-title-inner';
+            inner.innerHTML = el.innerHTML;
+            el.innerHTML = '';
+            el.appendChild(inner);
+        });
+
+        // -- Hero entrance sequence -------------------------------------------
+        const heroIn = gsap.timeline({ delay: 0.1 });
+        heroIn
+            .fromTo('.hero-spacer',
+                { opacity: 0, x: -24 },
+                { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }, 0.25)
+            .fromTo('.hero-title-inner',
+                { y: '105%' },
+                { y: '0%', duration: 1.05, ease: 'power4.out', stagger: 0.13 }, 0.4)
+            .fromTo('.viewfinder',
+                { opacity: 1, clipPath: 'inset(100% 0 0 0)' },
+                { clipPath: 'inset(0% 0 0 0)', duration: 1.3, ease: 'power4.out' }, 0.5)
+;
+
+// -- Hero scroll exit (parallax out) ---------------------------------
+        let heroTl = gsap.timeline({ scrollTrigger: { trigger: "#hero-section", start: "top top", end: "bottom top", scrub: 1 } });
+        heroTl.to(".hero-title", { y: -60, opacity: 0, stagger: 0.08 }, 0)
+              .to(".hero-spacer", { y: -30, opacity: 0 }, 0)
+              .to(".parallax-media", { yPercent: 15 }, 0)
+;
+
+        // -- Per-element scroll reveals ----------------------------------------
+        gsap.utils.toArray('.fade-up').forEach(el => {
+            gsap.fromTo(el,
+                { y: 40, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out',
+                  scrollTrigger: { trigger: el, start: 'top 88%' } }
+            );
+        });
+
+        // -- Section heading reveals -------------------------------------------
+        ['.shop-preview-head', '.testimonials-head', '.pull-quote-inner'].forEach(sel => {
+            gsap.from(sel, {
+                y: 44, opacity: 0, duration: 1.0, ease: 'power3.out',
+                scrollTrigger: { trigger: sel, start: 'top 85%' }
+            });
+        });
+
+        // -- Testimonials stagger ----------------------------------------------
+        gsap.fromTo('.testimonial',
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out', stagger: 0.12,
+              scrollTrigger: { trigger: '.testimonials-grid', start: 'top 90%', once: true } }
+        );
+
+        // -- Footer rise -------------------------------------------------------
+        gsap.from('.site-footer h2', {
+            y: 30, opacity: 0, duration: 0.9, ease: 'power2.out',
+            scrollTrigger: { trigger: '.site-footer', start: 'top 85%' }
+        });
+
+        // -- Scroll-linked background text parallax ----------------------------
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            gsap.to('#bg-arch', {
+                x: '12vw',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#teaser',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 2
+                }
+            });
+            gsap.to('#bg-resurf', {
+                x: '-12vw',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.shop-preview',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 2
+                }
+            });
+        }
+
+        // Gallery — vertical scroll reveal
+        gsap.utils.toArray('a.work-link').forEach((link, i) => {
+            gsap.fromTo(link,
+                { opacity: 0, y: 60 },
+                { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                  scrollTrigger: { trigger: link, start: 'top 88%', toggleActions: 'play none none none' }
+                }
+            );
+        });
+    </script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/site.js"></script>
+
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script src="assets/js/reveals.js"></script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+.policy-hero {
+    padding: 120px 5vw 60px;
+    border-bottom: 1px solid rgba(207,162,70,0.2);
+}
+.policy-hero .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #CFA246;
+    margin-bottom: 24px;
+}
+.policy-hero h1 {
+    font-size: clamp(2.8rem, 5vw, 5.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: #1A1612;
+    margin-bottom: 24px;
+}
+.policy-hero .updated {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: rgba(26,22,18,0.45);
+    text-transform: uppercase;
+}
+.policy-body {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 5vw 120px;
+}
+.policy-section {
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(207,162,70,0.12);
+}
+.policy-section:last-child { border-bottom: none; }
+.policy-section h2 {
+    font-size: 1.0938rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #CFA246;
+    margin-bottom: 28px;
+}
+.policy-section p {
+    font-size: 1.0rem;
+    font-weight: 400;
+    color: rgba(26,22,18,0.8);
+    line-height: 1.85;
+    margin-bottom: 18px;
+}
+.policy-section ul {
+    margin: 0 0 18px 0;
+    padding: 0;
+    list-style: none;
+}
+.policy-section ul li {
+    font-size: 1.0rem;
+    color: rgba(26,22,18,0.8);
+    line-height: 1.85;
+    padding: 10px 0 10px 24px;
+    border-bottom: 1px solid rgba(207,162,70,0.08);
+    position: relative;
+}
+.policy-section ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #CFA246;
+    font-weight: 700;
+}
+.policy-section ul li:last-child { border-bottom: none; }
+.policy-section strong { color: #1A1612; font-weight: 700; }
+.policy-section a { color: #CFA246; text-decoration: underline; text-underline-offset: 3px; }
+.policy-highlight {
+    background: rgba(207,162,70,0.07);
+    border-left: 3px solid #CFA246;
+    padding: 20px 24px;
+    margin: 28px 0;
+    font-size: 0.9375rem;
+    color: rgba(26,22,18,0.8);
+    line-height: 1.8;
+    border-radius: 8px;
+}
+@media (max-width: 700px) {
+    .policy-hero { padding: 100px 5vw 40px; }
+    .policy-hero h1 { font-size: 2.4rem; }
+    .policy-body { padding: 60px 5vw 80px; }
+}

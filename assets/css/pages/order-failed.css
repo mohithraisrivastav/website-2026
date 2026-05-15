@@ -1,0 +1,46 @@
+.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+#slineCanvas{position:absolute;top:0;left:0;}
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 100%; }
+        body { background-color: transparent; color: #1A1612; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+        /* failed page has logo-only navbar */
+        .navbar { justify-content: flex-start; }
+        .logo { height: 60px; }
+
+        .fail-wrap { max-width: 700px; margin: 0 auto; padding: 20px 5vw 100px; text-align: center; }
+
+        .x-icon { width: 80px; height: 80px; border: 1px solid rgba(255,100,100,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; }
+        .x-icon svg { width: 32px; height: 32px; fill: #ff6b6b; }
+
+        .fail-label { font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #ff6b6b; text-transform: uppercase; margin-bottom: 20px; }
+        h1 { font-size: clamp(3.125rem, 6vw, 5.625rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 30px; }
+        .fail-msg { font-size: 1.25rem; font-weight: 300; color: #aaa; line-height: 1.8; max-width: 520px; margin: 0 auto 20px; }
+
+        .reason-box { background: #0f0f0f; border: 1px solid #222; padding: 25px; margin: 30px auto; text-align: left; font-size: 1rem; color: #888; max-width: 520px; }
+        .reason-box .label { display: block; font-size: 0.8625rem; color: #555; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; }
+
+        .reassure { font-size: 1.063rem; color: #666; line-height: 1.8; margin: 40px auto 50px; max-width: 520px; }
+
+        .cta-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .cta-btn { padding: 18px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
+        .cta-btn:hover { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary:hover { background: transparent; color: #fff; }
+
+        @media (max-width: 700px) { .fail-wrap { padding-top: 20px; } }
+
+        /* -- Liquid background light-mode overrides ------------------- */
+        body { background: transparent !important; color: #1A1612 !important; position: relative; }
+        body > * { position: relative; z-index: 1; }
+        .x-icon { border-color: rgba(255,100,100,0.35) !important; }
+        .fail-label { color: #cc4444 !important; }
+        .fail-msg { color: #555 !important; }
+        .reason-box { background: rgba(247,243,236,0.82) !important; border-color: rgba(26, 22, 18,0.1) !important; backdrop-filter: blur(8px); color: #666 !important; }
+        .reason-box .label { color: #888 !important; }
+        .reassure { color: #666 !important; }
+        .cta-btn { border-color: rgba(26, 22, 18,0.2) !important; color: #1A1612 !important; }
+        .cta-btn:hover { background: #1A1612 !important; color: #F7F3ED !important; border-color: #1A1612 !important; }
+        .cta-btn.primary { background: #CFA246 !important; color: #fff !important; border-color: #CFA246 !important; }
+        .cta-btn.primary:hover { background: #1A1612 !important; border-color: #1A1612 !important; }

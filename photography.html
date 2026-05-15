@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <title>Photography | Architectural Portfolio | Mohith Rai Srivastav</title>
+    <meta name="description" content="Selected works by Mohith Rai Srivastav: architectural photography spanning residential, material, and environmental contexts across South Asia.">
+    <meta name="keywords" content="architectural photography portfolio, Goa, India, South Asia, Resurface series, built environment photography">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mohithraisrivastav.com/photography.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/pages/work.css">
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="images/Mohith LOGO.webp" alt="Logo" class="logo">
+        </a>
+        <div class="nav-brand">
+            <span class="name">Mohith Rai Srivastav</span>
+            <span class="sub">Architectural Photographer · Filmmaker · Educator</span>
+        </div>
+        <div class="nav-links-container">
+            <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li style="display:none"><a href="journal.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <main id="main-content">
+        <div class="mobile-page-title">Selected Work</div>
+
+        <section class="work-hero">
+            <h1>Selected<br><span class="hero-light">Work</span></h1>
+            <div class="hero-line"></div>
+        </section>
+
+        <section class="works-index">
+            <div class="wi-grid" id="wiGrid"></div>
+        </section>
+
+        <footer class="site-footer">
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link">
+              <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+            </a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">&rarr;</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+        <div class="cart-header">
+            <h2>Your Selection</h2>
+            <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+        </div>
+        <div id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+            <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div></main>
+
+    <script>
+        function toggleMenu() {
+            const menu   = document.getElementById('mobileMenu');
+            const burger = document.getElementById('hamburgerBtn');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+            burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        const lenis = new Lenis({ lerp: 0.12, smoothWheel: true });
+        window.__lenis = lenis;
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        const projects = [
+            { num:'01', slug:'eleve-eco-resort',  title:'Elevé Eco Resort',   loc:'Assagao, Goa',          year:'2026', cluster:'Hospitality', cover:'Work/Projects/Eleve/_DSC2593-HDR-Edit.webp' },
+            { num:'02', slug:'seven-doors',         title:'Seven Doors',  loc:'Pilerne Marra, Bardez',          year:'2024', cluster:'Restoration', cover:'Work/Projects/Seven Doors/_DSC3972-HDR-2.webp' },
+            { num:'03', slug:'solo-house',         title:'Solo House',     loc:'Goa',           year:'2024', cluster:'Residence', cover:'Work/Projects/Solo House/_DSC4373-HDR.webp' },
+            { num:'04', slug:'casa-kosha',         title:'Casa Kosha',      loc:'Siridao, Goa',         year:'2025', cluster:'Residence', cover:'Work/Projects/Casa Kosha/_DSC8122.webp' },
+            { num:'05', slug:'rio-estillo',         title:'Rio Estillo',      loc:'Anjuna, Goa',         year:'2025', cluster:'Hospitality', cover:'Work/Projects/RIO luxury Homes/DJI_20250425080741_0131_D.webp' },
+            { num:'06', slug:'sawantwadi-palace',         title:'Sawantwadi Palace', loc:'Sawantwadi, Maharashtra',     year:'2022', cluster:'Heritage', cover:'Work/Projects/Sawantwadi Palace/_DSC4402-Pano.webp' },
+            { num:'07', slug:'villa-lluvia',         title:'Villa Lluvia',  loc:'Siolim, Goa',      year:'2024', cluster:'Hospitality', cover:'Work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp' },
+            { num:'08', slug:'vaivi-space-designs',         title:'Vaivi Space Designs',    loc:'Jubilee Hills, Hyderabad',          year:'2024', cluster:'Residence', cover:'Work/Projects/Vaivi Space Designs/_DSC0092-HDR.webp' },
+            { num:'09', slug:'secure-meters',         title:'Secure Meters',      loc:'Sanand, Gujarat',    year:'2022', cluster:'Industrial', cover:'Work/Projects/Secure Meters/DSC3334b.webp' },
+            { num:'10', slug:'iim-bangalore',         title:'IIM Bangalore',        loc:'Bengaluru, Karnataka',        year:'2024', cluster:'Documentation', cover:'Work/Projects/IIMB/Final/To Post/20240823_162157-Edit.webp' },
+            { num:'11', slug:'anokhi',         title:'Anokhi',        loc:'Vasco da gama, Goa',        year:'2026', cluster:'Residence', cover:'Work/Projects/Anokhi/_DSC5348-HDR-Edit.webp' },
+            { num:'12', slug:'baithak',         title:'Baithak',      loc:'Goa',    year:'2024', cluster:'Restoration', cover:'Work/Projects/Baithak/_DSC8534-HDR-Pano-Edit.webp' },
+            { num:'13', slug:'2010-design-house',         title:'2010 Design House',      loc:'Hyderabad, Telangana',    year:'2021', cluster:'Renovation', cover:'Work/Projects/2010 Design House/_DSC4732-Edit.webp' },
+        ];
+
+        /* -- Aspect ratios per project (natural photographic proportions) -- */
+        const layoutMap = [
+            { aspect: '4/3'   },   // 01 &mdash; landscape
+            { aspect: '2/3'   },   // 02 &mdash; portrait
+            { aspect: '4/3'   },   // 03 &mdash; landscape
+            { aspect: '1/1'   },   // 04 &mdash; square
+            { aspect: '16/9'  },   // 05 &mdash; wide
+            { aspect: '2/3'   },   // 06 &mdash; portrait
+            { aspect: '2/3'   },   // 07 &mdash; portrait
+            { aspect: '4/3'   },   // 08 &mdash; landscape
+            { aspect: '16/10' },   // 09 &mdash; wide
+            { aspect: '4/3'   },   // 10 &mdash; landscape
+            { aspect: '2/3'   },   // 11 &mdash; portrait
+            { aspect: '16/9'  },   // 12 &mdash; wide
+            { aspect: '16/9'  },   // 13 &mdash; landscape
+        ];
+
+        const gridEl = document.getElementById('wiGrid');
+
+        /* Build 3 columns */
+        const cols = [0, 1, 2].map(() => {
+            const col = document.createElement('div');
+            col.className = 'wi-col';
+            gridEl.appendChild(col);
+            return col;
+        });
+
+        /* Distribute cards round-robin across columns */
+        projects.forEach((p, i) => {
+            const layout = layoutMap[i];
+            const card   = document.createElement('a');
+            card.href         = `Work/${p.slug}.html`;
+            card.className    = 'wi-card';
+            card.dataset.cat    = p.cluster;
+            card.dataset.col    = i % 3;
+            card.dataset.orient = layout.aspect === '2/3' ? 'portrait' : 'landscape';
+
+            card.innerHTML =
+`
+                <div class="wi-frame" style="aspect-ratio:${layout.aspect};">
+                    <img src="${p.cover}"
+                         alt="${p.title}"
+                         loading="${i < 6 ? 'eager' : 'lazy'}"
+                         onerror="this.onerror=null;this.src='images/Cosmic Return.webp';">
+                    <div class="wi-overlay"></div>
+                    <div class="wi-hinfo">
+                        <span class="wi-hmeta">
+                            <span>${p.loc}</span>
+                            <span class="wi-harrow">&#8594;</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="wi-cap">
+                    <div class="wi-cap-l">
+                        <span class="wi-cap-num">${p.num}</span>
+                        <span class="wi-cap-title">${p.title}</span>
+                    </div>
+                    <span class="wi-cap-cat">${p.cluster}</span>
+                </div>
+            `;
+            cols[i % 3].appendChild(card);
+        });
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from('.work-hero h1', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 });
+        gsap.from('.hero-line',    { scaleX: 0, transformOrigin: 'left', duration: 1.5, ease: 'power3.out', delay: 0.5 });
+
+        /* -- Reveal: cards fade + rise staggered per column -- */
+        cols.forEach((col, ci) => {
+            const cards = col.querySelectorAll('.wi-card');
+            ScrollTrigger.batch(cards, {
+                onEnter: batch => gsap.to(batch, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: 'power3.out',
+                    stagger: 0.12,
+                    delay: ci * 0.08,
+                    overwrite: true
+                }),
+                start: 'top 92%',
+                once: true
+            });
+        });
+
+    </script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/cart.js"></script>
+</body>
+</html>
+
+

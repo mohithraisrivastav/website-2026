@@ -1,0 +1,17 @@
+{
+  "name": "mohith-rai-srivastav-site",
+  "version": "1.0.0",
+  "description": "Architectural photography portfolio + print shop",
+  "private": true,
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "razorpay": "^2.9.4",
+    "resend": "^6.10.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

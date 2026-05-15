@@ -1,0 +1,1308 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <title>Resurface — A Photographic Series | Mohith Rai Srivastav</title>
+    <meta name="description" content="How does the built world remain active, even when its transformations go unnoticed? Resurface is a photographic enquiry by Mohith Rai Srivastav — moving through climates, materials, and conditions.">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mohithraisrivastav.com/resurface.html">
+    <meta property="og:title" content="Resurface — A Photographic Enquiry | Mohith Rai Srivastav">
+    <meta property="og:description" content="How does the built world remain active, even when its transformations go unnoticed? A photographic series moving through climates, materials, and conditions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mohithraisrivastav.com/resurface.html">
+    <meta property="og:image" content="https://mohithraisrivastav.com/images/Burnt Earth.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <style>
+
+        /* ── Base ── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 100%; scroll-behavior: smooth; }
+        body { background: transparent; color: #1A1612; line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        ::selection { background: rgba(207, 162, 70,0.15); color: #1A1612; }
+        a { text-decoration: none; color: inherit; }
+        img { display: block; width: 100%; height: auto; }
+
+        /* ══════════════════════════════════════════
+           EXHIBITION ENTRY — title card
+        ══════════════════════════════════════════ */
+        .exhibition-entry {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 8vw 12vh;
+            position: relative;
+        }
+        .entry-series {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.28);
+            margin-bottom: 22px;
+            font-family: var(--font-main) !important;
+        }
+        .entry-title {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(5.5rem, 11vw, 14rem);
+            line-height: 0.87;
+            letter-spacing: -0.025em;
+            color: #1A1612;
+            margin-bottom: 44px;
+        }
+        .entry-rule {
+            width: 48px;
+            height: 1px;
+            background: rgba(26, 22, 18,0.14);
+            margin-bottom: 28px;
+        }
+        .entry-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .entry-meta span {
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 2.5px;
+            color: rgba(26, 22, 18,0.35);
+            text-transform: uppercase;
+            font-family: var(--font-main) !important;
+        }
+        .entry-scroll {
+            position: absolute;
+            bottom: 44px;
+            right: 8vw;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.18);
+            writing-mode: vertical-rl;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: var(--font-main) !important;
+        }
+        .entry-scroll::before {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 52px;
+            background: rgba(26, 22, 18,0.1);
+        }
+
+        /* ══════════════════════════════════════════
+           INTRO ROOM — artist statement
+        ══════════════════════════════════════════ */
+        .intro-room {
+            padding: 16vh 8vw 14vh;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+        }
+        .room-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.22);
+            margin-bottom: 52px;
+            font-family: var(--font-main) !important;
+        }
+        .intro-text {
+            max-width: 680px;
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+            line-height: 1.9;
+            color: rgba(26, 22, 18,0.72);
+        }
+        .intro-text p + p { margin-top: 1.6em; }
+        .intro-closing {
+            margin-top: 64px;
+            padding-top: 36px;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: rgba(26, 22, 18,0.25);
+            line-height: 2;
+            font-family: var(--font-main) !important;
+        }
+
+        /* ══════════════════════════════════════════
+           BOOK SECTION
+        ══════════════════════════════════════════ */
+        .book-section {
+            padding: 12vh 8vw;
+            border-top: 1px solid rgba(26, 22, 18, 0.06);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 8vw;
+            align-items: center;
+        }
+        .book-cover {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            overflow: hidden;
+            background: #E8E2D8;
+        }
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .book-cover:hover img { transform: scale(1.03); }
+        .book-info { display: flex; flex-direction: column; gap: 0; }
+        .book-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.22);
+            margin-bottom: 28px;
+            font-family: var(--font-main) !important;
+        }
+        .book-title {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(2.4rem, 3.8vw, 5rem);
+            line-height: 0.95;
+            color: #1A1612;
+            margin-bottom: 36px;
+        }
+        .book-rule {
+            width: 40px;
+            height: 1px;
+            background: rgba(26, 22, 18, 0.14);
+            margin-bottom: 36px;
+        }
+        .book-desc {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1rem, 1.3vw, 1.2rem);
+            line-height: 1.9;
+            color: rgba(26, 22, 18, 0.65);
+            margin-bottom: 40px;
+        }
+        .book-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 24px;
+            margin-bottom: 44px;
+            flex-wrap: wrap;
+        }
+        .book-price {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1A1612;
+            font-family: var(--font-main) !important;
+        }
+        .book-specs-inline {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.28);
+            font-family: var(--font-main) !important;
+        }
+        .book-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #1A1612;
+            text-decoration: none;
+            border-bottom: 1px solid #CFA246;
+            padding-bottom: 6px;
+            font-family: var(--font-main) !important;
+            transition: color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+            align-self: flex-start;
+        }
+        .book-cta:hover { color: #CFA246; border-color: #CFA246; gap: 20px; }
+        @media (max-width: 900px) {
+            .book-section { grid-template-columns: 1fr; gap: 48px; }
+            .book-cover { max-width: 280px; }
+        }
+
+        /* ══════════════════════════════════════════
+           CHAPTER DIVIDER
+        ══════════════════════════════════════════ */
+        .chapter-divider {
+            padding: 8vh 8vw;
+            display: flex;
+            align-items: baseline;
+            gap: 36px;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+            border-bottom: 1px solid rgba(26, 22, 18,0.06);
+            flex-wrap: wrap;
+        }
+        .ch-num {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.22);
+            font-family: var(--font-main) !important;
+        }
+        .ch-name {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(2.2rem, 3.5vw, 4rem);
+            line-height: 1;
+            color: #1A1612;
+        }
+        .ch-count {
+            margin-left: auto;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.18);
+            font-family: var(--font-main) !important;
+        }
+
+        /* ══════════════════════════════════════════
+           CHAPTER INTRO
+        ══════════════════════════════════════════ */
+        .chapter-intro {
+            padding: 12vh 8vw 10vh;
+            border-bottom: 1px solid rgba(26, 22, 18,0.06);
+        }
+        .chapter-intro-text {
+            max-width: 600px;
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+            line-height: 1.9;
+            color: rgba(26, 22, 18,0.65);
+        }
+        .chapter-intro-text p + p { margin-top: 1.4em; }
+        .chapter-intro-note {
+            margin-top: 36px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.2);
+            font-family: var(--font-main) !important;
+        }
+
+        /* ══════════════════════════════════════════
+           GALLERY GUIDE — fixed left navigator
+        ══════════════════════════════════════════ */
+        .gallery-guide {
+            position: fixed;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+        .gallery-guide.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .guide-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 4px;
+            text-decoration: none;
+            color: rgba(26, 22, 18,0.18);
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .guide-item .g-num {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            width: 16px;
+            text-align: right;
+            font-family: var(--font-main) !important;
+            font-variant-numeric: tabular-nums;
+        }
+        .guide-item .g-tick {
+            display: block;
+            width: 12px;
+            height: 1px;
+            background: currentColor;
+            transition: width 0.3s;
+            flex-shrink: 0;
+        }
+        .guide-item.active { color: #CFA246; }
+        .guide-item.active .g-tick { width: 22px; }
+        .guide-item:hover:not(.active) { color: rgba(26, 22, 18,0.45); }
+
+        /* ══════════════════════════════════════════
+           GALLERY STATIONS — individual works
+        ══════════════════════════════════════════ */
+        .gallery-station {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 18vh 14vw;
+            position: relative;
+            border-top: 1px solid rgba(26, 22, 18,0.04);
+        }
+        .station-num {
+            position: absolute;
+            top: 160px;
+            left: 8vw;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.16);
+            font-family: var(--font-main) !important;
+        }
+
+        /* The figure is the art object */
+        .station-figure {
+            margin: 0 auto;
+            cursor: zoom-in;
+        }
+        .station-figure.landscape { width: min(72vw, 1020px); }
+        .station-figure.portrait  { width: min(42vw, 500px);  }
+
+        .station-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            box-shadow:
+                0 2px 8px  rgba(26, 22, 18,0.04),
+                0 8px 48px rgba(26, 22, 18,0.07);
+            transition: box-shadow 0.5s ease, transform 0.5s ease;
+        }
+        .station-figure:hover img {
+            box-shadow:
+                0 4px 16px rgba(26, 22, 18,0.06),
+                0 16px 72px rgba(26, 22, 18,0.11);
+            transform: translateY(-2px);
+        }
+
+        /* Wall label */
+        .station-label {
+            margin-top: 40px;
+            padding: 0 2px;
+            width: 100%;
+        }
+        .label-title {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1.5rem, 2.2vw, 2.6rem);
+            line-height: 1;
+            color: #1A1612;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+        .label-meta {
+            font-size: 0.6rem;
+            font-weight: 500;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.28);
+            line-height: 1.7;
+            font-family: var(--font-main) !important;
+        }
+        .label-text {
+            margin-top: 22px;
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.9;
+            color: rgba(26, 22, 18, 0.58);
+            max-width: 440px;
+        }
+
+        /* ══════════════════════════════════════════
+           EXHIBITION VIEWS — GOAF 2026 documentation
+        ══════════════════════════════════════════ */
+        .exhibition-views {
+            padding: 18vh 8vw;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+        }
+        .views-eyebrow {
+            font-size: 0.5625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #CFA246;
+            margin-bottom: 14px;
+            font-family: var(--font-main) !important;
+        }
+        .views-title {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(2rem, 3.5vw, 4.5rem);
+            line-height: 0.95;
+            color: #1A1612;
+            margin-bottom: 64px;
+        }
+        .views-mosaic {
+            columns: 3;
+            column-gap: 5px;
+        }
+        .views-mosaic img {
+            display: block;
+            width: 100%;
+            margin-bottom: 5px;
+            break-inside: avoid;
+            cursor: zoom-in;
+            transition: opacity 0.3s;
+        }
+        .views-mosaic img:hover { opacity: 0.82; }
+        .views-note {
+            margin-top: 28px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.2);
+            text-align: right;
+            font-family: var(--font-main) !important;
+        }
+
+        /* ══════════════════════════════════════════
+           CHAPTER II — in progress
+        ══════════════════════════════════════════ */
+        .chapter-ii {
+            padding: 18vh 8vw;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+        }
+        .chapter-ii .ch-num { margin-bottom: 24px; }
+        .chapter-ii .ch-name {
+            font-size: clamp(3rem, 5vw, 6rem);
+            color: rgba(26, 22, 18,0.14);
+            margin-bottom: 36px;
+        }
+        .ch-note {
+            max-width: 420px;
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: 1.0625rem;
+            line-height: 1.9;
+            color: rgba(26, 22, 18,0.38);
+            margin-bottom: 44px;
+        }
+        .works-coming {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .work-tag {
+            padding: 7px 16px;
+            border: 1px solid rgba(26, 22, 18,0.12);
+            border-radius: 4px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.52);
+            font-family: var(--font-main) !important;
+        }
+
+        /* ══════════════════════════════════════════
+           LIGHTBOX
+        ══════════════════════════════════════════ */
+        .lb-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(12,10,8,0.96);
+            z-index: 15000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s;
+        }
+        .lb-overlay.open { opacity: 1; pointer-events: all; }
+        .lb-img {
+            max-width: 88vw;
+            max-height: 88vh;
+            object-fit: contain;
+            cursor: default;
+            display: block;
+        }
+        .lb-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer !important;
+            transition: background 0.2s;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            z-index: 100;
+            /* Bypass custom cursor hide so a pointer is always shown */
+            pointer-events: auto;
+        }
+        .lb-close:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.7); }
+        .lb-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer !important;
+            transition: background 0.2s;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            z-index: 100;
+            pointer-events: auto;
+        }
+        .lb-nav:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.6); }
+        .lb-prev { left: 24px; }
+        .lb-next { right: 24px; }
+        .lb-nav[hidden] { display: none; }
+
+        /* ── Cursor: switch multiply→difference on dark overlay so dot stays visible ── */
+        #lbOverlay.open ~ #c-dot {
+            mix-blend-mode: difference !important;
+            background: #fff !important;
+        }
+        #lbOverlay.open ~ #c-ring {
+            mix-blend-mode: difference !important;
+            border-color: rgba(255,255,255,0.75) !important;
+        }
+        /* ── cursor.js sets cursor:none on everything; restore pointer inside lb ── */
+        .lb-overlay button {
+            cursor: pointer !important;
+        }
+        .lb-footer {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            white-space: nowrap;
+        }
+        .lb-caption {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+            white-space: nowrap;
+        }
+        .lb-counter {
+            font-size: 0.625rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.35);
+            white-space: nowrap;
+        }
+
+        /* ══════════════════════════════════════════
+           STATION ACQUIRE LINK
+        ══════════════════════════════════════════ */
+        .station-acquire {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 28px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.32);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(207, 162, 70, 0.3);
+            padding-bottom: 4px;
+            font-family: var(--font-main) !important;
+            transition: color 0.3s, border-color 0.3s, letter-spacing 0.3s;
+        }
+        .station-acquire:hover {
+            color: #CFA246;
+            border-color: #CFA246;
+            letter-spacing: 5px;
+        }
+
+        /* ══════════════════════════════════════════
+           SCROLL REVEAL
+        ══════════════════════════════════════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ══════════════════════════════════════════
+           GALLERY DOTS — tablet nav (≤1100px)
+        ══════════════════════════════════════════ */
+        .gallery-dots {
+            display: none;
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            background: rgba(247, 243, 236, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(26, 22, 18, 0.08);
+            border-radius: 30px;
+            padding: 10px 18px;
+            gap: 8px;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-dots.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .dot-item {
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(26, 22, 18, 0.2);
+            transition: background 0.3s, width 0.3s, border-radius 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .dot-item.active {
+            background: #CFA246;
+            width: 18px;
+            border-radius: 3px;
+        }
+        .dot-item:hover:not(.active) { background: rgba(26, 22, 18, 0.44); }
+
+        /* ══════════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════════ */
+        @media (max-width: 1100px) {
+            .gallery-guide { display: none; }
+            .gallery-dots { display: flex; }
+            .station-figure.landscape { width: 80vw; }
+            .station-figure.portrait  { width: 58vw; }
+        }
+        @media (max-width: 768px) {
+            .gallery-station { min-height: auto; padding: 14vh 8vw; }
+            .station-figure.landscape,
+            .station-figure.portrait { width: 86vw; }
+            .station-num { top: 120px; left: 6vw; }
+            .views-mosaic { columns: 2; }
+            .chapter-divider .ch-count { margin-left: 0; width: 100%; }
+            .entry-title { font-size: clamp(4rem, 15vw, 7rem); }
+        }
+        @media (max-width: 480px) {
+            .views-mosaic { columns: 1; }
+            .gallery-station { padding: 12vh 6vw; }
+            .station-figure.landscape,
+            .station-figure.portrait { width: 92vw; }
+        }
+    </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <a href="index.html"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+    <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
+    <div class="nav-links-container">
+        <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li style="display:none"><a href="journal.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+    <div class="cart-header">
+        <h2>Your Selection</h2>
+        <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+    </div>
+    <div id="cartItemsList"></div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     EXHIBITION ENTRY — title card
+════════════════════════════════════════════════════ -->
+<header class="exhibition-entry" id="main-content">
+    <p class="entry-series">Photographic Series &mdash; Chapter I</p>
+    <h1 class="entry-title">Resurface</h1>
+    <div class="entry-rule"></div>
+    <div class="entry-meta">
+        <span>Mohith Rai Srivastav</span>
+        <span>Goa, India &mdash; 2023 to Ongoing</span>
+        <span>Nine Works, Chapter I</span>
+    </div>
+    <span class="entry-scroll" aria-hidden="true">Scroll</span>
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════
+     INTRO ROOM — artist statement
+════════════════════════════════════════════════════ -->
+<section class="intro-room reveal" id="statement">
+    <p class="room-label" aria-hidden="true">On the Work</p>
+    <div class="intro-text">
+        <p>How does the built world remain active, even when its transformations go unnoticed? Resurface is a photographic enquiry into this question.</p>
+        <p>Every surface holds a record. Materials absorb climate, season, use, and time — and express these absorptions visibly, in colour, texture, and the slow alteration of form. The buildings and structures in this work are not monuments. They are sites of ongoing change, most of it unremarked.</p>
+        <p>The photographs begin in observation, but they do not remain there. Colour becomes a means of translation, carrying sensation rather than record. What is visible is not the surface as it exists, but the surface as it is encountered across duration.</p>
+        <p>Resurface moves through climates, environments, and material conditions — each chapter a different set of pressures, a different quality of light, a different surface.</p>
+    </div>
+    <p class="intro-closing">
+        Ongoing series &mdash; new chapters added as the practice develops.<br>
+        All works archival pigment print on 310&thinsp;GSM etching rag.
+    </p>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     BOOK SECTION — The Matter of Pause
+════════════════════════════════════════════════════ -->
+<section class="book-section reveal">
+    <div class="book-cover">
+        <img src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause — Monograph" loading="lazy"
+             onerror="this.onerror=null;this.src='images/Imprint.jpg';">
+    </div>
+    <div class="book-info">
+        <p class="book-label" aria-hidden="true">The Monograph</p>
+        <h2 class="book-title">The Matter<br>of Pause</h2>
+        <div class="book-rule"></div>
+        <p class="book-desc">176 pages of photographs, notes, and fieldwork drawn from years of sustained looking. An enquiry into duration, stillness, and the gradual unfolding of perception — available in digital and softcover editions.</p>
+        <a href="shop-books.html" class="book-cta">Acquire the Book &rarr;</a>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER I DIVIDER
+════════════════════════════════════════════════════ -->
+<div class="chapter-divider" id="chapter-1">
+    <span class="ch-num">Chapter I</span>
+    <span class="ch-name">Goa Monsoons</span>
+    <span class="ch-count">Nine Works &mdash; 2023&ndash;2024</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER I INTRODUCTION
+════════════════════════════════════════════════════ -->
+<section class="chapter-intro reveal">
+    <div class="chapter-intro-text">
+        <p>Rain changes the conditions under which the built world can be seen. Surfaces respond first.</p>
+        <p>The works in this chapter were made during the monsoon in Goa, when architecture absorbs water, colour, and growth at an accelerated pace. Walls darken. Pigments shift. Organic life emerges across structures that otherwise appear stable. These changes register ongoing occupation by climate and time, independent of human presence.</p>
+    </div>
+    <p class="chapter-intro-note">Nine works &mdash; Goa, India &mdash; 2023&ndash;2024</p>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     GALLERY GUIDE — fixed left navigator
+════════════════════════════════════════════════════ -->
+<nav class="gallery-guide" id="galleryGuide" aria-label="Works in this chapter">
+    <a href="#work-01" class="guide-item" data-target="work-01"><span class="g-num">01</span><span class="g-tick"></span></a>
+    <a href="#work-02" class="guide-item" data-target="work-02"><span class="g-num">02</span><span class="g-tick"></span></a>
+    <a href="#work-03" class="guide-item" data-target="work-03"><span class="g-num">03</span><span class="g-tick"></span></a>
+    <a href="#work-04" class="guide-item" data-target="work-04"><span class="g-num">04</span><span class="g-tick"></span></a>
+    <a href="#work-05" class="guide-item" data-target="work-05"><span class="g-num">05</span><span class="g-tick"></span></a>
+    <a href="#work-06" class="guide-item" data-target="work-06"><span class="g-num">06</span><span class="g-tick"></span></a>
+    <a href="#work-07" class="guide-item" data-target="work-07"><span class="g-num">07</span><span class="g-tick"></span></a>
+    <a href="#work-08" class="guide-item" data-target="work-08"><span class="g-num">08</span><span class="g-tick"></span></a>
+    <a href="#work-09" class="guide-item" data-target="work-09"><span class="g-num">09</span><span class="g-tick"></span></a>
+</nav>
+
+<!-- Tablet dot-nav: shown ≤1100px when gallery-guide is hidden -->
+<nav class="gallery-dots" id="galleryDots" aria-label="Works in this chapter">
+    <a href="#work-01" class="dot-item" data-target="work-01" aria-label="Work 01"></a>
+    <a href="#work-02" class="dot-item" data-target="work-02" aria-label="Work 02"></a>
+    <a href="#work-03" class="dot-item" data-target="work-03" aria-label="Work 03"></a>
+    <a href="#work-04" class="dot-item" data-target="work-04" aria-label="Work 04"></a>
+    <a href="#work-05" class="dot-item" data-target="work-05" aria-label="Work 05"></a>
+    <a href="#work-06" class="dot-item" data-target="work-06" aria-label="Work 06"></a>
+    <a href="#work-07" class="dot-item" data-target="work-07" aria-label="Work 07"></a>
+    <a href="#work-08" class="dot-item" data-target="work-08" aria-label="Work 08"></a>
+    <a href="#work-09" class="dot-item" data-target="work-09" aria-label="Work 09"></a>
+</nav>
+
+
+<!-- ═══════════════════════════════════════════════════
+     GALLERY STATIONS — Works I–IX
+════════════════════════════════════════════════════ -->
+
+<section class="gallery-station" id="work-01" data-index="1">
+    <span class="station-num">01 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure landscape" onclick="openLightbox(this)">
+        <img src="images/Cosmic Return.webp" alt="Cosmic Return" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Cosmic Return</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 2 + 1 AP</p>
+            <p class="label-text">The wall has returned something it once absorbed. Under the last hour of monsoon light, what appears to be colour is duration — the accumulated residue of seasons pressing outward through the surface.</p>
+            <a href="shop.html#cosmic-return" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-02" data-index="2">
+    <span class="station-num">02 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure landscape" onclick="openLightbox(this)">
+        <img src="images/Burnt Earth.webp" alt="Burnt Earth" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Burnt Earth</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">Pigment archaeology. The surface is not deteriorating — it is revealing. Each layer of colour is a record of an occupation, the earth returning to the structures that once borrowed it.</p>
+            <a href="shop.html#burnt-earth" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-03" data-index="3">
+    <span class="station-num">03 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure landscape" onclick="openLightbox(this)">
+        <img src="images/Chromatic Rupture.webp" alt="Chromatic Rupture" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Chromatic Rupture</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">Paint abandons its architecture. Where the pigment separates from the wall it once defined, another colour appears — the colour of what was beneath all along, waiting for the surface to open.</p>
+            <a href="shop.html#chromatic-rupture" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-04" data-index="4">
+    <span class="station-num">04 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/After The Fall.webp" alt="After The Fall" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">After The Fall</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">A flower has fallen. The surface beneath holds the colour of what was living — the boundary between object and ground dissolved by water and light.</p>
+            <a href="shop.html#after-the-fall" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-05" data-index="5">
+    <span class="station-num">05 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/Cracked Spectrum.webp" alt="Cracked Spectrum" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Cracked Spectrum</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">A wall fractures along a seam. Through the crack, another colour — the depth of a surface revealed only at the point of its rupture.</p>
+            <a href="shop.html#cracked-spectrum" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-06" data-index="6">
+    <span class="station-num">06 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/The Still Organism.webp" alt="The Still Organism" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">The Still Organism</h3>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">The wall has become something else. Crimson growth moves across it like a slow system — not decoration, not damage, but occupation.</p>
+            <a href="shop.html#still-organism" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-07" data-index="7">
+    <span class="station-num">07 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/The Forgotten Skin.webp" alt="The Forgotten Skin" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">The Forgotten Skin</h3>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">Layers accumulated over years, compressing time into a few millimetres of surface. The wall holds what the building has lived through.</p>
+            <a href="shop.html#forgotten-skin" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-08" data-index="8">
+    <span class="station-num">08 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/Erosion.webp" alt="Erosion" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Erosion</h3>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">Water has found its path downward, leaving colour behind. What the rain drew on the wall is now part of it.</p>
+            <a href="shop.html#erosion" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+<section class="gallery-station" id="work-09" data-index="9">
+    <span class="station-num">09 &thinsp;/&thinsp; IX</span>
+    <figure class="station-figure portrait" onclick="openLightbox(this)">
+        <img src="images/Imprint.webp" alt="Imprint" loading="lazy">
+        <div class="station-label">
+            <h3 class="label-title">Imprint</h3>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-text">A footprint, a mark, a pressure held in a surface long after the weight has gone. The body was here. The surface remembers.</p>
+            <a href="shop.html#imprint" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
+        </div>
+    </figure>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     EXHIBITION VIEWS — Goa Open Arts Festival 2026
+════════════════════════════════════════════════════ -->
+<section class="exhibition-views reveal" id="exhibition">
+    <p class="views-eyebrow">Exhibition Views</p>
+    <h2 class="views-title">Goa Open Arts Festival 2026</h2>
+
+    <div class="views-mosaic">
+        <img src="images/exhibition/_DSC5259-HDR.webp"          alt="Exhibition view — GOAF 2026"     loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260220_130209.webp"        alt="Opening day — GOAF 2026"         loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/_DSC5268-HDR.webp"          alt="Exhibition view — GOAF 2026"     loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260221_200018%20(1).webp"  alt="Evening — GOAF 2026"             loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/_DSC5273-HDR.webp"          alt="Installation — GOAF 2026"        loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260222_140848.webp"        alt="Festival — GOAF 2026"            loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/_DSC5274-HDR-2.webp"        alt="Exhibition detail — GOAF 2026"   loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260220_204546.webp"        alt="Festival atmosphere — GOAF 2026" loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/_DSC5284.webp"              alt="Exhibition detail — GOAF 2026"   loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260221_201135.webp"        alt="Evening — GOAF 2026"             loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260222_140903.webp"        alt="Exhibition — GOAF 2026"          loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260222_140921.webp"        alt="Closing day — GOAF 2026"         loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+        <img src="images/exhibition/20260222_162358.webp"        alt="Closing day — GOAF 2026"         loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
+    </div>
+
+    <p class="views-note">Goa Open Arts Festival &mdash; February 2026 &mdash; Goa, India</p>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER II — in progress
+════════════════════════════════════════════════════ -->
+<section class="chapter-ii reveal" id="chapter-2">
+    <p class="ch-num">Chapter II</p>
+    <h2 class="ch-name">The series<br>continues.</h2>
+    <p class="ch-note">New works are in progress.</p>
+    <div class="works-coming">
+        <span class="work-tag">Universal Spill</span>
+        <span class="work-tag">Rootscape</span>
+        <span class="work-tag">After The Tide</span>
+        <span class="work-tag">Entangled Line</span>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link">
+              <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+            </a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">→</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════
+     LIGHTBOX
+════════════════════════════════════════════════════ -->
+<div class="lb-overlay" id="lbOverlay" onclick="closeLightbox()">
+    <button class="lb-close" id="lbClose" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="3" y1="3" x2="17" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="3" x2="3" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <button class="lb-nav lb-prev" id="lbPrev" onclick="event.stopPropagation();lbStep(-1)" aria-label="Previous image">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="15 18 9 12 15 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <button class="lb-nav lb-next" id="lbNext" onclick="event.stopPropagation();lbStep(1)" aria-label="Next image">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="9 6 15 12 9 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="lb-footer">
+        <span class="lb-caption" id="lbCaption"></span>
+        <span class="lb-counter" id="lbCounter"></span>
+    </div>
+</div>
+
+
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/transitions.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const burger = document.getElementById('hamburgerBtn');
+        menu.classList.toggle('active');
+        burger.classList.toggle('active');
+        burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+
+    /* ── Lightbox with prev/next ── */
+    let _lbItems = [];
+    let _lbIdx   = 0;
+
+    function _lbBuildList(fromEl) {
+        // Collect all lightbox-able images in document order
+        const allEls = Array.from(document.querySelectorAll('[onclick*="openLightbox"]'));
+        _lbItems = allEls.map(el => {
+            const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+            return img ? { src: img.src, alt: img.alt } : null;
+        }).filter(Boolean);
+        // Find index of the clicked element
+        const clicked = fromEl.tagName === 'IMG' ? fromEl : fromEl.querySelector('img');
+        _lbIdx = _lbItems.findIndex(item => item.src === (clicked && clicked.src));
+        if (_lbIdx < 0) _lbIdx = 0;
+    }
+
+    function _lbRender() {
+        const item = _lbItems[_lbIdx];
+        if (!item) return;
+        document.getElementById('lbImg').src = item.src;
+        document.getElementById('lbImg').alt = item.alt;
+        document.getElementById('lbCaption').textContent = item.alt
+            .replace(' — Mohith Rai Srivastav', '')
+            .replace(' — GOAF 2026', '')
+            .replace(' - GOAF 2026', '');
+        document.getElementById('lbCounter').textContent =
+            (_lbIdx + 1) + ' — ' + _lbItems.length;
+        // Show/hide nav arrows
+        document.getElementById('lbPrev')[_lbItems.length < 2 ? 'setAttribute' : 'removeAttribute']('hidden', '');
+        document.getElementById('lbNext')[_lbItems.length < 2 ? 'setAttribute' : 'removeAttribute']('hidden', '');
+    }
+
+    function openLightbox(el) {
+        const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+        if (!img) return;
+        _lbBuildList(el);
+        _lbRender();
+        document.getElementById('lbOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lbOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function lbStep(dir) {
+        _lbIdx = (_lbIdx + dir + _lbItems.length) % _lbItems.length;
+        _lbRender();
+    }
+    document.addEventListener('keydown', e => {
+        if (!document.getElementById('lbOverlay').classList.contains('open')) return;
+        if (e.key === 'Escape')     closeLightbox();
+        if (e.key === 'ArrowLeft')  lbStep(-1);
+        if (e.key === 'ArrowRight') lbStep(1);
+    });
+    document.getElementById('lbImg').addEventListener('click', e => e.stopPropagation());
+
+    /* ── Gallery Guide + Dots — show/hide & active state ── */
+    const guide    = document.getElementById('galleryGuide');
+    const dots     = document.getElementById('galleryDots');
+    const stations = document.querySelectorAll('.gallery-station');
+
+    function setNavVisible(visible) {
+        guide.classList.toggle('visible', visible);
+        dots.classList.toggle('visible', visible);
+    }
+
+    // Show nav when chapter-1 enters viewport
+    const showObs = new IntersectionObserver(entries => {
+        entries.forEach(e => setNavVisible(e.isIntersecting));
+    }, { rootMargin: '0px 0px -20% 0px', threshold: 0 });
+    showObs.observe(document.getElementById('chapter-1'));
+
+    // Hide nav after last station leaves
+    const hideObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (!e.isIntersecting) setNavVisible(false);
+        });
+    }, { threshold: 0 });
+    hideObs.observe(document.getElementById('exhibition'));
+
+    // Update active state on both guide-items and dot-items
+    const dotObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                document.querySelectorAll('.guide-item').forEach(d => d.classList.remove('active'));
+                document.querySelectorAll('.dot-item').forEach(d => d.classList.remove('active'));
+                const guideItem = document.querySelector(`.guide-item[data-target="${e.target.id}"]`);
+                const dotItem   = document.querySelector(`.dot-item[data-target="${e.target.id}"]`);
+                if (guideItem) guideItem.classList.add('active');
+                if (dotItem)   dotItem.classList.add('active');
+            }
+        });
+    }, { threshold: 0.45 });
+    stations.forEach(s => dotObs.observe(s));
+
+    /* ── Scroll reveal ── */
+    const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('in-view');
+                revealObs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.gallery-station, .reveal').forEach(el => {
+        revealObs.observe(el);
+    });
+
+    /* ── Station fade-in on scroll ── */
+    stations.forEach(s => {
+        s.style.opacity = '0';
+        s.style.transform = 'translateY(20px)';
+        s.style.transition = 'opacity 1s ease, transform 1s ease';
+    });
+    const stationReveal = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.style.opacity = '1';
+                e.target.style.transform = 'translateY(0)';
+                stationReveal.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    stations.forEach(s => stationReveal.observe(s));
+</script>
+</body>
+</html>
+
+
+

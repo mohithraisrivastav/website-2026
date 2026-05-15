@@ -1,0 +1,271 @@
+.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+#slineCanvas{position:absolute;top:0;left:0;}
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 100%; }
+        body {
+            background-color: transparent; color: #1A1612; line-height: 1.7;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+
+        /* Hero */
+        .work-hero {
+            padding: 20px 5vw 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+        }
+        .work-hero h1 {
+            font-size: clamp(4.2969rem, 5vw, 7.8125rem);
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
+            color: #F8F6F1;
+            margin: 0 0 20px;
+        }
+        .work-hero h1 .hero-light { font-weight: 200; color: #D4CFC3; }
+        .work-hero .hero-line {
+            position: absolute; bottom: 0; left: 5vw; right: 5vw;
+            height: 1px; background: rgba(207, 162, 70, 0.2);
+        }
+
+        /* -- Works Index --------------------------------- */
+        .works-index { padding: 1.5vh 6vw 20vh; }
+
+
+        /* -- 3-Column masonry ---------------------------*/
+        .wi-grid {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.32vw;
+        }
+        .wi-col {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2vh;
+        }
+        .wi-col:nth-child(2) { margin-top: 4.4vh; }
+        .wi-col:nth-child(3) { margin-top: 2.2vh; }
+
+        /* -- Card ---------------------------------------*/
+        .wi-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 400px;
+            /* reveal state &mdash; GSAP sets to visible */
+            opacity: 0;
+            transform: translateY(22px);
+        }
+
+        /* -- Image frame --------------------------------*/
+        .wi-frame {
+            position: relative;
+            overflow: hidden;
+            background: rgba(26, 22, 18,0.08);
+            width: 100%;
+            border-radius: 10px;
+        }
+        /* Extra height so inner image can pan for parallax */
+        .wi-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* Static dim via pseudo-element — no filter, no compositing cost */
+        .wi-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(26, 22, 18, 0.14);
+            z-index: 1;
+            pointer-events: none;
+            transition: opacity 0.55s ease;
+        }
+        .wi-card:hover .wi-frame::before { opacity: 0; }
+
+        /* -- Hover overlay ------------------------------*/
+        .wi-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top,
+                rgba(26,24,21,0.92) 0%,
+                rgba(26,24,21,0.22) 38%,
+                transparent 64%);
+            opacity: 0;
+            transition: opacity 0.55s ease;
+            pointer-events: none;
+        }
+        .wi-card:hover .wi-overlay { opacity: 1; }
+
+        .wi-hinfo {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 20px 18px;
+            transform: translateY(6px);
+            opacity: 0;
+            transition: transform 0.55s cubic-bezier(0.16,1,0.3,1),
+                        opacity 0.45s ease;
+            pointer-events: none;
+        }
+        .wi-card:hover .wi-hinfo { transform: translateY(0); opacity: 1; }
+
+        .wi-hmeta {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.8625rem; letter-spacing: 2.5px;
+            text-transform: uppercase; color: rgba(247,243,236,0.3);
+        }
+        .wi-harrow {
+            margin-left: auto; font-size: 0.8625rem;
+            letter-spacing: 0; color: rgba(247,243,236,0.45);
+        }
+
+        /* -- Below-image caption ------------------------*/
+        .wi-cap {
+            padding: 8px 0 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid rgba(212,207,195,0.15);
+        }
+        .wi-cap-l { display: flex; align-items: baseline; gap: 8px; }
+        .wi-cap-num { display: none; }
+        .wi-cap-title {
+            font-family: var(--font-accent) !important;
+            font-size: clamp(1.05rem, 1.15vw, 1.3rem);
+            font-weight: 600; font-style: normal;
+            color: #CFA246; transition: color 0.4s ease;
+        }
+        .wi-card:hover .wi-cap-title { color: #F8F6F1; }
+        .wi-cap-cat {
+            font-size: 0.8625rem; letter-spacing: 2.5px;
+            text-transform: uppercase; color: #D4CFC3;
+            transition: color 0.4s ease;
+        }
+        .wi-card:hover .wi-cap-cat { color: #CFA246; }
+
+        /* -- Filter bar ---------------------------------*/
+        .wi-filters {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 0 0 3.5vh;
+            border-bottom: 1px solid #3D3A35;
+            margin-bottom: 3.5vh;
+            flex-wrap: wrap;
+        }
+        .wi-count {
+            font-size: 0.8625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #D4CFC3;
+            margin-right: auto;
+        }
+        .wi-count em {
+            font-style: normal;
+            color: #CFA246;
+        }
+        .wi-filter {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8625rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #D4CFC3;
+            padding: 11px 22px 11px 0;
+            transition: color 0.3s ease;
+        }
+        .wi-filter:hover { color: #CFA246; }
+        .wi-filter.active { color: #F8F6F1; }
+
+        /* -- Mobile title -------------------------------*/
+        .mobile-page-title {
+            display: none;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(4.2969rem, 5vw, 7.8125rem);
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: -0.01em;
+            line-height: 0.95;
+            padding: 20px 5vw 40px;
+            color: #F8F6F1;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-page-title { display: block; }
+            .work-hero { display: none; }
+            .wi-col:nth-child(2) { margin-top: 5vh; }
+            .wi-col:nth-child(3) { margin-top: 2vh; }
+        }
+        @media (max-width: 768px) {
+            .work-hero h1, .mobile-page-title { font-size: clamp(3.5rem, 6vw, 6rem) !important; }
+        }
+        @media (max-width: 640px) {
+            /* Cards start hidden for GSAP reveal &mdash; force visible on mobile */
+            .wi-card { opacity: 1 !important; transform: none !important; }
+            .mobile-page-title { padding: 20px 5vw 40px; font-size: clamp(3.5rem, 6vw, 6rem) !important; }
+            .works-index { padding: 1vh 4vw 12vh; }
+            .wi-grid { flex-direction: column; gap: 5px; }
+            .wi-col { flex-direction: row; flex-wrap: wrap; gap: 5px; margin-top: 0 !important; }
+            .wi-col .wi-card { flex: 1 1 100%; min-width: 0; }
+            .wi-col .wi-card[data-orient="portrait"] { flex: 1 1 calc(50% - 3px); }
+            .wi-col .wi-card[data-orient="landscape"] { flex: 1 1 100%; }
+            .wi-filters { display: none !important; }
+            .wi-filter { padding: 11px 18px 11px 0; font-size: 0.8625rem; }
+            /* Fix vw-based font sizes that become unreadably tiny on phones */
+            .wi-cap-title { font-size: 0.8625rem !important; }
+            .wi-cap-cat   { display: none !important; }
+            .wi-hmeta     { font-size: 0.8625rem !important; }
+            .wi-cap { padding: 6px 0 10px; }
+        }
+        @media (max-width: 400px) {
+            .wi-col .wi-card { flex: 1 1 100%; }
+        }
+
+        /* -- Light-mode colour corrections for liquid background ----- */
+        .work-hero h1 { color: #1A1612; }
+        .work-hero h1 .hero-light { color: #555; }
+        .mobile-page-title { color: #1A1612; }
+        .wi-count { color: #777; }
+        .wi-count em { color: #CFA246; }
+        .wi-cap-title { color: #CFA246; }
+        .wi-card:hover .wi-cap-title { color: #1A1612; }
+        .wi-cap-cat { color: #888; }
+        .wi-card:hover .wi-cap-cat { color: #CFA246; }
+        .wi-filters { border-bottom-color: rgba(26, 22, 18,0.1); }
+        .wi-filter { color: #777; }
+        .wi-filter:hover { color: #CFA246; }
+        .wi-filter.active { color: #1A1612; }
+        /* Mobile header fixes */
+        @media (max-width: 1100px) {
+            /* 1. Force hamburger to the right */
+            .nav-links-container {
+                flex: 1;
+                justify-content: flex-end;
+            }
+            .hamburger {
+                order: 3;
+                margin-left: auto;
+            }
+
+            /* 3. Prevent hero title from wrapping */
+            .work-hero h1,
+            .mobile-page-title {
+                white-space: normal !important;
+                word-break: normal !important;
+                hyphens: none !important;
+                font-size: clamp(2rem, 8vw, 3rem) !important;
+                line-height: 1.1 !important;
+            }
+        }

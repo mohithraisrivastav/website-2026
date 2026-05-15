@@ -1,0 +1,388 @@
+:root {
+    --orange: #CFA246;
+    --near-black: #0a0a0a;
+    --mid: #555;
+    --faint: #bbb;
+    --bg: #F7F4EF;
+    --card: #fff;
+    --border: rgba(0,0,0,0.1);
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    font-family: var(--sans);
+    color: var(--near-black);
+    padding: 60px 5vw 120px;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .header .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(3rem, 5vw, 5rem);
+    line-height: 0.95;
+    color: var(--near-black);
+    margin-bottom: 20px;
+  }
+  .header p {
+    font-size: 1rem;
+    color: var(--mid);
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Entry point ── */
+  .entry-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  .entry-node {
+    background: var(--near-black);
+    color: #fff;
+    padding: 18px 48px;
+    font-family: var(--serif);
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    position: relative;
+  }
+  .entry-node .sub {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    font-style: normal;
+    margin-bottom: 4px;
+  }
+
+  /* ── Connector from entry to three doors ── */
+  .connector-main {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    position: relative;
+    height: 60px;
+  }
+  .connector-main svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* ── Three Doors ── */
+  .doors-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto 0;
+  }
+
+  .door {
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    padding: 32px 28px 28px;
+    position: relative;
+    transition: border-color 0.25s;
+  }
+  .door:hover { border-color: var(--orange); }
+
+  .door-num {
+    font-family: var(--serif);
+    font-size: 4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(207, 162, 70,0.12);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .door-label {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .door-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-style: italic;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--near-black);
+    margin-bottom: 14px;
+  }
+  .door-desc {
+    font-size: 0.8125rem;
+    color: var(--mid);
+    line-height: 1.7;
+    font-weight: 300;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 14px;
+  }
+
+  /* ── Connector from doors to pages ── */
+  .connector-doors {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .connector-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .vline {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(to bottom, rgba(207, 162, 70,0.4), rgba(207, 162, 70,0.1));
+  }
+
+  /* ── Page nodes ── */
+  .pages-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pages-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .page-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .page-node:hover { border-color: rgba(207, 162, 70,0.4); }
+
+  .page-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .page-node-content {}
+  .page-node-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--near-black);
+    line-height: 1.3;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  .page-node-desc {
+    font-size: 0.75rem;
+    color: var(--faint);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+
+  /* ── Sub-pages (shop children) ── */
+  .sub-pages {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-left: 18px;
+    margin-top: 0;
+  }
+  .sub-page {
+    border-left: 2px solid rgba(207, 162, 70,0.2);
+    padding: 7px 12px;
+    background: #fafafa;
+    font-size: 0.75rem;
+    color: var(--mid);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  .sub-page strong {
+    font-weight: 600;
+    color: var(--near-black);
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.875rem;
+  }
+
+  /* ── Footer nodes ── */
+  .footer-band {
+    max-width: 1100px;
+    margin: 52px auto 0;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .footer-label {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--faint);
+    flex-shrink: 0;
+    padding-top: 8px;
+    min-width: 120px;
+  }
+  .footer-nodes {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .footer-node {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 10px 20px;
+    font-size: 0.8125rem;
+    font-weight: 300;
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--mid);
+    font-size: 1rem;
+  }
+
+  /* ── Comparison legend ── */
+  .legend {
+    max-width: 1100px;
+    margin: 60px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .legend-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+  }
+  .legend-box .legend-title {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .legend-box.before .legend-title { color: var(--faint); }
+  .legend-box.after .legend-title { color: var(--orange); }
+
+  .nav-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav-item {
+    padding: 6px 14px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .before .nav-item {
+    border-color: var(--border);
+    color: var(--mid);
+    background: #f5f5f5;
+  }
+  .after .nav-item {
+    border-color: rgba(207, 162, 70,0.25);
+    color: var(--near-black);
+    background: #fff;
+  }
+  .after .nav-item.primary {
+    border-color: var(--orange);
+    color: var(--orange);
+    background: #fff;
+  }
+  .after .nav-item.secondary {
+    border-color: var(--border);
+    color: var(--faint);
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+  }
+  .legend-note {
+    font-size: 0.8125rem;
+    color: var(--mid);
+    margin-top: 16px;
+    line-height: 1.7;
+    font-weight: 300;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  /* ── Behaviour notes ── */
+  .behaviour {
+    max-width: 1100px;
+    margin: 32px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .b-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--orange);
+    padding: 22px 20px;
+  }
+  .b-card h4 {
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .b-card p {
+    font-size: 0.8125rem;
+    color: var(--mid);
+    line-height: 1.7;
+    font-weight: 300;
+  }

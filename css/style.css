@@ -1,0 +1,71 @@
+/* â”€â”€ Hero Layout Overrides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Supplements global.css for the split-hero layout.
+   Applies to pages using .hero-split / .hero-left / .hero-right.
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+/* Left column: typography block â€” force left alignment */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  z-index: 10;
+}
+
+/* Right column: viewfinder image block */
+.hero-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Viewfinder image â€” full bleed within its column */
+.viewfinder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Caption / metadata text anchored bottom-right of hero */
+.hero-text {
+  position: absolute;
+  bottom: 24px;
+  right: 5vw;
+  text-align: right;
+}
+
+/* â”€â”€ Mobile Adjustments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Below 900px: stack columns, align everything left.
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (max-width: 900px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+    height: auto;
+    padding-top: 150px;
+    gap: 50px;
+    text-align: left;
+  }
+
+  .hero-right {
+    align-items: flex-start;
+  }
+
+  .viewfinder {
+    width: 100%;
+    margin: 0;
+  }
+
+  .hero-text {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .nav-links    { display: none; }
+  .gallery-intro { width: 70vw; }
+  .work-item    { width: 80vw; }
+}

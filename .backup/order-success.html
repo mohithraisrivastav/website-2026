@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | Mohith Rai Srivastav</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { font-size: 125%; }
+        body { background-color: #0a0a0a; color: #ffffff; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: fixed; width: 100%; background: rgba(10, 10, 10, 0.95); z-index: 9999; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { height: 60px; width: auto; mix-blend-mode: screen; opacity: 0.7; }
+
+        .success-wrap { max-width: 800px; margin: 0 auto; padding: 180px 5vw 100px; text-align: center; }
+
+        .check-icon { width: 80px; height: 80px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; animation: scaleIn 0.6s cubic-bezier(0.25,1,0.5,1); }
+        .check-icon svg { width: 40px; height: 40px; fill: #fff; }
+        @keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .success-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 5px; color: #666; text-transform: uppercase; margin-bottom: 20px; }
+        h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1; margin-bottom: 30px; }
+        .success-msg { font-size: 1rem; font-weight: 300; color: #aaa; line-height: 1.8; max-width: 560px; margin: 0 auto 60px; }
+
+        .order-detail { background: #0f0f0f; border: 1px solid #1a1a1a; padding: 40px; margin: 0 auto 50px; text-align: left; }
+        .detail-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.8rem; }
+        .detail-row:last-of-type { border-bottom: none; }
+        .detail-label { color: #666; text-transform: uppercase; letter-spacing: 2px; font-size: 0.6rem; font-weight: 700; }
+        .detail-value { color: #fff; font-weight: 500; text-align: right; word-break: break-all; max-width: 60%; }
+
+        .items-list { margin-top: 30px; padding-top: 25px; border-top: 1px solid #222; }
+        .items-list h3 { font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 20px; }
+        .order-item { display: flex; justify-content: space-between; padding: 12px 0; font-size: 0.85rem; color: #ccc; }
+
+        .downloads { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin: 30px 0; text-align: left; }
+        .downloads h3 { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; color: #fff; }
+        .download-link { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; font-size: 0.85rem; }
+        .download-link:last-child { border-bottom: none; }
+        .download-link a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; transition: 0.3s; }
+        .download-link a:hover { border-color: #fff; }
+
+        .next-steps { text-align: left; margin-bottom: 50px; }
+        .next-steps h3 { font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: #666; margin-bottom: 25px; font-weight: 700; }
+        .step { display: grid; grid-template-columns: 40px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px solid #1a1a1a; }
+        .step:last-child { border-bottom: none; }
+        .step-num { font-size: 1rem; font-weight: 900; color: #444; }
+        .step-text { font-size: 0.85rem; color: #aaa; line-height: 1.7; }
+
+        .cta-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .cta-btn { padding: 18px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
+        .cta-btn:hover { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary:hover { background: transparent; color: #fff; }
+
+        @media (max-width: 700px) {
+            .success-wrap { padding-top: 130px; }
+            .order-detail, .downloads { padding: 25px; }
+            .detail-value { max-width: 55%; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html"><img src="Mohith LOGO.png" alt="Logo" class="logo"></a>
+    </nav>
+
+    <main class="success-wrap">
+        <div class="check-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+
+        <div class="success-label">Order Confirmed</div>
+        <h1>Thank You.</h1>
+        <p class="success-msg">Your order has been received and payment confirmed. A receipt has been sent to your email. We'll notify you the moment your prints ship.</p>
+
+        <div class="order-detail" id="orderDetail">
+            <div class="detail-row"><span class="detail-label">Order ID</span><span class="detail-value" id="orderId">—</span></div>
+            <div class="detail-row"><span class="detail-label">Payment ID</span><span class="detail-value" id="paymentId">—</span></div>
+            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value" id="email">—</span></div>
+            <div class="detail-row"><span class="detail-label">Total Paid</span><span class="detail-value" id="total">—</span></div>
+
+            <div class="items-list">
+                <h3>Items</h3>
+                <div id="itemsList"></div>
+            </div>
+        </div>
+
+        <div class="downloads" id="downloadsBlock" style="display:none;">
+            <h3>Digital Downloads</h3>
+            <div id="downloadsList"></div>
+            <p style="font-size:0.7rem; color:#666; margin-top:20px; line-height:1.7;">Links also sent to your email. Valid for 7 days.</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>What Happens Next</h3>
+            <div class="step">
+                <div class="step-num">01</div>
+                <div class="step-text">Your prints are hand-packed in archival sleeves and a rigid tube with corner protection. This takes 2-3 business days.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <div class="step-text">You'll receive a dispatch email with courier tracking (Sequel/DHL for international, Blue Dart domestic) once the package leaves the studio.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <div class="step-text">Estimated delivery: 7-10 days domestic, 14-21 days international. Signed certificate of authenticity enclosed with every print.</div>
+            </div>
+        </div>
+
+        <div class="cta-row">
+            <a href="index.html" class="cta-btn primary">Return Home</a>
+            <a href="shop.html" class="cta-btn">Continue Browsing</a>
+        </div>
+    </main>
+
+    <script>
+        const order = JSON.parse(localStorage.getItem('lastOrder') || 'null');
+
+        if (!order) {
+            document.getElementById('orderDetail').innerHTML = '<p style="text-align:center; color:#666; font-size:0.85rem;">No recent order found. Check your email for details.</p>';
+        } else {
+            document.getElementById('orderId').innerText = order.orderId || '—';
+            document.getElementById('paymentId').innerText = order.paymentId || '—';
+            document.getElementById('email').innerText = order.email || '—';
+            document.getElementById('total').innerText = '₹' + Math.round(order.total).toLocaleString('en-IN');
+
+            document.getElementById('itemsList').innerHTML = (order.items || []).map(i =>
+                `<div class="order-item"><span>${i.title}</span><span>₹${i.price.toLocaleString('en-IN')}</span></div>`
+            ).join('');
+
+            if (order.downloads && order.downloads.length) {
+                document.getElementById('downloadsBlock').style.display = 'block';
+                document.getElementById('downloadsList').innerHTML = order.downloads.map(d =>
+                    `<div class="download-link"><span>${d.title}</span><a href="${d.url}" download>Download →</a></div>`
+                ).join('');
+            }
+        }
+    </script>
+</body>
+</html>

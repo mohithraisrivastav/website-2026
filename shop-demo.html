@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immersive Metaverse Gallery – Mohith Rai Srivastav</title>
+    <link rel="stylesheet" href="assets/css/pages/shop-demo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="hud">
+        <div id="top-bar">
+            <div style="display:flex;gap:12px;">
+                <a href="shop.html" class="hud-btn">← Shop</a>
+                <button class="hud-btn" id="btn-walk">🚶 Walk Mode</button>
+                <button class="hud-btn" id="btn-orbit" style="display:none;">◎ Orbit</button>
+                <button class="hud-btn" id="btn-audio">♪ Audio Off</button>
+            </div>
+        </div>
+    </div>
+    <div id="room-label"></div>
+    <div id="crosshair"></div>
+    <div id="hint">Click brass spheres to navigate • Click artworks to inspect</div>
+    <div id="toast"></div>
+
+    <div id="lightbox">
+        <div class="lightbox-inner" onclick="event.stopPropagation()">
+            <img id="lb-img" src="" alt="">
+            <div class="lightbox-title" id="lb-title"></div>
+            <div class="lightbox-details" id="lb-details"></div>
+            <button class="add-cart-btn" id="lb-add">Add to Selection</button>
+        </div>
+    </div>
+
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // ── Your 9 artworks ──
+        // Using ROOT-RELATIVE paths (starting with /) so they work from any page location.
+        const ARTWORKS = [
+            { id:'cosmic-return', title:'Cosmic Return', img:'/images/Cosmic Return 05.png', price:'₹1,25,000', edition:'Ed. 2 + 1 AP', size:'42 × 31.5 in' },
+            { id:'burnt-earth', title:'Burnt Earth', img:'/images/Burnt Earth 03.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'32 × 24 in' },
+            { id:'chromatic-rupture', title:'Chromatic Rupture', img:'/images/Chromatic Rupture 01.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'32 × 24 in' },
+            { id:'after-the-fall', title:'After The Fall', img:'/images/After The Fall 02.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'32 × 25.5 in' },
+            { id:'cracked-spectrum', title:'Cracked Spectrum', img:'/images/Cracked Spectrum 01.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'32 × 21.3 in' },
+            { id:'still-organism', title:'Still Organism', img:'/images/The Still Organism 01.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'24 × 32 in' },
+            { id:'forgotten-skin', title:'Forgotten Skin', img:'/images/The Forgotten Skin 01.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'24 × 32 in' },
+            { id:'erosion', title:'Erosion', img:'/images/Erosion 01.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'24 × 32 in' },
+            { id:'imprint', title:'Imprint', img:'/images/Imprint 03.png', price:'₹85,000', edition:'Ed. 5 + 1 AP', size:'24 × 32 in' }
+        ];
+
+        const VIEWPOINTS = [
+            { label:'Main Hall', pos:[0,2.8,7.5], look:[0,1.8,-2] },
+            { label:'Left Gallery', pos:[-7.25,2.8,-1.5], look:[-7.25,1.8,-4] },
+            { label:'Right Gallery', pos:[7.25,2.8,-1.5], look:[7.25,1.8,-4] },
+            { label:'Cosmic Return', pos:[-2.2,2.4,-2.5], look:[-2.2,2.4,-5.38] },
+            { label:'Burnt Earth', pos:[2.2,2.4,-2.5], look:[2.2,2.4,-5.38] }
+        ];
+
+        // ── Scene ──
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#1A1714');
+        scene.fog = new THREE.Fog('#1A1714', 8, 28);
+
+        const camera = new THREE.PerspectiveCamera(58, window.innerWidth/window.innerHeight, 0.4, 40);
+        camera.position.set(0, 2.8, 7.5);
+        camera.lookAt(0, 1.8, -2);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Materials
+        const wallMat = new THREE.MeshStandardMaterial({ color: 0xE8E0D3, roughness: 0.9 });
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0xCFC4B4, roughness: 0.5 });
+        const ceilingMat = new THREE.MeshStandardMaterial({ color: 0xF2EDE6, roughness: 0.95 });
+        const frameMat = new THREE.MeshStandardMaterial({ color: 0x3A332C, roughness: 0.4, metalness: 0.5 });
+
+        // ── Rooms ──
+        const wallHeight = 4.2, wallThick = 0.25;
+        const colliders = [];
+
+        function buildRoom(w, d, x, z, label) {
+            const hw = w/2, hd = d/2;
+            const g = new THREE.Group();
+            g.position.set(x, 0, z);
+            const floor = new THREE.Mesh(new THREE.PlaneGeometry(w, d), floorMat);
+            floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; g.add(floor);
+            const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(w, d), ceilingMat);
+            ceiling.rotation.x = Math.PI/2; ceiling.position.y = wallHeight; g.add(ceiling);
+            const addWall = (width, height, px, py, pz, ry) => {
+                const wall = new THREE.Mesh(new THREE.PlaneGeometry(width, height), wallMat);
+                wall.position.set(px, py, pz); wall.rotation.y = ry; wall.receiveShadow = true; g.add(wall);
+                const box = new THREE.Mesh(new THREE.BoxGeometry(width, height, wallThick), new THREE.MeshBasicMaterial({visible:false}));
+                box.position.copy(wall.position); box.rotation.copy(wall.rotation); g.add(box); colliders.push(box);
+            };
+            addWall(w, wallHeight, 0, wallHeight/2, -hd, 0);
+            addWall(w, wallHeight, 0, wallHeight/2, hd, Math.PI);
+            addWall(d, wallHeight, -hw, wallHeight/2, 0, Math.PI/2);
+            addWall(d, wallHeight, hw, wallHeight/2, 0, -Math.PI/2);
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x5A524A, roughness: 0.7 });
+            const addBase = (len, bx, bz, ry) => {
+                const b = new THREE.Mesh(new THREE.BoxGeometry(len, 0.14, 0.06), baseMat);
+                b.position.set(bx, 0.07, bz); b.rotation.y = ry; b.receiveShadow = true; b.castShadow = true; g.add(b);
+            };
+            addBase(w, 0, -hd+0.03, 0); addBase(w, 0, hd-0.03, 0);
+            addBase(d, -hw+0.03, 0, Math.PI/2); addBase(d, hw-0.03, 0, Math.PI/2);
+            g.userData = { label };
+            scene.add(g);
+            return g;
+        }
+        buildRoom(9, 11, 0, 0, 'Main Hall');
+        buildRoom(7, 7, -8, -2, 'Left Gallery');
+        buildRoom(7, 7, 8, -2, 'Right Gallery');
+
+        // ── Artworks ──
+        const clickTargets = [];
+        function createFallbackTexture(title) {
+            const c = document.createElement('canvas'); c.width=512; c.height=640;
+            const ctx = c.getContext('2d');
+            const gradient = ctx.createLinearGradient(0,0,512,640);
+            gradient.addColorStop(0,'#2A2421'); gradient.addColorStop(1,'#1A1714');
+            ctx.fillStyle = gradient; ctx.fillRect(0,0,c.width,c.height);
+            ctx.fillStyle = '#F2EDE6'; ctx.font = 'bold 26px "Inter"'; ctx.textAlign = 'center';
+            ctx.fillText(title, c.width/2, c.height/2);
+            ctx.strokeStyle = '#C5421C'; ctx.lineWidth = 2; ctx.strokeRect(10,10,c.width-20,c.height-20);
+            return new THREE.CanvasTexture(c);
+        }
+
+        function placeArtwork(data, pos, rotY, size) {
+            const group = new THREE.Group();
+            const loader = new THREE.TextureLoader();
+            // Preload attempt
+            console.log(`Loading artwork: ${data.title} from ${data.img}`);
+            const loadPromise = new Promise(resolve => {
+                loader.load(
+                    data.img,
+                    tex => {
+                        tex.colorSpace = THREE.SRGBColorSpace;
+                        console.log(`✅ Loaded: ${data.title}`);
+                        resolve(tex);
+                    },
+                    undefined,
+                    () => {
+                        console.warn(`❌ Failed to load ${data.img} — using placeholder for ${data.title}`);
+                        resolve(createFallbackTexture(data.title));
+                    }
+                );
+            });
+            loadPromise.then(tex => {
+                const painting = new THREE.Mesh(new THREE.PlaneGeometry(size.w, size.h), new THREE.MeshStandardMaterial({map:tex, roughness:0.3}));
+                painting.castShadow = painting.receiveShadow = true;
+                group.add(painting);
+                const ft=0.06, fd=0.05;
+                const addBar = (w,h,px,py) => {
+                    const bar = new THREE.Mesh(new THREE.BoxGeometry(w,h,fd), frameMat);
+                    bar.position.set(px,py,0); bar.castShadow=bar.receiveShadow=true; group.add(bar);
+                };
+                addBar(size.w+ft, ft, 0, size.h/2+ft/2);
+                addBar(size.w+ft, ft, 0, -size.h/2-ft/2);
+                addBar(ft, size.h+ft*2, -size.w/2-ft/2, 0);
+                addBar(ft, size.h+ft*2, size.w/2+ft/2, 0);
+                const clickMesh = new THREE.Mesh(new THREE.PlaneGeometry(size.w+0.5, size.h+0.5), new THREE.MeshBasicMaterial({visible:false}));
+                clickMesh.position.z = 0.03;
+                clickMesh.userData = { ...data, isArtwork: true };
+                group.add(clickMesh); clickTargets.push(clickMesh);
+            });
+            group.position.copy(pos); group.rotation.y = rotY;
+            scene.add(group);
+        }
+
+        // Place all 9 artworks
+        placeArtwork(ARTWORKS[0], new THREE.Vector3(-2.5, 2.4, -5.38), 0, {w:1.4, h:1.75});
+        placeArtwork(ARTWORKS[1], new THREE.Vector3(2.5, 2.4, -5.38), 0, {w:1.3, h:1.62});
+        const lz = -2 - 3.5 + 0.02;
+        placeArtwork(ARTWORKS[2], new THREE.Vector3(-10.5, 2.4, lz), 0, {w:1.3, h:1.62});
+        placeArtwork(ARTWORKS[3], new THREE.Vector3(-8, 2.4, lz), 0, {w:1.3, h:1.65});
+        placeArtwork(ARTWORKS[4], new THREE.Vector3(-5.5, 2.4, lz), 0, {w:1.3, h:1.45});
+        const rz = -2 - 3.5 + 0.02;
+        placeArtwork(ARTWORKS[5], new THREE.Vector3(4.52, 2.4, -1.5), -Math.PI/2, {w:1.3, h:1.65});
+        placeArtwork(ARTWORKS[6], new THREE.Vector3(4.52, 2.4, 1.0), -Math.PI/2, {w:1.3, h:1.65});
+        placeArtwork(ARTWORKS[7], new THREE.Vector3(10.5, 2.4, rz), 0, {w:1.3, h:1.65});
+        placeArtwork(ARTWORKS[8], new THREE.Vector3(8.0, 2.4, rz), 0, {w:1.3, h:1.65});
+
+        // Brass markers
+        const markerGeo = new THREE.SphereGeometry(0.07, 16, 16);
+        const markerMat = new THREE.MeshStandardMaterial({ color:0xD4AF37, roughness:0.2, metalness:0.9, emissive:0xD4AF37, emissiveIntensity:0.3 });
+        const markerGroup = new THREE.Group();
+        VIEWPOINTS.forEach(vp => {
+            const m = new THREE.Mesh(markerGeo, markerMat);
+            m.position.set(...vp.pos);
+            m.userData = { viewpoint: vp, isMarker: true };
+            markerGroup.add(m);
+        });
+        scene.add(markerGroup);
+
+        // Lighting
+        scene.add(new THREE.AmbientLight('#FFF5EC', 2.2));
+        const sun = new THREE.DirectionalLight('#FFFFFF', 6);
+        sun.position.set(4, 10, 3); sun.castShadow = true;
+        sun.shadow.mapSize.set(2048,2048); sun.shadow.camera.near=0.5; sun.shadow.camera.far=50;
+        sun.shadow.camera.left=-10; sun.shadow.camera.right=10; sun.shadow.camera.top=10; sun.shadow.camera.bottom=-4;
+        sun.shadow.bias=-0.0001; scene.add(sun);
+
+        function addSpot(x,y,z,tx,ty,tz,int=20) {
+            const spot = new THREE.SpotLight('#FFF8F0', int, 15, Math.PI/9, 0.3, 0.5);
+            spot.position.set(x,y,z); spot.castShadow=true; spot.shadow.mapSize.set(512,512); spot.shadow.bias=-0.0002;
+            const target = new THREE.Object3D(); target.position.set(tx,ty,tz); scene.add(target); spot.target = target; scene.add(spot);
+        }
+        addSpot(-2.5,3.8,-2.5, -2.5,2.4,-5.38, 25);
+        addSpot(2.5,3.8,-2.5, 2.5,2.4,-5.38, 25);
+        addSpot(-10.5,3.8,-2.5, -10.5,2.4,lz, 20);
+        addSpot(-8,3.8,-2.5, -8,2.4,lz, 20);
+        addSpot(-5.5,3.8,-2.5, -5.5,2.4,lz, 20);
+        addSpot(5.5,3.8,-2.5, 4.52,2.4,-1.5, 20);
+        addSpot(5.5,3.8,1, 4.52,2.4,1.0, 20);
+        addSpot(10.5,3.8,-2.5, 10.5,2.4,rz, 20);
+        addSpot(7,3.8,-2.5, 7,2.4,rz, 20);
+
+        // Dust particles
+        const pGeo = new THREE.BufferGeometry();
+        const pPos = new Float32Array(500*3);
+        for (let i=0;i<pPos.length;i+=3){ pPos[i]=(Math.random()-0.5)*18; pPos[i+1]=Math.random()*5; pPos[i+2]=(Math.random()-0.5)*18; }
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
+        const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({size:0.01, color:'#FFF8F0', opacity:0.25, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending}));
+        scene.add(particles);
+
+        // Controls
+        const orbit = new OrbitControls(camera, renderer.domElement);
+        orbit.target.set(0,1.8,-2); orbit.enableDamping=true; orbit.dampingFactor=0.08; orbit.minDistance=2; orbit.maxDistance=14; orbit.maxPolarAngle=Math.PI/2.1; orbit.update();
+        let walkControl, walkMode=false;
+        const keys = { w:false, a:false, s:false, d:false };
+
+        function enableWalk() {
+            if (!walkControl) {
+                walkControl = new PointerLockControls(camera, document.body);
+                walkControl.addEventListener('lock', () => {
+                    walkMode=true; document.getElementById('btn-walk').style.display='none';
+                    document.getElementById('btn-orbit').style.display='inline-flex';
+                    document.getElementById('crosshair').style.display='block';
+                    document.getElementById('hint').textContent='WASD to move · Click art to inspect';
+                    orbit.enabled=false;
+                });
+                walkControl.addEventListener('unlock', () => {
+                    walkMode=false; document.getElementById('btn-walk').style.display='inline-flex';
+                    document.getElementById('btn-orbit').style.display='none';
+                    document.getElementById('crosshair').style.display='none';
+                    document.getElementById('hint').textContent='Click brass spheres to navigate • Click artworks to inspect';
+                    orbit.enabled=true;
+                });
+            }
+            walkControl.lock();
+        }
+        function disableWalk() {
+            if (walkControl && document.pointerLockElement) document.exitPointerLock();
+            else { walkMode=false; document.getElementById('btn-walk').style.display='inline-flex'; document.getElementById('btn-orbit').style.display='none'; document.getElementById('crosshair').style.display='none'; orbit.enabled=true; }
+        }
+
+        window.addEventListener('keydown',e=>{ if(e.code==='KeyW')keys.w=true; if(e.code==='KeyA')keys.a=true; if(e.code==='KeyS')keys.s=true; if(e.code==='KeyD')keys.d=true; });
+        window.addEventListener('keyup',e=>{ if(e.code==='KeyW')keys.w=false; if(e.code==='KeyA')keys.a=false; if(e.code==='KeyS')keys.s=false; if(e.code==='KeyD')keys.d=false; });
+
+        const raycaster = new THREE.Raycaster();
+        function checkCollision(from,to) {
+            const dir = new THREE.Vector3().subVectors(to,from).normalize();
+            raycaster.set(from,dir); raycaster.far = from.distanceTo(to)+0.35;
+            const hits = raycaster.intersectObjects(colliders, true);
+            return hits.length>0 && hits[0].distance < from.distanceTo(to)+0.35;
+        }
+
+        function walkMove(delta) {
+            if (!walkMode || !walkControl || !document.pointerLockElement) return;
+            const speed = 5*delta;
+            const forward = new THREE.Vector3(); camera.getWorldDirection(forward); forward.y=0; forward.normalize();
+            const right = new THREE.Vector3().crossVectors(forward, new THREE.Vector3(0,1,0)).normalize();
+            let mx=0, mz=0;
+            if (keys.w) { mx+=forward.x; mz+=forward.z; }
+            if (keys.s) { mx-=forward.x; mz-=forward.z; }
+            if (keys.a) { mx-=right.x; mz-=right.z; }
+            if (keys.d) { mx+=right.x; mz+=right.z; }
+            if (mx||mz) {
+                const len = Math.sqrt(mx*mx+mz*mz); mx/=len; mz/=len;
+                const newPos = camera.position.clone(); newPos.x+=mx*speed; newPos.z+=mz*speed;
+                newPos.x = THREE.MathUtils.clamp(newPos.x, -12, 12); newPos.z = THREE.MathUtils.clamp(newPos.z, -9.5, 5.5);
+                if (!checkCollision(camera.position, newPos)) camera.position.copy(newPos);
+            }
+            const labelEl = document.getElementById('room-label');
+            let room = 'Main Hall';
+            if (camera.position.x < -4.5) room = 'Left Gallery';
+            else if (camera.position.x > 4.5) room = 'Right Gallery';
+            if (labelEl.textContent !== room) {
+                labelEl.textContent = room; labelEl.classList.add('show');
+                clearTimeout(labelEl._t); labelEl._t = setTimeout(()=>labelEl.classList.remove('show'),2000);
+            }
+        }
+
+        document.getElementById('btn-walk').addEventListener('click', enableWalk);
+        document.getElementById('btn-orbit').addEventListener('click', disableWalk);
+
+        // Point-and-click navigation
+        const mouse = new THREE.Vector2();
+        let transitioning = false;
+        function navigate(vp) {
+            if (transitioning || walkMode) return;
+            transitioning = true;
+            const startPos = camera.position.clone(), startTarget = orbit.target.clone();
+            const endPos = new THREE.Vector3(...vp.pos), endTarget = new THREE.Vector3(...vp.look);
+            const duration = 1200, start = performance.now();
+            function anim(now) {
+                const t = Math.min((now-start)/duration, 1);
+                const ease = t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+                camera.position.lerpVectors(startPos, endPos, ease);
+                orbit.target.lerpVectors(startTarget, endTarget, ease);
+                if (t<1) requestAnimationFrame(anim);
+                else transitioning = false;
+            }
+            requestAnimationFrame(anim);
+            const labelEl = document.getElementById('room-label');
+            labelEl.textContent = vp.label; labelEl.classList.add('show');
+            clearTimeout(labelEl._t); labelEl._t = setTimeout(()=>labelEl.classList.remove('show'),2000);
+        }
+
+        renderer.domElement.addEventListener('click', e => {
+            if (transitioning || walkMode) return;
+            if (e.target.closest('#lightbox')) return;
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((e.clientX-rect.left)/rect.width)*2-1;
+            mouse.y = -((e.clientY-rect.top)/rect.height)*2+1;
+            raycaster.setFromCamera(mouse, camera);
+            const mHits = raycaster.intersectObjects(markerGroup.children, false);
+            if (mHits.length) { const vp = mHits[0].object.userData.viewpoint; if(vp) { navigate(vp); return; } }
+            const aHits = raycaster.intersectObjects(clickTargets, false);
+            if (aHits.length) { const obj = aHits[0].object; if (obj.userData?.isArtwork) showLightbox(obj.userData); }
+        });
+
+        // Lightbox
+        let selected = null;
+        window.showLightbox = function(art) {
+            selected = art;
+            document.getElementById('lb-img').src = art.img;
+            document.getElementById('lb-title').textContent = art.title;
+            document.getElementById('lb-details').innerHTML = `<span>${art.price}</span><span>${art.size}</span><span>${art.edition}</span><span>310 GSM Etching Rag</span><span>Signed</span>`;
+            document.getElementById('lightbox').style.display = 'flex';
+            if (walkMode && document.pointerLockElement) document.exitPointerLock();
+        };
+        function hideLightbox() { document.getElementById('lightbox').style.display='none'; selected=null; }
+        document.getElementById('lightbox').addEventListener('click', hideLightbox);
+        document.getElementById('lb-add').addEventListener('click', e => {
+            e.stopPropagation();
+            if (selected && window.addToCart) {
+                window.addToCart(selected);
+                document.getElementById('toast').textContent = `${selected.title} added`;
+                document.getElementById('toast').classList.add('show');
+                setTimeout(()=>document.getElementById('toast').classList.remove('show'),2500);
+                hideLightbox();
+            }
+        });
+
+        // Cart stub
+        window.addToCart = item => {
+            if (window.cart && window.saveCart && window.updateCartUI) {
+                window.cart.push({ title:item.title, img:item.img, price: parseInt(item.price.replace(/[^0-9]/g,'')) });
+                window.saveCart(); window.updateCartUI();
+            } else console.log('Add to cart:', item.title);
+        };
+
+        // Audio toggle
+        let audioOn = false;
+        document.getElementById('btn-audio').addEventListener('click', ()=>{
+            audioOn = !audioOn;
+            document.getElementById('btn-audio').textContent = audioOn ? '♪ Audio On' : '♪ Audio Off';
+            document.getElementById('btn-audio').classList.toggle('active', audioOn);
+        });
+
+        // Animation loop
+        const clock = new THREE.Clock();
+        function animate() {
+            const delta = Math.min(clock.getDelta(), 0.1);
+            walkMove(delta);
+            orbit.update();
+            particles.rotation.y += 0.00015;
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('resize', ()=>{
+            camera.aspect = window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

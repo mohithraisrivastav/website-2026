@@ -1,0 +1,2462 @@
+﻿<!-- ============================================================
+     SHOP PAGE &mdash; SOURCE OF TRUTH
+     Products are consolidated here with in-page filters.
+     Legacy category pages redirect to this page.
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <title>Shop | Fine Art Prints | Mohith Rai Srivastav</title>
+    <meta name="description" content="Shop limited-edition archival fine art prints by Mohith Rai Srivastav. Each print is produced in small editions on archival paper.">
+    <meta name="keywords" content="fine art prints, archival prints, limited edition prints, Mohith Rai Srivastav">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mohithraisrivastav.com/shop.html">
+    <meta property="og:site_name" content="Mohith Rai Srivastav">
+    <meta property="og:title" content="Shop | Mohith Rai Srivastav">
+    <meta property="og:description" content="Limited-edition archival fine art prints by Mohith Rai Srivastav.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mohithraisrivastav.com/shop.html">
+    <meta property="og:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shop | Mohith Rai Srivastav">
+    <meta name="twitter:description" content="Limited-edition archival fine art prints by Mohith Rai Srivastav.">
+    <meta name="twitter:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "url": "https://mohithraisrivastav.com/shop.html",
+      "name": "Shop &mdash; Mohith Rai Srivastav",
+      "description": "Limited-edition archival fine art prints by Mohith Rai Srivastav.",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Cosmic Return", "url": "https://mohithraisrivastav.com/shop.html" },
+        { "@type": "ListItem", "position": 2, "name": "Burnt Earth", "url": "https://mohithraisrivastav.com/shop.html" },
+        { "@type": "ListItem", "position": 3, "name": "Chromatic Rupture", "url": "https://mohithraisrivastav.com/shop.html" }
+      ],
+      "author": { "@type": "Person", "name": "Mohith Rai Srivastav", "url": "https://mohithraisrivastav.com/" }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/pages/shop.css">
+    <script src="assets/js/translate.js" defer></script>
+    <style>
+        /* ── Detail accordion (Framing / Packaging / Delivery / Returns) ── */
+        .md-accordion {
+            grid-column: 1 / -1;
+            border-bottom: 1px solid rgba(26,22,18,0.1);
+        }
+        .md-accordion:first-child { border-top: 1px solid rgba(26,22,18,0.1); }
+        .md-acc-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            gap: 16px;
+        }
+        .md-acc-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #1A1612;
+        }
+        .md-acc-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            color: rgba(26,22,18,0.4);
+            transition: transform 0.3s ease, color 0.2s;
+        }
+        .md-acc-icon svg { width: 16px; height: 16px; }
+        .md-accordion.open .md-acc-icon { transform: rotate(180deg); color: #CFA246; }
+        .md-accordion.open .md-acc-title { color: #CFA246; }
+        .md-acc-body {
+            display: none;
+            padding: 0 0 20px;
+        }
+        .md-accordion.open .md-acc-body { display: block; }
+
+        /* ── Waitlist form modal ── */
+        #waitlistModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 14500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #waitlistModal.wl-active { display: flex; }
+
+        .wl-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(26, 22, 18, 0.55);
+            cursor: pointer;
+        }
+        .wl-card {
+            position: relative;
+            z-index: 1;
+            background: #FAF8F4;
+            border: 1px solid rgba(207, 162, 70, 0.35);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 36px 36px;
+            animation: wlSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes wlSlideUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .wl-close {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: none; border: none;
+            font-size: 1.25rem; line-height: 1;
+            color: rgba(26,22,18,0.35);
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+        .wl-close:hover { color: #1A1612; }
+
+        .wl-eyebrow {
+            font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase;
+            color: #CFA246; margin-bottom: 8px;
+        }
+        .wl-heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 4vw, 2.1rem);
+            font-weight: 300; line-height: 1.1;
+            color: #1A1612; margin-bottom: 6px;
+        }
+        .wl-product-name {
+            font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(26,22,18,0.45);
+            margin-bottom: 28px;
+        }
+        .wl-field { margin-bottom: 16px; }
+        .wl-label {
+            display: block;
+            font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+            color: rgba(26,22,18,0.55);
+            margin-bottom: 6px;
+        }
+        .wl-input {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(26,22,18,0.2);
+            color: #1A1612;
+            padding: 13px 14px;
+            font-family: inherit;
+            font-size: 0.9375rem;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+            border-radius: 6px;
+        }
+        .wl-input:focus { border-color: #CFA246; }
+        .wl-input::placeholder { color: rgba(26,22,18,0.3); }
+        .wl-submit {
+            width: 100%;
+            margin-top: 24px;
+            padding: 16px;
+            background: #1A1612;
+            border: 1px solid #1A1612;
+            color: #FAF8F4;
+            font-family: inherit;
+            font-size: 0.875rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.25s, border-color 0.25s, color 0.25s;
+        }
+        .wl-submit:hover { background: #CFA246; border-color: #CFA246; color: #fff; }
+        .wl-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Success state */
+        .wl-success {
+            display: none;
+            text-align: center;
+            padding: 16px 0 8px;
+        }
+        .wl-success-icon {
+            width: 44px; height: 44px;
+            border: 1px solid #CFA246;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 18px;
+            color: #CFA246;
+        }
+        .wl-success-icon svg { width: 20px; height: 20px; }
+        .wl-success h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem; font-weight: 300;
+            color: #1A1612; margin-bottom: 10px;
+        }
+        .wl-success p {
+            font-size: 0.9rem; color: rgba(26,22,18,0.6);
+            line-height: 1.6; font-weight: 300;
+        }
+
+        /* ── AR "View in Your Space" overlay ── */
+        .ar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #000;
+            overflow: hidden;
+        }
+        .ar-overlay.ar-active { display: block; }
+
+        #arVideo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ar-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 100%);
+        }
+        .ar-close-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .ar-close-btn:hover { background: rgba(255,255,255,0.25); }
+        .ar-close-btn svg { width: 16px; height: 16px; }
+
+        .ar-title {
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            flex: 1;
+        }
+        .ar-size-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 8px;
+            padding: 6px 10px;
+        }
+        .ar-size-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+            white-space: nowrap;
+        }
+        #arSizeSelect {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            max-width: 160px;
+        }
+        #arSizeSelect option {
+            background: #1A1612;
+            color: #F8F6F1;
+        }
+
+        .ar-print {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            z-index: 3;
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.35),
+                0 12px 40px rgba(0,0,0,0.3);
+        }
+        .ar-print.ar-dragging { cursor: grabbing; }
+        .ar-print img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+        .ar-dim-tag {
+            position: absolute;
+            bottom: -26px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.6);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .ar-hint {
+            position: absolute;
+            bottom: 36px; left: 0; right: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.45);
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            z-index: 4;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+        .ar-hint.ar-hint-fade { opacity: 0; }
+
+        .ar-no-camera {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            z-index: 5;
+            background: #111;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 40px;
+        }
+        .ar-no-camera[hidden] { display: none; }
+        .ar-no-camera svg { opacity: 0.4; }
+        .ar-no-camera p { font-size: 0.9375rem; line-height: 1.6; max-width: 280px; }
+        .ar-retry-btn {
+            background: #CFA246;
+            border: none;
+            color: #1A1612;
+            padding: 12px 28px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        /* AR trigger button — injected into modal by JS */
+        .ar-trigger-btn {
+            width: 100%;
+            background: none;
+            border: 1px solid rgba(26,22,18,0.18);
+            color: #777;
+            padding: 11px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .ar-trigger-btn:hover {
+            border-color: #CFA246;
+            color: #CFA246;
+        }
+        .ar-trigger-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <!-- Full-screen image viewer -->
+    <div id="imgViewer" onclick="closeImgViewer()">
+        <button id="imgViewerClose" onclick="closeImgViewer()" aria-label="Close viewer">&times;</button>
+        <button class="img-viewer-nav prev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image">&#8592;</button>
+        <button class="img-viewer-nav next" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image">&#8594;</button>
+        <img id="imgViewerImg" src="" alt="">
+        <div id="imgViewerHint">Click anywhere to close &nbsp;&mdash;&nbsp; ESC</div>
+    </div>
+
+    <div class="product-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-overlay" onclick="closeProductModal()"></div>
+        <div class="modal-scroll">
+            <div class="modal-back-bar">
+                <button class="modal-back global-back-link" onclick="closeProductModal()">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back to Shop
+                </button>
+                <button class="modal-close" onclick="closeProductModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-gallery">
+                    <div class="gallery-main" onclick="openImgViewer(document.getElementById('modalMainImage').src, document.getElementById('modalMainImage').alt)">
+                        <img id="modalMainImage" src="" alt="">
+                        <div class="gallery-zoom-hint">Click to enlarge</div>
+                        <button class="gallery-nav gallery-prev" id="galleryPrev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+                        <button class="gallery-nav gallery-next" id="galleryNext" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+                        <div class="gallery-counter" id="galleryCounter"></div>
+                    </div>
+                    <div class="gallery-thumbs" id="modalThumbs"></div>
+                </div>
+                <div class="modal-info">
+                    <div class="modal-category" id="modalCategory"></div>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-price" id="modalPrice"></div>
+                    <div id="modalSizeWrap"></div>
+                    <div class="modal-actions">
+                        <button class="action-btn" id="modalAddBtn">Add to Cart</button>
+                        <button class="action-btn buy-now-btn" id="modalBuyBtn">Buy Now</button>
+                    </div>
+                    <div id="modalARWrap"></div>
+                    <div class="modal-reassurance" id="modalReassurance"></div>
+                    <p class="modal-description" id="modalDescription"></p>
+                    <div class="modal-specs" id="modalSpecs"></div>
+                    <div class="modal-registry" id="modalRegistry"></div>
+                    <div class="modal-coa" id="modalCOA"></div>
+                </div>
+            </div>
+            <!-- Product details (full width, below gallery+info) -->
+            <div class="modal-details" id="modalDetails"></div>
+            <!-- Related products -->
+            <div class="modal-related" id="modalRelated"></div>
+
+            <!-- Modal footer -->
+            <footer class="site-footer modal-footer">
+                <div class="sf-body">
+                    <div class="sf-brand">
+                        <a href="index.html" class="sf-logo-link">
+                            <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+                        </a>
+                        <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+                    </div>
+                    <nav class="sf-nav">
+                        <span class="sf-nav-label">Pages</span>
+                        <a href="about.html">About</a>
+                        <a href="work.html">Work</a>
+                        <a href="film.html">Films</a>
+                        <a href="journal.html" style="display:none">Journal</a>
+                        <a href="workshops.html">Workshops</a>
+                        <a href="shop.html">Shop</a>
+                        <a href="contact.html">Contact</a>
+                    </nav>
+                    <nav class="sf-legal">
+                        <span class="sf-nav-label">Legal Print</span>
+                        <a href="shipping.html">Shipping Policy</a>
+                        <a href="returns.html">Returns Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="support.html">Support</a>
+                    </nav>
+                    <div class="sf-newsletter-col">
+                        <span class="sf-nav-label">Field Notes</span>
+                        <p>New work and workshop openings &mdash; sent rarely.</p>
+                        <form class="sf-form" id="sfFormModal">
+                            <label for="sfEmailModalInput" class="sr-only">Email address</label>
+                            <input type="email" id="sfEmailModalInput" placeholder="your@email.com" required>
+                            <button type="submit" aria-label="Subscribe">&rarr;</button>
+                        </form>
+                        <span class="sf-form-ok" id="sfFormModalOk">Received.</span>
+                    </div>
+                </div>
+                <div class="sf-base">
+                    <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+                    <div class="sf-social">
+                        <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                        <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+                        <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                        <a href="mailto:info@mohithraisrivastav.com">Email</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <div class="cart-toast" id="cartToast"></div>
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+        <div class="cart-header"><h2>Your Selection</h2><button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button></div>
+        <div class="cart-items-list" id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+            <button class="checkout-btn" onclick="goToCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+        <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
+        <div class="nav-links-container">
+            <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li style="display:none"><a href="journal.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">
+                <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                <span class="cart-count zero" id="cartCountGlobal"></span>
+            </div>
+            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <main id="main-content">
+        <header class="shop-hero">
+            <h1 class="fade-up">Shop.</h1>
+            <p class="fade-up">Limited-edition prints for looking with more care.</p>
+        </header>
+
+        <div id="tab-nav-anchor"></div>
+        <nav class="tab-nav fade-up" aria-label="Shop categories">
+            <button type="button" class="tab-btn active" data-shop-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="tab-btn" data-shop-filter="prints" aria-pressed="false">Prints</button>
+        </nav>
+        <div class="shop-filter-summary fade-up" id="shopFilterSummary" aria-live="polite">Showing all products</div>
+        <div class="saved-actions fade-up">
+            <button class="saved-action-btn" onclick="viewFavorites()">View Favourites</button>
+            <button class="saved-action-btn" onclick="viewCollections()">View Collections</button>
+        </div>
+
+        <div class="saved-panel" id="savedPanel">
+            <div class="saved-panel-overlay" onclick="closeSavedPanel()"></div>
+            <div class="saved-panel-inner">
+                <button class="saved-panel-close" onclick="closeSavedPanel()" aria-label="Close Favourites and Collections">&mdash;</button>
+                <div class="saved-panel-header">
+                    <h3 id="savedPanelTitle">Saved Items</h3>
+                    <div class="saved-panel-summary" id="savedPanelSummary"></div>
+                </div>
+                <div id="savedPanelContent"></div>
+            </div>
+        </div>
+
+        <section id="prints" class="shop-section" data-category="prints">
+            <div class="category-header fade-up">
+                <h2>Fine Art Prints</h2>
+                <p>Large-format archival works, hand-packed and shipped in limited editions. Each print is signed, numbered, and accompanied by a certificate of authenticity. These are permanent acquisitions.</p>
+            </div>
+            <div class="shop-grid">
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cosmic-return')" data-orig-w="42" data-orig-h="31.5" data-base-price="125000">
+                    <div class="product-image"><img loading="lazy" src="images/Cosmic Return 05.png" alt="Cosmic Return"></div>
+                    <div class="product-title">Cosmic Return</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 2 + 1 AP</span><span class="spec-tag dim-tag">42 &times; 31.5 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="125000" class="product-price">&#8377;1,25,000</div>
+                    <div class="product-actions">
+                        <button class="action-btn" onclick="addPrintToCart(event,'Cosmic Return','Cosmic Return.webp')">Add to Cart</button>
+                        <button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Cosmic Return','Cosmic Return.webp')">Buy Now</button>
+                    </div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('burnt-earth')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/Burnt Earth 03.png" alt="Burnt Earth"></div>
+                    <div class="product-title">Burnt Earth</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Burnt Earth','Burnt Earth.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Burnt Earth','Burnt Earth.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('chromatic-rupture')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/Chromatic Rupture 01.png" alt="Chromatic Rupture"></div>
+                    <div class="product-title">Chromatic Rupture</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Chromatic Rupture','Chromatic Rupture.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Chromatic Rupture','Chromatic Rupture.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('after-the-fall')" data-orig-w="32" data-orig-h="25.5" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/After The Fall 02.webp" alt="After The Fall"></div>
+                    <div class="product-title">After The Fall</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 25.5 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'After The Fall','After The Fall 02.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'After The Fall','After The Fall 02.webp')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cracked-spectrum')" data-orig-w="32" data-orig-h="21.3" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/Cracked Spectrum 01.png" alt="Cracked Spectrum"></div>
+                    <div class="product-title">Cracked Spectrum</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 21.3 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('still-organism')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/The Still Organism 01.png" alt="Still Organism"></div>
+                    <div class="product-title">Still Organism</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Still Organism','The Still Organism.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Still Organism','The Still Organism.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('forgotten-skin')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/The Forgotten Skin 01.png" alt="Forgotten Skin"></div>
+                    <div class="product-title">Forgotten Skin</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Forgotten Skin','The Forgotten Skin.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Forgotten Skin','The Forgotten Skin.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('erosion')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/Erosion 01.png" alt="Erosion"></div>
+                    <div class="product-title">Erosion</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Erosion','Erosion.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Erosion','Erosion.jpg')">Buy Now</button></div>
+                </div>
+                <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('imprint')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
+                    <div class="product-image"><img loading="lazy" src="images/Imprint 03.png" alt="Imprint"></div>
+                    <div class="product-title">Imprint</div>
+                    <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
+                    <div data-inr="85000" class="product-price">&#8377;85,000</div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Imprint','Imprint.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Imprint','Imprint.jpg')">Buy Now</button></div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="books" class="shop-section" data-category="books" style="display:none">
+            <div class="category-header fade-up">
+                <h2>Books</h2>
+                <p>The written foundation of the practice. How architecture is observed, how the Resurface series developed, and how sustained attention becomes a working method.</p>
+            </div>
+            <div class="shop-grid">
+                <div class="product-card fade-up" onclick="openProductModal('matter-of-pause')" data-product-id="matter-of-pause" data-shop-category="books">
+                    <div class="product-image"><img loading="lazy" src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause (Monograph)" onerror="this.onerror=null;this.src='images/Cosmic Return.webp';"></div>
+                    <div class="product-title">The Matter of Pause (Monograph)</div>
+                    <div class="product-specs" id="bookSpecsDisplay"><span class="spec-tag">176 Pages</span><span class="spec-tag">English</span><span class="spec-tag">Digital / Softcover</span></div>
+                    <div data-inr="1500" class="product-price" id="bookPriceDisplay">&#8377;1,500</div>
+                    <div class="product-config">
+                        <label class="config-label">Format selection</label>
+                        <select class="config-select" id="bookFormatSelect" onchange="updateBookUI()" onclick="event.stopPropagation()">
+                            <option value="999" data-name="The Matter of Pause (Digital)" data-status="In Stock" data-delivery="Instant Download" data-specs="Digital Download Edition.">Digital Download</option>
+                            <option value="2499" data-name="The Matter of Pause (Paperback)" data-status="Pre-Order" data-delivery="Standard Shipping" data-specs="Paperback Edition.">Paperback Edition</option>
+                        </select>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); openWaitlistForm('The Matter of Pause')">Join Waitlist</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="shop-section" data-category="tools" style="display:none">
+            <div class="category-header fade-up">
+                <h2>Studio Tools</h2>
+                <p>Used in every Lived Space workshop session. Equally useful alone. 52 constraints for slowing down and observing before you make. Works in any creative medium.</p>
+            </div>
+            <div class="shop-grid">
+                <div class="product-card fade-up" onclick="openProductModal('explorer-deck')" data-product-id="explorer-deck" data-shop-category="tools">
+                    <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" onerror="this.onerror=null;this.src='images/Cracked Spectrum.jpg';"></div>
+                    <div class="product-title">Explorer's Deck</div>
+                    <div class="product-specs"><span class="spec-tag">76 Cards</span><span class="spec-tag">6 Suits + Wild</span><span class="spec-tag">Matte Tactile Stock</span></div>
+                    <div data-inr="2100" class="product-price">&#8377;2,100</div>
+                    <div class="product-actions">
+                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); openWaitlistForm('The Explorer\'s Deck')">Join Waitlist</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+<footer class="site-footer">
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link">
+              <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+            </a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">&rarr;</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+    </main>
+
+    <!-- ── AR "View in Your Space" overlay ───────────────────────────── -->
+    <!-- ── Waitlist Form Modal ── -->
+    <div id="waitlistModal" role="dialog" aria-modal="true" aria-labelledby="wlHeading">
+        <div class="wl-backdrop" onclick="closeWaitlistForm()"></div>
+        <div class="wl-card">
+            <button class="wl-close" onclick="closeWaitlistForm()" aria-label="Close">&times;</button>
+
+            <!-- Form view -->
+            <div id="wlFormView">
+                <div class="wl-eyebrow">Limited Availability</div>
+                <h2 class="wl-heading" id="wlHeading">Join the Waitlist</h2>
+                <div class="wl-product-name" id="wlProductName"></div>
+                <form id="wlForm" onsubmit="submitWaitlistForm(event)">
+                    <div class="wl-field">
+                        <label class="wl-label" for="wlName">Name</label>
+                        <input class="wl-input" type="text" id="wlName" name="name" placeholder="Your full name" required autocomplete="name">
+                    </div>
+                    <div class="wl-field">
+                        <label class="wl-label" for="wlEmail">Email</label>
+                        <input class="wl-input" type="email" id="wlEmail" name="email" placeholder="your@email.com" required autocomplete="email">
+                    </div>
+                    <div class="wl-field">
+                        <label class="wl-label" for="wlPhone">Mobile Number</label>
+                        <input class="wl-input" type="tel" id="wlPhone" name="phone" placeholder="+91 98765 43210" autocomplete="tel">
+                    </div>
+                    <button class="wl-submit" type="submit" id="wlSubmitBtn">Notify Me When Available</button>
+                </form>
+            </div>
+
+            <!-- Success view -->
+            <div id="wlSuccessView" class="wl-success">
+                <div class="wl-success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3>You're on the list.</h3>
+                <p>We'll reach out as soon as <strong id="wlSuccessProduct"></strong> is available.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="arOverlay" class="ar-overlay" role="dialog" aria-modal="true" aria-label="View in Your Space">
+        <div class="ar-header">
+            <button class="ar-close-btn" onclick="closeAR()" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="ar-title">View in Your Space</div>
+            <div class="ar-size-pill">
+                <span class="ar-size-label">Size</span>
+                <select id="arSizeSelect" onchange="updateARSize()"></select>
+            </div>
+        </div>
+        <video id="arVideo" autoplay playsinline muted></video>
+        <div id="arPrint" class="ar-print">
+            <img id="arPrintImg" src="" alt="Print preview" draggable="false">
+            <div class="ar-dim-tag" id="arDimTag"></div>
+        </div>
+        <div class="ar-hint" id="arHint">Drag to move &nbsp;·&nbsp; Pinch to resize</div>
+        <div class="ar-no-camera" id="arNoCam" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="44" height="44"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <p id="arNoCamMsg">Camera access is needed to preview the print on your wall. Please allow camera access when prompted.</p>
+            <button class="ar-retry-btn" onclick="startARCamera()">Allow Camera</button>
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            'cosmic-return': {
+                title: 'Cosmic Return', price: 125000, category: 'Resurface Series / Fine Art Print', origW: 42, origH: 31.5,
+                images: ['Cosmic Return.webp', 'Cosmic Return 03.png', 'Cosmic Return 05.png'],
+                description: 'The largest edition in the Resurface series &mdash; a meditation on cyclical transformation, where weathered surfaces carry the residue of countless monsoons. Printed at museum scale to preserve the full tonal depth of the archival pigment.',
+                specs: { Edition: '2 + 1 AP', Dimensions: '42 &mdash; 31.5 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Goa, India', light: 'Late afternoon, October — raking oblique light, three days after monsoon end', frame: 'The wall still held moisture deep in its pores — not visible but present in the surface tension of the pigment. I positioned the camera just below eye-level and angled slightly up, at about fifteen degrees. The decision was to catch the way the ochre layer beneath the whitewash absorbed the last hour of sun differently from the surface above it. The resulting tonal depth is not the image I planned. It is what the light chose to show.' }
+            },
+            'burnt-earth': {
+                title: 'Burnt Earth', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 24,
+                images: ['Burnt Earth.jpg', 'Burnt Earth 01.png', 'Burnt Earth 03.png'],
+                description: 'Pigment archaeology: rust, clay, and oxidation read as palimpsest on the built skin of Goa. A close reading of how earth-tones return to the surfaces that first borrowed them.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 24 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Aldona, North Goa', light: 'Midday, March — direct overhead sun, no diffusion, no shade sought', frame: 'The conditions were wrong by every convention — harsh midday light, bleached sky, no softness anywhere. That was exactly the reason to stay. Harsh light does not flatter a surface; it interrogates it. What the camera found was not deterioration but archaeology: the rust-orange layer beneath the paint, the clay deposit at the lower course, the oxidation bloom around an old nail. The tones in this image have not been adjusted. What you see is what was there.' }
+            },
+            'chromatic-rupture': {
+                title: 'Chromatic Rupture', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 24,
+                images: ['Chromatic Rupture.jpg', 'Chromatic Rupture 01.png',`Chromatic Rupture 02.png`],
+                description: 'Where paint abandons its architecture. A study of color as a living organism in retreat &mdash; documenting the moment pigment separates from the wall it once defined.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 24 in', Paper: 'Museum board', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Fontainhas, Panaji, Goa', light: 'Morning, January — soft eastern light, low angle, strong colour rendering', frame: 'I had passed this wall many times before the decision to photograph it. The paint was actively separating — not yet fallen, still holding the shape of departure. The January light rendered the blue and yellow as equally weighted, which is not how they appear in stronger illumination. The rupture at the centre reads differently at different times of day. This is the morning version: two colours of equal authority, separating with patience.' }
+            },
+            'after-the-fall': {
+                title: 'After The Fall', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 25.5,
+                images: ['After The Fall.jpg', 'Chromatic Rupture.jpg', 'Imprint.jpg'],
+                description: 'Captured in the aftermath of monsoon &mdash; surfaces holding the memory of water that has already moved on. Stillness as residue, silence as record.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 25.5 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Siolim, North Goa', light: 'Overcast afternoon, September — diffuse grey sky, monsoon retreating, surface wet from morning rain', frame: 'This was made within two hours of the last heavy rain. The surface still held the water in its lower register — a horizontal tide-line of saturation marking exactly how high the flow had reached. What the image is about is not the wall but the water that is no longer there. The grey light was essential: any sun would have dried the surface before I arrived and closed the record. Timing is not composition. It is the whole decision.' }
+            },
+            'cracked-spectrum': {
+                title: 'Cracked Spectrum', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 21.3,
+                images: ['Cracked Spectrum.jpg', 'Chromatic Rupture.jpg', 'Burnt Earth.jpg'],
+                description: 'Fissures as spectrum. The geometry of structural fatigue rendered as abstract field &mdash; reading a wall the way one reads a seismograph.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 21.3 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Industrial periphery, Verna, South Goa', light: 'Overcast afternoon — flat light that renders crack depth without shadow masking', frame: 'The fissure system in this wall had been forming for years. I had visited three times before making the image — twice the light gave too much shadow in the lower cracks, flattening the upper ones. Overcast conditions were necessary: flat light reads a crack network as a drawn line, not a relief. The image is closer to a diagram than a photograph. It documents a structural event — the wall recording the slow arithmetic of expansion, contraction, and time.' }
+            },
+            'still-organism': {
+                title: 'Still Organism', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
+                images: ['The Still Organism.jpg', 'Cosmic Return.webp', 'Erosion.jpg'],
+                description: 'Architecture considered not as object but as slow body &mdash; breathing, absorbing, decaying in place. A portrait of a building at rest within its own transformation.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Village compound, Anjuna, Goa', light: 'Early morning, February — pre-golden hour, cool directional light from the east', frame: 'The building had not been used in several years. The stillness was not absence — it was presence of a different kind. I waited for the point at which no shadow was moving on the facade: the window before the sun begins its rotation across the surface. At that moment the building is most itself — not interacting with light, simply receiving it. The vertical format was the only one that could hold the full logic of the facade without cropping the dialogue between the roof edge and the ground.' }
+            },
+            'forgotten-skin': {
+                title: 'Forgotten Skin', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
+                images: ['The Forgotten Skin.jpg', 'The Forgotten Skin 01.png'],
+                description: 'The exterior wall as memory surface. What the building has witnessed, recorded in pigment, spore, and slow stain.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Portuguese-era structure, Chandor, South Goa', light: 'Late afternoon, November — warm raking light from low sun angle, long shadows from adjacent tree', frame: 'The stain pattern on this wall had been accumulating for decades — water track, biological growth, paint loss, and the shadow-print of a creeper that had since been removed. The raking afternoon light was the only condition in which all four layers read simultaneously without any one of them dominating. I made twelve frames across forty minutes as the sun moved through the tree canopy. This is the one in which nothing is hidden.' }
+            },
+            'erosion': {
+                title: 'Erosion', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
+                images: ['Erosion.jpg', 'Burnt Earth.jpg', 'The Still Organism.jpg'],
+                description: "Time's deliberate subtraction. A portrait of material yielding to weather across seasons &mdash; the wall's quiet negotiation with its own disappearance.",
+                specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Coastal building, Morjim, North Goa', light: 'Late afternoon, September — post-monsoon salt air, low warm light, wind from the sea', frame: 'Salt-laden air from the Arabian Sea acts on lime plaster in a specific way — it does not crack, it dissolves. The erasure here is horizontal: the lower register of the wall has been returning to the earth for years while the upper section still holds its coat. I framed the image to place the horizon of erasure at exactly the mid-point. What is above the line and what is below are the same material at different points in the same sentence.' }
+            },
+            'imprint': {
+                title: 'Imprint', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
+                images: ['Imprint.jpg', 'Cosmic Return.webp', 'The Forgotten Skin.jpg'],
+                description: 'A trace left by the absence of something that once touched this surface. Architecture as archive of the things it no longer holds.',
+                specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
+                provenance: { location: 'Old market building, Mapusa, Goa', light: 'Noon, April — high overhead light that falls directly into the recess with no shadow edge', frame: 'Something had been fixed to this wall for a long time and then removed. The adhesive, the fixings, the pressure of the object — all of it remained in the surface as a negative. Noon light was the correct choice: at any other angle the recess casts its own shadow and reads as depth. At noon the shadow is eliminated and what remains is only the trace of a thing that is no longer there. Architecture as archive. The photograph does not explain what was there. That absence is part of the work.' }
+            },
+            'matter-of-pause': {
+                title: 'The Matter of Pause (Monograph)', price: 1500, category: 'Monograph / Book',
+                images: ['MATTER_OF_PAUSE_BOOK.jpg'],
+                description: 'A deep, narrative-driven exploration of spatial duration through photography and film, tracing architectural attention across time and place.',
+                specs: { Format: 'Digital Download / Paperback', Pages: '176', Language: 'English', Binding: 'Softcover', Shipping: 'Worldwide' }
+            },
+            'explorer-deck': {
+                title: 'The Explorer\'s Deck', price: 2100, category: 'Practice Kit / Deck',
+                images: ['VISUAL_JUDGEMENT.jpg'],
+                description: 'A deck that turns noticing into your superpower. 76 cards invite you to break habit, sharpen perception, and transform everyday spaces into creative practice. Made for artists, designers, photographers, and makers who want to see differently and create with sharper eyes.',
+                specs: { Cards: '76', Players: '1&mdash;5 casual &mdash; larger groups in workshops', Size: 'Standard playing card', Finish: 'Matt tactile stock', Age: '7 and above', Shipping: 'Worldwide' },
+                details: [
+                    {
+                        heading: 'What It Is',
+                        body: 'The Explorer\'s Deck is a creative observation deck of 76 cards designed to train perception, attention, and creativity through simple but powerful exercises. Each card contains three parts: a <strong>Mission</strong> &mdash; a clear task to do or find in your environment; a <strong>Why It Matters</strong> &mdash; the bigger idea behind the task, connecting observation to creativity; and a <strong>Key</strong> &mdash; a sharp question that focuses your noticing and deepens reflection. The deck is versatile. It can be used for solo practice, group play, or structured workshops. It is not about right answers or finished products. The value lies in what you notice while doing the task.'
+                    },
+                    {
+                        heading: "What's Inside",
+                        list: [
+                            '<strong>Sensation (12 cards)</strong> &mdash; Colour, light, sound, texture',
+                            '<strong>Emotion (12 cards)</strong> &mdash; Mood of places, human traces, memory',
+                            '<strong>Energy (12 cards)</strong> &mdash; Movement, rhythm, stillness, tension',
+                            '<strong>Abstraction (12 cards)</strong> &mdash; Patterns, voids, forms, reflections',
+                            '<strong>Perception (12 cards)</strong> &mdash; Awareness, framing, interpretation',
+                            '<strong>Attention (12 cards)</strong> &mdash; Focus, duration, distraction, patience',
+                            '<strong>Wild Cards (5 cards)</strong> &mdash; Chaos agents that override the rules'
+                        ]
+                    },
+                    {
+                        heading: 'How to Play',
+                        list: [
+                            '<strong>Solo</strong> &mdash; Draw a card and explore.',
+                            '<strong>Battle</strong> &mdash; Everyone draws the same card, goes out, comes back, compares.',
+                            '<strong>Workshop</strong> &mdash; Use cards as warm-ups, group hunts, or creative constraints.',
+                            '<strong>Wild Cards</strong> &mdash; Override everything when the game needs a shock.'
+                        ]
+                    },
+                    {
+                        heading: 'Age and Audience',
+                        list: [
+                            '<strong>Recommended Age:</strong> 7 and above',
+                            '<strong>Players:</strong> 1 to 5 casually, larger groups in workshops',
+                            '<strong>Audience:</strong> Families, students, creative groups, design schools, museums, and anyone training perception or attention'
+                        ]
+                    },
+                    {
+                        heading: 'Rules',
+                        list: [
+                            'Draw a card and follow the mission.',
+                            'Record what you notice in any medium &mdash; writing, photo, sketch, audio.',
+                            'Share or reflect. There are no winners or losers.',
+                            'Skip anything unsafe. Adapt every mission to your environment.'
+                        ]
+                    },
+                    {
+                        heading: 'Uses',
+                        list: [
+                            '<strong>Family Entertainment</strong> &mdash; Playful exploration at home or outdoors',
+                            '<strong>Creative Practice</strong> &mdash; Break habits, sharpen observation, generate ideas',
+                            '<strong>Workshops and Education</strong> &mdash; Train perception, teamwork, and problem-solving',
+                            '<strong>Attention Training</strong> &mdash; Exercises in focus, patience, and awareness',
+                            '<strong>Museums and Institutions</strong> &mdash; interactive tool for engaging visitors with space and detail'
+                        ]
+                    }
+                ]
+            }
+        };
+
+        /**
+         * editionRegistry — source of truth for sold/available status.
+         * Nested by product id → size label (Small / Medium / Standard / Large).
+         * To mark a sale: add the edition number to the `sold` array.
+         *   e.g. sold: [1, 3]  →  editions 1 and 3 are sold for that size.
+         * AP is tracked separately: apSold: true/false.
+         */
+        const editionRegistry = {
+            'cosmic-return': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'burnt-earth': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'chromatic-rupture': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'after-the-fall': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'cracked-spectrum': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'still-organism': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'forgotten-skin': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'erosion': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            },
+            'imprint': {
+                'Small':    { total: 20, ap: 1, sold: [], apSold: false },
+                'Medium':   { total: 12, ap: 1, sold: [], apSold: false },
+                'Standard': { total: 5,  ap: 1, sold: [], apSold: false },
+                'Large':    { total: 2,  ap: 1, sold: [], apSold: false }
+            }
+        };
+
+        /* Renders (or re-renders) the edition registry for a given product + size. */
+        function renderRegistry(id, sizeLabel) {
+            var regEl = document.getElementById('modalRegistry');
+            if (!regEl) return;
+            var regForId = editionRegistry[id];
+            if (!regForId || !products[id] || !products[id].origW) { regEl.innerHTML = ''; return; }
+            var reg = regForId[sizeLabel];
+            if (!reg) { regEl.innerHTML = ''; return; }
+
+            var available = reg.total - reg.sold.length;
+            var allSold   = available === 0;
+
+            var slots = '';
+            for (var n = 1; n <= reg.total; n++) {
+                var isSold = reg.sold.indexOf(n) !== -1;
+                slots += '<div class="rs-slot ' + (isSold ? 'rs-sold' : 'rs-avail') + '">'
+                       +   '<span class="rs-num">' + n + '/' + reg.total + '</span>'
+                       +   '<span class="rs-status">' + (isSold ? 'Sold' : 'Available') + '</span>'
+                       + '</div>';
+            }
+            if (reg.ap) {
+                slots += '<div class="rs-slot rs-ap' + (reg.apSold ? ' rs-sold' : '') + '">'
+                       +   '<span class="rs-num">AP</span>'
+                       +   '<span class="rs-status">' + (reg.apSold ? 'Sold' : 'Artist Proof') + '</span>'
+                       + '</div>';
+            }
+
+            regEl.innerHTML =
+                '<div class="registry-header">'
+              +   '<span class="registry-label">Edition Registry</span>'
+              +   '<span class="registry-count' + (allSold ? ' rs-count-soldout' : '') + '">'
+              +     (allSold ? 'Sold Out' : available + ' of ' + reg.total + ' remaining')
+              +   '</span>'
+              + '</div>'
+              + '<div class="registry-slots">' + slots + '</div>'
+              + '<p class="registry-note">Each edition is numbered, hand-signed verso, and accompanied by a Certificate of Authenticity. Numbers are assigned at time of purchase.</p>';
+        }
+
+        let currentProduct = null;
+        let currentImgIndex = 0;
+
+        function imgPath(src) {
+            return src.startsWith('http') || src.startsWith('images/') ? src : 'images/' + src;
+        }
+
+        function updateGalleryNav(p) {
+            const prev = document.getElementById('galleryPrev');
+            const next = document.getElementById('galleryNext');
+            const counter = document.getElementById('galleryCounter');
+            const total = p.images.length;
+            if (total > 1) {
+                prev.removeAttribute('hidden');
+                next.removeAttribute('hidden');
+                counter.textContent = (currentImgIndex + 1) + ' / ' + total;
+            } else {
+                prev.setAttribute('hidden', '');
+                next.setAttribute('hidden', '');
+                counter.textContent = '';
+            }
+        }
+
+        function galleryStep(dir) {
+            const p = products[currentProduct];
+            if (!p || p.images.length < 2) return;
+            currentImgIndex = (currentImgIndex + dir + p.images.length) % p.images.length;
+            document.getElementById('modalMainImage').src = imgPath(p.images[currentImgIndex]);
+            document.querySelectorAll('.gallery-thumb').forEach((t, i) => t.classList.toggle('active', i === currentImgIndex));
+            updateGalleryNav(p);
+        }
+
+        function openProductModal(id) {
+            closeSavedPanel();
+            const p = products[id];
+            if (!p) return;
+            currentProduct = id;
+            // Push URL hash so reload restores this modal
+            if (window.location.hash !== '#' + id) {
+                history.pushState({ product: id }, '', '#' + id);
+            }
+            currentImgIndex = 0;
+            document.getElementById('modalCategory').innerText = p.category;
+            document.getElementById('modalTitle').innerText = p.title;
+            document.getElementById('modalPrice').innerText = formatPrice(p.price);
+            document.getElementById('modalPrice').dataset.inrPrice = p.price;
+            document.getElementById('modalDescription').innerText = p.description;
+            document.getElementById('modalMainImage').src = imgPath(p.images[0]);
+            document.getElementById('modalMainImage').alt = p.title;
+
+            const thumbs = document.getElementById('modalThumbs');
+            thumbs.innerHTML = p.images.length > 1 ? p.images.map((img, i) =>
+                `<div class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="switchModalImage('${imgPath(img)}', this, ${i})"><img src="${imgPath(img)}" alt="${p.title} - image ${i+1}"></div>
+`
+            ).join('') : '';
+
+            updateGalleryNav(p);
+
+            const specs = document.getElementById('modalSpecs');
+            specs.innerHTML = Object.entries(p.specs).map(([k, v]) =>
+                `<div class="spec-item"><span class="spec-label">${k}</span><span class="spec-value">${v}</span></div>
+`
+            ).join('');
+
+            /* ── Certificate of Authenticity block (prints only) ── */
+            const coaEl = document.getElementById('modalCOA');
+            coaEl.innerHTML = '';
+            if (p.origW) {
+                const shieldSvg = `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+                const checkSvg  = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`;
+                coaEl.innerHTML = `
+                    <div class="coa-header">
+                        ${shieldSvg}
+                        <span class="coa-heading">Certificate of Authenticity</span>
+                    </div>
+                    <p class="coa-statement">Each print is accompanied by a hand-signed Certificate of Authenticity issued by the studio. The certificate records the edition number, print dimensions, buyer provenance, and year of issue — forming a permanent record of this work's origin and ownership.</p>
+                    <div class="coa-security">
+                        <span class="coa-security-label">Security</span>
+                        <span class="coa-feature">${checkSvg} Embossed studio seal</span>
+                        <span class="coa-feature">${checkSvg} Holographic sticker</span>
+                        <span class="coa-feature">${checkSvg} QR verification</span>
+                    </div>
+                    <div class="coa-meta">
+                        <div class="coa-meta-item"><span class="coa-meta-key">Medium</span><span class="coa-meta-val">Archival pigment print on 310 GSM Etching Rag</span></div>
+                        <div class="coa-meta-item"><span class="coa-meta-key">Production</span><span class="coa-meta-val">Giclée, printed under artist supervision</span></div>
+                        <div class="coa-meta-item"><span class="coa-meta-key">Signature</span><span class="coa-meta-val">Signed verso by Mohith Rai Srivastav</span></div>
+                        <div class="coa-meta-item"><span class="coa-meta-key">Year of Issue</span><span class="coa-meta-val">2026</span></div>
+                    </div>
+                    <p class="coa-id-note">Each certificate carries a unique reference in the format <strong>COA-2026-MOH-XXX</strong>, numbered sequentially across the entire edition. The COA ships with the print inside the archival packaging.</p>
+                `;
+            }
+
+            const detailsEl = document.getElementById('modalDetails');
+            detailsEl.innerHTML = '';
+            if (p.details && p.details.length) {
+                p.details.forEach(function(block, i) {
+                    const div = document.createElement('div');
+                    /* index 0 = "What It Is" &mdash; full width */
+                    div.className = 'md-block' + (i === 0 ? ' md-full' : '');
+
+                    const inner = block.body
+                        ? `<p class="md-block-body">${block.body}</p>
+`
+                        : `<ul class="md-block-list">${block.list.map(function(item) { return '<li>' + item + '</li>'; }).join('')}</ul>`;
+
+                    div.innerHTML = `<div class="md-block-heading">${block.heading}</div>${inner}`;
+                    detailsEl.appendChild(div);
+                });
+            }
+
+            /* ── Framing & Shipping detail blocks (prints only) ── */
+            if (p.origW) {
+                const isLarge = p.origW >= 40 || p.origH >= 40;
+                const packagingLine = isLarge
+                    ? '<strong>Museum-grade custom flat crate</strong> — rigid foam corner protection, acid-free tissue interleaving, moisture barrier. Fully insured studio-to-door.'
+                    : '<strong>Double-walled archival flat crate</strong> — foam corner inserts, pH-neutral glassine wrap, moisture barrier. Fully insured studio-to-door.';
+
+                var printDetailBlocks = [
+                    {
+                        heading: 'Framing',
+                        list: [
+                            '<strong>Unframed (standard)</strong> — Dispatched flat-packed; ready to hand to a local framer with the enclosed spec sheet.',
+                            '<strong>Framed on request</strong> — Float-mounted on acid-free museum board behind anti-reflective museum glass. Contact the studio to add framing before ordering.',
+                            '<strong>Frame profiles</strong> — Natural white oak, dark walnut, or matte black aluminium. All profiles are archival and UV-stable.',
+                            'Framed orders add <strong>10–14 business days</strong> to lead time and ship in a custom timber crate.'
+                        ]
+                    },
+                    {
+                        heading: 'Packaging & Handling',
+                        list: [
+                            packagingLine,
+                            'Print is sleeved in archival glassine tissue before crating. No tape ever contacts the print surface.',
+                            '<strong>3–5 business days</strong> production and preparation time before dispatch — prints are inspected, signed, and numbered at this stage.',
+                            'Tracking number and insurance certificate emailed on day of dispatch.',
+                            'White-glove unpacking guide included inside every crate.'
+                        ]
+                    },
+                    {
+                        heading: 'Delivery',
+                        list: [
+                            '<strong>India</strong> — 5–10 business days via Blue Dart / FedEx India. 18% GST applicable at checkout.',
+                            '<strong>International</strong> — 10–21 business days via FedEx International Priority. Tracking provided end-to-end.',
+                            'Customs duties and import taxes are the responsibility of the recipient as per local law.',
+                            'Large-format or multi-print orders — <strong>contact the studio</strong> for a tailored freight quote before purchasing.'
+                        ]
+                    },
+                    {
+                        heading: 'Returns & Exchanges',
+                        list: [
+                            '<strong>7-day return window</strong> — contact the studio within 7 days of confirmed delivery to initiate a return.',
+                            'Print must be returned in its <strong>original undamaged packaging</strong>, unframed, and in the same condition as received.',
+                            'Return shipping is the buyer\'s responsibility. We recommend using the original crate and a fully insured courier.',
+                            'Once the print is received and inspected, a <strong>full refund</strong> (excluding original shipping cost) is processed within 5 business days.',
+                            '<strong>Exchanges</strong> — we will exchange a print for a different work of equal or greater value. Contact us to arrange.',
+                            'Framed-on-request and custom-size prints are <strong>non-returnable</strong> unless the work arrives damaged.',
+                            'Damaged on arrival? Photograph the damage before unpacking further and email us within 48 hours — we will cover all costs.'
+                        ]
+                    }
+                ];
+
+                printDetailBlocks.forEach(function(block) {
+                    const div = document.createElement('div');
+                    div.className = 'md-accordion';
+                    div.innerHTML = '<button class="md-acc-trigger" onclick="toggleAccordion(this)" aria-expanded="false">'
+                        + '<span class="md-acc-title">' + block.heading + '</span>'
+                        + '<span class="md-acc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>'
+                        + '</button>'
+                        + '<div class="md-acc-body">'
+                        + '<ul class="md-block-list">'
+                        + block.list.map(function(item) { return '<li>' + item + '</li>'; }).join('')
+                        + '</ul>'
+                        + '</div>';
+                    detailsEl.appendChild(div);
+                });
+
+                /* ── Provenance narrative block ── */
+                if (p.provenance) {
+                    var prov = p.provenance;
+                    var provDiv = document.createElement('div');
+                    provDiv.className = 'modal-provenance';
+                    provDiv.innerHTML =
+                        '<div class="mprov-header">'
+                        + '<span class="mprov-label">Provenance</span>'
+                        + '<button class="mprov-pdf-btn" onclick="printProvenance(\'' + id + '\')">Download as PDF →</button>'
+                        + '</div>'
+                        + '<div class="mprov-fields">'
+                        + '<div class="mprov-field"><span class="mprov-key">Location</span><span class="mprov-val">' + prov.location + '</span></div>'
+                        + '<div class="mprov-field"><span class="mprov-key">Light</span><span class="mprov-val">' + prov.light + '</span></div>'
+                        + '</div>'
+                        + '<div class="mprov-narrative"><p>' + prov.frame + '</p></div>';
+                    detailsEl.appendChild(provDiv);
+                }
+            }
+
+            /* ── Reassurance strip below buy buttons (prints only) ── */
+            var reassuranceEl = document.getElementById('modalReassurance');
+            reassuranceEl.innerHTML = '';
+            if (p.origW) {
+                var checkSvg   = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+                var shieldSvg  = '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+                var rotateSvg  = '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.54"/></svg>';
+                reassuranceEl.innerHTML =
+                    '<div class="ra-item">' + checkSvg  + '7-day returns</div>'
+                  + '<div class="ra-item">' + shieldSvg + 'Fully insured shipping</div>'
+                  + '<div class="ra-item">' + rotateSvg + 'Exchange available</div>';
+            }
+
+            /* -- Size selector for fine art prints -- */
+            const sizeWrap = document.getElementById('modalSizeWrap');
+            sizeWrap.innerHTML = '';
+            let selectedPrice   = p.price;
+            let selectedDimLabel = '';
+
+            if (p.origW) {
+                const sizes = calcPrintSizes(p.origW, p.origH);
+                const foundIdx   = sizes.findIndex(s => s.price === p.price);
+                const defaultIdx = Math.min(foundIdx !== -1 ? foundIdx : 2, sizes.length - 1);
+
+                selectedPrice    = sizes[defaultIdx].price;
+                selectedDimLabel = sizes[defaultIdx].str;
+
+                const wrap = document.createElement('div');
+                wrap.style.cssText = 'margin: 0 0 32px;';
+
+                const lbl = document.createElement('span');
+                lbl.style.cssText = 'display:block; font-size:0.8625rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#1A1612; margin-bottom:10px;';
+                lbl.textContent = 'Select Size';
+
+                const sel = document.createElement('select');
+                sel.className = 'size-select';
+                sel.style.cssText = 'font-size:0.8625rem; padding:13px 36px 13px 14px;';
+
+                sizes.forEach(function(s, i) {
+                    const opt           = document.createElement('option');
+                    opt.dataset.price    = s.price;
+                    opt.dataset.dim      = s.str;
+                    opt.dataset.edition  = s.edition;
+                    opt.dataset.sizeLabel = s.label;
+                    opt.textContent      = s.label + '  \u2014  ' + s.str;
+                    if (i === defaultIdx) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+
+                const reqOpt       = document.createElement('option');
+                reqOpt.disabled    = true;
+                reqOpt.textContent = '\u2014 Larger sizes available on request';
+                sel.appendChild(reqOpt);
+
+                sel.addEventListener('change', function() {
+                    const opt     = this.options[this.selectedIndex];
+                    selectedPrice     = parseInt(opt.dataset.price);
+                    selectedDimLabel  = opt.dataset.dim;
+                    document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
+                    document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
+                    /* update Edition + Dimensions in the specs grid */
+                    const specsEl = document.getElementById('modalSpecs');
+                    specsEl.querySelectorAll('.spec-item').forEach(function(row) {
+                        const key = row.querySelector('.spec-label').textContent;
+                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = opt.dataset.edition.replace('Ed. ', '');
+                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = opt.dataset.dim;
+                    });
+                    /* re-render edition registry for the newly selected size */
+                    renderRegistry(currentProduct, opt.dataset.sizeLabel);
+                });
+
+                wrap.appendChild(lbl);
+                wrap.appendChild(sel);
+                sizeWrap.appendChild(wrap);
+
+                /* set initial price to match default selection */
+                document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
+                document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
+
+                /* render edition registry for the default size */
+                renderRegistry(id, sizes[defaultIdx].label);
+            } else {
+                /* non-print product — clear registry */
+                var regEl = document.getElementById('modalRegistry');
+                if (regEl) regEl.innerHTML = '';
+            }
+
+            document.getElementById('modalAddBtn').onclick = function(e) {
+                e.stopPropagation();
+                const label = selectedDimLabel ? p.title + ' \u2014 ' + selectedDimLabel : p.title;
+                addToCart(label, selectedPrice, imgPath(p.images[0]));
+                closeProductModal();
+                setTimeout(() => toggleCart(), 120);
+            };
+            document.getElementById('modalBuyBtn').onclick = function(e) {
+                e.stopPropagation();
+                const label = selectedDimLabel ? p.title + ' \u2014 ' + selectedDimLabel : p.title;
+                addToCart(label, selectedPrice, imgPath(p.images[0]));
+                closeProductModal();
+                window.location.href = 'checkout.html';
+            };
+
+            // Waitlist-only products (books & studio tools) \u2014 replace action buttons
+            var waitlistNames = {
+                'matter-of-pause': 'The Matter of Pause',
+                'explorer-deck':   "Explorer's Deck"
+            };
+            if (waitlistNames[id]) {
+                var wName = waitlistNames[id];
+                document.querySelector('.modal-actions').innerHTML =
+                    '<button class="action-btn buy-now-btn" style="width:100%" onclick="openWaitlistForm(\'' + wName.replace(/'/g, "\\'") + '\')">Join Waitlist</button>';
+            }
+
+            // Related products &mdash; same category first, cross-category fallback
+            const allKeys = Object.keys(products).filter(k => k !== id);
+            const samecat = allKeys.filter(k => products[k].category === p.category);
+            const others  = allKeys.filter(k => products[k].category !== p.category);
+            const related = samecat.concat(others).slice(0, 3);
+            const relContainer = document.getElementById('modalRelated');
+            if (related.length) {
+                relContainer.innerHTML = 
+`
+                    <div class="modal-related-label">You May Also Like</div>
+                    <div class="modal-related-grid">
+                        ${related.map(k => {
+                            const r = products[k];
+                            return `<div class="modal-rel-card" onclick="openProductModal('${k}')">
+                                <div class="rel-img"><img src="${imgPath(r.images[0])}" alt="${r.title}" loading="lazy"></div>
+                                <div class="rel-title">${r.title}</div>
+                                <div class="rel-price">${formatPrice(r.price)}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>`;
+            } else {
+                relContainer.innerHTML = '';
+            }
+
+            document.getElementById('productModal').classList.add('active');
+            // Scroll modal to top
+            document.getElementById('productModal').querySelector('.modal-scroll').scrollTop = 0;
+            document.body.style.overflow = 'hidden';
+            // Cancel RAF loop then destroy Lenis &mdash; its passive:false wheel listener
+            // calls preventDefault() even when stopped, blocking modal scroll
+            if (window.__lenisRafId) { cancelAnimationFrame(window.__lenisRafId); window.__lenisRafId = null; }
+            if (window.__lenis) { window.__lenis.destroy(); window.__lenis = null; }
+            // Move focus into the modal for keyboard / screen-reader users
+            var modal = document.getElementById('productModal');
+            var firstFocusable = modal.querySelector('button, [href], input, select, [tabindex]:not([tabindex="-1"])');
+            if (firstFocusable) firstFocusable.focus();
+            // Focus trap — keep Tab/Shift+Tab inside the modal; Escape closes it
+            if (modal._focusTrapHandler) modal.removeEventListener('keydown', modal._focusTrapHandler);
+            modal._focusTrapHandler = function(e) {
+                if (e.key === 'Escape') { closeProductModal(); return; }
+                if (e.key !== 'Tab') return;
+                var focusable = Array.from(modal.querySelectorAll(
+                    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                )).filter(function(el) { return el.offsetParent !== null; });
+                if (!focusable.length) return;
+                var first = focusable[0], last = focusable[focusable.length - 1];
+                if (e.shiftKey) {
+                    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+                } else {
+                    if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+                }
+            };
+            modal.addEventListener('keydown', modal._focusTrapHandler);
+        }
+
+        // Image load fade-in &mdash; marks images loaded so shimmer gives way smoothly
+        function markImgLoaded(img) {
+            if (img.complete && img.naturalWidth) { img.classList.add('loaded'); return; }
+            img.addEventListener('load',  function() { img.classList.add('loaded'); }, { once: true });
+            img.addEventListener('error', function() { img.classList.add('loaded'); }, { once: true });
+        }
+        document.querySelectorAll('.product-image img, .gallery-main img').forEach(markImgLoaded);
+        // Also catch modal images injected dynamically
+        new MutationObserver(function(mutations) {
+            mutations.forEach(function(m) {
+                m.addedNodes.forEach(function(n) {
+                    if (n.nodeType !== 1) return;
+                    n.querySelectorAll && n.querySelectorAll('.product-image img, .gallery-main img').forEach(markImgLoaded);
+                    if (n.matches && n.matches('.product-image img, .gallery-main img')) markImgLoaded(n);
+                });
+            });
+        }).observe(document.body, { childList: true, subtree: true });
+
+        function getProductIdFromCard(card) {
+            const onclickAttr = card.getAttribute('onclick') || '';
+            const match = onclickAttr.match(/openProductModal\('([^']+)'\)/);
+            return match ? match[1] : (card.dataset.productId || '');
+        }
+
+        function initShopFilters() {
+            const labels = {
+                all: 'all products',
+                prints: 'prints',
+                books: 'books',
+                tools: 'tools'
+            };
+            const cards    = Array.from(document.querySelectorAll('.product-card'));
+            const sections = Array.from(document.querySelectorAll('.shop-section'));
+            const buttons  = Array.from(document.querySelectorAll('[data-shop-filter]'));
+            const summary  = document.getElementById('shopFilterSummary');
+
+            function applyFilter(filter, shouldUpdateHash) {
+                const selected = labels[filter] ? filter : 'all';
+                let visibleCount = 0;
+
+                // Toggle individual cards (for "Showing N products" count + future sub-filters)
+                cards.forEach(function(card) {
+                    const isVisible = selected === 'all' || card.dataset.shopCategory === selected;
+                    card.classList.toggle('is-filtered-out', !isVisible);
+                    if (isVisible) visibleCount += 1;
+                });
+
+                // Toggle whole sections so headers also hide/show cleanly
+                sections.forEach(function(section) {
+                    const sectionCat = section.dataset.category;
+                    const isVisible  = selected === 'all' || sectionCat === selected;
+                    section.classList.toggle('shop-section--hidden', !isVisible);
+                });
+
+                buttons.forEach(function(button) {
+                    const isActive = button.dataset.shopFilter === selected;
+                    button.classList.toggle('active', isActive);
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+
+                if (summary) {
+                    summary.textContent = selected === 'all'
+                        ? 'Showing all ' + visibleCount + ' products'
+                        : 'Showing ' + visibleCount + ' ' + labels[selected];
+                }
+
+                if (shouldUpdateHash) {
+                    history.replaceState(null, '', selected === 'all' ? location.pathname : '#' + selected);
+                }
+            }
+
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    applyFilter(button.dataset.shopFilter, true);
+                    // Scroll to first visible section after a brief tick
+                    setTimeout(function() {
+                        const firstVisible = document.querySelector('.shop-section:not(.shop-section--hidden)');
+                        if (firstVisible) {
+                            const navH = document.querySelector('.navbar') ? document.querySelector('.navbar').offsetHeight : 80;
+                            const top  = firstVisible.getBoundingClientRect().top + window.scrollY - navH - 24;
+                            window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                        }
+                    }, 60);
+                });
+            });
+
+            const initial = location.hash ? location.hash.replace('#', '') : 'all';
+            applyFilter(initial, false);
+        }
+        initShopFilters();
+
+        /* ── Inject availability count on every print card ────────────── */
+        (function injectAvailability() {
+            document.querySelectorAll('.product-card[data-shop-category="prints"]').forEach(function(card) {
+                var id      = getProductIdFromCard(card);
+                var regById = editionRegistry[id];
+                if (!regById) return;
+                /* cards default to Standard size; fall back to first available tier */
+                var reg = regById['Standard'] || regById['Large'] || regById['Medium'] || regById['Small'];
+                if (!reg) return;
+                var available = reg.total - reg.sold.length;
+                var allSold   = available === 0;
+
+                /* Availability line — injected right after .product-specs */
+                if (!card.querySelector('.card-availability')) {
+                    var line = document.createElement('div');
+                    line.className = 'card-availability' + (allSold ? ' ca-soldout' : '');
+                    line.innerHTML = allSold
+                        ? '<span class="ca-dot ca-dot-sold"></span>Sold Out'
+                        : '<span class="ca-dot"></span>' + available + ' of ' + reg.total + ' editions remaining';
+                    var specs = card.querySelector('.product-specs');
+                    if (specs) specs.insertAdjacentElement('afterend', line);
+                }
+
+                /* Disable buy buttons if fully sold out */
+                if (allSold) {
+                    card.querySelectorAll('.action-btn').forEach(function(btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'Sold Out';
+                        btn.style.opacity = '0.45';
+                        btn.style.cursor  = 'default';
+                    });
+                }
+            });
+        })();
+
+        /* ── Inject COA badge on every print card ─────────────────────── */
+        (function injectCoaBadges() {
+            const shieldSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="#CFA246" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px;flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+            document.querySelectorAll('.product-card[data-shop-category="prints"]').forEach(function(card) {
+                if (card.querySelector('.coa-badge')) return; // already injected
+                const specs = card.querySelector('.product-specs');
+                if (!specs) return;
+                const badge = document.createElement('div');
+                badge.className = 'coa-badge';
+                badge.innerHTML = shieldSvg + 'Certificate of Authenticity';
+                specs.insertAdjacentElement('afterend', badge);
+            });
+        })();
+
+        // Track which card triggered the modal so focus can return on close
+        var _modalTrigger = null;
+        document.querySelectorAll('.product-card').forEach(function(card) {
+            card.addEventListener('click', function() { _modalTrigger = card; });
+        });
+
+        function closeProductModal() {
+            var modal = document.getElementById('productModal');
+            modal.classList.remove('active');
+            // Remove focus trap
+            if (modal._focusTrapHandler) {
+                modal.removeEventListener('keydown', modal._focusTrapHandler);
+                modal._focusTrapHandler = null;
+            }
+            document.body.style.overflow = '';
+            currentProduct = null;
+            // Clear URL hash so closing removes the modal state
+            if (window.location.hash) {
+                history.replaceState(null, '', location.pathname + location.search);
+            }
+            // Recreate Lenis for smooth page scroll
+            if (!window.__lenis) initLenis();
+            // Return focus to the card that opened the modal
+            if (_modalTrigger) { _modalTrigger.focus(); _modalTrigger = null; }
+        }
+
+        function switchModalImage(src, thumb, index) {
+            currentImgIndex = index || 0;
+            document.getElementById('modalMainImage').src = src;
+            document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            const p = products[currentProduct];
+            if (p) updateGalleryNav(p);
+        }
+
+        /* -- Image viewer ---------------------------------------------------- */
+        function openImgViewer(src, alt) {
+            if (!src) return;
+            var img = document.getElementById('imgViewerImg');
+            img.src = src;
+            img.alt = alt || '';
+            document.getElementById('imgViewer').classList.add('open');
+        }
+        function closeImgViewer() {
+            document.getElementById('imgViewer').classList.remove('open');
+            var img = document.getElementById('imgViewerImg');
+            img.src = '';
+            img.alt = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('imgViewer').classList.contains('open')) {
+                    closeImgViewer();
+                } else {
+                    closeProductModal();
+                }
+            }
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.getElementById('hamburgerBtn');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+            burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function updateBookUI() {
+            const select = document.getElementById('bookFormatSelect');
+            const opt = select.options[select.selectedIndex];
+            document.getElementById('bookPriceDisplay').innerText = formatPrice(parseInt(select.value));
+            document.getElementById('bookSpecsDisplay').innerHTML = `${opt.getAttribute('data-specs')} <br> <span style="color:#1A1612;">Status: ${opt.getAttribute('data-status')}</span> | Delivery: ${opt.getAttribute('data-delivery')}`;
+        }
+
+        function addBookToCart() {
+            const select = document.getElementById('bookFormatSelect');
+            const opt = select.options[select.selectedIndex];
+            addToCart(opt.getAttribute('data-name'), parseInt(select.value), 'MATTER_OF_PAUSE_BOOK.jpg');
+        }
+
+        function buyBookNow() { addBookToCart(); window.location.href = 'checkout.html'; }
+
+        function initLenis() {
+            // Cancel any still-running RAF loop before creating a new instance
+            if (window.__lenisRafId) { cancelAnimationFrame(window.__lenisRafId); window.__lenisRafId = null; }
+            const l = new Lenis();
+            // Fix: body{overflow-x:hidden} computes overflow-y:auto (CSS pairing), making <body>
+            // the scroll root in Chrome. Lenis's default setScroll() writes to
+            // document.documentElement.scrollTop which is always 0 in this context &mdash; a no-op.
+            // Patch both setScroll and actualScroll to use window.scrollTo/scrollY instead.
+            l.setScroll = function(val) { window.scrollTo(0, val); };
+            Object.defineProperty(l, 'actualScroll', {
+                get: function() { return window.scrollY; },
+                configurable: true
+            });
+            window.__lenis = l;
+            function raf(time) { l.raf(time); window.__lenisRafId = requestAnimationFrame(raf); }
+            window.__lenisRafId = requestAnimationFrame(raf);
+        }
+        initLenis();
+        gsap.to(".fade-up", { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: ".fade-up", start: "top 95%" } });
+        gsap.utils.toArray('.product-card').forEach(item => { gsap.to(item, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: item, start: "top 90%" } }); });
+
+        /* -- Favourites ----------------------------------------------- */
+        function getFavs() { return JSON.parse(localStorage.getItem('shop_favs') || '[]'); }
+        function saveFavs(f) { localStorage.setItem('shop_favs', JSON.stringify(f)); }
+
+        function toggleFav(btn, id) {
+            let favs = getFavs();
+            const idx = favs.indexOf(id);
+            if (idx === -1) {
+                favs.push(id);
+                btn.classList.add('fav-active');
+                showToast('Added to Favourites');
+            } else {
+                favs.splice(idx, 1);
+                btn.classList.remove('fav-active');
+                showToast('Removed from Favourites');
+            }
+            saveFavs(favs);
+            // sync modal fav btn if open
+            const mFav = document.getElementById('modalFavBtn');
+            if (mFav && mFav.dataset.id === id) mFav.classList.toggle('fav-active', favs.includes(id));
+        }
+
+        function initFavStates() {
+            const favs = getFavs();
+            document.querySelectorAll('.fav-btn[data-id]').forEach(btn => {
+                btn.classList.toggle('fav-active', favs.includes(btn.dataset.id));
+            });
+        }
+
+        /* -- Collections ----------------------------------------------- */
+        function addToCollection(btn, title) {
+            const name = window.prompt('Add "' + title + '" to collection:\n(Enter a collection name)', 'My Collection');
+            if (!name || !name.trim()) return;
+            const cols = JSON.parse(localStorage.getItem('shop_collections') || '{}');
+            if (!cols[name]) cols[name] = [];
+            if (!cols[name].includes(title)) {
+                cols[name].push(title);
+                showToast('Added to "' + name + '"');
+            } else {
+                showToast('Already in "' + name + '"');
+            }
+            localStorage.setItem('shop_collections', JSON.stringify(cols));
+        }
+
+        function getCollections() { return JSON.parse(localStorage.getItem('shop_collections') || '{}'); }
+        function saveCollections(cols) { localStorage.setItem('shop_collections', JSON.stringify(cols)); }
+
+        function viewFavorites() { openSavedPanel('favorites'); }
+        function viewCollections() { openSavedPanel('collections'); }
+
+        function openSavedPanel(type) {
+            const panel = document.getElementById('savedPanel');
+            const content = document.getElementById('savedPanelContent');
+            const header = document.getElementById('savedPanelTitle');
+            const summary = document.getElementById('savedPanelSummary');
+            const favs = getFavs();
+            const cols = getCollections();
+            let html = '';
+
+            if (type === 'favorites') {
+                header.textContent = 'Favourites';
+                summary.textContent = favs.length ? 'Your favourited products appear here. Click any item to open it again.' : 'No favourites yet &mdash; tap the heart icon on a product to save it here.';
+                if (!favs.length) {
+                    html = '<div class="saved-no-items">You have no products in Favourites.</div>';
+                } else {
+                    html = favs.map(id => {
+                        const p = products[id] || { title: id, price: 0, images: [], description: '' };
+                        return `<div class="saved-item">
+                            <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${p.title}">
+                            <div class="saved-item-meta">
+                                <div class="saved-item-title">${p.title}</div>
+                                <div class="saved-item-price">${formatPrice(p.price || 0)}</div>
+                            </div>
+                            <div class="saved-item-actions">
+                                <button onclick="openProductModal('${id}')">Open</button>
+                                <button onclick="removeFromFavorites('${id}')">Remove</button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            } else {
+                header.textContent = 'Collections';
+                const names = Object.keys(cols);
+                summary.textContent = names.length ? 'Saved collections are shown below. Open any product, or remove items from a collection.' : 'No collections yet &mdash; add products by tapping Collection on a product.';
+                if (!names.length) {
+                    html = '<div class="saved-no-items">You have not created any collections.</div>';
+                } else {
+                    html = names.map(name => {
+                        const items = cols[name];
+                        const entries = items.map(title => {
+                            const id = Object.keys(products).find(key => products[key].title === title) || title;
+                            const p = products[id] || { title, price: 0, images: [] };
+                            return `<div class="saved-item" style="grid-template-columns: 90px 1fr auto;">
+                                <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${title}">
+                                <div class="saved-item-meta">
+                                    <div class="saved-item-title">${title}</div>
+                                    <div class="saved-item-price">${formatPrice(p.price || 0)}</div>
+                                </div>
+                                <div class="saved-item-actions">
+                                    <button onclick="openProductModal('${id}')">Open</button>
+                                    <button onclick="removeFromCollection('${name.replace(/'/g,"\\'")}', '${title.replace(/'/g,"\\'")}')">Remove</button>
+                                </div>
+                            </div>`;
+                        }).join('');
+                        return `<div style="margin-bottom:24px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;">
+                                <div style="font-weight:700;color:#1A1612;text-transform:uppercase;letter-spacing:1.5px;">${name}</div>
+                                <button class="saved-action-btn" style="padding:8px 12px;font-size:0.8625rem;" onclick="deleteCollection('${name.replace(/'/g,"\\'")}')">Delete</button>
+                            </div>
+                            <div class="saved-panel-grid">${entries}</div>
+                        </div>`;
+                    }).join('');
+                }
+            }
+
+            content.innerHTML = html;
+            panel.classList.add('open');
+        }
+
+        function closeSavedPanel() {
+            const panel = document.getElementById('savedPanel');
+            panel.classList.remove('open');
+        }
+
+        function removeFromFavorites(id) {
+            const favs = getFavs().filter(item => item !== id);
+            saveFavs(favs);
+            initFavStates();
+            openSavedPanel('favorites');
+        }
+
+        function removeFromCollection(collection, title) {
+            const cols = getCollections();
+            if (!cols[collection]) return;
+            cols[collection] = cols[collection].filter(item => item !== title);
+            if (!cols[collection].length) delete cols[collection];
+            saveCollections(cols);
+            openSavedPanel('collections');
+        }
+
+        function deleteCollection(collection) {
+            const cols = getCollections();
+            delete cols[collection];
+            saveCollections(cols);
+            openSavedPanel('collections');
+        }
+
+        /* -- Share ----------------------------------------------------- */
+        function shareProduct(id, title) {
+            const url = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(id);
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => showToast('Link copied &mdash; ' + title)).catch(() => fallbackCopy(url, title));
+            } else {
+                fallbackCopy(url, title);
+            }
+        }
+        function fallbackCopy(url, title) {
+            const inp = document.createElement('input');
+            inp.value = url; document.body.appendChild(inp);
+            inp.select(); document.execCommand('copy');
+            document.body.removeChild(inp);
+            showToast('Link copied &mdash; ' + title);
+        }
+
+        /* -- Social icon SVGs ------------------------------------------- */
+        const SVG_FAV  = `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+        const SVG_COL  = `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`;
+        const SVG_SHARE= `<svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+
+        /* SVGs for spec tags */
+        const SVG_ED     = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>`;
+        const SVG_PAPER  = `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/></svg>`;
+        const SVG_SIGNED = `<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
+
+        /* SVGs for action buttons */
+        const SVG_CART   = `<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
+        const SVG_ARROW  = `<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+
+        /* -- Inject icons into spec tags on all product cards ---------- */
+        (function initSpecIcons() {
+            document.querySelectorAll('.product-specs .spec-tag').forEach(tag => {
+                const txt = tag.textContent.trim();
+                if (tag.classList.contains('ed-tag')) {
+                    tag.innerHTML = SVG_ED + txt;
+                } else if (/gsm|board|rag|stock/i.test(txt)) {
+                    tag.classList.add('paper-tag');
+                    tag.innerHTML = SVG_PAPER + txt;
+                } else if (/signed/i.test(txt)) {
+                    tag.classList.add('signed-tag');
+                    tag.innerHTML = SVG_SIGNED + `<span>${txt}</span>`;
+                    tag.title = 'Artist Signed';
+                }
+            });
+        })();
+
+        /* -- Inject icons into action buttons ------------------------- */
+        (function initActionIcons() {
+            document.querySelectorAll('.action-btn:not(.buy-now-btn)').forEach(btn => {
+                if (!btn.querySelector('svg')) btn.innerHTML = SVG_CART + btn.innerHTML;
+            });
+            document.querySelectorAll('.buy-now-btn').forEach(btn => {
+                if (!btn.querySelector('svg')) btn.innerHTML = btn.innerHTML + SVG_ARROW;
+            });
+        })();
+
+        /* -- Inject social buttons into every product card ------------- */
+        function initProductSocialButtons() {
+            document.querySelectorAll('.product-card').forEach(card => {
+                const onclickAttr = card.getAttribute('onclick') || '';
+                const match = onclickAttr.match(/openProductModal\('([^']+)'\)/);
+                const id = match ? match[1] : (card.dataset.productId || null);
+                const titleEl = card.querySelector('.product-title');
+                const title = titleEl ? titleEl.textContent.trim() : (id || 'Product');
+
+                const social = document.createElement('div');
+                social.className = 'product-social';
+                social.innerHTML = 
+`
+                    <button class="psoc-btn fav-btn" data-id="${id || title}" title="Favourite" aria-label="Favourite" onclick="event.stopPropagation(); toggleFav(this, '${id || title}')">${SVG_FAV}</button>
+                    <button class="psoc-btn col-btn" title="Add to Collection" aria-label="Add to Collection" onclick="event.stopPropagation(); addToCollection(this, '${title.replace(/'/g,"&#39;")}')">${SVG_COL}</button>
+                    <button class="psoc-btn share-btn" title="Share" aria-label="Share" onclick="event.stopPropagation(); shareProduct('${id || title}', '${title.replace(/'/g,"&#39;")}')">${SVG_SHARE}</button>
+                `;
+                const imageEl = card.querySelector('.product-image');
+                if (imageEl) {
+                    imageEl.appendChild(social);
+                } else {
+                    card.appendChild(social);
+                }
+            });
+            initFavStates();
+        }
+        initProductSocialButtons();
+
+        /* -- Print size calculator (4 fixed tiers) -------------------- */
+        function calcPrintSizes(w, h) {
+            var isLandscape = w >= h;
+            function dim(longest) {
+                var nw, nh;
+                if (isLandscape) { nw = longest; nh = +((longest / w) * h).toFixed(2); }
+                else             { nh = longest; nw = +((longest / h) * w).toFixed(2); }
+                return nw + ' \u00d7 ' + nh + ' in';
+            }
+            return [
+                { label: 'Small',    str: dim(18), price:  30000, edition: 'Ed. 20 + 1 AP' },
+                { label: 'Medium',   str: dim(24), price:  50000, edition: 'Ed. 12 + 1 AP' },
+                { label: 'Standard', str: dim(32), price:  85000, edition: 'Ed. 5 + 1 AP'  },
+                { label: 'Large',    str: dim(42), price: 125000, edition: 'Ed. 2 + 1 AP'  }
+            ];
+        }
+
+        function addPrintToCart(e, name, img) {
+            e.stopPropagation();
+            var card = e.currentTarget.closest('.product-card');
+            var sel  = card && card.querySelector('.size-select');
+            if (sel) {
+                var opt = sel.options[sel.selectedIndex];
+                addToCart(name + ' \u2014 ' + opt.dataset.dim, parseInt(opt.dataset.price), img);
+            }
+        }
+
+        function buyPrintNow(e, name, img) {
+            e.stopPropagation();
+            var card = e.currentTarget.closest('.product-card');
+            var sel  = card && card.querySelector('.size-select');
+            if (sel) {
+                var opt = sel.options[sel.selectedIndex];
+                buyNow(name + ' \u2014 ' + opt.dataset.dim, parseInt(opt.dataset.price), img);
+            }
+        }
+
+        /* -- Inject size selectors on all fine art print cards -------- */
+        (function initSizeSelectors() {
+            document.querySelectorAll('.product-card[data-orig-w]').forEach(function(card) {
+                var w    = parseFloat(card.dataset.origW);
+                var h    = parseFloat(card.dataset.origH);
+                var sizes = calcPrintSizes(w, h);
+
+                var wrap = document.createElement('div');
+                wrap.className = 'size-select-wrap';
+                wrap.addEventListener('click', function(e) { e.stopPropagation(); });
+
+                var sel = document.createElement('select');
+                sel.className = 'size-select';
+
+                var cardDefaultIdx = Math.min(2, sizes.length - 1);
+                sizes.forEach(function(s, i) {
+                    var opt          = document.createElement('option');
+                    opt.value        = i;
+                    opt.dataset.dim  = s.str;
+                    opt.dataset.price   = s.price;
+                    opt.dataset.edition = s.edition;
+                    opt.textContent  = s.label + '  \u2014  ' + s.str;
+                    if (i === cardDefaultIdx) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+
+                var reqOpt     = document.createElement('option');
+                reqOpt.disabled    = true;
+                reqOpt.textContent = '\u2014 Larger sizes available on request';
+                sel.appendChild(reqOpt);
+
+                var priceEl = card.querySelector('.product-price');
+                var dimTag  = card.querySelector('.dim-tag');
+                var edTag   = card.querySelector('.ed-tag');
+
+                sel.addEventListener('change', function() {
+                    var opt = this.options[this.selectedIndex];
+                    if (priceEl) priceEl.textContent = formatPrice(parseInt(opt.dataset.price));
+                    if (dimTag)  dimTag.textContent  = opt.dataset.dim;
+                    if (edTag)   edTag.textContent   = opt.dataset.edition;
+                });
+
+                wrap.appendChild(sel);
+                var actionsEl = card.querySelector('.product-actions');
+                if (actionsEl) card.insertBefore(wrap, actionsEl);
+            });
+        })();
+
+        /* -- Card-level image galleries ------------------------------- */
+        (function initCardGalleries() {
+            const SVG_PREV = '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
+            const SVG_NEXT = '<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                const match = (card.getAttribute('onclick') || '').match(/openProductModal\('([^']+)'\)/);
+                const id = match ? match[1] : (card.dataset.productId || null);
+                const p = id ? products[id] : null;
+                if (!p || p.images.length < 2) return;
+
+                const imgEl  = card.querySelector('.product-image img');
+                const imgWrap = card.querySelector('.product-image');
+                if (!imgEl || !imgWrap) return;
+
+                let idx = 0;
+
+                const btnPrev = document.createElement('button');
+                btnPrev.className = 'gallery-nav gallery-prev';
+                btnPrev.setAttribute('aria-label', 'Previous image');
+                btnPrev.innerHTML = SVG_PREV;
+
+                const btnNext = document.createElement('button');
+                btnNext.className = 'gallery-nav gallery-next';
+                btnNext.setAttribute('aria-label', 'Next image');
+                btnNext.innerHTML = SVG_NEXT;
+
+                const counter = document.createElement('div');
+                counter.className = 'gallery-counter';
+                counter.textContent = '1 / ' + p.images.length;
+
+                function goTo(newIdx) {
+                    idx = (newIdx + p.images.length) % p.images.length;
+                    imgEl.src = imgPath(p.images[idx]);
+                    counter.textContent = (idx + 1) + ' / ' + p.images.length;
+                }
+
+                btnPrev.addEventListener('click', e => { e.stopPropagation(); goTo(idx - 1); });
+                btnNext.addEventListener('click', e => { e.stopPropagation(); goTo(idx + 1); });
+
+                imgWrap.appendChild(btnPrev);
+                imgWrap.appendChild(btnNext);
+                imgWrap.appendChild(counter);
+            });
+        })();
+
+        /* -- Inject social buttons into product modal ------------------- */
+        const _origOpenModal = openProductModal;
+        openProductModal = function(id) {
+            _origOpenModal(id);
+            const p = products[id];
+            if (!p) return;
+            // Remove existing modal-social if any
+            const existing = document.querySelector('.modal-social');
+            if (existing) existing.remove();
+            const favActive = getFavs().includes(id) ? ' fav-active' : '';
+            const social = document.createElement('div');
+            social.className = 'modal-social';
+            social.innerHTML = 
+`
+                <button class="psoc-btn fav-btn${favActive}" id="modalFavBtn" data-id="${id}" title="Favourite" aria-label="Favourite" onclick="toggleFav(this, '${id}')">${SVG_FAV}</button>
+                <button class="psoc-btn col-btn" title="Add to Collection" aria-label="Add to Collection" onclick="addToCollection(this, '${p.title.replace(/'/g,"&#39;")}')">${SVG_COL}</button>
+                <button class="psoc-btn share-btn" title="Share" aria-label="Share" onclick="shareProduct('${id}', '${p.title.replace(/'/g,"&#39;")}')">${SVG_SHARE}</button>
+            `;
+            document.querySelector('.modal-actions').insertAdjacentElement('beforebegin', social);
+        };
+    
+    /* ── Re-render open modal price on currency switch ─────────────────── */
+    document.addEventListener('currencychange', function () {
+        /* Re-render static data-inr price cards */
+        document.querySelectorAll('[data-inr]').forEach(function (el) {
+            el.textContent = formatPrice(parseInt(el.getAttribute('data-inr'), 10));
+        });
+        /* Re-render modal price if modal is open */
+        var mp = document.getElementById('modalPrice');
+        if (mp && mp.dataset.inrPrice) {
+            mp.textContent = formatPrice(parseInt(mp.dataset.inrPrice, 10));
+        }
+    });
+
+        /* ── Provenance PDF generator ──────────────────────────────── */
+        function printProvenance(id) {
+            var p = products[id];
+            if (!p || !p.provenance) return;
+            var pr = p.provenance;
+            var html = '<!DOCTYPE html><html><head>'
+                + '<title>Provenance — ' + p.title + '</title>'
+                + '<style>'
+                + '* { margin:0; padding:0; box-sizing:border-box; }'
+                + '@page { size: A4; margin: 36mm 28mm; }'
+                + 'body { font-family: Georgia, serif; font-size: 11pt; color: #1A1612; background: #fff; line-height: 1.75; }'
+                + '.ph { border-bottom: 0.5pt solid #CFA246; padding-bottom: 18pt; margin-bottom: 30pt; }'
+                + '.pa { font-size: 7.5pt; letter-spacing: 5pt; text-transform: uppercase; color: #aaa; margin-bottom: 6pt; }'
+                + '.pt { font-size: 28pt; font-weight: 400; font-style: italic; line-height: 1.1; margin-bottom: 8pt; }'
+                + '.ps { font-size: 8pt; letter-spacing: 4pt; text-transform: uppercase; color: #CFA246; }'
+                + '.pf { display: flex; gap: 14pt; margin-bottom: 11pt; }'
+                + '.pk { font-size: 7.5pt; letter-spacing: 3.5pt; text-transform: uppercase; color: #999; min-width: 52pt; padding-top: 2pt; flex-shrink: 0; }'
+                + '.pv { font-size: 10.5pt; }'
+                + '.pn { margin: 28pt 0 20pt; padding: 18pt 22pt; border-left: 2pt solid #CFA246; }'
+                + '.pn p { font-size: 11pt; font-style: italic; line-height: 2.0; }'
+                + '.pfoot { border-top: 0.5pt solid rgba(207,162,70,0.4); padding-top: 12pt; margin-top: 32pt; font-size: 7.5pt; letter-spacing: 2pt; text-transform: uppercase; color: #bbb; display: flex; justify-content: space-between; }'
+                + '</style></head><body>'
+                + '<div class="ph">'
+                + '<div class="pa">Mohith Rai Srivastav &nbsp;&middot;&nbsp; Studio Provenance Document</div>'
+                + '<div class="pt">' + p.title + '</div>'
+                + '<div class="ps">' + p.category + '</div>'
+                + '</div>'
+                + '<div class="pf"><span class="pk">Location</span><span class="pv">' + pr.location + '</span></div>'
+                + '<div class="pf"><span class="pk">Light</span><span class="pv">' + pr.light + '</span></div>'
+                + '<div class="pf"><span class="pk">Edition</span><span class="pv">' + p.specs.Edition + '</span></div>'
+                + '<div class="pf"><span class="pk">Medium</span><span class="pv">' + p.specs.Technique + ', ' + p.specs.Paper + '</span></div>'
+                + '<div class="pf"><span class="pk">Signed</span><span class="pv">' + p.specs.Signed + '</span></div>'
+                + '<div class="pn"><p>' + pr.frame + '</p></div>'
+                + '<div class="pfoot"><span>mohithraisrivastav.com</span><span>Goa, India &nbsp;&middot;&nbsp; 2026</span></div>'
+                + '</body></html>';
+            var w = window.open('', '_blank', 'width=860,height=1100');
+            if (w) { w.document.write(html); w.document.close(); setTimeout(function() { w.print(); }, 500); }
+        }
+
+        /* ── Prospect provenance email form ────────────────────────── */
+        (function() {
+            var form = document.getElementById('provenanceCaptureForm');
+            var ok   = document.getElementById('provenanceCaptureOk');
+            if (!form || !ok) return;
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                ok.style.display = 'block';
+                form.style.display = 'none';
+            });
+        })();
+
+        /* ── Hash-based modal opener (from resurface.html "Acquire" links) ── */
+        (function() {
+            var hash = window.location.hash.replace('#', '');
+            if (hash && products[hash]) {
+                /* Wait for the page to settle before opening modal */
+                setTimeout(function() { openProductModal(hash); }, 400);
+            }
+        })();
+
+        /* ════════════════════════════════════════════════════════════
+           AR — "View in Your Space"
+           Uses getUserMedia (rear camera) + a draggable/pinchable
+           print overlay. No WebXR required — works on all devices.
+           ════════════════════════════════════════════════════════════ */
+        var _arStream       = null;
+        var _arProductId    = null;
+        var _arSizes        = null;
+        var _arDragInit     = false;
+
+        /* Position & scale state */
+        var _arX = 0, _arY = 0, _arScale = 1;
+        var _arBaseW = 0, _arBaseH = 0;
+
+        /* Drag state */
+        var _drag = { on: false, sx: 0, sy: 0, ox: 0, oy: 0 };
+        /* Pinch state */
+        var _pinch = { on: false, d0: 0, s0: 1 };
+
+        function openAR(productId) {
+            var p = products[productId];
+            if (!p || !p.origW) return;
+            _arProductId = productId;
+            _arSizes = calcPrintSizes(p.origW, p.origH);
+
+            /* Populate size select — sync to whatever is selected in the modal */
+            var modalSel = document.querySelector('#modalSizeWrap .size-select');
+            var syncIdx  = modalSel ? modalSel.selectedIndex : 2;
+            var arSel = document.getElementById('arSizeSelect');
+            arSel.innerHTML = '';
+            _arSizes.forEach(function(s, i) {
+                var opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = s.label + '  —  ' + s.str;
+                if (i === Math.min(syncIdx, _arSizes.length - 1)) opt.selected = true;
+                arSel.appendChild(opt);
+            });
+
+            /* Set print image */
+            document.getElementById('arPrintImg').src = imgPath(p.images[0]);
+
+            /* Reset position */
+            _arX = 0; _arY = 0; _arScale = 1;
+
+            /* Show overlay */
+            document.getElementById('arOverlay').classList.add('ar-active');
+
+            /* Start camera */
+            startARCamera();
+
+            /* Apply initial size */
+            updateARSize();
+
+            /* Attach drag/pinch listeners once */
+            if (!_arDragInit) { _arDragInit = true; _initARInteraction(); }
+
+            /* Fade hint after 4 s */
+            var hint = document.getElementById('arHint');
+            hint.classList.remove('ar-hint-fade');
+            clearTimeout(window._arHintTimer);
+            window._arHintTimer = setTimeout(function() {
+                hint.classList.add('ar-hint-fade');
+            }, 4000);
+        }
+
+        /* ── Detail accordion toggle ── */
+        function toggleAccordion(btn) {
+            var item = btn.closest('.md-accordion');
+            var isOpen = item.classList.contains('open');
+            // Close all siblings first
+            var siblings = item.parentElement.querySelectorAll('.md-accordion');
+            siblings.forEach(function(s) {
+                s.classList.remove('open');
+                s.querySelector('.md-acc-trigger').setAttribute('aria-expanded', 'false');
+            });
+            // Toggle clicked item
+            if (!isOpen) {
+                item.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        /* ── Waitlist form ── */
+        var _wlProductName = '';
+        function openWaitlistForm(productName) {
+            _wlProductName = productName;
+            document.getElementById('wlProductName').textContent = productName;
+            document.getElementById('wlSuccessProduct').textContent = productName;
+            document.getElementById('wlFormView').style.display = '';
+            document.getElementById('wlSuccessView').style.display = 'none';
+            document.getElementById('wlForm').reset();
+            document.getElementById('wlSubmitBtn').disabled = false;
+            document.getElementById('waitlistModal').classList.add('wl-active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function() {
+                var n = document.getElementById('wlName');
+                if (n) n.focus();
+            }, 80);
+        }
+        function closeWaitlistForm() {
+            document.getElementById('waitlistModal').classList.remove('wl-active');
+            document.body.style.overflow = '';
+        }
+        function submitWaitlistForm(e) {
+            e.preventDefault();
+            var btn = document.getElementById('wlSubmitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Adding you…';
+            var name  = document.getElementById('wlName').value.trim();
+            var email = document.getElementById('wlEmail').value.trim();
+            var phone = document.getElementById('wlPhone').value.trim();
+            // Build contact URL as fallback record (fires in background)
+            var msg = 'Waitlist request for ' + _wlProductName + '.'
+                    + ' Name: ' + name + '.'
+                    + (phone ? ' Mobile: ' + phone + '.' : '');
+            // Show success after brief delay
+            setTimeout(function() {
+                document.getElementById('wlFormView').style.display = 'none';
+                document.getElementById('wlSuccessView').style.display = 'block';
+            }, 600);
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('waitlistModal').classList.contains('wl-active')) {
+                closeWaitlistForm();
+            }
+        });
+
+        function closeAR() {
+            document.getElementById('arOverlay').classList.remove('ar-active');
+            if (_arStream) {
+                _arStream.getTracks().forEach(function(t) { t.stop(); });
+                _arStream = null;
+            }
+            var video = document.getElementById('arVideo');
+            video.srcObject = null;
+        }
+
+        function startARCamera() {
+            var video  = document.getElementById('arVideo');
+            var noCam  = document.getElementById('arNoCam');
+            noCam.hidden = true;
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                document.getElementById('arNoCamMsg').textContent =
+                    'Camera not supported in this browser. Try Chrome or Safari on your phone.';
+                noCam.hidden = false;
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }
+            })
+            .then(function(stream) {
+                _arStream = stream;
+                video.srcObject = stream;
+                video.play();
+                noCam.hidden = true;
+            })
+            .catch(function(err) {
+                var msg = err.name === 'NotAllowedError'
+                    ? 'Camera access was denied. Tap “Allow Camera” to grant access.'
+                    : 'Could not start camera: ' + err.message;
+                document.getElementById('arNoCamMsg').textContent = msg;
+                noCam.hidden = false;
+            });
+        }
+
+        function updateARSize() {
+            var arSel  = document.getElementById('arSizeSelect');
+            var idx    = parseInt(arSel.value, 10);
+            var s      = _arSizes && _arSizes[idx];
+            if (!s) return;
+
+            /* Parse "W × H in" */
+            var raw    = s.str.replace(' in', '').split(' × ');
+            var wIn    = parseFloat(raw[0]);
+            var hIn    = parseFloat(raw[1]);
+
+            /* Scale longest side to 38% of viewport height for a natural feel */
+            var refPx  = window.innerHeight * 0.38;
+            var longer = Math.max(wIn, hIn);
+            var px_per_in = refPx / longer;
+            _arBaseW   = wIn * px_per_in;
+            _arBaseH   = hIn * px_per_in;
+
+            /* Reset position on size change */
+            _arX = 0; _arY = 0; _arScale = 1;
+
+            var print  = document.getElementById('arPrint');
+            print.style.width  = _arBaseW + 'px';
+            print.style.height = _arBaseH + 'px';
+            _applyARTransform();
+
+            document.getElementById('arDimTag').textContent = s.str;
+        }
+
+        function _applyARTransform() {
+            var print = document.getElementById('arPrint');
+            print.style.transform =
+                'translate(calc(-50% + ' + _arX + 'px), calc(-50% + ' + _arY + 'px)) scale(' + _arScale + ')';
+        }
+
+        function _getTouchDist(touches) {
+            var dx = touches[0].clientX - touches[1].clientX;
+            var dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function _initARInteraction() {
+            var print   = document.getElementById('arPrint');
+            var overlay = document.getElementById('arOverlay');
+
+            /* ── Mouse drag ── */
+            print.addEventListener('mousedown', function(e) {
+                if (!document.getElementById('arOverlay').classList.contains('ar-active')) return;
+                _drag.on = true;
+                _drag.sx = e.clientX; _drag.sy = e.clientY;
+                _drag.ox = _arX;     _drag.oy = _arY;
+                print.classList.add('ar-dragging');
+                e.preventDefault();
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (!_drag.on) return;
+                _arX = _drag.ox + (e.clientX - _drag.sx);
+                _arY = _drag.oy + (e.clientY - _drag.sy);
+                _applyARTransform();
+            });
+            document.addEventListener('mouseup', function() {
+                _drag.on = false;
+                print.classList.remove('ar-dragging');
+            });
+
+            /* ── Touch drag + pinch ── */
+            print.addEventListener('touchstart', function(e) {
+                if (!document.getElementById('arOverlay').classList.contains('ar-active')) return;
+                if (e.touches.length === 1) {
+                    _drag.on = true; _pinch.on = false;
+                    _drag.sx = e.touches[0].clientX; _drag.sy = e.touches[0].clientY;
+                    _drag.ox = _arX; _drag.oy = _arY;
+                    print.classList.add('ar-dragging');
+                } else if (e.touches.length === 2) {
+                    _drag.on = false; _pinch.on = true;
+                    _pinch.d0 = _getTouchDist(e.touches);
+                    _pinch.s0 = _arScale;
+                    print.classList.remove('ar-dragging');
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            overlay.addEventListener('touchmove', function(e) {
+                if (_drag.on && e.touches.length === 1) {
+                    _arX = _drag.ox + (e.touches[0].clientX - _drag.sx);
+                    _arY = _drag.oy + (e.touches[0].clientY - _drag.sy);
+                    _applyARTransform();
+                } else if (_pinch.on && e.touches.length === 2) {
+                    var d  = _getTouchDist(e.touches);
+                    _arScale = Math.max(0.25, Math.min(5, _pinch.s0 * (d / _pinch.d0)));
+                    _applyARTransform();
+                }
+                e.preventDefault();
+            }, { passive: false });
+
+            overlay.addEventListener('touchend', function(e) {
+                if (e.touches.length === 0) {
+                    _drag.on = false; _pinch.on = false;
+                    print.classList.remove('ar-dragging');
+                } else if (e.touches.length === 1) {
+                    _pinch.on = false;
+                    /* restart drag from current touch */
+                    _drag.on = true;
+                    _drag.sx = e.touches[0].clientX; _drag.sy = e.touches[0].clientY;
+                    _drag.ox = _arX; _drag.oy = _arY;
+                }
+            });
+        }
+
+        /* Inject AR trigger button into modal for fine-art prints */
+        var _arOrigOpenModal = openProductModal;
+        openProductModal = function(id) {
+            _arOrigOpenModal(id);
+            var arWrap = document.getElementById('modalARWrap');
+            if (!arWrap) return;
+            arWrap.innerHTML = '';
+            var p = products[id];
+            if (!p || !p.origW) return;
+            var camSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+            var btn = document.createElement('button');
+            btn.className = 'ar-trigger-btn';
+            btn.innerHTML = camSvg + ' View in Your Space';
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                openAR(id);
+            };
+            arWrap.appendChild(btn);
+        };
+</script>
+<script src="assets/js/currency.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/site.js"></script>
+
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script src="assets/js/reveals.js"></script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#1A1612';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+
+</body>
+</html>
+
+
+
+
+

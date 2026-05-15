@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Audit Report — mohithraisrivastav.com</title>
+<style>
+  :root {
+    --bg: #F7F3ED;
+    --surface: #EDE8DF;
+    --card: #E8E0D0;
+    --text: #1A1612;
+    --secondary: #4A3A33;
+    --gold: #7F5F10;
+    --red: #B85C38;
+    --green: #166534;
+    --amber: #92400E;
+    --border: rgba(26,22,18,0.12);
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .header {
+    background: var(--text);
+    color: var(--bg);
+    padding: 48px 5vw 40px;
+  }
+  .header h1 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .header-meta {
+    font-size: 0.875rem;
+    opacity: 0.6;
+    letter-spacing: 0.5px;
+  }
+  .summary-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 28px 5vw;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .stat-pill.critical { background: #FEE2E2; color: #991B1B; }
+  .stat-pill.major    { background: #FEF3C7; color: #92400E; }
+  .stat-pill.moderate { background: #D1FAE5; color: #065F46; }
+  .stat-pill.info     { background: #E0F2FE; color: #0C4A6E; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.critical { background: #DC2626; }
+  .dot.major    { background: #D97706; }
+  .dot.moderate { background: #059669; }
+  .dot.info     { background: #0284C7; }
+
+  .toc {
+    padding: 28px 5vw;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .toc h2 { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--secondary); margin-bottom: 14px; }
+  .toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc a {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--gold);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid rgba(127,95,16,0.25);
+    border-radius: 100px;
+    transition: background 0.2s;
+  }
+  .toc a:hover { background: rgba(127,95,16,0.08); }
+
+  .section {
+    padding: 40px 5vw 0;
+  }
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .issue {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .issue-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+  .severity-badge {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+  .sev-critical { background: #FEE2E2; color: #991B1B; }
+  .sev-major    { background: #FEF3C7; color: #92400E; }
+  .sev-moderate { background: #D1FAE5; color: #065F46; }
+  .sev-info     { background: #E0F2FE; color: #0C4A6E; }
+
+  .issue-title { font-size: 0.9375rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .issue-where { font-size: 0.8rem; color: var(--secondary); margin-top: 3px; }
+
+  .issue-body { padding: 0 20px 18px; }
+  .issue-desc { font-size: 0.875rem; color: var(--secondary); margin-bottom: 12px; line-height: 1.6; }
+
+  .code-block {
+    background: var(--card);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text);
+    overflow-x: auto;
+    margin-bottom: 10px;
+  }
+  .code-bad  { border-left: 3px solid #DC2626; }
+  .code-good { border-left: 3px solid #059669; }
+  .label-small {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .divider { height: 40px; }
+
+  .footer-note {
+    padding: 40px 5vw;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    font-size: 0.8125rem;
+    color: var(--secondary);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .issue-header { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Site Audit Report</h1>
+  <div class="header-meta">mohithraisrivastav.com &nbsp;·&nbsp; May 2026 &nbsp;·&nbsp; HTML + CSS &nbsp;·&nbsp; 70+ files reviewed</div>
+</div>
+
+<div class="summary-bar">
+  <div class="stat-pill critical"><span class="dot critical"></span> 7 Critical</div>
+  <div class="stat-pill major"><span class="dot major"></span> 9 Major</div>
+  <div class="stat-pill moderate"><span class="dot moderate"></span> 10 Moderate</div>
+  <div class="stat-pill info"><span class="dot info"></span> 4 Informational</div>
+</div>
+
+<div class="toc">
+  <h2>Jump to section</h2>
+  <ul>
+    <li><a href="#accessibility">Accessibility</a></li>
+    <li><a href="#structure">Broken Structure</a></li>
+    <li><a href="#images">Image Attributes</a></li>
+    <li><a href="#seo">SEO</a></li>
+    <li><a href="#css">CSS — Unused &amp; Duplicated Styles</a></li>
+    <li><a href="#spacing">Inconsistent Spacing</a></li>
+    <li><a href="#performance">Performance</a></li>
+  </ul>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ ACCESSIBILITY -->
+<div class="section" id="accessibility">
+  <div class="section-title">01 / Accessibility — WCAG 2.1 AA</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Hamburger button is a &lt;div&gt;, not a &lt;button&gt; — no aria-label</div>
+        <div class="issue-where">index.html · about.html · contact.html · shop.html · all pages</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The hamburger is a <code>&lt;div&gt;</code> with an <code>onclick</code> handler. It has no role, no aria-label, and cannot be reached or triggered by keyboard users. WCAG 2.1.1 and 4.1.2 both fail.</div>
+      <span class="label-small">Current (broken)</span>
+      <div class="code-block code-bad">&lt;div class="hamburger" id="hamburgerBtn" onclick="toggleMenu()"&gt;
+  &lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+&lt;/div&gt;</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;button class="hamburger" id="hamburgerBtn"
+        onclick="toggleMenu()"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobileMenu"&gt;
+  &lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+&lt;/button&gt;</div>
+      <div class="issue-desc">Also toggle <code>aria-expanded</code> and <code>aria-label</code> to "Close navigation menu" in <code>toggleMenu()</code>.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Cart icon on index.html — no role, no aria-label, not a button</div>
+        <div class="issue-where">index.html line 469</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The <code>.cart-icon</code> div is used only on index.html. It has no ARIA role and no accessible label. The <code>.nav-cart</code> anchor variant (used on all other pages) correctly has <code>aria-label="Cart"</code>. Standardise to the accessible variant.</div>
+      <span class="label-small">Current (broken)</span>
+      <div class="code-block code-bad">&lt;div class="cart-icon" onclick="toggleCart()"&gt;
+  &lt;svg ...&gt;&lt;/svg&gt;
+  &lt;span class="cart-count"&gt;&lt;/span&gt;
+&lt;/div&gt;</div>
+      <span class="label-small">Fix — use the same pattern as other pages</span>
+      <div class="code-block code-good">&lt;a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();"
+   aria-label="Open cart" role="button"&gt;
+  &lt;svg ...&gt;&lt;/svg&gt;
+  &lt;span class="cart-count" id="cartCountGlobal"&gt;&lt;/span&gt;
+&lt;/a&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Cart close button is a &lt;div&gt;, not a &lt;button&gt;</div>
+        <div class="issue-where">All pages — cart sidebar</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc"><code>&lt;div class="close-cart" onclick="toggleCart()"&gt;Close&lt;/div&gt;</code> is not keyboard-accessible. Replace with a <code>&lt;button&gt;</code>.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;button class="close-cart" onclick="toggleCart()" aria-label="Close cart"&gt;Close&lt;/button&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">No skip-to-main-content link</div>
+        <div class="issue-where">All pages</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Keyboard users must tab through the entire nav on every page before reaching content. WCAG 2.4.1 requires a mechanism to skip repeated navigation blocks.</div>
+      <span class="label-small">Fix — add this as the very first element inside &lt;body&gt;</span>
+      <div class="code-block code-good">&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;
+
+&lt;!-- CSS --&gt;
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #1A1612;
+  color: #F7F3ED;
+  padding: 8px 16px;
+  z-index: 99999;
+  text-decoration: none;
+  font-weight: 700;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 0; }</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Hero Vimeo iframe has no title attribute</div>
+        <div class="issue-where">index.html line 516</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Screen readers announce iframes by their <code>title</code>. Without it, users hear "unnamed frame." WCAG 4.1.2 fails.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;iframe
+  src="https://player.vimeo.com/video/900115166?background=1&amp;autoplay=1&amp;loop=1"
+  title="Background video: architectural photography reel"
+  allow="autoplay; fullscreen"
+  class="parallax-media"
+  tabindex="-1"
+  aria-hidden="true"&gt;
+&lt;/iframe&gt;</div>
+      <div class="issue-desc">Since it's decorative, <code>aria-hidden="true"</code> and <code>tabindex="-1"</code> also hide it from AT entirely — even cleaner.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Footer newsletter input missing label — on most pages</div>
+        <div class="issue-where">about.html · contact.html · all pages except index.html</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The footer email input has no associated <code>&lt;label&gt;</code>. Only index.html has the correct sr-only label. WCAG 3.3.2 fails. The placeholder alone is not sufficient.</div>
+      <span class="label-small">Current (broken — about.html, contact.html)</span>
+      <div class="code-block code-bad">&lt;form class="sf-form" id="sfForm"&gt;
+  &lt;input type="email" placeholder="your@email.com" required&gt;
+  &lt;button type="submit"&gt;→&lt;/button&gt;
+&lt;/form&gt;</div>
+      <span class="label-small">Fix — match index.html pattern</span>
+      <div class="code-block code-good">&lt;form class="sf-form" id="sfForm"&gt;
+  &lt;label for="sfEmailInput" class="sr-only"&gt;Email address&lt;/label&gt;
+  &lt;input type="email" id="sfEmailInput" placeholder="your@email.com" required&gt;
+  &lt;button type="submit" aria-label="Subscribe"&gt;→&lt;/button&gt;
+&lt;/form&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">:focus { outline: none } removes all focus indicators globally</div>
+        <div class="issue-where">assets/css/typo.css line 97</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc"><code>:focus { outline: none; }</code> strips focus rings for older browsers and some assistive tech that don't support <code>:focus-visible</code>. WCAG 2.4.7 requires visible focus indicators.</div>
+      <span class="label-small">Current (broken)</span>
+      <div class="code-block code-bad">:focus { outline: none; }
+:focus-visible { outline: 2px solid #CFA246; ... }</div>
+      <span class="label-small">Fix — remove the :focus rule entirely; :focus-visible is enough</span>
+      <div class="code-block code-good">/* Remove the :focus { outline: none } rule.
+   :focus-visible already handles modern keyboard focus. */
+:focus-visible {
+  outline: 2px solid #7F5F10;  /* use dark gold — better contrast on light bg */
+  outline-offset: 3px;
+  border-radius: 2px;
+}</div>
+      <div class="issue-desc">Also switch the outline color from <code>#CFA246</code> to <code>#7F5F10</code>. The gold <code>#CFA246</code> achieves only 2.15:1 contrast on the parchment background — WCAG fail.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Multiple &lt;nav&gt; landmarks with no distinguishing labels</div>
+        <div class="issue-where">All pages — footer</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Each page has 3 or more <code>&lt;nav&gt;</code> elements (main nav, sf-nav, sf-legal). Screen readers list landmarks by type. Without labels, users hear "navigation, navigation, navigation" with no context.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;nav class="navbar" aria-label="Main navigation"&gt;
+&lt;nav class="sf-nav" aria-label="Site pages"&gt;
+&lt;nav class="sf-legal" aria-label="Legal"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Checkout form inputs have no id — labels can't be linked</div>
+        <div class="issue-where">checkout.html lines 48, 52, 56, 60</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Labels use implicit wrapping but inputs need explicit <code>id</code> attributes to be reliably linked (especially for AT). Also the <code>&lt;label&gt;</code> tags wrap the label text but not the input.</div>
+      <span class="label-small">Current</span>
+      <div class="code-block code-bad">&lt;label&gt;Full Name &lt;span class="req"&gt;*&lt;/span&gt;&lt;/label&gt;
+&lt;input type="text" name="name" required&gt;</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;label for="checkout-name"&gt;Full Name &lt;span class="req" aria-hidden="true"&gt;*&lt;/span&gt;&lt;/label&gt;
+&lt;input type="text" id="checkout-name" name="name" required
+       aria-required="true"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Most GSAP scroll animations ignore prefers-reduced-motion</div>
+        <div class="issue-where">index.html · about.html · all pages with GSAP</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Only the background parallax text checks <code>prefers-reduced-motion</code>. All other scroll reveals, hero entrances, and stagger animations run regardless of user preference. WCAG 2.3.3 (AAA) and general best practice.</div>
+      <span class="label-small">Fix — wrap all GSAP animation init in a check</span>
+      <div class="code-block code-good">const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!prefersReducedMotion) {
+  gsap.fromTo('.fade-up', { y: 40, opacity: 0 }, { ... });
+  // ... all other animations
+} else {
+  // Make elements visible immediately
+  document.querySelectorAll('.fade-up').forEach(el => {
+    el.style.opacity = 1;
+    el.style.transform = 'none';
+  });
+}</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Testimonial blockquotes lack semantic attribution via &lt;cite&gt;</div>
+        <div class="issue-where">index.html lines 599–622</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Author names are in <code>&lt;div class="name"&gt;</code>. The HTML spec expects attribution for <code>&lt;blockquote&gt;</code> to use a <code>&lt;cite&gt;</code> element or a <code>&lt;figcaption&gt;</code> inside a <code>&lt;figure&gt;</code>.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;figure class="testimonial"&gt;
+  &lt;blockquote&gt;Mohith was an exceptional...&lt;/blockquote&gt;
+  &lt;figcaption class="author"&gt;
+    &lt;cite class="name"&gt;Georgia Taylor Aguilar&lt;/cite&gt;
+    &lt;span class="role"&gt;Exhibition Curator, UK&lt;/span&gt;
+  &lt;/figcaption&gt;
+&lt;/figure&gt;</div>
+    </div>
+  </div>
+
+</div><!-- /accessibility -->
+
+
+<!-- ═══════════════════════════════════════════ STRUCTURE -->
+<div class="section" id="structure">
+  <div class="section-title">02 / Broken Structure</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">Three &lt;h1&gt; elements on index.html</div>
+        <div class="issue-where">index.html lines 509–511</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The hero heading is split across three <code>&lt;h1&gt;</code> tags ("Translating", "the built", "environment."). A page must have exactly one <code>&lt;h1&gt;</code>. This also breaks SEO heading hierarchy and confuses screen readers.</div>
+      <span class="label-small">Current (broken)</span>
+      <div class="code-block code-bad">&lt;h1 class="hero-title"&gt;Translating&lt;/h1&gt;
+&lt;h1 class="hero-title" style="color: #1A1612;"&gt;the built&lt;/h1&gt;
+&lt;h1 class="hero-title"&gt;environment.&lt;/h1&gt;</div>
+      <span class="label-small">Fix — one &lt;h1&gt;, use spans for styling each line</span>
+      <div class="code-block code-good">&lt;h1 class="hero-title"&gt;
+  &lt;span class="hero-title-line"&gt;Translating&lt;/span&gt;
+  &lt;span class="hero-title-line"&gt;the built&lt;/span&gt;
+  &lt;span class="hero-title-line"&gt;environment.&lt;/span&gt;
+&lt;/h1&gt;</div>
+      <div class="issue-desc">The GSAP animation that wraps text in inner spans can still be applied to each <code>.hero-title-line</code> span.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-critical">Critical</span>
+      <div>
+        <div class="issue-title">about.html has no &lt;h1&gt; — page title uses &lt;h2&gt;</div>
+        <div class="issue-where">about.html line 121</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">"Mohith Rai Srivastav" is marked as <code>&lt;h2&gt;</code>. There is no <code>&lt;h1&gt;</code> anywhere on the page. Every page needs exactly one, and it should be the primary topic of the page.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;h1 class="fade-up" style="font-size: 2rem; font-weight: 600; margin-top: 1.5em;"&gt;
+  Mohith Rai Srivastav
+&lt;/h1&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">&lt;footer&gt; and cart sidebar placed inside &lt;main&gt;</div>
+        <div class="issue-where">about.html lines 220, 268 · contact.html lines 266, 314</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The <code>&lt;footer&gt;</code> and <code>.cart-sidebar</code> overlay are nested inside <code>&lt;main&gt;</code>. These are landmark elements and should be siblings to <code>&lt;main&gt;</code>, not children. This breaks the landmark structure screen reader users rely on.</div>
+      <span class="label-small">Fix — correct HTML structure</span>
+      <div class="code-block code-good">&lt;body&gt;
+  &lt;nav class="navbar"&gt;...&lt;/nav&gt;
+  &lt;div class="mobile-menu"&gt;...&lt;/div&gt;
+  &lt;div class="cart-overlay"&gt;...&lt;/div&gt;
+  &lt;div class="cart-sidebar"&gt;...&lt;/div&gt;
+
+  &lt;main id="main-content"&gt;
+    &lt;!-- page content only --&gt;
+  &lt;/main&gt;
+
+  &lt;footer class="site-footer"&gt;...&lt;/footer&gt;
+&lt;/body&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">theme.js loaded synchronously — blocks rendering on every page</div>
+        <div class="issue-where">All pages — first line of &lt;head&gt;</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc"><code>&lt;script src="assets/js/theme.js"&gt;&lt;/script&gt;</code> is the very first tag inside <code>&lt;head&gt;</code> on every page. No <code>defer</code> or <code>async</code>. The browser stops parsing HTML to download and execute this script before rendering anything.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;script src="assets/js/theme.js"&gt;&lt;/script&gt;
+&lt;!-- Change to --&gt;
+&lt;script src="assets/js/theme.js" defer&gt;&lt;/script&gt;
+&lt;!-- Or inline the critical theme snippet to prevent flash-of-wrong-theme --&gt;</div>
+      <div class="issue-desc">If theme.js prevents flash-of-wrong-theme, inline only the critical 2–3 lines as a synchronous script; move the rest to a deferred file.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">GSAP + Lenis loaded in &lt;head&gt; without defer on about.html</div>
+        <div class="issue-where">about.html lines 56–58</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">On about.html, Lenis and GSAP are loaded synchronously in <code>&lt;head&gt;</code> — render-blocking. On index.html and contact.html, they're correctly loaded at the bottom of <code>&lt;body&gt;</code>. The pattern is inconsistent across pages.</div>
+      <span class="label-small">Fix — move to bottom of &lt;body&gt; or add defer</span>
+      <div class="code-block code-good">&lt;!-- Move these from &lt;head&gt; to just before &lt;/body&gt; --&gt;
+&lt;script src="https://cdn.jsdelivr.net/.../lenis.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.../gsap.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.../ScrollTrigger.min.js"&gt;&lt;/script&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Sline canvas script copy-pasted as inline on every page</div>
+        <div class="issue-where">index.html · about.html · contact.html · all pages (bottom of body)</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">~800 characters of identical minified JS is inlined at the bottom of every page. This can't be cached, inflates every HTML file, and makes updates painful. Move it to <code>assets/js/sline.js</code>.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;!-- Replace the inline minified block with: --&gt;
+&lt;script src="assets/js/sline.js" defer&gt;&lt;/script&gt;</div>
+    </div>
+  </div>
+
+</div><!-- /structure -->
+
+
+<!-- ═══════════════════════════════════════════ IMAGES -->
+<div class="section" id="images">
+  <div class="section-title">03 / Image Attributes</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Logo alt text is "Logo" — too generic, every page</div>
+        <div class="issue-where">All pages — navbar &amp; footer logo</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Screen readers announce the logo as "Logo, link." This tells the user nothing about where they are or who owns the site. Alt text should describe the image's purpose.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;!-- Navbar --&gt;
+&lt;img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav — home" class="logo"&gt;
+
+&lt;!-- Footer --&gt;
+&lt;img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Favicon uses .webp with no .ico fallback</div>
+        <div class="issue-where">All pages — &lt;head&gt;</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc"><code>&lt;link rel="icon" type="image/png" href="images/Mohith LOGO.webp"&gt;</code> — the type says "image/png" but the file is .webp. Older browsers and some operating systems don't support webp favicons. A .ico fallback is safest.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;link rel="icon" href="images/favicon.ico"&gt;
+&lt;link rel="icon" type="image/webp" href="images/Mohith LOGO.webp"&gt;
+&lt;link rel="apple-touch-icon" href="images/apple-touch-icon.png"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">about.html onerror fallback changes image without updating alt</div>
+        <div class="issue-where">about.html lines 196, 204</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">When the onerror fallback fires, the image source changes but the <code>alt</code> text still says "Resurface" or "The Matter of Pause", which may no longer describe the fallback image.</div>
+      <span class="label-small">Current</span>
+      <div class="code-block code-bad">&lt;img src="images/RESURFACE_PREVIEW.jpg" alt="Resurface" loading="lazy"
+     onerror="this.onerror=null;this.src='images/Chromatic Rupture.jpg';"&gt;</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;img src="images/RESURFACE_PREVIEW.jpg" alt="Resurface — ongoing research project" loading="lazy"
+     onerror="this.onerror=null; this.src='images/Chromatic Rupture.jpg'; this.alt='Resurface — alternate image';"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-info">Info</span>
+      <div>
+        <div class="issue-title">Work page hero images missing width/height attributes</div>
+        <div class="issue-where">Work/*.html — hero images</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Images without explicit <code>width</code> and <code>height</code> attributes cause layout shift (CLS) as the page loads. This affects Core Web Vitals. The <code>aspect-ratio</code> CSS property is already set on containers, which helps, but explicit dimensions are still best practice.</div>
+      <span class="label-small">Fix — add native dimensions to &lt;img&gt; tags</span>
+      <div class="code-block code-good">&lt;img src="..." alt="..." loading="lazy" width="1920" height="1280"&gt;</div>
+    </div>
+  </div>
+
+</div><!-- /images -->
+
+
+<!-- ═══════════════════════════════════════════ SEO -->
+<div class="section" id="seo">
+  <div class="section-title">04 / SEO</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">OG image and JSON-LD use different file formats for the same image</div>
+        <div class="issue-where">about.html head</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The <code>og:image</code> points to <code>Mohith.webp</code> but the JSON-LD structured data references <code>Mohith.jpg</code>. If both files exist that's fine, but it signals inconsistency to crawlers. Standardize to the same URL everywhere.</div>
+      <span class="label-small">Fix — use the same URL in both</span>
+      <div class="code-block code-good">&lt;meta property="og:image" content="https://mohithraisrivastav.com/images/Mohith.webp"&gt;
+// JSON-LD:
+"image": "https://mohithraisrivastav.com/images/Mohith.webp"</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Twitter meta missing twitter:site and twitter:creator</div>
+        <div class="issue-where">All pages — &lt;head&gt;</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Cards without <code>twitter:site</code> and <code>twitter:creator</code> render with less detail and attribution on X/Twitter. These are optional but improve click-through.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;meta name="twitter:site" content="@mohithraisrivastav"&gt;
+&lt;meta name="twitter:creator" content="@mohithraisrivastav"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Work subdirectory canonical URLs use capital "W" — case sensitivity risk</div>
+        <div class="issue-where">Work/*.html — all project pages</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Canonical URLs reference <code>https://mohithraisrivastav.com/Work/eleve-eco-resort.html</code>. Linux servers (which most hosts run) are case-sensitive. If the folder is <code>Work/</code> on the server, URLs with <code>work/</code> will 404. Canonicals should use the exact server path. Best practice is to use all-lowercase folder names.</div>
+      <span class="label-small">Fix — rename folder to lowercase and update all references</span>
+      <div class="code-block code-good">/* Rename: Work/ → work/ */
+/* Update canonical in eleve-eco-resort.html: */
+&lt;link rel="canonical" href="https://mohithraisrivastav.com/work/eleve-eco-resort.html"&gt;</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-info">Info</span>
+      <div>
+        <div class="issue-title">No sitemap.xml or robots.txt referenced in &lt;head&gt;</div>
+        <div class="issue-where">All pages</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">A sitemap helps crawlers discover all pages, especially the 13+ Work project pages. If a sitemap exists, verify it's submitted to Google Search Console. If not, generate one.</div>
+    </div>
+  </div>
+
+</div><!-- /seo -->
+
+
+<!-- ═══════════════════════════════════════════ CSS -->
+<div class="section" id="css">
+  <div class="section-title">05 / CSS — Unused &amp; Duplicated Styles</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Font-family rules duplicated 5+ times in global.css</div>
+        <div class="issue-where">assets/css/global.css — multiple blocks</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The same font-family declarations for <code>body</code>, <code>h1–h6</code>, <code>em/blockquote</code>, and <code>button</code> appear across at least 5 separate rule blocks in global.css (roughly at lines 1030, 1299, 1363, 1636, 1663). This creates a 1,600+ line file where the cascade is impossible to reason about without tracing every <code>!important</code>. Merge into a single, canonical typography block.</div>
+      <span class="label-small">Impact</span>
+      <div class="code-block code-bad">/* Block 1 — line ~1030 */
+blockquote { font-family: var(--font-accent) !important; }
+
+/* Block 2 — line ~1363 */
+em, i, blockquote { font-family: var(--font-body) !important; font-style: italic; }
+
+/* Block 3 — line ~1663 */
+em, i, blockquote, blockquote * { font-family: var(--font-body) !important; }
+
+/* Three different values / selectors for the same elements. Last one wins. */</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">::before/::after blanket font-family override breaks pseudo-elements</div>
+        <div class="issue-where">assets/css/global.css lines 1621–1623</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">This rule forces ALL <code>::before</code> and <code>::after</code> pseudo-elements to use the system sans-serif font stack via <code>!important</code>. It overrides decorative content like the gold dot separator between testimonials (<code>content: '·'</code>), the attribution dash (<code>content: '— '</code>), and the list separator (<code>content: '/'</code>). These may render in the wrong typeface.</div>
+      <span class="label-small">Current (problematic)</span>
+      <div class="code-block code-bad">::before, ::after {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif !important;
+}</div>
+      <span class="label-small">Fix — remove this rule entirely, or use font-family: inherit</span>
+      <div class="code-block code-good">/* Remove the rule. Pseudo-elements inherit font-family from their parent.
+   If specific pseudo-elements need overrides, target them explicitly. */</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-major">Major</span>
+      <div>
+        <div class="issue-title">Page-specific CSS files contain inline style blocks, not real CSS</div>
+        <div class="issue-where">assets/css/pages/about.css · assets/css/pages/shop.css · others</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Several files in <code>assets/css/pages/</code> contain content that looks like an entire <code>&lt;style&gt;</code> block was copy-pasted as-is — including the <code>.sline-stage</code> fixed position rule that belongs in global.css, and duplicate <code>* { margin:0; padding:0 }</code> resets. These are external CSS files: they should not contain browser-only HTML artifacts or duplicate global resets.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">-moz-osx-font-smoothing declared twice in the same rule</div>
+        <div class="issue-where">assets/css/pages/about.css lines 12–13</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The <code>body</code> rule declares <code>-moz-osx-font-smoothing: grayscale</code> twice on consecutive lines. The second declaration is ignored.</div>
+      <span class="label-small">Current</span>
+      <div class="code-block code-bad">body {
+  ...
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; /* duplicate */
+}</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">section-header and list-label colors conflict between page CSS and global.css</div>
+        <div class="issue-where">assets/css/pages/about.css vs assets/css/global.css</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">about.css sets <code>.section-header { color: #CFA246 }</code> and <code>.list-label { color: #CFA246 }</code>. global.css later overrides both to <code>#4A3A33 !important</code>. The page CSS rule is effectively dead code. The intended color was probably the darker amber, but the cascade is confusing.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Legacy .footer class still in global.css — different visual from .site-footer</div>
+        <div class="issue-where">assets/css/global.css lines 953–983</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The legacy <code>.footer</code> class (salmon background <code>#F2D6C2</code>, old layout) lives alongside the new <code>.site-footer</code> (parchment, grid layout). If any page still uses <code>.footer</code>, the visual breaks. Audit all HTML files for usage and remove the legacy class once confirmed unused.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">.back-to-top has outline: none — keyboard inaccessible</div>
+        <div class="issue-where">assets/css/global.css line 1257</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">The back-to-top button explicitly sets <code>outline: none</code> and doesn't have a corresponding <code>:focus-visible</code> override in global.css. Keyboard users get no visible indicator when this button is focused.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">.back-to-top:focus-visible {
+  outline: 2px solid #7F5F10;
+  outline-offset: 4px;
+}</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">.cart-icon .cart-count does not hide when empty — unlike .nav-cart version</div>
+        <div class="issue-where">assets/css/global.css lines 446, 479</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc"><code>.nav-cart .cart-count:empty { display: none; }</code> is set. But the <code>.cart-icon</code> variant (used on index.html) only hides on <code>.zero</code> class — not on <code>:empty</code>. An empty badge circle may appear when no items are in the cart on the homepage.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">.cart-icon .cart-count:empty,
+.cart-icon .cart-count.zero { display: none; }</div>
+    </div>
+  </div>
+
+</div><!-- /css -->
+
+
+<!-- ═══════════════════════════════════════════ SPACING -->
+<div class="section" id="spacing">
+  <div class="section-title">06 / Inconsistent Spacing</div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Mixed spacing units with no clear convention</div>
+        <div class="issue-where">index.html inline styles · about.css · global.css</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">Padding and margin values use four different unit types without a clear rule for when each applies. This makes spacing feel inconsistent at different viewport sizes and makes maintenance difficult.</div>
+      <div class="code-block code-bad">/* px — fixed, doesn't scale */
+.testimonials { padding: 80px 5vw; }
+
+/* % — relative to parent width */
+.about-manifesto { padding: 8vh 10%; }
+
+/* vw — relative to viewport width */
+.pinned-section { padding: 7vh 8vw 10vh; }
+
+/* vh — relative to viewport height */
+.section-padding { padding: 15vh 5vw; }</div>
+      <span class="label-small">Recommended convention</span>
+      <div class="code-block code-good">/* Use clamp() for vertical rhythm — scales with viewport, has hard limits */
+padding-block: clamp(48px, 8vh, 120px);
+
+/* Use vw (or %) consistently for horizontal gutters */
+padding-inline: 5vw;
+
+/* Reserve px for fine details: borders, icon sizes, gaps within components */</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-moderate">Moderate</span>
+      <div>
+        <div class="issue-title">Excessive use of !important in responsive overrides masks base rule conflicts</div>
+        <div class="issue-where">index.html inline style · global.css · about.css</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">There are 50+ <code>!important</code> declarations across index.html's inline <code>&lt;style&gt;</code> block alone. Most of these exist to fight specificity conflicts caused by having inline styles, page-specific CSS, and global.css all defining the same properties. The root cause is the inline <code>&lt;style&gt;</code> block pattern — moving all page styles to their proper CSS file would eliminate most of these.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-info">Info</span>
+      <div>
+        <div class="issue-title">index.html has 350+ lines of inline CSS in &lt;style&gt; tags</div>
+        <div class="issue-where">index.html lines 71–423</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">All page-specific styles for index.html live in an inline <code>&lt;style&gt;</code> block. These cannot be cached by the browser across page visits. Moving them to a proper <code>assets/css/pages/index.css</code> file (which already has partial files for other pages) would improve cache performance and make the HTML file dramatically more readable.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <div class="issue-header">
+      <span class="severity-badge sev-info">Info</span>
+      <div>
+        <div class="issue-title">rel="noopener" missing "noreferrer" on social links</div>
+        <div class="issue-where">index.html · all pages — social links in footer</div>
+      </div>
+    </div>
+    <div class="issue-body">
+      <div class="issue-desc">External links use <code>rel="noopener"</code> which prevents the new tab from accessing the opener window. Adding <code>noreferrer</code> additionally prevents passing the referrer header for better privacy.</div>
+      <span class="label-small">Fix</span>
+      <div class="code-block code-good">&lt;a href="https://www.instagram.com/..."
+   target="_blank"
+   rel="noopener noreferrer"&gt;Instagram&lt;/a&gt;</div>
+    </div>
+  </div>
+
+</div><!-- /spacing -->
+
+<div class="footer-note">
+  <strong>How to use this report:</strong> Fix Critical items first — these directly block users or break structure. Major items affect accessibility and performance significantly. Moderate items are cleanup and quality improvements. Info items are best-practice suggestions.<br><br>
+  <strong>Files reviewed:</strong> index.html, about.html, contact.html, shop.html, checkout.html, Work/eleve-eco-resort.html, assets/css/global.css, assets/css/typo.css, assets/css/pages/about.css, assets/css/pages/shop.css, and the full folder structure of 70+ additional files.<br><br>
+  Generated: May 2026
+</div>
+
+</body>
+</html>

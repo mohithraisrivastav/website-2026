@@ -1,0 +1,335 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 100%; }
+        body {
+            background: transparent; color: #1A1612; line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+
+        /* Page container */
+        .page-container {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 48px 5vw 80px;
+            text-align: left !important;
+        }
+
+        /* Back to Workshops button */
+        .back-link-top {
+            display: flex !important; align-items: center; gap: 8px;
+            width: fit-content;
+            font-size: 0.85rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #888; text-decoration: none;
+            margin-bottom: 28px; transition: 0.3s;
+            margin-left: 0;
+            padding: 0 !important;
+        }
+        .back-link-top:hover { color: #CFA246; }
+        .back-link-top svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* Workshop tabs */
+        .workshop-tabs {
+            display: flex; gap: 8px; margin-bottom: 56px; flex-wrap: wrap;
+        }
+        .workshop-tab {
+            padding: 14px 28px;
+            border: 1px solid rgba(26, 22, 18,0.15);
+            background: transparent;
+            font-size: 0.85rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: #666;
+            cursor: pointer; transition: 0.3s;
+        }
+        .workshop-tab:hover { border-color: #CFA246; color: #CFA246; }
+        .workshop-tab.active {
+            border-color: #CFA246; color: #CFA246;
+            background: rgba(207, 162, 70,0.06);
+        }
+
+        /* Two-column grid – left heavy for more spacious feel */
+        .reg-grid {
+            display: grid;
+            grid-template-columns: minmax(340px, 460px) minmax(0, 1fr);
+            gap: clamp(56px, 7vw, 120px);
+            align-items: start;
+            justify-content: start;
+        }
+
+        /* Left column – info */
+        .reg-info {
+            position: sticky;
+            top: 120px;
+            text-align: left;
+            max-width: 440px;
+        }
+        .reg-info h2 {
+            font-size: clamp(2rem, 3vw, 3rem);
+            font-weight: 300; font-style: italic;
+            letter-spacing: -0.01em; line-height: 1.02; margin-bottom: 32px;
+        }
+        .reg-info .reg-blurb {
+            font-size: 1.08rem; color: #555; line-height: 1.9; margin-bottom: 44px;
+            max-width: 34ch;
+        }
+        .reg-meta {
+            display: flex; flex-wrap: wrap; gap: 24px 32px;
+            border-top: 1px solid rgba(26, 22, 18,0.1);
+            padding-top: 34px; margin-bottom: 34px;
+        }
+        .reg-meta-item .meta-label {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #888; margin-bottom: 8px;
+        }
+        .reg-meta-item .meta-val {
+            font-size: 1.12rem; font-weight: 500; color: #1A1612;
+            line-height: 1.45;
+        }
+        .brochure-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #CFA246; text-decoration: none;
+            border-bottom: 1px solid rgba(207, 162, 70,0.2); padding-bottom: 6px;
+            transition: 0.3s;
+        }
+        .brochure-link:hover { border-color: #CFA246; color: #1A1612; }
+
+        /* Right column – form */
+        .reg-form {
+            padding-left: 0;
+        }
+        .reg-form-section {
+            margin-bottom: 48px;
+        }
+        .reg-form-section h3 {
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: #CFA246;
+            border-bottom: 1px solid rgba(207, 162, 70,0.15);
+            padding-bottom: 12px; margin-bottom: 28px;
+        }
+        .form-row {
+            display: flex; gap: 24px; margin-bottom: 24px;
+        }
+        .form-row.single { flex-direction: column; }
+        .form-field {
+            flex: 1; display: flex; flex-direction: column;
+            margin-bottom: 4px;
+        }
+        .form-field label {
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: #777; margin-bottom: 8px;
+            min-height: 3.4em;
+        }
+        .form-field label .optional {
+            font-weight: 400; color: #aaa; text-transform: none; letter-spacing: 0;
+        }
+        .form-field input, .form-field select, .form-field textarea {
+            background: transparent; border: none;
+            border-bottom: 1px solid rgba(26, 22, 18,0.15);
+            color: #1A1612; font-size: 1rem; padding: 12px 0;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+        .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+            border-bottom-color: #CFA246 !important;
+            border-color: transparent !important;
+            border-bottom: 1px solid #CFA246 !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .form-field textarea {
+            resize: vertical; min-height: 90px; padding: 12px 0;
+            line-height: 1.6;
+        }
+        .form-field input::placeholder, .form-field textarea::placeholder { color: #aaa; }
+
+        .submit-btn {
+            width: 100%; padding: 18px;
+            background: #B85C38; color: #F7F3ED; border: none;
+            font-size: 0.85rem; font-weight: 700; letter-spacing: 4px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            margin-top: 12px;
+        }
+        .submit-btn:hover:not(:disabled) { background: #A34E2E; letter-spacing: 5px; }
+        .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .form-note {
+            margin-top: 20px; font-size: 0.8rem; color: #888;
+            text-align: center; line-height: 1.8;
+        }
+
+        /* Confirmation screen */
+        .confirmation {
+            display: none; max-width: 680px; margin: 0 auto;
+            padding: 80px 5vw; text-align: center;
+        }
+        .confirmation.show { display: block; }
+        .confirmation h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900;
+            text-transform: uppercase; letter-spacing: -0.03em; margin-bottom: 28px;
+        }
+        .confirmation p {
+            font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 36px;
+        }
+        .conf-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .conf-btn {
+            padding: 16px 36px; font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; border: 1px solid #CFA246;
+            background: #CFA246; color: #fff; cursor: pointer;
+            transition: 0.3s; text-decoration: none; display: inline-flex;
+            align-items: center; gap: 8px;
+        }
+        .conf-btn:hover { background: #1A1612; border-color: #1A1612; }
+        .conf-back {
+            border-color: rgba(26, 22, 18,0.2); background: transparent; color: #666;
+        }
+        .conf-back:hover { border-color: #1A1612; color: #1A1612; background: transparent; }
+        .conf-email-note {
+            margin-top: 24px; font-size: 0.85rem; color: #888; line-height: 1.7;
+        }
+
+        .error-msg {
+            color: #d33; font-size: 0.85rem; margin-bottom: 20px; display: none;
+        }
+        .error-msg.show { display: block; }
+
+        .hint {
+            font-size: 0.75rem; color: #888; margin-top: 6px; line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .reg-grid { grid-template-columns: 1fr; gap: 48px; }
+            .reg-info { position: static; }
+            .form-row { flex-direction: column; gap: 20px; }
+        }
+
+        /* ── Left info panel alignment fix ──────────────────────────────────
+           Override any inherited text-align: center from parent elements
+           so the workshop title, blurb, meta, and brochure link stay left. */
+        .reg-info,
+        .reg-info h2,
+        .reg-info p,
+        .reg-info .reg-blurb,
+        .reg-info .reg-meta { text-align: left; }
+
+        .brochure-link { display: inline-flex; text-align: left; }
+
+        .reg-grid { align-items: start; }
+
+        /* ── FINAL OVERRIDE: force left-align on the entire left info panel ──
+           This block uses !important throughout to beat any inherited styles,
+           global stylesheet rules, or browser-cache conflicts. Do not remove. */
+        .reg-info,
+        .reg-info * {
+            text-align: left;
+            float: none;
+        }
+        .reg-info { width: 100%; }
+        .reg-grid > .reg-info {
+            justify-self: start;
+            align-self: start;
+        }
+
+        .brochure-link[hidden],
+        .conf-btn[hidden] {
+            display: none;
+        }
+
+        @media (min-width: 1200px) {
+            .reg-grid {
+                gap: clamp(140px, 10vw, 200px);
+            }
+            .reg-form {
+                padding-left: clamp(60px, 5vw, 110px);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .page-container {
+                padding: 40px 5vw 64px;
+            }
+            .workshop-tabs {
+                margin-bottom: 44px;
+            }
+            .workshop-tab {
+                flex: 1 1 calc(50% - 8px);
+                min-width: min(100%, 180px);
+                padding: 13px 18px;
+                letter-spacing: 1.4px;
+            }
+            .reg-meta {
+                gap: 20px 28px;
+            }
+            .reg-meta-item {
+                min-width: 130px;
+            }
+            .reg-form {
+                padding-left: 0;
+            }
+            .reg-info {
+                max-width: none;
+            }
+            .form-row {
+                gap: 18px;
+                margin-bottom: 20px;
+            }
+            .form-field label {
+                min-height: 0;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .page-container {
+                padding: 34px 5vw 56px;
+            }
+            .back-link-top {
+                letter-spacing: 2px;
+                margin-bottom: 24px;
+            }
+            .workshop-tabs {
+                gap: 8px;
+                margin-bottom: 38px;
+            }
+            .workshop-tab {
+                flex-basis: 100%;
+                font-size: 0.78rem;
+                letter-spacing: 1.2px;
+            }
+            .reg-info h2 {
+                font-size: clamp(2rem, 12vw, 2.75rem);
+                line-height: 1;
+            }
+            .reg-info .reg-blurb {
+                font-size: 1rem;
+                line-height: 1.7;
+                margin-bottom: 32px;
+                max-width: none;
+            }
+            .reg-form-section {
+                margin-bottom: 40px;
+            }
+            .reg-form-section h3,
+            .form-field label,
+            .submit-btn,
+            .conf-btn {
+                letter-spacing: 2px;
+            }
+            .submit-btn {
+                padding: 17px 14px;
+                line-height: 1.35;
+            }
+            .confirmation {
+                padding: 64px 5vw;
+            }
+            .confirmation h2 {
+                font-size: clamp(2rem, 12vw, 2.8rem);
+            }
+            .conf-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+            .conf-btn {
+                justify-content: center;
+                width: 100%;
+            }
+        }

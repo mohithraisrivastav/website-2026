@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <title>Work | Mohith Rai Srivastav | Architectural Photography &amp; Film</title>
+    <meta name="description" content="The full body of work by Mohith Rai Srivastav — architectural photography and slow cinema across South Asia.">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mohithraisrivastav.com/work.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Work | Mohith Rai Srivastav">
+    <meta property="og:description" content="The full body of work by Mohith Rai Srivastav — architectural photography and slow cinema across South Asia.">
+    <meta property="og:url" content="https://mohithraisrivastav.com/work.html">
+    <meta property="og:image" content="https://mohithraisrivastav.com/Work/Projects/Villa%20Lluvia/_DSC7368-HDR-Edit.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="assets/js/translate.js" defer></script>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #F7F3ED;
+            overflow-x: hidden;
+        }
+
+        /* ── Viewport container ──────────────────────────── */
+        .work-overview {
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+        }
+
+        /* ── Side-by-side panels with hover expand ───────── */
+        .wo-panel {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            transition: flex 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hover expand: hovered grows, sibling contracts */
+        .work-overview:has(.wo-panel:hover) .wo-panel       { flex: 0.78; }
+        .work-overview:has(.wo-panel:hover) .wo-panel:hover { flex: 1.44; }
+
+        /* gap on .work-overview handles the divider */
+        .wo-panel + .wo-panel::before { display: none; }
+
+        /* ── Background image ────────────────────────────── */
+        .wo-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.72) brightness(0.78);
+            transition: transform 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        filter 0.7s ease;
+            will-change: transform;
+        }
+
+        /* Ken Burns drift on Photography panel */
+        @keyframes kenBurns {
+            0%   { transform: scale(1.06) translate(0%,    0%);    }
+            25%  { transform: scale(1.09) translate(-1.2%, 0.6%);  }
+            50%  { transform: scale(1.07) translate(0.8%,  -0.8%); }
+            75%  { transform: scale(1.10) translate(-0.5%, 1.0%);  }
+            100% { transform: scale(1.06) translate(0%,    0%);    }
+        }
+
+        .wo-panel:nth-child(1) .wo-bg {
+            animation: kenBurns 22s ease-in-out infinite;
+        }
+
+        /* Pause Ken Burns on hover, apply scale instead */
+        .wo-panel:hover .wo-bg {
+            animation: none;
+            transform: scale(1.04);
+            filter: saturate(0.95) brightness(0.90);
+        }
+
+        /* Films panel — Vimeo background iframe */
+        .wo-bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* cover the panel regardless of aspect ratio */
+            width: 177.78vh;   /* 16:9 of viewport height */
+            height: 100vh;
+            min-width: 100%;
+            min-height: 56.25vw; /* 16:9 of panel width */
+            transform: translate(-50%, -50%);
+            border: none;
+            pointer-events: none;
+            filter: brightness(0.78);
+            transition: filter 0.7s ease;
+        }
+
+        .wo-panel:nth-child(2):hover .wo-bg-video {
+            filter: brightness(0.90);
+        }
+
+        /* ── Photography: warm amber gradient ───────────── */
+        .wo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(18, 10, 2, 0.88) 0%,
+                rgba(14, 9, 4, 0.32) 50%,
+                rgba(14, 9, 4, 0.04) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.5s;
+        }
+
+        /* Films: cooler blue-grey gradient */
+        .wo-panel:nth-child(2) .wo-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(4, 8, 16, 0.90) 0%,
+                rgba(6, 10, 18, 0.32) 50%,
+                rgba(6, 10, 18, 0.04) 100%
+            );
+        }
+
+        /* ── Content column pinned to bottom of each panel ── */
+        .wo-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            padding: 0 8% 6vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .wo-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .wo-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255, 235, 190, 0.82);
+        }
+
+        .wo-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3.6rem, 6.5vw, 8rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 0.93;
+            color: #F5EDD8;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .wo-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            line-height: 1.72;
+            color: rgba(245, 237, 216, 0.76);
+            max-width: 380px;
+            margin-top: 6px;
+        }
+
+        /* ── CTA — below description ─────────────────────── */
+        .wo-cta {
+            margin-top: 22px;
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(207, 162, 70, 0.80);
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(207, 162, 70, 0.28);
+            white-space: nowrap;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .wo-panel:hover .wo-cta {
+            color: #CFA246;
+            border-color: rgba(207, 162, 70, 0.65);
+        }
+
+        .wo-cta-arrow {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .wo-panel:hover .wo-cta-arrow {
+            transform: translateX(6px);
+        }
+
+        /* ── Mobile ──────────────────────────────────────── */
+        /* ── Focus rings for keyboard nav ───────────────── */
+        .wo-panel:focus-visible {
+            outline: 2px solid rgba(207, 162, 70, 0.9);
+            outline-offset: -3px;
+            z-index: 10;
+        }
+
+        @media (max-width: 700px) {
+            .work-overview {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+            .wo-panel { flex: 1 !important; min-height: 48vh; }
+            /* gap still shows as a horizontal strip on mobile column layout */
+            .wo-content { padding: 0 6vw 4vh; }
+            .wo-title { font-size: clamp(3rem, 11vw, 4.5rem); }
+            .wo-desc {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+                font-size: 12px;
+                max-width: 100%;
+            }
+            .wo-cta { margin-top: 16px; }
+        }
+
+        /* ── Mobile nav sub-menus ────────────────────────── */
+        .mobile-nav-children { display: none; }
+        .mobile-nav-children.open { display: flex; flex-direction: column; }
+
+        /* ── Screen-reader only utility ─────────────────── */
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="images/Mohith LOGO.webp" alt="Logo" class="logo">
+        </a>
+        <div class="nav-brand">
+            <span class="name">Mohith Rai Srivastav</span>
+            <span class="sub">Architectural Photographer · Filmmaker · Educator</span>
+        </div>
+        <div class="nav-links-container">
+            <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li style="display:none"><a href="journal.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count"></span></a>
+            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <main class="work-overview" id="main-content">
+
+        <!-- Photography -->
+        <a class="wo-panel" href="photography.html" aria-label="Photography — architectural photography portfolio, 13 projects">
+            <img class="wo-bg"
+                 src="Work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp"
+                 alt="Villa Lluvia — Siolim, Goa"
+                 loading="eager"
+                 onerror="this.style.opacity='0'">
+            <div class="wo-overlay"></div>
+            <div class="wo-content">
+                <div class="wo-text-group">
+                    <span class="wo-eyebrow">Still Image &nbsp;&middot;&nbsp; 13 Projects</span>
+                    <h1 class="wo-title">Photography</h1>
+                    <p class="wo-desc">Commissioned and personal work spanning hospitality, residence, heritage, and industrial architecture across South Asia.</p>
+                </div>
+                <span class="wo-cta">
+                    View projects
+                    <svg class="wo-cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="9 6 15 12 9 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+            </div>
+        </a>
+
+        <!-- Films -->
+        <a class="wo-panel" href="film.html" aria-label="Films — architectural and essay film projects, 8 films">
+            <iframe class="wo-bg-video"
+                    src="https://player.vimeo.com/video/1180402778?background=1&autoplay=1&loop=1&muted=1&byline=0&title=0"
+                    allow="autoplay"
+                    title="Films reel"></iframe>
+            <div class="wo-overlay"></div>
+            <div class="wo-content">
+                <div class="wo-text-group">
+                    <span class="wo-eyebrow">Moving Image &nbsp;&middot;&nbsp; 8 Films</span>
+                    <h2 class="wo-title">Films</h2>
+                    <p class="wo-desc">Motion work as a slower kind of photograph — documentary, architecture, and essay films shot on site and cut to silence.</p>
+                </div>
+                <span class="wo-cta">
+                    View films
+                    <svg class="wo-cta-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="9 6 15 12 9 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+            </div>
+        </a>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="sf-body">
+            <div class="sf-brand">
+                <a href="index.html" class="sf-logo-link">
+                    <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+                </a>
+                <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+            </div>
+            <nav class="sf-nav">
+                <span class="sf-nav-label">Pages</span>
+                <a href="about.html">About</a>
+                <a href="work.html">Work</a>
+                <a href="film.html">Films</a>
+                <a href="journal.html" style="display:none">Journal</a>
+                <a href="workshops.html">Workshops</a>
+                <a href="shop.html">Shop</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+                <span class="sf-nav-label">Field Notes</span>
+                <p>New work and workshop openings &mdash; sent rarely.</p>
+                <form class="sf-form" id="sfForm">
+                    <label for="sfEmailWork" class="sr-only">Email address</label>
+                    <input id="sfEmailWork" type="email" placeholder="your@email.com" required>
+                    <button type="submit" aria-label="Subscribe">&#8594;</button>
+                </form>
+                <span class="sf-form-ok" id="sfFormOk">Received.</span>
+            </div>
+        </div>
+        <div class="sf-base">
+            <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+            <div class="sf-social">
+                <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+                <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="mailto:info@mohithraisrivastav.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+        <div class="cart-header">
+            <h2>Your Selection</h2>
+            <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+        </div>
+        <div id="cartItemsList"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+            <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menu   = document.getElementById('mobileMenu');
+            var burger = document.getElementById('hamburgerBtn');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+            burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function toggleMobileDropdown(btn) {
+            var isOpen   = btn.classList.toggle('open');
+            var children = btn.nextElementSibling;
+            if (children) children.classList.toggle('open', isOpen);
+        }
+
+        /* Smooth scroll */
+        (function () {
+            var lenis = new Lenis({
+                duration: 1.2,
+                easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }
+            });
+            window.__lenis = lenis;
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+        })();
+
+        /* Sync --nav-h */
+        (function () {
+            function sync() {
+                var nav = document.querySelector('.navbar');
+                document.documentElement.style.setProperty('--nav-h', (nav ? nav.offsetHeight : 120) + 'px');
+            }
+            document.addEventListener('DOMContentLoaded', sync);
+            window.addEventListener('resize', sync);
+        })();
+    </script>
+    <script src="assets/js/transitions.js"></script>
+    <script src="assets/js/cursor.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script src="assets/js/preloader.js"></script>
+    <script src="assets/js/cart.js"></script>
+</body>
+</html>
+
+

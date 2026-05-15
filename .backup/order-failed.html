@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed | Mohith Rai Srivastav</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { font-size: 125%; }
+        body { background-color: #0a0a0a; color: #ffffff; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; position: fixed; width: 100%; background: rgba(10, 10, 10, 0.95); z-index: 9999; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { height: 60px; width: auto; mix-blend-mode: screen; opacity: 0.7; }
+
+        .fail-wrap { max-width: 700px; margin: 0 auto; padding: 180px 5vw 100px; text-align: center; }
+
+        .x-icon { width: 80px; height: 80px; border: 1px solid rgba(255,100,100,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; }
+        .x-icon svg { width: 32px; height: 32px; fill: #ff6b6b; }
+
+        .fail-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 5px; color: #ff6b6b; text-transform: uppercase; margin-bottom: 20px; }
+        h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1; margin-bottom: 30px; }
+        .fail-msg { font-size: 1rem; font-weight: 300; color: #aaa; line-height: 1.8; max-width: 520px; margin: 0 auto 20px; }
+
+        .reason-box { background: #0f0f0f; border: 1px solid #222; padding: 25px; margin: 30px auto; text-align: left; font-size: 0.8rem; color: #888; font-family: 'Courier New', monospace; max-width: 520px; }
+        .reason-box .label { display: block; font-size: 0.55rem; color: #555; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; font-family: 'Montserrat', sans-serif; }
+
+        .reassure { font-size: 0.85rem; color: #666; line-height: 1.8; margin: 40px auto 50px; max-width: 520px; }
+
+        .cta-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .cta-btn { padding: 18px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
+        .cta-btn:hover { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary { background: #fff; color: #000; border-color: #fff; }
+        .cta-btn.primary:hover { background: transparent; color: #fff; }
+
+        @media (max-width: 700px) { .fail-wrap { padding-top: 130px; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html"><img src="Mohith LOGO.png" alt="Logo" class="logo"></a>
+    </nav>
+
+    <main class="fail-wrap">
+        <div class="x-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+
+        <div class="fail-label">Payment Not Completed</div>
+        <h1>Something<br>Stopped.</h1>
+        <p class="fail-msg">Your payment did not go through. No amount has been charged. Your cart is still intact.</p>
+
+        <div class="reason-box" id="reasonBox" style="display:none;">
+            <span class="label">Reason</span>
+            <span id="reasonText"></span>
+        </div>
+
+        <p class="reassure">
+            Common causes: cancelled transaction, insufficient balance, bank declined, or connection interrupted. If funds were deducted, they will be auto-refunded within 5-7 business days.
+        </p>
+
+        <div class="cta-row">
+            <a href="checkout.html" class="cta-btn primary">Try Again</a>
+            <a href="contact.html" class="cta-btn">Contact Support</a>
+        </div>
+    </main>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const reason = params.get('reason');
+        if (reason) {
+            document.getElementById('reasonBox').style.display = 'block';
+            document.getElementById('reasonText').innerText = decodeURIComponent(reason);
+        }
+    </script>
+</body>
+</html>

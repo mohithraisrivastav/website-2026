@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Workshop Registration | Mohith Rai Srivastav</title>
+    <meta name="description" content="Register your interest or apply for a field workshop with Mohith Rai Srivastav.">
+    <link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <link rel="stylesheet" href="assets/css/pages/workshop-register.css">
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+<nav class="navbar">
+    <a href="index.html" class="logo-link">
+        <img src="images/Mohith LOGO.webp" alt="Logo" class="logo">
+    </a>
+    <div class="nav-brand">
+        <span class="name">Mohith Rai Srivastav</span>
+        <span class="sub">Architectural Photographer · Filmmaker · Educator</span>
+    </div>
+    <div class="nav-links-container">
+        <ul class="nav-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="work.html">Work</a></li>
+            <li><a href="film.html">Films</a></li>
+            <li style="display:none"><a href="journal.html">Journal</a></li>
+            <li><a href="workshops.html">Workshops</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart">
+            <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            <span class="cart-count" id="cartCountGlobal"></span>
+        </a>
+        <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="about.html" onclick="toggleMenu()">About</a>
+    <a href="work.html" onclick="toggleMenu()">Work</a>
+    <a href="film.html" onclick="toggleMenu()">Films</a>
+    <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
+    <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+    <a href="shop.html" onclick="toggleMenu()">Shop</a>
+    <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    <a href="#" onclick="toggleMenu();toggleCart();return false;">Cart</a>
+</div>
+
+<main id="main-content">
+    <div class="page-container" id="regContainer">
+        <!-- Back to Workshops button (top) -->
+        <a href="workshops.html" class="page-back-btn global-back-link back-link-top">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to Workshops
+        </a>
+
+        <!-- Workshop selection tabs -->
+        <div class="workshop-tabs" id="workshopTabs">
+            <button class="workshop-tab" data-type="1day">1‑Day Immersion</button>
+            <button class="workshop-tab" data-type="3day">3‑Day Intensive</button>
+            <button class="workshop-tab" data-type="7day">7‑Day Residency</button>
+        </div>
+
+        <!-- Main layout -->
+        <div class="reg-grid" id="regGrid">
+            <!-- Left column: info -->
+            <div class="reg-info" id="regInfo">
+                <h2 id="regTitle">Select a Workshop</h2>
+                <p class="reg-blurb" id="regBlurb">Choose a format above. Details will appear here.</p>
+                <div class="reg-meta" id="regMeta"></div>
+                <a href="#" class="brochure-link" id="brochureLink" download hidden aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Brochure
+                </a>
+            </div>
+
+            <!-- Right column: form -->
+            <div class="reg-form" id="regFormArea">
+                <div class="error-msg" id="errorMsg"></div>
+                <form id="regForm" novalidate>
+                    <input type="hidden" name="workshopType" id="workshopTypeInput">
+                    <input type="hidden" name="workshopTitle" id="workshopTitleInput">
+
+                    <div class="reg-form-section">
+                        <h3>01 / Your Details</h3>
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Full Name <span style="color:#CFA246;">*</span></label>
+                                <input type="text" name="name" required autocomplete="name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label>Email <span style="color:#CFA246;">*</span></label>
+                                <input type="email" name="email" required autocomplete="email">
+                            </div>
+                            <div class="form-field">
+                                <label>Phone <span style="color:#CFA246;">*</span></label>
+                                <input type="tel" name="phone" required placeholder="+91 98765 43210" autocomplete="tel">
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Address <span class="optional">(optional)</span></label>
+                                <input type="text" name="address" placeholder="Street, building, etc." autocomplete="street-address">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label>City <span style="color:#CFA246;">*</span></label>
+                                <input type="text" name="city" required placeholder="e.g. Panjim" autocomplete="address-level2">
+                            </div>
+                            <div class="form-field">
+                                <label>Country <span style="color:#CFA246;">*</span></label>
+                                <input type="text" name="country" required placeholder="e.g. India" autocomplete="country-name">
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Pincode / Postcode <span style="color:#CFA246;">*</span></label>
+                                <input type="text" name="pincode" required placeholder="e.g. 403001" autocomplete="postal-code">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reg-form-section">
+                        <h3>02 / Your Practice</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label>Experience <span style="color:#CFA246;">*</span></label>
+                                <select name="experience" required>
+                                    <option value="">Select</option>
+                                    <option value="Student">Student</option>
+                                    <option value="Professional">Professional</option>
+                                    <option value="Enthusiast">Enthusiast</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label>Medium / Profession</label>
+                                <input type="text" name="medium" placeholder="e.g. Photography, Architecture, Writing">
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>What draws you to this workshop? <span style="color:#CFA246;">*</span></label>
+                                <textarea name="motivation" required placeholder="A few words about what you hope to explore."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reg-form-section">
+                        <h3>03 / Cohort &amp; Discovery</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label>Preferred Cohort <span style="color:#CFA246;">*</span></label>
+                                <select name="cohort" id="cohortSelect" required>
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label>How did you hear about us?</label>
+                                <select name="source">
+                                    <option value="">Select</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="Website">Website / Search</option>
+                                    <option value="Word of mouth">Word of mouth</option>
+                                    <option value="LinkedIn">LinkedIn</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="submit-btn" id="submitBtn" onclick="submitRegistration()">
+                        Submit Application →
+                    </button>
+                    <p class="form-note">We'll send a confirmation and the workshop brochure.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation screen -->
+    <div class="confirmation" id="confirmationScreen">
+        <h2>Application Received.</h2>
+        <p id="confBody">Thank you. I'll reply within 48 hours to discuss details and next steps.</p>
+        <div class="conf-actions">
+            <button class="conf-btn" id="confDownloadBtn" onclick="triggerDownload()" hidden aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Brochure
+            </button>
+            <a href="workshops.html" class="conf-btn conf-back">Back to Workshops</a>
+        </div>
+        <p class="conf-email-note" id="confEmailNote"></p>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link"><img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo"></a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India · Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings — sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">→</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">© 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+    <div class="cart-header">
+        <h2>Your Selection</h2>
+        <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+    </div>
+    <div id="cartItemsList"></div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const burger = document.getElementById('hamburgerBtn');
+        menu.classList.toggle('active');
+        burger.classList.toggle('active');
+        burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+
+    /* ── Workshop data ─────────────────────────────────────── */
+    const WORKSHOPS = {
+        '1day': {
+            label: 'One‑Day Immersion',
+            title: 'The One‑Day\nImmersion',
+            blurb: 'A single day of guided noticing. You’ll be walked through a chosen site — a fort wall, a laterite quarry, a monsoon courtyard — and taught to slow down, listen, and record.',
+            meta: { Format: '1 Day', 'Group Size': '12 max', Location: 'Goa, India', Date: '7 June 2026', Fee: '₹3,500 per person' },
+            pdf: ''
+        },
+        '3day': {
+            label: 'Three‑Day Intensive',
+            title: 'The Three‑Day\nIntensive',
+            blurb: 'A weekend of deeper immersion on one site, with group critique, mentoring, and a mini‑project in your medium.',
+            meta: { Format: '3 Days', 'Group Size': '12 max', Location: 'Goa, India', Date: '19 to 21 June 2026', Fee: '₹11,500 per person' },
+            pdf: ''
+        },
+        '7day': {
+            label: 'Seven‑Day Residency',
+            title: 'The Seven‑Day\nResidency',
+            blurb: 'A full week across Goa, culminating in a finished work exhibited at a closing circle.',
+            meta: { Format: '7 Days', 'Group Size': '12 max', Location: 'Goa, India', Date: '7 to 13 September 2026', Fee: '₹24,000 per person' },
+            pdf: ''
+        }
+    };
+
+    const COHORTS = {
+        '1day': ['7 June 2026 – Goa', '12 July 2026 – Goa', '9 Aug 2026 – Goa', '13 Sep 2026 – Goa'],
+        '3day': ['19‑21 June 2026 – Goa', '18‑20 July 2026 – Goa', '15‑17 Aug 2026 – Goa'],
+        '7day': ['7‑13 September 2026 – Goa', '4‑10 Oct 2026 – Goa', '7‑13 Nov 2026 – Goa']
+    };
+
+    /* ── State ────────────────────────────────────────────── */
+    const params = new URLSearchParams(window.location.search);
+    let currentType = params.get('type');
+    if (!currentType || !WORKSHOPS[currentType]) currentType = '1day';
+
+    /* ── Render helpers ───────────────────────────────────── */
+    function populateCohorts(type) {
+        const sel = document.getElementById('cohortSelect');
+        if (!sel) return;
+        const cohorts = COHORTS[type] || [];
+        sel.innerHTML = '<option value="">Select</option>' +
+            cohorts.map(c => `<option value="${c}">${c}</option>`).join('') +
+            '<option value="Notify me of future dates">Notify me of future dates</option>';
+    }
+
+    function renderWorkshop(type) {
+        const w = WORKSHOPS[type];
+        document.getElementById('regTitle').innerHTML = w.title.replace(/\n/g, '<br>');
+        document.getElementById('regBlurb').textContent = w.blurb;
+        document.getElementById('workshopTypeInput').value = type;
+        document.getElementById('workshopTitleInput').value = w.title.replace(/\n/g, ' ');
+        const brochureLink = document.getElementById('brochureLink');
+        const hasBrochure = Boolean(w.pdf);
+        brochureLink.href = hasBrochure ? w.pdf : '#';
+        brochureLink.hidden = !hasBrochure;
+        brochureLink.setAttribute('aria-hidden', hasBrochure ? 'false' : 'true');
+
+        const metaEl = document.getElementById('regMeta');
+        metaEl.innerHTML = Object.entries(w.meta).map(([k, v]) =>
+            `<div class="reg-meta-item"><div class="meta-label">${k}</div><div class="meta-val">${v}</div></div>`
+        ).join('');
+
+        populateCohorts(type);
+
+        document.querySelectorAll('.workshop-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.type === type);
+        });
+    }
+
+    function switchWorkshop(type) {
+        currentType = type;
+        renderWorkshop(type);
+    }
+
+    // Tab click handler
+    document.getElementById('workshopTabs').addEventListener('click', e => {
+        const tab = e.target.closest('.workshop-tab');
+        if (!tab) return;
+        switchWorkshop(tab.dataset.type);
+    });
+
+    // Initialize
+    renderWorkshop(currentType);
+
+    /* ── Form submission ──────────────────────────────────── */
+    function showError(msg) {
+        const el = document.getElementById('errorMsg');
+        el.textContent = msg;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 6000);
+    }
+
+    async function submitRegistration() {
+        const form = document.getElementById('regForm');
+        const btn = document.getElementById('submitBtn');
+
+        // Validation
+        const required = [
+            { name: 'name', label: 'Full Name' },
+            { name: 'email', label: 'Email' },
+            { name: 'phone', label: 'Phone' },
+            { name: 'city', label: 'City' },
+            { name: 'country', label: 'Country' },
+            { name: 'pincode', label: 'Pincode / Postcode' },
+            { name: 'experience', label: 'Experience' },
+            { name: 'motivation', label: 'What draws you to this workshop?' },
+            { name: 'cohort', label: 'Preferred Cohort' }
+        ];
+
+        for (const field of required) {
+            const el = form.querySelector(`[name="${field.name}"]`);
+            if (!el || !el.value.trim()) {
+                showError(`Please fill in: ${field.label}`);
+                el && el.focus();
+                return;
+            }
+        }
+
+        const emailEl = form.querySelector('[name="email"]');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+            showError('Please enter a valid email address.');
+            emailEl.focus();
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Submitting…';
+
+        const isLocal = window.location.protocol === 'file:' ||
+                        window.location.hostname === 'localhost' ||
+                        window.location.hostname === '127.0.0.1';
+
+        if (!isLocal) {
+            try {
+                const data = Object.fromEntries(new FormData(form));
+                const response = await fetch('/api/register-workshop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error('Server error');
+            } catch (err) {
+                showError('Something went wrong. Please try again or email info@mohithraisrivastav.com');
+                btn.disabled = false;
+                btn.textContent = 'Submit Application →';
+                return;
+            }
+        }
+
+        showConfirmation();
+    }
+
+    function showConfirmation() {
+        document.getElementById('regContainer').style.display = 'none';
+        const conf = document.getElementById('confirmationScreen');
+        conf.classList.add('show');
+
+        const email = document.querySelector('[name="email"]').value || 'your email';
+        document.getElementById('confEmailNote').innerHTML =
+            `We will reply at <strong>${email}</strong> with confirmation details and the brochure.`;
+
+        const downloadBtn = document.getElementById('confDownloadBtn');
+        const hasBrochure = Boolean(WORKSHOPS[currentType] && WORKSHOPS[currentType].pdf);
+        downloadBtn.hidden = !hasBrochure;
+        downloadBtn.setAttribute('aria-hidden', hasBrochure ? 'false' : 'true');
+        conf.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function triggerDownload() {
+        const w = WORKSHOPS[currentType];
+        if (!w || !w.pdf) return;
+        const a = document.createElement('a');
+        a.href = w.pdf;
+        a.download = `Mohith-Rai-Srivastav-${currentType}-Brochure.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+</script>
+</body>
+</html>
+
+

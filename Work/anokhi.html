@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../assets/js/theme.js"></script>
+<link rel="stylesheet" href="../assets/css/typo.css">
+<link rel="stylesheet" href="../assets/css/global.css">
+<meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="../images/Mohith LOGO.webp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Anokhi — Coastal photography by Mohith Rai Srivastav. Shore form and the geometry of tide at Morjim, Goa.">
+<meta name="author" content="Mohith Rai Srivastav">
+<meta property="og:site_name" content="Mohith Rai Srivastav">
+<meta property="og:title" content="Anokhi â€” Mohith Rai Srivastav">
+<meta property="og:description" content="Morjim photographed as a study in coastal geometry â€” the line where tide meets form, and the shore that shifts with each frame.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mohithraisrivastav.com/work/baithak.html">
+<meta property="og:image" content="https://mohithraisrivastav.com/Work/Projects/Anokhi/_DSC5348-HDR-Edit.webp">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anokhi â€” Mohith Rai Srivastav">
+<meta name="twitter:description" content="Morjim photographed as a study in coastal geometry â€” the line where tide meets form, and the shore that shifts with each frame.">
+<meta name="twitter:image" content="https://mohithraisrivastav.com/Work/Projects/Anokhi/_DSC5348-HDR-Edit.webp">
+<link rel="canonical" href="https://mohithraisrivastav.com/work/baithak.html">
+<title>Anokhi â€” Mohith Rai Srivastav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="Projects/Anokhi/_DSC5348-HDR-Edit.webp" fetchpriority="high">
+<style>
+.sline-stage{position:fixed;top:92px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+#slineCanvas{position:absolute;top:0;left:0;}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
+body { background-color: #F2EAD8; color: #1A1612; overflow-x: hidden; }
+body.js-cursor { cursor: none; }
+#progress { position: fixed; top: 0; left: 0; height: 2px; background: rgba(26, 22, 18,0.35); width: 0%; z-index: 300; transition: width 0.08s linear; pointer-events: none; }
+#curtain { position: fixed; inset: 0; background: #F7F3ED; z-index: 450; pointer-events: none; transform: scaleY(0); transform-origin: top; }
+.cursor { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 500; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s, opacity 0.3s; mix-blend-mode: difference; }
+.cursor.on { width: 40px; height: 40px; opacity: 0.3; }
+
+/* â”€â”€ Back button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.back-btn {
+  display: inline-block;
+  padding: clamp(28px, 4vh, 48px) 5vw 0;
+  font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: #6F7A82; text-decoration: none;
+  transition: color 0.3s;
+}
+.back-btn:hover { color: #1A1612; }
+#frame-counter { position: fixed; right: 2.5vw; top: 50%; transform: translateY(-50%); z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; pointer-events: none; }
+.fc-num { font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; color: rgba(26, 22, 18,0.45); writing-mode: vertical-rl; }
+.fc-line { width: 1px; height: 28px; background: rgba(26, 22, 18,0.1); }
+.fc-total { font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; color: #6F7A82; writing-mode: vertical-rl; }
+.page-vert-label { position: fixed; left: 18px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 0.8625rem; letter-spacing: 5px; text-transform: uppercase; color: #6F7A82; z-index: 10; white-space: nowrap; font-weight: 600; pointer-events: none; }
+.navbar { display: flex; align-items: center; padding: 1rem 5%; position: fixed; top: 0; left: 0; width: 100%; background: rgba(252,250,246,0.97); z-index: 200; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(26, 22, 18,0.08); }
+.logo-link { display: flex; align-items: center; flex-shrink: 0; }
+.logo { height: 60px; width: auto; mix-blend-mode: normal; opacity: 1; transition: all 0.5s ease; }
+.logo:hover { opacity: 1; filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); transform: scale(1.02); }
+.nav-brand { flex: 1; text-align: center; padding: 0 20px; }
+.nav-brand .name { display: block; font-size: 1.375rem; font-weight: 900; color: #1A1612; letter-spacing: 4px; text-transform: uppercase; line-height: 1.2; }
+.nav-brand .sub { display: block; font-size: 0.8625rem; font-weight: 600; letter-spacing: 4px; color: #6F7A82; text-transform: uppercase; }
+.nav-links-container { display: flex; justify-content: flex-end; align-items: center; gap: 1.25rem; }
+.nav-links { list-style: none; display: flex; gap: 1.25rem; align-items: center; margin: 0; padding: 0; }
+.nav-links a { color: #4A3A33; text-decoration: none; text-transform: uppercase; font-size: 0.8625rem; font-weight: 600; letter-spacing: 2px; transition: color 0.3s; }
+.nav-links a:hover, .nav-links a.active { color: #1A1612; }
+.hamburger { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 18px; cursor: pointer; }
+.hamburger span { display: block; width: 100%; height: 1.5px; background: #1A1612; transition: all 0.4s cubic-bezier(0.7,0,0.3,1); }
+.hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.mobile-menu { position: fixed; inset: 0; background: #F7F3ED; z-index: 190; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; visibility: hidden; opacity: 0; transition: all 0.5s ease; }
+.mobile-menu.active { visibility: visible; opacity: 1; }
+.mobile-menu a { color: #1A1612; text-decoration: none; text-transform: uppercase; font-size: 2rem; font-weight: 200; letter-spacing: 8px; transition: color 0.3s; }
+.mobile-menu a:hover { color: #4A3A33; }
+.project-header { display: grid; grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: end;
+  padding: clamp(16px, 2.5vh, 28px) 5vw clamp(28px, 4.5vh, 48px);
+  gap: 0.6vh 2vw; position: relative; }
+.project-num { font-size: 0.8625rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #6F7A82; white-space: nowrap; padding-bottom: 4px; }
+.project-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; line-height: 0.88; letter-spacing: -0.02em; text-align: left; }
+.title-line { display: block; overflow: hidden; } .title-inner { display: block; } .title-main { font-size: clamp(3.8rem, 6.8vw, 9rem); }
+.project-meta-inline { font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #6F7A82; white-space: nowrap; text-align: right; padding-bottom: 4px; }
+.scroll-cue { position: absolute; bottom: -3.5vh; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.scroll-cue-text { font-size: 0.8625rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; }
+.scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, rgba(26, 22, 18,0.3), transparent); animation: linepulse 2s ease-in-out infinite; }
+@keyframes linepulse { 0%,100%{opacity:.3;transform:scaleY(1)} 50%{opacity:.7;transform:scaleY(1.15)} }
+.project-meta-row { display: flex; align-items: center; gap: 0; padding: 0 5vw; border-top: 1px solid rgba(26, 22, 18,0.08); border-bottom: 1px solid rgba(26, 22, 18,0.08); }
+.pmr-item { display: flex; align-items: center; gap: 10px; padding: 22px 0; flex: 1; }
+.pmr-item + .pmr-item { border-left: 1px solid rgba(26, 22, 18,0.08); padding-left: clamp(16px, 2.5vw, 40px); margin-left: clamp(16px, 2.5vw, 40px); }
+.pmr-key { font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #4A3A33; white-space: nowrap; flex-shrink: 0; }
+.pmr-val { font-size: 0.8625rem; font-weight: 300; color: #4A3A33; letter-spacing: 0.5px; white-space: nowrap; }
+.project-context { display: grid; grid-template-columns: 1fr 1fr; padding: clamp(20px, 3vh, 36px) 5vw; gap: clamp(12px, 2vw, 24px); border-bottom: 1px solid rgba(26, 22, 18,0.08); }
+.pc-card {
+  border: none;
+  padding: 0;
+  background: none;
+}
+.pc-card-label { display: block; font-size: 0.8625rem; letter-spacing: 4px; text-transform: uppercase; color: #6F7A82; font-weight: 600; margin-bottom: 12px; }
+.pc-card p { font-size: 0.902rem; line-height: 1.75; color: #4A3A33; font-weight: 300; }
+.gallery { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: clamp(6px, 1.2vw, 16px); row-gap: clamp(6px, 1.2vw, 16px); padding: clamp(32px, 5vh, 60px) 5vw; }
+.section-rule { grid-column: 1 / 13; }
+.gallery { grid-template-columns: repeat(12, minmax(0, 1fr));  }
+.p { grid-column: span 4; }
+.p-inner { width: 100%; aspect-ratio: 3/2; background: rgba(26, 22, 18,0.02); overflow: hidden; position: relative; border-radius: 10px; }
+.p-inner::after { content: ''; position: absolute; inset: 0; background: #F2EAD8; opacity: 1; transition: opacity 1.4s ease; pointer-events: none; z-index: 1; }
+.p.developed .p-inner::after { opacity: 0; }
+.p-inner img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; transform-origin: center center; }
+.p { position: relative; overflow: hidden; line-height: 0; }
+.corner { position: absolute; width: 10px; height: 10px; border-color: rgba(26, 22, 18,0.15); border-style: solid; border-width: 0; z-index: 5; pointer-events: none; transition: border-color 0.5s; }
+.corner.tl { top: 7px; left: 7px; border-top-width: 1px; border-left-width: 1px; } .corner.tr { top: 7px; right: 7px; border-top-width: 1px; border-right-width: 1px; }
+.corner.bl { bottom: 7px; left: 7px; border-bottom-width: 1px; border-left-width: 1px; } .corner.br { bottom: 7px; right: 7px; border-bottom-width: 1px; border-right-width: 1px; }
+.p:hover .corner { border-color: rgba(26, 22, 18,0.4); }
+.p-expand { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 36px; height: 36px; border: 1px solid rgba(26, 22, 18,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; z-index: 6; pointer-events: none; transition: opacity 0.4s; }
+.p-expand::before, .p-expand::after { content: ''; position: absolute; background: rgba(26, 22, 18,0.7); }
+.p-expand::before { width: 10px; height: 1px; } .p-expand::after { width: 1px; height: 10px; }
+.p.developed:hover .p-expand { opacity: 1; }
+.p-index-label { position: absolute; bottom: 10px; right: 12px; font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; color: rgba(26, 22, 18,0); transition: color 1s; pointer-events: none; z-index: 5; text-transform: uppercase; }
+.p.developed .p-index-label { color: rgba(26, 22, 18,0.25); }
+.section-rule { display: flex; align-items: center; gap: 2vw; margin: clamp(12px, 2vh, 28px) 0; opacity: 0.55; }
+.section-rule::before { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(26, 22, 18,0.12)); }
+.section-rule-label { font-size: 0.8625rem; letter-spacing: 4px; text-transform: uppercase; color: #6F7A82; white-space: nowrap; font-weight: 600; }
+.section-rule::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to left, transparent, rgba(26, 22, 18,0.12)); }
+@media (max-width: 960px) { .nav-links { display: none; } .hamburger { display: flex; } .nav-brand .sub { display: none; } .nav-brand .name { font-size: 1rem; letter-spacing: 2px; } .logo { height: 44px; } }
+@media (max-width: 1100px) and (min-width: 901px) { .project-header { grid-template-columns: auto 1fr; } .project-meta-inline { display: none; } }
+@media (max-width: 900px) {
+  .project-header { grid-template-columns: 1fr; padding-top: clamp(12px, 2vh, 20px); gap: 8px; }
+  .project-num, .project-title, .project-meta-inline { text-align: left; }
+  .project-meta-row { flex-direction: column; align-items: flex-start; }
+  .pmr-item { flex: unset; padding: 12px 0; }
+  .pmr-item + .pmr-item { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid rgba(26, 22, 18,0.08); }
+  .project-context { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: 1fr; padding: 6vw 5vw; column-gap: 0; row-gap: clamp(8px, 3vw, 20px); }
+  .section-rule { grid-column: 1 / 2; }
+  .gallery {  }
+  .p { grid-column: 1 / 2; grid-row: auto; }
+  .p-inner { height: auto; aspect-ratio: 4 / 5; }
+  #frame-counter, .page-vert-label { display: none; }
+}
+.next-project { margin-top: 16vh; position: relative; z-index: 11; }
+.next-label { display:block; font-size:0.8625rem; font-weight:600; letter-spacing:5px; text-transform:uppercase; color:#6F7A82; padding:0 5vw; margin-bottom:3vh; }
+.next-link { display:block; text-decoration:none; color:inherit; position:relative; overflow:hidden; }
+.next-thumb { width:100%; height:55vh; overflow:hidden; position:relative; }
+.next-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 1.4s cubic-bezier(.25,.46,.45,.94), filter 1.4s ease; filter:brightness(0.48); transform:scale(1.05); }
+.next-link:hover .next-thumb img { transform:scale(1.09); filter:brightness(0.65); }
+.next-thumb-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.4) 50%, transparent 100%); }
+.next-text { position:absolute; bottom:0; left:0; right:0; padding:5vh 5vw; display:flex; align-items:flex-end; justify-content:space-between; gap:4vw; }
+.next-text-left { display:flex; flex-direction:column; gap:1.4vh; min-width:0; }
+.next-title-clip { overflow:hidden; }
+.next-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,6vw,6rem); font-weight:300; line-height:0.9; letter-spacing:-0.02em; display:block; color:#fff; }
+.next-sub { font-size:0.8625rem; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.45); }
+.next-cta { flex-shrink:0; font-size:0.8625rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.45); border:1px solid rgba(255,255,255,0.16); padding:14px 28px; transition:border-color 0.4s,color 0.4s; align-self:flex-end; white-space:nowrap; }
+.next-link:hover .next-cta { border-color:rgba(255,255,255,0.65); color:#fff; }
+.lb { position:fixed; inset:0; background:rgba(4,4,4,0.97); z-index:20000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.32s ease; cursor:default; }
+.lb.active { opacity:1; pointer-events:all; }
+.lb-img { max-width:90vw; max-height:90vh; object-fit:contain; display:block; }
+.lb-close { position:absolute; top:24px; right:32px; background:none; border:none; color:rgba(255,255,255,0.4); font-family:var(--font-main); font-size:0.8625rem; font-weight:600; letter-spacing:4px; text-transform:uppercase; cursor:pointer; padding:8px 0; transition:color 0.3s; }
+.lb-close:hover { color:#fff; }
+.lb-nav { position:absolute; top:50%; transform:translateY(-50%); background:none; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.35); font-size:1rem; cursor:pointer; width:48px; height:48px; display:flex; align-items:center; justify-content:center; transition:border-color 0.3s,color 0.3s; }
+.lb-nav:hover { border-color:rgba(255,255,255,0.55); color:#fff; }
+.lb-prev { left:24px; } .lb-next { right:24px; }
+.lb-counter { position:absolute; bottom:24px; left:50%; transform:translateX(-50%); font-size:0.8625rem; letter-spacing:4px; color:rgba(255,255,255,0.3); font-weight:600; text-transform:uppercase; white-space:nowrap; }
+.site-footer { background:#EDE8DF; border-top:1px solid rgba(26, 22, 18,0.12); font-family:var(--font-main); position: relative; z-index: 11; }
+.sf-cta { padding:clamp(60px,10vh,100px) 5vw clamp(40px,6vh,70px); border-bottom:1px solid rgba(26, 22, 18,0.12); display:flex; flex-direction:column; align-items:flex-start; gap:24px; }
+.sf-cta-label { font-size:0.8625rem; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:#4A3A33; }
+.sf-heading { font-size:clamp(3rem,8vw,9rem); font-weight:900; line-height:0.88; letter-spacing:-0.04em; text-transform:uppercase; color:#1A1612; margin:0; }
+.sf-contact-btn { display:inline-flex; align-items:center; gap:14px; background:transparent; color:#6F7A82; text-decoration:none; font-size:0.8625rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; border:1px solid rgba(26, 22, 18,0.2); padding:16px 32px; transition:border-color 0.3s,color 0.3s,gap 0.3s; margin-top:8px; }
+.sf-contact-btn:hover { border-color:rgba(26, 22, 18,0.6); color:#1A1612; gap:20px; }
+.sf-body { display:grid; grid-template-columns:1.4fr 1fr 1.5fr; gap:60px; padding:60px 5vw; border-bottom:1px solid rgba(26, 22, 18,0.08); }
+.sf-logo-link { display:block; margin-bottom:20px; line-height:0; }
+.sf-logo { height:55px; width:auto; mix-blend-mode:normal; opacity:1; display:block; transition:all 0.5s ease; }
+.sf-tagline { font-size:0.8625rem; font-weight:400; color:#4A3A33; line-height:1.9; letter-spacing:0.5px; }
+.sf-nav-label { display:block; font-size:0.8625rem; font-weight:700; letter-spacing:5px; text-transform:uppercase; color:#6F7A82; margin-bottom:22px; }
+.sf-nav { display:flex; flex-direction:column; }
+.sf-nav a { font-size:0.875rem; font-weight:500; color:#4A3A33; text-decoration:none; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; transition:color 0.3s; }
+.sf-nav a:hover { color:#1A1612; }
+.sf-newsletter-col p { font-size:0.8625rem; font-weight:400; color:#4A3A33; line-height:1.8; margin-bottom:20px; max-width:320px; }
+.sf-form { display:flex; border:1px solid rgba(26, 22, 18,0.18); overflow:hidden; max-width:320px; }
+.sf-form input { flex:1; background:transparent; border:none; color:#1A1612; font-family:var(--font-main); font-size:0.8625rem; font-weight:400; padding:12px 16px; outline:none; }
+.sf-form input::placeholder { color:#6F7A82; }
+.sf-form button { background:#E2D8C6; border:none; color:#4A3A33; padding:12px 18px; font-size:1.125rem; cursor:pointer; transition:background 0.3s,color 0.3s; font-family:inherit; line-height:1; }
+.sf-form button:hover { background:#CFA246; color:#fff; }
+.sf-form-ok { display:none; font-size:0.8625rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#22c55e; margin-top:14px; }
+.sf-base { display:flex; justify-content:space-between; align-items:center; padding:22px 5vw; gap:20px; flex-wrap:wrap; }
+.sf-copy { font-size:0.8625rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6F7A82; }
+.sf-social { display:flex; gap:24px; flex-wrap:wrap; }
+.sf-social a { font-size:0.8625rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#4A3A33; text-decoration:none; transition:color 0.3s; }
+.sf-social a:hover { color:#1A1612; }
+@media (max-width:900px) { .sf-body { grid-template-columns:1fr 1fr; gap:40px; } .sf-brand { grid-column:span 2; } .next-text { flex-direction:column; align-items:flex-start; } .next-cta { align-self:flex-start; } }
+@media (max-width:600px) { .sf-body { grid-template-columns:1fr; gap:36px; padding:40px 5vw; } .sf-brand { grid-column:span 1; } .sf-base { flex-direction:column; align-items:flex-start; gap:16px; } .sf-social { gap:16px; } .sf-contact-btn { width:100%; justify-content:center; } .next-thumb { height:42vh; } }
+</style>
+    <script src="../assets/js/translate.js" defer></script>
+<style>
+.nav-has-dropdown { position: relative; }
+.nav-dropdown { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(-6px); list-style: none; margin: 0; padding: 16px 0 0; background: none; border: none; min-width: 140px; z-index: 16000; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; }
+.nav-dropdown::before { display: none; }
+.nav-has-dropdown:hover .nav-dropdown { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+.nav-dropdown li a { display: block; padding: 5px 0; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(26,22,18,0.65) !important; white-space: nowrap; text-decoration: none !important; text-align: center; transition: color 0.15s; }
+.nav-dropdown li a:hover { color: #1A1612 !important; } .nav-dropdown li a.active { color: #CFA246 !important; }
+.mobile-nav-group { width: 100%; text-align: center; }
+.mobile-nav-parent { background: none; border: none; color: #1A1612; font-size: 2rem; font-weight: 200; letter-spacing: 8px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 0; transition: color 0.3s; font-family: inherit; }
+.mobile-nav-parent:hover { color: #4A3A33; }
+.mobile-nav-chevron { font-size: 0.7em; display: inline-block; transition: transform 0.3s ease; line-height: 1; }
+.mobile-nav-parent.open .mobile-nav-chevron { transform: rotate(180deg); }
+.mobile-nav-children { display: none; flex-direction: column; align-items: center; gap: 0.8rem; padding: 0.8rem 0 0.4rem; }
+.mobile-nav-children.open { display: flex; }
+.mobile-nav-children a { font-size: 1.1rem !important; letter-spacing: 5px !important; font-weight: 300 !important; color: rgba(26,22,18,0.65) !important; text-decoration: none; transition: color 0.25s; }
+.mobile-nav-children a:hover { color: #CFA246 !important; }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="progress"></div>
+<div id="curtain"></div>
+<div class="cursor" id="cursor"></div>
+<div id="frame-counter">
+  <span class="fc-num" id="fcNum">01</span>
+  <div class="fc-line"></div>
+  <span class="fc-total">13</span>
+</div>
+<nav class="navbar">
+  <a href="../index.html" class="logo-link"><img src="../images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="logo"></a>
+  <div class="nav-brand">
+    <span class="name">Mohith Rai Srivastav</span>
+    <span class="sub">Architectural Photographer Â· Filmmaker Â· Educator</span>
+  </div>
+  <div class="nav-links-container">
+    <ul class="nav-links">
+      <li class="nav-has-dropdown"><a href="../work.html">Work</a>
+        <ul class="nav-dropdown"><li><a href="../photography.html">Photography</a></li><li><a href="../film.html">Films</a></li></ul>
+      </li>
+      <li class="nav-has-dropdown"><a href="../about.html">Practice</a>
+        <ul class="nav-dropdown"><li><a href="../about.html">About</a></li><li style="display:none"><a href="../journal.html">Journal</a></li><li><a href="../resurface.html">Resurface</a></li></ul>
+      </li>
+      <li><a href="../workshops.html">Workshops</a></li>
+      <li><a href="../shop.html">Shop</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+  <div class="mobile-nav-group">
+    <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+    <div class="mobile-nav-children"><a href="../photography.html" onclick="toggleMenu()">Photography</a><a href="../film.html" onclick="toggleMenu()">Films</a></div>
+  </div>
+  <div class="mobile-nav-group">
+    <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+    <div class="mobile-nav-children"><a href="../about.html" onclick="toggleMenu()">About</a><a href="../journal.html" onclick="toggleMenu()" style="display:none">Journal</a><a href="../resurface.html" onclick="toggleMenu()">Resurface</a></div>
+  </div>
+  <a href="../workshops.html" onclick="toggleMenu()">Workshops</a>
+  <a href="../shop.html" onclick="toggleMenu()">Shop</a>
+  <a href="../contact.html" onclick="toggleMenu()">Contact</a>
+</div>
+<a href="../photography.html" class="back-btn">&#8592; All Work</a>
+<header class="project-header" id="header">
+  <h1 class="project-title">
+    <span class="title-line title-main"><span class="title-inner" id="tl1">Anokhi</span></span>
+  </h1></div>
+</header>
+<div class="project-meta-row" id="metaRow">
+  <div class="pmr-item"><span class="pmr-key">Location</span><span class="pmr-val">Vasco da Gama, Goa</span></div>
+  <div class="pmr-item"><span class="pmr-key">Type</span><span class="pmr-val">Residence</span></div>
+  <div class="pmr-item"><span class="pmr-key">Client</span><span class="pmr-val">Private</span></div>
+  <div class="pmr-item"><span class="pmr-key">Year</span><span class="pmr-val">2026</span></div>
+</div>
+<main class="gallery" id="main-content">
+  <div class="p" data-index="01" data-num="1" data-label="Frame 01 — opening frame">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <span class="p-expand"></span><span class="p-index-label">01</span>
+    <div class="p-inner"><img src="Projects/Anokhi/_DSC5348-HDR-Edit.webp" loading="eager" fetchpriority="high" alt="Frame 01 — opening frame"></div>
+  </div>
+  <div class="p" data-index="02" data-num="2" data-label="Frame 02"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">02</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5383-HDR-Edit.webp" loading="lazy" alt="Frame 02"></div></div>
+  <div class="p" data-index="03" data-num="3" data-label="Frame 03"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">03</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5413-HDR-Edit-2.webp" loading="lazy" alt="Frame 03"></div></div>
+  <div class="p" data-index="04" data-num="4" data-label="Frame 04"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">04</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5433-HDR-Edit.webp" loading="lazy" alt="Frame 04"></div></div>
+  <div class="p" data-index="05" data-num="5" data-label="Frame 05"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">05</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5488-HDR-Edit.webp" loading="lazy" alt="Frame 05"></div></div>
+  <div class="p" data-index="06" data-num="6" data-label="Frame 06"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">06</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5515-HDR-Edit-Edit.webp" loading="lazy" alt="Frame 06"></div></div>
+  <div class="p" data-index="07" data-num="7" data-label="Frame 07"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">07</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5567-Edit.webp" loading="lazy" alt="Frame 07"></div></div>
+  <div class="p" data-index="08" data-num="8" data-label="Frame 08"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">08</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5588-HDR-Edit.webp" loading="lazy" alt="Frame 08"></div></div>
+  <div class="p" data-index="09" data-num="9" data-label="Frame 09"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">09</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5667-HDR-Edit.webp" loading="lazy" alt="Frame 09"></div></div>
+  <div class="p" data-index="10" data-num="10" data-label="Frame 10"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">10</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5677-HDR-Edit.webp" loading="lazy" alt="Frame 10"></div></div>
+  <div class="p" data-index="11" data-num="11" data-label="Frame 11"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">11</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5702-HDR-Edit.webp" loading="lazy" alt="Frame 11"></div></div>
+  <div class="p" data-index="12" data-num="12" data-label="Frame 12"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">12</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5712-HDR-Edit.webp" loading="lazy" alt="Frame 12"></div></div>
+  <div class="p" data-index="13" data-num="13" data-label="Frame 13"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">13</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5722.webp" loading="lazy" alt="Frame 13"></div></div>
+  <div class="p" data-index="14" data-num="14" data-label="Frame 14"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">14</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5741-HDR-Edit.webp" loading="lazy" alt="Frame 14"></div></div>
+  <div class="p" data-index="15" data-num="15" data-label="Frame 15"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">15</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5775-HDR-Edit.webp" loading="lazy" alt="Frame 15"></div></div>
+  <div class="p" data-index="16" data-num="16" data-label="Frame 16"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">16</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5800-HDR-Edit.webp" loading="lazy" alt="Frame 16"></div></div>
+  <div class="p" data-index="17" data-num="17" data-label="Frame 17"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">17</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5820-HDR-Edit.webp" loading="lazy" alt="Frame 17"></div></div>
+  <div class="p" data-index="18" data-num="18" data-label="Frame 18"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">18</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5896-HDR-Edit.webp" loading="lazy" alt="Frame 18"></div></div>
+  <div class="p" data-index="19" data-num="19" data-label="Frame 19"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">19</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5924-HDR-Edit.webp" loading="lazy" alt="Frame 19"></div></div>
+  <div class="p" data-index="20" data-num="20" data-label="Frame 20"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">20</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5938-HDR-Edit.webp" loading="lazy" alt="Frame 20"></div></div>
+  <div class="p" data-index="21" data-num="21" data-label="Frame 21"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">21</span><div class="p-inner"><img src="Projects/Anokhi/_DSC5959-HDR-Edit.webp" loading="lazy" alt="Frame 21"></div></div>
+  <div class="p" data-index="22" data-num="22" data-label="Frame 22"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">22</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6059-HDR-Edit.webp" loading="lazy" alt="Frame 22"></div></div>
+  <div class="p" data-index="23" data-num="23" data-label="Frame 23"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">23</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6094-HDR-Edit.webp" loading="lazy" alt="Frame 23"></div></div>
+  <div class="p" data-index="24" data-num="24" data-label="Frame 24"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">24</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6114-HDR-Edit.webp" loading="lazy" alt="Frame 24"></div></div>
+  <div class="p" data-index="25" data-num="25" data-label="Frame 25"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">25</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6124-HDR-Edit.webp" loading="lazy" alt="Frame 25"></div></div>
+  <div class="p" data-index="26" data-num="26" data-label="Frame 26"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">26</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6139-HDR-Edit.webp" loading="lazy" alt="Frame 26"></div></div>
+  <div class="p" data-index="27" data-num="27" data-label="Frame 27"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">27</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6149-HDR-Edit.webp" loading="lazy" alt="Frame 27"></div></div>
+  <div class="p" data-index="28" data-num="28" data-label="Frame 28"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">28</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6199-HDR-Edit.webp" loading="lazy" alt="Frame 28"></div></div>
+  <div class="p" data-index="29" data-num="29" data-label="Frame 29"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">29</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6209-HDR-Edit.webp" loading="lazy" alt="Frame 29"></div></div>
+  <div class="p" data-index="30" data-num="30" data-label="Frame 30"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">30</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6256-HDR-Edit.webp" loading="lazy" alt="Frame 30"></div></div>
+  <div class="p" data-index="31" data-num="31" data-label="Frame 31"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">31</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6317-HDR-Edit.webp" loading="lazy" alt="Frame 31"></div></div>
+  <div class="p" data-index="32" data-num="32" data-label="Frame 32"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">32</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6341-HDR-Edit.webp" loading="lazy" alt="Frame 32"></div></div>
+  <div class="p" data-index="33" data-num="33" data-label="Frame 33"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">33</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6356-HDR-Edit.webp" loading="lazy" alt="Frame 33"></div></div>
+  <div class="p" data-index="34" data-num="34" data-label="Frame 34"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">34</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6361-HDR-Edit.webp" loading="lazy" alt="Frame 34"></div></div>
+  <div class="p" data-index="35" data-num="35" data-label="Frame 35"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">35</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6396-HDR-Edit.webp" loading="lazy" alt="Frame 35"></div></div>
+  <div class="p" data-index="36" data-num="36" data-label="Frame 36"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">36</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6410-HDR-Edit.webp" loading="lazy" alt="Frame 36"></div></div>
+  <div class="p" data-index="37" data-num="37" data-label="Frame 37"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">37</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6476-HDR-Edit.webp" loading="lazy" alt="Frame 37"></div></div>
+  <div class="p" data-index="38" data-num="38" data-label="Frame 38"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">38</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6501-HDR-Edit.webp" loading="lazy" alt="Frame 38"></div></div>
+  <div class="p" data-index="39" data-num="39" data-label="Frame 39"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">39</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6511-HDR-Edit.webp" loading="lazy" alt="Frame 39"></div></div>
+  <div class="p" data-index="40" data-num="40" data-label="Frame 40"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">40</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6521-HDR-Edit.webp" loading="lazy" alt="Frame 40"></div></div>
+  <div class="p" data-index="41" data-num="41" data-label="Frame 41"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">41</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6555-HDR-Edit.webp" loading="lazy" alt="Frame 41"></div></div>
+  <div class="p" data-index="42" data-num="42" data-label="Frame 42"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="p-expand"></span><span class="p-index-label">42</span><div class="p-inner"><img src="Projects/Anokhi/_DSC6581-HDR-Edit.webp" loading="lazy" alt="Frame 42"></div></div>
+</main>
+<section class="next-project">
+  <span class="next-label" id="nLabel">Next Project</span>
+  <a href="baithak.html" class="next-link">
+    <div class="next-thumb">
+      <img src="Projects/Baithak/_DSC8534-HDR-Pano-Edit.webp" alt="Baithak preview" loading="lazy">
+      <div class="next-thumb-overlay"></div>
+    </div>
+    <div class="next-text">
+      <div class="next-text-left">
+        <div class="next-title-clip"><span class="next-title" id="nTitle">Baithak</span></div>
+        <span class="next-sub" id="nSub">Restoration &middot; Goa &middot; 2024</span>
+      </div>
+      <span class="next-cta" id="nCta">View Project &nbsp;&rarr;</span>
+    </div>
+  </a>
+</section>
+<footer class="site-footer">
+  <div class="sf-cta"><span class="sf-cta-label">Open for Commissions: 2026</span><h2 class="sf-heading">Let's Work<br>Together.</h2><a href="../contact.html" class="sf-contact-btn">Start a Project &nbsp;&rarr;</a></div>
+  <div class="sf-body">
+    <div class="sf-brand"><a href="../index.html" class="sf-logo-link"><img src="../images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo"></a><p class="sf-tagline">Architectural Photographer Â· Filmmaker Â· Educator<br>Goa, India &middot; Global Commissions</p></div>
+    <nav class="sf-nav"><span class="sf-nav-label">Pages</span><a href="../about.html">About</a><a href="../work.html">Work</a><a href="../film.html">Films</a><a href="../journal.html" style="display:none">Journal</a><a href="../workshops.html">Workshops</a><a href="../shop.html">Shop</a><a href="../contact.html">Contact</a></nav>
+    <nav class="sf-legal">
+      <span class="sf-nav-label">Legal Print</span>
+      <a href="../shipping.html">Shipping Policy</a>
+      <a href="../returns.html">Returns Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../support.html">Support</a>
+    </nav>
+    <div class="sf-newsletter-col"><span class="sf-nav-label">Field Notes</span><p>New work and workshop openings &mdash; sent rarely.</p><form class="sf-form" id="sfForm"><label for="sfEmailInput" class="sr-only">Email address</label><input type="email" id="sfEmailInput" placeholder="your@email.com" required><button type="submit" aria-label="Subscribe">&#8594;</button></form><span class="sf-form-ok" id="sfFormOk">Received.</span></div>
+  </div>
+  <div class="sf-base">
+    <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+    <div class="sf-social"><a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a><a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a><a href="mailto:info@mohithraisrivastav.com">Email</a></div>
+  </div>
+</footer>
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lbClose">&#10005;&nbsp;&nbsp;Close</button>
+  <button class="lb-nav lb-prev" id="lbPrev">&#8592;</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext">&#8594;</button>
+  <span class="lb-counter" id="lbCounter"></span>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+'use strict';
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const cur = document.getElementById('cursor');
+if (finePointer) { document.body.classList.add('js-cursor'); } else { cur.style.display = 'none'; }
+function toggleMenu() { const menu = document.getElementById('mobileMenu'); const btn = document.getElementById('hamburgerBtn'); menu.classList.toggle('active'); btn.classList.toggle('active'); btn.setAttribute('aria-expanded', menu.classList.contains('active').toString()); document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : ''; }
+function toggleMobileDropdown(btn) { btn.classList.toggle('open'); const children = btn.nextElementSibling; if (children) children.classList.toggle('open'); }
+gsap.registerPlugin(ScrollTrigger);
+const BASE_SCALE = 1.06, LIVE_SCALE = 1.00, HOVER_SCALE = 1.028;
+const LARGE_FRAMES = ['01'], MEDIUM_FRAMES = ['05','06','08','09','10'];
+gsap.set('#curtain', { transformOrigin: 'top', scaleY: 1, immediateRender: true });
+gsap.set('#tl1', { y: '110%' });
+gsap.set('#frame-counter', { autoAlpha: 0 });
+gsap.set('#metaRow', { autoAlpha: 0, y: 12 });
+gsap.utils.toArray('.p-inner img').forEach(img => gsap.set(img, { scale: BASE_SCALE }));
+const firstImg = document.querySelector('.gallery .p:first-child .p-inner img');
+const firstFrame = document.querySelector('.gallery .p:first-child');
+gsap.timeline({ delay: 0.1 })
+  .to('#curtain', { scaleY: 0, duration: 1.1, ease: 'power3.inOut' })
+  .to('#tl1', { y: '0%', duration: 1, ease: 'power4.out' }, '-=0.3')
+  .to('#metaRow', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.5')
+  .to('#frame-counter', { autoAlpha: 1, duration: 0.5 }, '<')
+  .to(firstImg, { scale: LIVE_SCALE, duration: 1.6, ease: 'power2.out', onStart: () => firstFrame.classList.add('developed') }, '-=0.3');
+gsap.to('#tl1', { yPercent: -18, ease: 'none', scrollTrigger: { trigger: '#header', start: 'top top', end: 'bottom top', scrub: 1 } });
+const fcNum = document.getElementById('fcNum');
+function updateCounter(n) { gsap.to(fcNum, { autoAlpha: 0, duration: 0.12, onComplete() { fcNum.textContent = String(n).padStart(2,'0'); gsap.to(fcNum, { autoAlpha: 1, duration: 0.12 }); } }); }
+ScrollTrigger.create({ trigger: firstFrame, start: 'top 60%', once: false, onEnterBack: () => updateCounter(1) });
+document.querySelectorAll('.gallery .p:not(:first-child)').forEach(frame => { const img = frame.querySelector('img'); if (!img) return; gsap.set(frame, { clipPath: 'inset(100% 0 0 0)' }); ScrollTrigger.create({ trigger: frame, start: 'top 88%', once: true, onEnter() { gsap.to(frame, { clipPath: 'inset(0% 0 0 0)', duration: 1.0, ease: 'power4.out' }); frame.classList.add('developed'); gsap.to(img, { scale: LIVE_SCALE, duration: 1.5, ease: 'power2.out', delay: 0.15, overwrite: 'auto' }); const n = frame.getAttribute('data-num'); if (n) updateCounter(Number(n)); } }); });
+document.querySelectorAll('.p-inner').forEach(inner => { const idx = inner.closest('.p').dataset.index; const amt = LARGE_FRAMES.includes(idx) ? 5 : MEDIUM_FRAMES.includes(idx) ? 3 : 2; gsap.fromTo(inner, { yPercent: amt }, { yPercent: -amt, ease: 'none', scrollTrigger: { trigger: inner, start: 'top bottom', end: 'bottom top', scrub: 1 } }); });
+document.querySelectorAll('.gallery .p').forEach(frame => { const img = frame.querySelector('img'); if (!img) return; frame.addEventListener('mouseenter', () => { if (!frame.classList.contains('developed')) return; gsap.to(img, { scale: HOVER_SCALE, duration: 0.7, ease: 'power2.out', overwrite: 'auto' }); }); frame.addEventListener('mouseleave', () => { if (!frame.classList.contains('developed')) return; gsap.to(img, { scale: LIVE_SCALE, duration: 1.1, ease: 'power2.inOut', overwrite: 'auto' }); }); });
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCtr = document.getElementById('lbCounter');
+const lbFrames = Array.from(document.querySelectorAll('.gallery .p'));
+let lbIdx = 0;
+function lbOpen(idx) { const img = lbFrames[idx] && lbFrames[idx].querySelector('img'); if (!img) return; lbIdx = idx; lbImg.src = img.src; lbCtr.textContent = String(idx+1).padStart(2,'0') + '  /  ' + String(lbFrames.length).padStart(2,'0'); lb.classList.add('active'); document.body.style.overflow = 'hidden'; if (cur) cur.style.opacity = '0'; }
+function lbClose2() { lb.classList.remove('active'); document.body.style.overflow = ''; if (cur) cur.style.opacity = '1'; }
+function lbShift(dir) { const next = (lbIdx + dir + lbFrames.length) % lbFrames.length; const img = lbFrames[next].querySelector('img'); gsap.to(lbImg, { opacity: 0, x: dir * -40, duration: 0.16, onComplete() { lbIdx = next; lbImg.src = img.src; lbCtr.textContent = String(next+1).padStart(2,'0') + '  /  ' + String(lbFrames.length).padStart(2,'0'); gsap.fromTo(lbImg, { opacity: 0, x: dir * 40 }, { opacity: 1, x: 0, duration: 0.2 }); } }); }
+lbFrames.forEach((frame, i) => frame.addEventListener('click', () => lbOpen(i)));
+document.getElementById('lbClose').addEventListener('click', lbClose2);
+document.getElementById('lbPrev').addEventListener('click', () => lbShift(-1));
+document.getElementById('lbNext').addEventListener('click', () => lbShift(1));
+lb.addEventListener('click', e => { if (e.target === lb) lbClose2(); });
+if (finePointer) { [document.getElementById('lbPrev'), document.getElementById('lbNext'), document.getElementById('lbClose')].forEach(btn => { if (!btn) return; btn.addEventListener('mouseenter', () => cur.classList.add('on')); btn.addEventListener('mouseleave', () => cur.classList.remove('on')); }); }
+document.addEventListener('keydown', e => { if (!lb.classList.contains('active')) return; if (e.key === 'Escape') lbClose2(); if (e.key === 'ArrowLeft') lbShift(-1); if (e.key === 'ArrowRight') lbShift(1); });
+let lbTouchX = 0;
+lb.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - lbTouchX; if (Math.abs(dx) > 50) lbShift(dx < 0 ? 1 : -1); });
+
+
+// -- Project context reveal
+gsap.set('#projectContext', { autoAlpha: 0, y: 16 });
+ScrollTrigger.create({
+  trigger: '#projectContext', start: 'top 88%', once: true,
+  onEnter() { gsap.to('#projectContext', { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out' }); }
+});
+gsap.set(['#nTitle','#nSub','#nCta','#nLabel'], { autoAlpha: 0 }); gsap.set('#nTitle', { y: '110%' });
+ScrollTrigger.create({ trigger: '.next-project', start: 'top 88%', once: true, onEnter() { gsap.to('#nLabel', { autoAlpha: 1, duration: 0.5 }); gsap.to('#nTitle', { y: '0%', autoAlpha: 1, duration: 1.1, ease: 'power4.out', delay: 0.15 }); gsap.to('#nSub', { autoAlpha: 1, duration: 0.6, delay: 0.5 }); gsap.to('#nCta', { autoAlpha: 1, duration: 0.6, delay: 0.7 }); } });
+window.addEventListener('scroll', () => { const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100; document.getElementById('progress').style.width = pct + '%'; }, { passive: true });
+document.querySelectorAll('a[href]').forEach(a => { a.addEventListener('click', e => { const h = a.getAttribute('href'); if (!h || h.startsWith('#') || h.startsWith('mailto') || h.startsWith('tel') || h.startsWith('https') || h.startsWith('http') || a.target === '_blank' || a.hasAttribute('download') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); gsap.set('#curtain', { transformOrigin: 'bottom', scaleY: 0 }); gsap.to('#curtain', { scaleY: 1, duration: 0.65, ease: 'power3.inOut', onComplete: () => window.location.href = h }); }); });
+if (finePointer) { let mx = 0, my = 0, cx = 0, cy = 0; document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true }); (function loop() { cx += (mx-cx)*0.28; cy += (my-cy)*0.28; cur.style.left = cx+'px'; cur.style.top = cy+'px'; requestAnimationFrame(loop); })(); document.querySelectorAll('.gallery .p').forEach(f => { f.addEventListener('mouseenter', () => cur.classList.add('on')); f.addEventListener('mouseleave', () => cur.classList.remove('on')); }); }
+const sfForm = document.getElementById('sfForm'); if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const ok = document.getElementById('sfFormOk'); if (ok) ok.style.display = 'block'; e.target.reset(); }); }
+</script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/preloader.js"></script>
+<script src="../assets/js/cursor.js"></script>
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+    <div class="cart-header"><h2>Your Selection</h2><button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button></div>
+    <div id="cartItemsList"></div>
+    <div class="cart-footer"><div class="cart-total"><span>Total</span><span id="cartTotalDisplay">&#8377;0</span></div><a href="../checkout.html" class="checkout-btn">Proceed to Checkout</a></div>
+</div>
+<script src="../assets/js/transitions.js"></script>
+<script src="../assets/js/cart.js"></script>
+<script>
+/* â”€â”€ Smart focal-point framing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Pass 1: apply cached / manual positions instantly (no flicker).
+   Pass 2: run smartcrop.js on uncached images, store in localStorage.
+   Manual override: add data-position="X% Y%" to any .p div.
+   Cache key: fp_ + image src. Clear with localStorage.clear().
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+(function () {
+  var PREFIX = 'fp_';
+
+  function getCached(src) {
+    try { return localStorage.getItem(PREFIX + src); } catch (e) { return null; }
+  }
+  function setCached(src, val) {
+    try { localStorage.setItem(PREFIX + src, val); } catch (e) {}
+  }
+
+  var imgs = document.querySelectorAll('.p-inner img');
+
+  /* Pass 1 â€” instant: manual overrides + cached positions */
+  imgs.forEach(function (img) {
+    var p = img.closest('.p');
+    if (p && p.dataset.position) {
+      img.style.objectPosition = p.dataset.position;
+      return;
+    }
+    var cached = getCached(img.getAttribute('src'));
+    if (cached) img.style.objectPosition = cached;
+  });
+
+  /* Pass 2 â€” async: compute uncached images via smartcrop */
+  var sc = document.createElement('script');
+  sc.src = 'https://cdn.jsdelivr.net/npm/smartcrop@2.0.5/smartcrop.js';
+  sc.onload = function () {
+    imgs.forEach(function (img) {
+      var p = img.closest('.p');
+      if (p && p.dataset.position) return;           // manual wins
+      if (getCached(img.getAttribute('src'))) return; // already done
+
+      function run() {
+        var inner = img.closest('.p-inner');
+        var w = inner ? inner.offsetWidth  : 400;
+        var h = inner ? inner.offsetHeight : 300;
+        if (!w || !h || !img.naturalWidth) return;
+        smartcrop.crop(img, { width: w, height: h }).then(function (r) {
+          var c = r.topCrop;
+          if (!c) return;
+          var val = Math.round(c.x / img.naturalWidth  * 100) + '% ' +
+                    Math.round(c.y / img.naturalHeight * 100) + '%';
+          img.style.objectPosition = val;
+          setCached(img.getAttribute('src'), val);
+        }).catch(function () {});
+      }
+
+      if (img.complete && img.naturalWidth > 0) run();
+      else img.addEventListener('load', run, { once: true });
+    });
+  };
+  document.head.appendChild(sc);
+}());
+</script>
+</body>
+</html>

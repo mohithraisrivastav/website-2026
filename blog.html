@@ -1,0 +1,449 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Journal | Mohith Rai Srivastav</title>
+    <meta name="description" content="The Studio Journal &mdash; essays, field notes, and working thoughts from Mohith Rai Srivastav's practice as an architectural photographer.">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <link rel="stylesheet" href="assets/css/pages/blog.css">
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+        <div class="nav-brand"><span class="name">Mohith Rai Srivastav</span><span class="sub">Architectural Photographer · Filmmaker · Educator</span></div>
+        <div class="nav-links-container">
+            <ul class="nav-links">
+                <li class="nav-has-dropdown"><a href="work.html">Work</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="photography.html">Photography</a></li>
+                        <li><a href="film.html">Films</a></li>
+                    </ul>
+                </li>
+                <li class="nav-has-dropdown"><a href="about.html">Practice</a>
+                    <ul class="nav-dropdown">
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="blog.html">Journal</a></li>
+                        <li><a href="resurface.html">Resurface</a></li>
+                    </ul>
+                </li>
+                <li><a href="workshops.html">Workshops</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+            <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="toggleMenu()" aria-label="Close menu">&times;</button>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Work <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="photography.html" onclick="toggleMenu()">Photography</a>
+                <a href="film.html" onclick="toggleMenu()">Films</a>
+            </div>
+        </div>
+        <div class="mobile-nav-group">
+            <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
+            <div class="mobile-nav-children">
+                <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="blog.html" onclick="toggleMenu()">Journal</a>
+                <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+            </div>
+        </div>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <!-- Studio Header -->
+    <header class="studio-header" id="main-content">
+
+        <div class="sh-left">
+            <div class="sh-tag">The Journal</div>
+            <h1>On<br><span>Seeing</span><span>.</span></h1>
+        </div>
+        <div class="sh-right">
+            Critical essays on architecture, light, and the discipline of careful observation &mdash; written from the field.
+        </div>
+    </header>
+
+    <div class="journal-columns">
+        <!-- Left: Discussion Wall -->
+        <div class="journal-left" data-lenis-prevent>
+            <div class="zone fade-up">
+                <div class="zone-label">Discussion Wall</div>
+                <div class="zone-line"></div>
+                <div class="zone-count">06</div>
+            </div>
+            <section class="discussion-wall" id="discussionWall" role="list">
+                <noscript><div class="note-card" style="margin:0;">Please enable JavaScript to view the discussion wall.</div></noscript>
+            </section>
+        </div>
+
+        <!-- Right: Concepts & Essays -->
+        <div class="journal-right">
+            <div class="zone fade-up">
+                <div class="zone-label">Concepts & Essays</div>
+                <div class="zone-line"></div>
+                <div class="zone-count">04</div>
+            </div>
+            <section class="concept-board" id="conceptBoard"></section>
+        </div>
+    </div>
+
+    <!-- Collab Strip -->
+    <section class="collab-strip fade-up">
+        <div class="cs-tag">Correspondence</div>
+        <h3>A response, a commission, a question.</h3>
+        <p>If something here changed how you looked at a building or a wall, the studio door is open.</p>
+        <a href="contact.html" class="collab-cta">Write to the Studio →</a>
+    </section>
+
+    <footer class="site-footer">
+        <div class="sf-body">
+            <div class="sf-brand">
+                <a href="index.html" class="sf-logo-link">
+                    <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+                </a>
+                <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+            </div>
+            <nav class="sf-nav">
+                <span class="sf-nav-label">Pages</span>
+                <a href="about.html">About</a>
+                <a href="work.html">Work</a>
+                <a href="film.html">Films</a>
+                <a href="blog.html">Journal</a>
+                <a href="workshops.html">Workshops</a>
+                <a href="shop.html">Shop</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <nav class="sf-legal">
+                <span class="sf-nav-label">Legal Print</span>
+                <a href="shipping.html">Shipping Policy</a>
+                <a href="returns.html">Returns Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="support.html">Support</a>
+            </nav>
+            <div class="sf-newsletter-col">
+                <span class="sf-nav-label">Field Notes</span>
+                <p>New work and workshop openings &mdash; sent rarely.</p>
+                <form class="sf-form" id="sfForm">
+                    <label for="sfEmailInput" class="sr-only">Email address</label>
+                    <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                    <button type="submit" aria-label="Subscribe">&rarr;</button>
+                </form>
+                <span class="sf-form-ok" id="sfFormOk">Received.</span>
+            </div>
+        </div>
+        <div class="sf-base">
+            <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+            <div class="sf-social">
+                <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+                <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <a href="mailto:info@mohithraisrivastav.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Reader Overlay -->
+    <div class="reader" id="reader">
+        <div class="reader-progress" id="rProgress"></div>
+        <div class="reader-top">
+            <div class="crumbs"><span>Studio Journal</span><span class="sep">/</span><span id="rCrumb">&mdash;</span></div>
+            <button class="reader-close" onclick="closeReader()">&times;</button>
+        </div>
+        <div class="reader-hint">&larr; &rarr; navigate &nbsp;&middot;&nbsp; Esc close</div>
+        <div id="readerContent"></div>
+    </div>
+
+    <script>
+        /* ======= CONTENT ======= */
+        const essays = [
+            { id:1, date:'15 OCT 2024', dateLong:'October 15, 2024', title:'On the Patience <em>of Walls</em>', subtitle:'What eighteen months inside a single laterite residence taught me about accumulation, surface, and the long, unhurried authorship of weather.', tags:['Architecture','Material','Time'], readTime:'12 min read', cover:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85', teaser:'Walls do not pose &mdash; they accumulate. Rain, dust, shadow, smoke, and the occasional lizard all take their turn authoring the surface.', annotation:'? this changed everything', body:`<p class="drop">The first time I photographed the house in Assagao, I got everything wrong. I arrived at the hour I thought was correct &mdash; mid-morning, when the light was neither rising nor tired &mdash; and I framed the laterite elevation as if it were a subject. I composed. I stepped back. I chose my focal length. I did all the things I had been trained to do. The photographs were competent, and I hated them.</p><p>The architect who had commissioned the work was polite. He said what clients say when they do not want to hurt you: <em> Interesting</em>. I booked a return visit three weeks later. Then another. Then another after that, until the return visits had become a practice, and the practice had become the project.</p><blockquote>A wall does not pose. It accumulates. Your job is to stand there long enough to be noticed by what it has been accumulating.<cite>&mdash; Field Note, June 2023</cite></blockquote><p>What I eventually understood &mdash; and it took the full eighteen months to understand it &mdash; is that a laterite wall is not a surface so much as a timeline. Each rain leaves a residue. Each dry season subtracts it. Smoke from the kitchen on the west face. A child's chalk marks near the door. A lizard's thousand minute traversals. The architect drew the wall once; the weather redraws it continuously.</p><h2>The wrong question</h2><p>I had been asking the wrong question. I had been asking: <em>how do I photograph this wall well?</em> The better question turned out to be: <em>when does the wall want to be photographed?</em> And that question cannot be answered in advance. It can only be answered by returning.</p><h2>Slowness as method</h2><p>But slowness is not only a poetic position. It is also a <strong>methodological</strong> one. When you return to a wall ninety times, you do not simply see more frames. You see the wall <em>differently</em>. The wall acquires a temperament. It becomes, in an almost uncomfortable sense, a collaborator.</p><figure><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85" alt=" Interior detail"><figcaption>Detail, west face &mdash; the chalk mark had been there three weeks before I noticed it.</figcaption></figure><h2>What the wall taught me</h2><p>First: the wall is not the subject. The weather is the subject, and the wall is the instrument through which the weather records itself.</p><p>Second: duration is a kind of access. A wall photographed once shows you what it looks like. A wall photographed ninety times shows you what it <em>is</em>.</p><p>Third: patience is not an aesthetic. It is a debt you pay to the subject.</p><hr><p>The final sequence of the Assagao project is thirty-two frames. Ninety-seven visits produced those thirty-two. The ratio is, in commercial terms, grotesque. In photographic terms, it is approximately correct.</p>` },
+            { id:2, date:'22 SEP 2024', dateLong:'September 22, 2024', title:'Why I Stopped <em>Photographing</em> Buildings', subtitle:'A quiet confession about the moment I realized the building was never the point.', tags:['Process','Architecture'], readTime:'8 min read', cover:'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85', teaser:"At some point the buildings stopped being the thing I was photographing. I noticed this slowly, and then all at once.", annotation:'the confession', body:`<p class="drop">There is a moment in every long-term project when the stated subject quietly stops being the actual subject. For me, with architectural photography, that moment arrived in late 2022.</p><p>I had been photographing <em>weather</em>. I had been photographing <em>light</em>. The building was simply the excuse.</p><blockquote>The architect draws the building. The weather finishes it. The photographer, at best, catches the sentence mid-clause.<cite>&mdash; Notebook, Kochi, 2022</cite></blockquote><h2>The reframing</h2><p>Once I said this aloud &mdash; first to myself, then to a few trusted clients &mdash; everything changed. My commissions got slower. My deliverable counts went down. My reading of a site got longer.</p><p>I still photograph buildings. But I am no longer pretending that the building is the whole sentence. It is one noun in a longer grammar of weather, time, material, and attention.</p>` },
+            { id:3, date:'08 AUG 2024', dateLong:'August 8, 2024', title:"The Monsoon's <em>Instruction</em>", subtitle:'Forty days of Goan rain and the small curriculum it delivered, one storm at a time.', tags:['Goa','Weather','Personal'], readTime:'10 min read', cover:'https://images.unsplash.com/photo-1520637836862-4d197d17c55a?auto=format&fit=crop&w=1800&q=85', teaser:'The monsoon does not negotiate. You either learn its curriculum or you do not photograph in Goa between June and September.', annotation:'40 days of rain', body:`<p class="drop">The monsoon is not a season. It is a pedagogy. In Goa, between the first week of June and the middle of September, the weather takes over the classroom.</p><h2>One: you cannot wait it out.</h2><p>The second year I gave up on waiting. I started working <em>during</em> the rain. The photographs immediately became calmer.</p><h2>Two: wet surfaces are different surfaces.</h2><p>A laterite wall is a different photographic subject when wet. The colour shifts. The porosity becomes visible.</p><figure><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=85" alt="Wet courtyard"><figcaption>Courtyard, Saligao, during a July squall.</figcaption></figure><h2>Three: silence is louder.</h2><p>The constant percussion of the rain creates, paradoxically, a kind of silence.</p><h2>Four: patience is not a virtue. It is a prerequisite.</h2><p>The monsoon will not adjust to your schedule.</p>` },
+            { id:4, date:'30 JUN 2024', dateLong:'June 30, 2024', title:'What Corbusier <em>Got Wrong</em>', subtitle:'A respectful disagreement with the master, delivered from the steps of the Capitol Complex at six in the morning.', tags:['Modernism','Architecture','History'], readTime:'15 min read', cover:'https://images.unsplash.com/photo-1604537529428-15bcbeecfe4d?auto=format&fit=crop&w=1800&q=85', teaser:'Chandigarh at dawn is a different argument than Chandigarh at noon. The noon version is the one we teach. The dawn version is the one we should.', annotation:'dawn ? noon', body:`<p class="drop">To say that Corbusier got something wrong is to risk sounding impertinent. I am a photographer who has spent twelve consecutive winters visiting the Capitol Complex, and what I want to say is small: he got the weather wrong.</p><blockquote>A building has to survive its photographer. Chandigarh barely survives midday.<cite>&mdash; Field Note, December 2021</cite></blockquote><h2>The argument</h2><p>He designed for a climate of pure sunlight. But the buildings receive fog, winter haze, the long humid afternoons of the monsoon. And in those conditions, the buildings become more  Interesting than the drawings ever imagined.</p><p>This is not a failure. This is the thing architecture always does: it exceeds its author.</p>` }
+        ];
+
+        const notes = [
+            { id:'n1', date:'12 DEC 2024', dateLong:'December 12, 2024', text:'A cow walked through the frame at Chapora this morning. Ninety-seven visits and she had never appeared before. I did not lift the camera.', scribble:'sometimes watching > shooting', accent:'#8a6b42', type:'Observation', body:`<p class="drop">A cow walked through the frame at Chapora this morning. Ninety-seven visits and she had never appeared before. I did not lift the camera. I watched her. This was, I think, the correct choice.</p><p>There are moments when the photograph is not the thing that should happen.</p>` },
+            { id:'n2', date:'28 NOV 2024', dateLong:'November 28, 2024', text:'Rereading Berger on the train to the Rann. The sentence I keep underlining: <em>the camera records in order to remind.</em>', scribble:'records vs reminders &mdash; which are mine?', accent:'#5a7a6b', type:'Reading Note', body:`<p class="drop">Rereading Berger on the train to the Rann. The sentence I keep underlining: <em>the camera records in order to remind.</em></p><p>A record answers: what was there. A reminder answers: what did it feel like to have been there. The second is harder.</p>` },
+            { id:'n3', date:'14 NOV 2024', dateLong:'November 14, 2024', text:"The mason's hands knew the stone before his eyes did. I watched him for an hour before I understood.", scribble:'the camera cannot photograph knowledge', accent:'#7a5a5a', type:'Field Note', body:`<p class="drop">The mason's hands knew the stone before his eyes did.</p><p>The photographs are failures, but they are the right kind of failures &mdash; the kind that tell you what the camera cannot do.</p>` },
+            { id:'n4', date:'30 OCT 2024', dateLong:'October 30, 2024', text:'Developed the first film in six months. Two frames survived the edit. This is a good ratio.', scribble:'12 ? 2. film is kinder.', accent:'#6b6a5a', type:'Process', body:`<p class="drop">Developed the first film in six months. Two frames survived the edit. This is a good ratio.</p><p>Digital says: shoot a hundred and keep ten. Film says: shoot twelve and keep two. The second ratio is kinder.</p>` },
+            { id:'n5', date:'05 OCT 2024', dateLong:'October 5, 2024', text:'Light at 5:47am &mdash; the only honest hour. Everything after that is negotiation.', scribble:'5:47. every time.', accent:'#8a7a42', type:'Light Note', body:`<p class="drop">Light at 5:47am &mdash; the only honest hour.</p><p>Everything after that is negotiation. Everything before that is still yesterday.</p>` },
+            { id:'n6', date:'20 SEP 2024', dateLong:'September 20, 2024', text:'Returned to the house after the monsoon. The walls have new handwriting. I did not expect to be moved.', scribble:'18 months buys you a relationship', accent:'#5a6a7a', type:'Return Visit', body:`<p class="drop">Returned to the house after the monsoon. The walls have new handwriting.</p><p>I did not expect to be moved, and I was moved. This is what eighteen months buys you.</p>` }
+        ];
+
+        /* ======= Build Concept Board ======= */
+        const board = document.getElementById('conceptBoard');
+        essays.forEach((e, i) => {
+            const el = document.createElement('article');
+            el.className = `concept fade-up${i === 0 ? ' featured' : ''}`;
+            const page = `essay-${String(e.id).padStart(2,'0')}.html`;
+            if (i === 0) {
+                el.innerHTML = 
+`
+                    <a href="${page}" class="concept-link">
+                        <div class="c-content">
+                            <div class="c-num">Concept ${String(i+1).padStart(2,'0')}</div>
+                            <div class="c-date">${e.date} &mdash; ${e.readTime}</div>
+                            <h2>${e.title}</h2>
+                            <p class="c-excerpt">${e.teaser}</p>
+                            <div class="c-tags">${e.tags.map(t => `<span>${t}</span>`).join('')}</div>
+                            <div class="c-read">Open Concept</div>
+                        </div>
+                        <div class="c-img">
+                            <img src="${e.cover}" alt="" loading="lazy">
+                            <div class="annotation">${e.annotation}</div>
+                        </div>
+                    </a>
+                `;
+            } else {
+                el.innerHTML = 
+`
+                    <a href="${page}" class="concept-link">
+                        <div class="c-num">Concept ${String(i+1).padStart(2,'0')}</div>
+                        <div class="c-img">
+                            <img src="${e.cover}" alt="" loading="lazy">
+                            <div class="annotation">${e.annotation}</div>
+                        </div>
+                        <div class="c-date">${e.date} &mdash; ${e.readTime}</div>
+                        <h2>${e.title}</h2>
+                        <p class="c-excerpt">${e.teaser}</p>
+                        <div class="c-tags">${e.tags.map(t => `<span>${t}</span>`).join('')}</div>
+                        <div class="c-read">Open Concept</div>
+                    </a>
+                `;
+            }
+            board.appendChild(el);
+        });
+
+        /* ======= Build Discussion Wall ======= */
+        const wall = document.getElementById('discussionWall');
+        notes.forEach(n => {
+            const el = document.createElement('div');
+            el.className = 'note-card fade-up';
+            el.style.setProperty('--accent', n.accent);
+            el.setAttribute('role', 'listitem');
+            el.setAttribute('tabindex', '0');
+            el.innerHTML = 
+`
+                <div class="n-type">${n.type}</div>
+                <div class="n-date">${n.date}</div>
+                <div class="n-text">${n.text}</div>
+                <div class="n-scribble">${n.scribble}</div>
+            `;
+            el.addEventListener('click', function(e) {
+                if (typeof editMode !== 'undefined' && editMode) return;
+                if (e.target.closest('.n-del')) return;
+                const isExpanded = el.classList.contains('expanded');
+                if (isExpanded) {
+                    el.classList.remove('expanded');
+                    const body = el.querySelector('.n-body');
+                    if (body) {
+                        body.style.maxHeight = '0';
+                        setTimeout(function() { if (body.parentNode) body.parentNode.removeChild(body); }, 380);
+                    }
+                } else {
+                    el.classList.add('expanded');
+                    const body = document.createElement('div');
+                    body.className = 'n-body';
+                    body.style.cssText = 'overflow:hidden;max-height:0;transition:max-height 0.35s ease;font-family: var(--font-main) !important;font-size:0.88rem;color:#1A1612;line-height:1.7;padding-top:14px;margin-top:12px;border-top:1px solid #1e1e1e;';
+                    body.innerHTML = n.body || '';
+                    el.appendChild(body);
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            body.style.maxHeight = (body.scrollHeight || 200) + 'px';
+                        });
+                    });
+                }
+            });
+            el.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    el.click();
+                }
+            });
+            wall.appendChild(el);
+        });
+
+        /* ======= Reader ======= */
+        const reader = document.getElementById('reader');
+        const readerContent = document.getElementById('readerContent');
+        const rCrumb = document.getElementById('rCrumb');
+        const rProgress = document.getElementById('rProgress');
+        let currentType = null, currentId = null;
+        let lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) }); window.__lenis = lenis;
+        function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        /* &mdash; Stop Lenis hijacking scroll inside .journal-left &mdash; */
+        (function() {
+            const jl = document.querySelector('.journal-left');
+            if (!jl) return;
+            jl.addEventListener('mouseenter', function() {
+                if (window.__lenis) window.__lenis.stop();
+            });
+            jl.addEventListener('mouseleave', function() {
+                if (window.__lenis) window.__lenis.start();
+            });
+            /* Touch: pause on touchstart, resume on touchend */
+            jl.addEventListener('touchstart', function() {
+                if (window.__lenis) window.__lenis.stop();
+            }, { passive: true });
+            jl.addEventListener('touchend', function() {
+                setTimeout(function() { if (window.__lenis) window.__lenis.start(); }, 50);
+            }, { passive: true });
+        })();
+
+        function openNote(id) {
+            const n = notes.find(x => x.id == id); if (!n) return;
+            currentType = 'note'; currentId = n.id;
+            const idx = notes.findIndex(x => x.id == id);
+            const prev = notes[(idx - 1 + notes.length) % notes.length];
+            const next = notes[(idx + 1) % notes.length];
+            rCrumb.innerText = `${n.type} &mdash; ${n.dateLong}`;
+            readerContent.innerHTML = 
+`
+                <div class="reader-hero">
+                    <div class="date">${n.dateLong}</div>
+                    <h1><em>${n.type}</em></h1>
+                </div>
+                <div class="reader-body" style="max-width:620px;">${n.body}</div>
+                <div class="reader-foot"><div class="signoff">&mdash; M.R.S.</div></div>
+                <nav class="reader-nav">
+                    <a onclick="openNote('${prev.id}')"><div class="dir">? Previous</div><div class="ttl">${prev.date}</div></a>
+                    <a class="next" onclick="openNote('${next.id}')"><div class="dir">Next ?</div><div class="ttl">${next.date}</div></a>
+                </nav>`;
+            openReader();
+        }
+
+        function openReader() {
+            reader.classList.add('active');
+            reader.scrollTop = 0;
+            lenis.destroy();
+            document.body.style.overflow = 'hidden';
+            document.body.style.filter = 'brightness(0.2)';
+            updateProgress();
+        }
+        function closeReader() {
+            reader.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.filter = '';
+            lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+            function newRaf(t) { lenis.raf(t); requestAnimationFrame(newRaf); }
+            requestAnimationFrame(newRaf);
+            currentType = null; currentId = null;
+        }
+        function updateProgress() {
+            const s = reader.scrollTop, m = reader.scrollHeight - reader.clientHeight;
+            rProgress.style.width = (m > 0 ? (s/m)*100 : 0) + '%';
+        }
+        reader.addEventListener('scroll', updateProgress);
+
+        document.addEventListener('keydown', e => {
+            if (!reader.classList.contains('active')) return;
+            if (e.key === 'Escape') closeReader();
+            if (e.key === 'ArrowLeft') {
+                if (currentType === 'note') { const i = notes.findIndex(x=>x.id==currentId); openNote(notes[(i-1+notes.length)%notes.length].id); }
+            }
+            if (e.key === 'ArrowRight') {
+                if (currentType === 'note') { const i = notes.findIndex(x=>x.id==currentId); openNote(notes[(i+1)%notes.length].id); }
+            }
+        });
+
+        function toggleMenu() {
+            const m = document.getElementById('mobileMenu'), b = document.getElementById('hamburgerBtn');
+            m.classList.toggle('active'); b.classList.toggle('active');
+            b.setAttribute('aria-expanded', m.classList.contains('active').toString());
+            document.body.style.overflow = m.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.fade-up').forEach(el => {
+            gsap.to(el, { opacity:1, y:0, duration:0.8, ease:'power2.out', scrollTrigger:{ trigger:el, start:'top 92%' }});
+        });
+
+        // -- Studio header entrance ------------------------------------------
+        gsap.from('.studio-header .sh-tag',   { opacity:0, x:-24, duration:0.8, ease:'power2.out', delay:0.15 });
+        gsap.from('.studio-header h1',        { opacity:0, y:50,  duration:1.1, ease:'power3.out', delay:0.3  });
+        gsap.from('.studio-header .sh-right', { opacity:0, y:20,  duration:0.8, ease:'power2.out', delay:0.55 });
+
+        // -- Zone-line scaleX wipe -------------------------------------------
+        document.querySelectorAll('.zone-line').forEach(line => {
+            gsap.fromTo(line,
+                { scaleX: 0 },
+                { scaleX: 1, duration: 1.4, ease: 'power3.inOut',
+                  scrollTrigger: { trigger: line, start: 'top 92%' } }
+            );
+        });
+
+        // -- Note cards: staggered slide-in from right -----------------------
+        gsap.set('.note-card', { opacity: 0, x: 28 });
+        document.querySelectorAll('.note-card').forEach((card, i) => {
+            gsap.to(card, {
+                opacity: 1, x: 0, duration: 0.65, ease: 'power2.out',
+                scrollTrigger: { trigger: card, start: 'top 94%' },
+                delay: i * 0.06
+            });
+        });
+
+        // -- Concept card images: clip-path reveal ---------------------------
+        document.querySelectorAll('.c-img img').forEach(img => {
+            const wrapper = img.closest('.concept') || img.parentElement;
+            gsap.set(img, { clipPath: 'inset(100% 0 0 0)' });
+            gsap.to(img, {
+                clipPath: 'inset(0% 0 0 0)',
+                duration: 1.25, ease: 'power4.out',
+                scrollTrigger: { trigger: wrapper, start: 'top 88%', toggleActions: 'play none none none' }
+            });
+        });
+
+    </script>
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar" tabindex="-1">
+    <div class="cart-header">
+        <h2>Your Selection</h2>
+        <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+    </div>
+    <div id="cartItemsList"></div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total</span><span id="cartTotalDisplay">₹0</span></div>
+        <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/cart.js"></script>
+</body>
+</html>
+

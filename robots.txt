@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Transactional & utility pages — no indexing needed
+Disallow: /checkout.html
+Disallow: /order-success.html
+Disallow: /order-failed.html
+Disallow: /workshop-register.html
+Disallow: /shop1.html
+
+# Backend & assets
+Disallow: /api/
+Disallow: /js/
+Disallow: /.backup/
+
+Sitemap: https://mohithraisrivastav.com/sitemap.xml

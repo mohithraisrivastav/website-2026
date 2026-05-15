@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navigation Flowchart — Three Doors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/pages/nav-flowchart.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="eyebrow">Navigation Architecture</div>
+    <h1>Three Doors,<br>Not Seven.</h1>
+    <p>One practice. One coherent entry. Three distinct rooms — each complete, each connected.</p>
+  </div>
+
+  <!-- Entry point -->
+  <div class="entry-row">
+    <div class="entry-node">
+      <span class="sub">visitor lands on</span>
+      mohithrai.com
+    </div>
+  </div>
+
+  <!-- Main connector SVG -->
+  <div class="connector-main" style="height:70px; max-width:1100px; margin:0 auto;">
+    <svg viewBox="0 0 1100 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- vertical from entry -->
+      <line x1="550" y1="0" x2="550" y2="30" stroke="#CFA246" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+      <!-- horizontal bar -->
+      <line x1="183" y1="30" x2="917" y2="30" stroke="#CFA246" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+      <!-- drops to three doors -->
+      <line x1="183" y1="30" x2="183" y2="70" stroke="#CFA246" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+      <line x1="550" y1="30" x2="550" y2="70" stroke="#CFA246" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+      <line x1="917" y1="30" x2="917" y2="70" stroke="#CFA246" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Three Doors -->
+  <div class="doors-row">
+
+    <div class="door">
+      <div class="door-num">01</div>
+      <div class="door-label">The Practice</div>
+      <div class="door-title">See.</div>
+      <div class="door-desc">Visual work — the core of what Mohith makes. Photography and film as two modes of the same sustained attention.</div>
+    </div>
+
+    <div class="door">
+      <div class="door-num">02</div>
+      <div class="door-label">The Teaching</div>
+      <div class="door-title">Learn.</div>
+      <div class="door-desc">How the practice thinks aloud — workshops to experience it in person, essays to follow it on the page.</div>
+    </div>
+
+    <div class="door">
+      <div class="door-num">03</div>
+      <div class="door-label">The Shop</div>
+      <div class="door-title">Collect.</div>
+      <div class="door-desc">Tangible extensions of the work — prints, books, tools, guides, and digital resources to own and use.</div>
+    </div>
+
+  </div>
+
+  <!-- Connector lines door → pages -->
+  <div class="connector-doors">
+    <div class="connector-col"><div class="vline"></div></div>
+    <div class="connector-col"><div class="vline"></div></div>
+    <div class="connector-col"><div class="vline"></div></div>
+  </div>
+
+  <!-- Page nodes under each door -->
+  <div class="pages-row">
+
+    <!-- See -->
+    <div class="pages-col">
+      <div class="page-node">
+        <div class="page-dot"></div>
+        <div class="page-node-content">
+          <div class="page-node-name">Work</div>
+          <div class="page-node-desc">Photography portfolio — projects, series, commissions</div>
+        </div>
+      </div>
+      <div class="page-node">
+        <div class="page-dot"></div>
+        <div class="page-node-content">
+          <div class="page-node-name">Film</div>
+          <div class="page-node-desc">Architectural films, reels, commissioned documentary essays</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learn -->
+    <div class="pages-col">
+      <div class="page-node">
+        <div class="page-dot"></div>
+        <div class="page-node-content">
+          <div class="page-node-name">Workshops</div>
+          <div class="page-node-desc">Lived Space — formats, dates, registration</div>
+        </div>
+      </div>
+      <div class="page-node">
+        <div class="page-dot"></div>
+        <div class="page-node-content">
+          <div class="page-node-name">Journal</div>
+          <div class="page-node-desc">Essays, field notes, and working thoughts from the practice</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collect -->
+    <div class="pages-col">
+      <div class="page-node">
+        <div class="page-dot"></div>
+        <div class="page-node-content">
+          <div class="page-node-name">Shop</div>
+          <div class="page-node-desc">Top-level with tab navigation — five sub-categories below</div>
+        </div>
+      </div>
+      <div class="sub-pages">
+        <div class="sub-page"><strong>Prints</strong>Archival photographic prints</div>
+        <div class="sub-page"><strong>Books</strong>Monographs & publications</div>
+        <div class="sub-page"><strong>Tools</strong>Studio instruments</div>
+        <div class="sub-page"><strong>Digital</strong>Presets & downloadables</div>
+        <div class="sub-page"><strong>Guides</strong>Essays & card decks</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer / secondary nav -->
+  <div class="footer-band">
+    <div class="footer-label">Always visible — footer or secondary</div>
+    <div class="footer-nodes">
+      <div class="footer-node">About</div>
+      <div class="footer-node">Contact</div>
+    </div>
+  </div>
+
+  <!-- Before / After comparison -->
+  <div class="legend">
+
+    <div class="legend-box before">
+      <div class="legend-title">Current nav — 7 items</div>
+      <div class="nav-items">
+        <div class="nav-item">Work</div>
+        <div class="nav-item">Shop</div>
+        <div class="nav-item">Film</div>
+        <div class="nav-item">Journal</div>
+        <div class="nav-item">Workshops</div>
+        <div class="nav-item">About</div>
+        <div class="nav-item">Contact</div>
+      </div>
+      <div class="legend-note">All pages at the same visual weight. The visitor has no sense of hierarchy — what's the practice vs. what's peripheral.</div>
+    </div>
+
+    <div class="legend-box after">
+      <div class="legend-title">Proposed nav — 3 primary</div>
+      <div class="nav-items">
+        <div class="nav-item primary">See</div>
+        <div class="nav-item primary">Learn</div>
+        <div class="nav-item primary">Collect</div>
+        <div class="nav-item secondary">About</div>
+        <div class="nav-item secondary">Contact</div>
+      </div>
+      <div class="legend-note">Three primary entries — each a conceptual room. About and Contact become secondary (footer + hamburger menu). Dropdown or mega-menu reveals sub-pages on hover.</div>
+    </div>
+
+  </div>
+
+  <!-- Behaviour notes -->
+  <div class="behaviour">
+
+    <div class="b-card">
+      <h4>Hover / tap behaviour</h4>
+      <p>On desktop, hovering <em>See</em> opens a minimal dropdown: Work — Film. No mega-menu, just two lines.</p>
+    </div>
+
+    <div class="b-card">
+      <h4>Active state</h4>
+      <p>The active primary door stays highlighted in orange. Sub-page tabs (Prints / Books / Tools…) appear inside the page, not in the top nav.</p>
+    </div>
+
+    <div class="b-card">
+      <h4>Mobile</h4>
+      <p>Hamburger opens a full-screen overlay with the three rooms as large italic headings. Sub-pages nested under each, disclosed on tap.</p>
+    </div>
+
+    <div class="b-card">
+      <h4>Label alternatives</h4>
+      <p><em>See / Learn / Collect</em> is one option. Others: <strong>Work / Words / Shop</strong> — or keep literal: <strong>Work + Film / Workshops + Journal / Shop</strong>.</p>
+    </div>
+
+    <div class="b-card">
+      <h4>About + Contact</h4>
+      <p>Moved to footer (always reachable) and the hamburger overlay. Removing them from primary nav cuts the cognitive load without hiding them.</p>
+    </div>
+
+    <div class="b-card">
+      <h4>URL structure unchanged</h4>
+      <p>The grouping is purely navigational — no URL changes. work.html, film.html, shop.html all stay as-is. Zero redirect work.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

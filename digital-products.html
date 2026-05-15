@@ -1,0 +1,304 @@
+        .catalog-main { min-width: 0; }
+        .lut-lab {
+            margin-bottom: 34px;
+            padding-bottom: 34px;
+            border-bottom: 1px solid var(--line);
+        }
+        .lut-lab-head {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+            gap: 24px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+        .lut-lab h2 {
+            max-width: 760px;
+            margin-top: 8px;
+            font-size: 3.1rem;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+        .lut-lab-copy {
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+        .sample-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 18px 0 20px;
+        }
+        .sample-button,
+        .lut-pill {
+            min-height: 38px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            cursor: pointer;
+            transition: 0.22s ease;
+        }
+        .sample-button:hover,
+        .sample-button.active,
+        .lut-pill:hover {
+            border-color: var(--line-strong);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.07);
+        }
+        .lut-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .lut-preview-card {
+            position: relative;
+            min-height: 260px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+        }
+        .lut-preview-card img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.58) contrast(0.86) brightness(0.8);
+        }
+        .lut-preview-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            width: var(--preview-split, 58%);
+            background: inherit;
+            background-image: var(--lut-image);
+            background-size: cover;
+            background-position: center;
+            filter: saturate(1.12) contrast(1.16) brightness(1.02);
+            z-index: 1;
+        }
+        .lut-preview-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: var(--preview-split, 58%);
+            width: 2px;
+            background: var(--acid);
+            box-shadow: 0 0 16px rgba(215,255,67,0.4);
+            z-index: 2;
+        }
+        .lut-preview-content {
+            position: absolute;
+            inset: auto 16px 16px;
+            z-index: 3;
+        }
+        .lut-preview-content h3 {
+            margin: 8px 0 6px;
+            font-size: 1.08rem;
+            letter-spacing: 0;
+        }
+        .lut-preview-content p {
+            color: rgba(252,250,246,0.72);
+            font-size: 0.84rem;
+        }
+        .lut-preview-range {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            margin-top: 16px;
+            color: var(--soft);
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .lut-preview-range input {
+            width: 100%;
+            accent-color: var(--acid);
+        }
+        .lut-specs {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--line);
+        }
+        .lut-spec {
+            padding: 16px;
+            background: var(--surface);
+        }
+        .lut-spec strong {
+            display: block;
+            color: var(--text);
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+        .lut-spec span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+        .lut-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .catalog-toolbar {
+            
+                </div>
+
+                <div class="filter-group">
+                    <h3>LUT Look</h3>
+                    <button class="filter-chip" type="button" data-filter="modern"><span>Modern</span><span>1</span></button>
+                    <button class="filter-chip" type="button" data-filter="dramatic"><span>Dramatic</span><span>1</span></button>
+                    <button class="filter-chip" type="button" data-filter="soft"><span>Soft</span><span>1</span></button>
+                    <button class="filter-chip" type="button" data-filter="rec709"><span>Rec.709</span><span>3</span></button>
+                </div>
+            </aside>
+            <section class="catalog-main" aria-label="Digital product catalog">
+                <section class="lut-lab fade-up" aria-label="LUT preview lab">
+                    <div class="lut-lab-head">
+                        <div>
+                            <span class="section-kicker">Premium LUTs</span>
+                            <h2>Color grades custom-built for real footage</h2>
+                            <p class="lut-lab-copy">
+                                Choose a sample, preview the grade before download, then refine by style, tone, saturation, temperature, and contrast.
+                            </p>
+                        </div>
+                        <div class="lut-specs" aria-label="LUT specifications">
+                            <div class="lut-spec"><strong>Rec.709</strong><span>Color space</span></div>
+                            <div class="lut-spec"><strong>.cube</strong><span>Format</span></div>
+                            <div class="lut-spec"><strong>3</strong><span>Preview packs</span></div>
+                        </div>
+                    </div>
+
+                    <div class="sample-selector" aria-label="Sample footage">
+                        <button class="sample-button active" type="button" data-sample="architecture">Architecture</button>
+                        <button class="sample-button" type="button" data-sample=" Interiors"> Interiors</button>
+                        <button class="sample-button" type="button" data-sample="travel">Travel</button>
+                        <button class="sample-button" type="button" data-sample="documentary">Documentary</button>
+                    </div>
+
+                    <div class="lut-preview-grid" id="lutPreviewGrid" style="--preview-split: 58%;">
+                        <article class="lut-preview-card" style="--lut-image: url('images/Chromatic Rupture.jpg');">
+                            <img src="images/Chromatic Rupture.jpg" alt="Modern Rec.709 LUT preview">
+                            <div class="lut-preview-content">
+                                <span class="meta-label">Modern</span>
+                                <h3>Concrete Dawn</h3>
+                                <p>Neutral whites, crisp shadow separation, clean facade detail.</p>
+                            </div>
+                        </article>
+                        <article class="lut-preview-card" style="--lut-image: url('images/Burnt Earth.jpg');">
+                            <img src="images/Burnt Earth.jpg" alt="Dramatic warm LUT preview">
+                            <div class="lut-preview-content">
+                                <span class="meta-label">Dramatic</span>
+                                <h3>Burnt Earth</h3>
+                                <p>Warm midtones, strong blacks, and cinematic color density.</p>
+                            </div>
+                        </article>
+                        <article class="lut-preview-card" style="--lut-image: url('images/IMG_7720.jpg');">
+                            <img src="images/IMG_7720.jpg" alt="Soft minimal LUT preview">
+                            <div class="lut-preview-content">
+                                <span class="meta-label">Soft</span>
+                                <h3>Quiet Contrast</h3>
+                                <p>Low saturation, gentle rolloff, and quiet portfolio contrast.</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <label class="lut-preview-range">
+                        <span>Before</span>
+                        <input id="lutPreviewRange" type="range" min="28" max="78" value="58" aria-label="Adjust LUT preview split">
+                        <span>After</span>
+                    </label>
+
+                    <div class="lut-pills" aria-label="LUT quick filters">
+                        <button class="lut-pill" type="button" data-filter="modern">Modern</button>
+                        <button class="lut-pill" type="button" data-filter="dramatic">Dramatic</button>
+                        <button class="lut-pill" type="button" data-filter="soft">Soft</button>
+                        <button class="lut-pill" type="button" data-filter="rec709">Rec.709</button>
+                    </div>
+                </section>
+
+                <div class="catalog-toolbar fade-up">
+                    
+                <div class="asset-list" id="assetList">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube cinematic architecture minimal" data-title="Concrete Dawn LUT Pack" data-downloads="980" data-date="2026-04-08">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube cinematic architecture minimal modern neutral rec709" data-title="Concrete Dawn LUT Pack" data-downloads="980" data-date="2026-04-08">
+                        <button class="play-button" type="button" aria-label="Preview Concrete Dawn LUT Pack"></button>
+                    </article>
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube warm cinematic reels" data-title="Burnt Earth Film Tones" data-downloads="920" data-date="2026-03-03">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube warm cinematic reels dramatic highcontrast rec709" data-title="Burnt Earth Film Tones" data-downloads="920" data-date="2026-03-03">
+                        <button class="play-button" type="button" aria-label="Preview Burnt Earth Film Tones"></button>
+                    </article>
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube minimal reels social" data-title="Quiet Contrast LUTs" data-downloads="590" data-date="2026-01-10">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube minimal reels social soft lowcontrast rec709" data-title="Quiet Contrast LUTs" data-downloads="590" data-date="2026-01-10">
+                        <button class="play-button" type="button" aria-label="Preview Quiet Contrast LUTs"></button>
+                        
+                <div class="asset-list" id="assetList">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube cinematic architecture minimal" data-title="Concrete Dawn LUT Pack" data-downloads="980" data-date="2026-04-08">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube cinematic architecture minimal modern neutral rec709" data-title="Concrete Dawn LUT Pack" data-downloads="980" data-date="2026-04-08">
+                        <button class="play-button" type="button" aria-label="Preview Concrete Dawn LUT Pack"></button>
+                    </article>
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube warm cinematic reels" data-title="Burnt Earth Film Tones" data-downloads="920" data-date="2026-03-03">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube warm cinematic reels dramatic highcontrast rec709" data-title="Burnt Earth Film Tones" data-downloads="920" data-date="2026-03-03">
+                        <button class="play-button" type="button" aria-label="Preview Burnt Earth Film Tones"></button>
+                    </article>
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube minimal reels social" data-title="Quiet Contrast LUTs" data-downloads="590" data-date="2026-01-10">
+                    <article class="asset-row fade-up" data-category="luts" data-tags="cube minimal reels social soft lowcontrast rec709" data-title="Quiet Contrast LUTs" data-downloads="590" data-date="2026-01-10">
+                        <button class="play-button" type="button" aria-label="Preview Quiet Contrast LUTs"></button>
+                        
+        const emptyState = document.getElementById('emptyState');
+        const lutPreviewGrid = document.getElementById('lutPreviewGrid');
+        const lutPreviewRange = document.getElementById('lutPreviewRange');
+        const catalogTabs = Array.from(document.querySelectorAll('.catalog-tab'));
+        const filterChips = Array.from(document.querySelectorAll('.filter-chip'));
+        const lutPills = Array.from(document.querySelectorAll('.lut-pill'));
+        const sampleButtons = Array.from(document.querySelectorAll('.sample-button'));
+        let activeCategory = 'all';
+
+        lutPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                activeCategory = 'luts';
+                activeFilter = pill.dataset.filter || 'all';
+                catalogTabs.forEach(item => item.classList.toggle('active', item.dataset.tab === 'luts'));
+                filterChips.forEach(item => item.classList.toggle('active', item.dataset.filter === activeFilter));
+                updateCatalog();
+            });
+        });
+
+        sampleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                sampleButtons.forEach(item => item.classList.toggle('active', item === button));
+                assetSearch.value = button.dataset.sample || '';
+                activeCategory = 'luts';
+                activeFilter = 'all';
+                catalogTabs.forEach(item => item.classList.toggle('active', item.dataset.tab === 'luts'));
+                filterChips.forEach(item => item.classList.toggle('active', item.dataset.filter === 'all'));
+                updateCatalog();
+            });
+        });
+
+        lutPreviewRange?.addEventListener('input', () => {
+            lutPreviewGrid?.style.setProperty('--preview-split', `${lutPreviewRange.value}%`);
+        });
+
+        assetSearch?.addEventListener('input', updateCatalog);
+                        sampleButtons.forEach(item => item.classList.toggle('active', item === button));
+                assetSearch.value = button.dataset.sample || '';
+                if (assetSearch) assetSearch.value = '';
+                activeCategory = 'luts';

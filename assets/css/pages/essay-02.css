@@ -1,0 +1,46 @@
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:radial-gradient(circle at top center, rgba(255,255,255,0.06), transparent 20%), radial-gradient(circle at 80% 16%, rgba(255,255,255,0.03), transparent 18%), #F7F3ED;color:#1A1612;font-family: var(--font-main) !important;overflow-x:hidden;-webkit-font-smoothing:antialiased;position:relative;}
+body::before{content: '';position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 30%), radial-gradient(circle at bottom right, rgba(255,255,255,0.02), transparent 22%), linear-gradient(180deg, rgba(10,8,7,0.18), rgba(5,4,3,0.32));mix-blend-mode:screen;opacity:0.7;z-index:-1;}
+a{text-decoration:none;color:inherit;}
+#rProgress{position:fixed;top:0;left:0;height:2px;background:rgba(26, 22, 18,0.35);width:0%;z-index:999;pointer-events:none;}
+.essay-back{position:sticky;top:92px;z-index:100;background:rgba(10,8,7,0.88);backdrop-filter:blur(22px);border-bottom:1px solid rgba(255,255,255,0.06);padding:16px 5vw;display:flex;justify-content:space-between;align-items:center;box-shadow:0 24px 40px rgba(0,0,0,0.22);}
+.essay-back a{font-size:0.8625rem;font-weight:700;letter-spacing:4px;color:#b8b0a4;text-transform:uppercase;transition:color 0.3s;}
+.essay-back a:hover{color:#fff;}
+.essay-back .crumb{font-size:0.8625rem;font-weight:700;letter-spacing:4px;color:#7f7c76;text-transform:uppercase;}
+.essay-hero{padding:90px 5vw 60px;text-align:center;max-width:920px;margin:0 auto;position:relative;}
+.essay-hero .date{font-size:0.8625rem;font-weight:700;letter-spacing:6px;color:#b4ada2;text-transform:uppercase;margin-bottom:36px;display:inline-flex;align-items:center;gap:16px;}
+.essay-hero .date::before,.essay-hero .date::after{content: '';width:30px;height:1px;background:#555;}
+.essay-hero h1{font-family: var(--font-accent) !important;font-size:clamp(3.2rem,5.2vw,5.8rem);font-weight:400;line-height:1.02;color:#fff;margin-bottom:28px;}
+.essay-hero h1 em{font-style:italic;color:#d7c9b2;}
+.essay-hero .subtitle{font-family: var(--font-accent) !important;font-size:clamp(1.2rem,1.8vw,1.45rem);font-weight:300;font-style:italic;color:#b8b1aa;line-height:1.7;max-width:680px;margin:0 auto 42px;}
+.essay-hero .byline{font-size:0.8625rem;font-weight:700;letter-spacing:4px;color:#a89f93;text-transform:uppercase;display:flex;gap:20px;justify-content:center;align-items:center;}
+.essay-hero .byline .dot{width:4px;height:4px;background:#6d6a66;border-radius:50%;}
+.essay-feat-img{max-width:1100px;margin:0 auto 90px;aspect-ratio:16/9;overflow:hidden;padding:0 5vw;box-sizing:content-box;border-radius:18px;box-shadow:0 36px 100px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.06);}
+.essay-feat-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.8s ease;}
+.essay-feat-img:hover img{transform:scale(1.02);}
+.essay-body{max-width:720px;margin:0 auto;padding:0 5vw 80px;font-family: var(--font-main) !important;font-size:clamp(1.2rem,1.7vw,1.55rem);font-weight:300;line-height:1.92;color:#1A1612;}
+.essay-body p{margin-bottom:1.6em;}
+.essay-body p.drop::first-letter{float:left;font-family: var(--font-accent) !important;font-size:5.4em;line-height:0.82;font-weight:500;padding:0.08em 0.14em 0 0;color:#fff;}
+.essay-body h2{font-family: var(--font-accent) !important;font-size:clamp(2.1rem,3vw,2.8rem);font-weight:500;font-style:italic;color:#f7f3ef;margin:2.4em 0 0.9em;line-height:1.18;}
+.essay-body em{color:#fff;font-style:italic;}
+.essay-body strong{color:#fff;font-weight:500;}
+.essay-body blockquote{margin:2.4em 0;padding:1.8em 0 1.8em 2.2em;border-left:2px solid #fff;font-family: var(--font-accent) !important;font-size:clamp(1.5rem,2.2vw,2.2rem);font-weight:400;font-style:italic;line-height:1.35;color:#f4f0eb;background:rgba(255,255,255,0.02);border-radius:12px;}
+.essay-body blockquote cite{display:block;margin-top:0.8em;font-family: var(--font-accent) !important;font-size:0.8625rem;font-weight:700;letter-spacing:4px;color:#aaa;text-transform:uppercase;font-style:normal;}
+.essay-body figure{margin:3.2em 0;overflow:hidden;border-radius:20px;box-shadow:0 28px 100px rgba(0,0,0,0.28);border:1px solid rgba(255,255,255,0.06);}
+.essay-body figure img{width:100%;display:block;transition:transform 0.8s ease;}
+.essay-body figure:hover img{transform:scale(1.03);}
+.essay-body figure figcaption{font-family: var(--font-accent) !important;font-size:1rem;font-style:italic;color:#b2aca4;margin-top:14px;text-align:center;}
+.essay-body hr{border:0;text-align:center;margin:3.2em 0;}
+.essay-body hr::before{content:'* * *';color:#777;letter-spacing:1em;font-size:1.1rem;}
+.essay-pull{margin:2.5em -5vw;padding:2.5em 5vw;background:rgba(255,255,255,0.04);border-top:1px solid rgba(26, 22, 18,0.1);border-bottom:1px solid rgba(26, 22, 18,0.1);font-family: var(--font-accent) !important;font-size:clamp(1.75rem,2.7vw,3.1rem);font-weight:400;font-style:italic;line-height:1.28;color:#fff;text-align:center;}
+.essay-foot{max-width:720px;margin:0 auto;padding:40px 5vw 80px;border-top:1px solid rgba(255,255,255,0.08);}
+.essay-foot .signoff{font-family: var(--font-accent) !important;font-style:italic;color:#fff;font-size:1.6rem;margin-bottom:40px;}
+.essay-foot .tags{display:flex;gap:12px;flex-wrap:wrap;}
+.essay-foot .tag{font-size:0.8625rem;font-weight:700;letter-spacing:3px;color:#b2ada4;text-transform:uppercase;border:1px solid rgba(255,255,255,0.08);padding:10px 16px;}
+.essay-nav{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:40px 5vw;max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.01);backdrop-filter:blur(8px);}
+.essay-nav a{padding:34px;border:1px solid rgba(255,255,255,0.08);transition:0.35s;display:block;background:rgba(255,255,255,0.02);}
+.essay-nav a:hover{border-color:rgba(255,255,255,0.16);background:rgba(255,255,255,0.05);}
+.essay-nav .dir{font-size:0.8625rem;font-weight:700;letter-spacing:4px;color:#b7b1aa;text-transform:uppercase;margin-bottom:14px;}
+.essay-nav .ttl{font-family: var(--font-accent) !important;font-size:1.6rem;font-weight:500;color:#fff;line-height:1.2;}
+.essay-nav .next{text-align:right;}
+@media(max-width:700px){.essay-nav{grid-template-columns:1fr;}.essay-body{font-size:1.15rem;}.essay-feat-img{padding:0 4vw;}.essay-back{top:108px;}.essay-hero{padding:100px 5vw 50px;}.essay-pull{margin:2em -4vw;padding:2em 4vw;}.essay-hero h1{font-size:clamp(2.4rem,8vw,4.6rem);}}

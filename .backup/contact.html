@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Mohith Rai Srivastav</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* --- 1. Global Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { font-size: 125%; }
+        
+        body { 
+            background-color: #0a0a0a; color: #ffffff; line-height: 1.6;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- 2. Navigation Bar --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; position: fixed; width: 100%;
+            background: rgba(10, 10, 10, 0.95); 
+            z-index: 9999; 
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        /* LOGO HOVER EFFECT ADDED HERE */
+        .logo { 
+            height: 100px; 
+            width: auto; 
+            mix-blend-mode: screen; 
+            opacity: 0.7; 
+            transition: all 0.5s ease; 
+            cursor: pointer;
+        }
+        .logo:hover { 
+            opacity: 1; 
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)); 
+            transform: scale(1.02);
+        }
+
+        .nav-brand {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            text-align: center; pointer-events: none; transition: 0.4s;
+        }
+        .nav-brand .name {
+            display: block; font-size: 1.2rem; font-weight: 900; 
+            color: #ffffff; letter-spacing: 4px; text-transform: uppercase;
+        }
+        .nav-brand .sub {
+            display: block; font-size: 0.6rem; font-weight: 600; 
+            letter-spacing: 5px; color: #666; text-transform: uppercase;
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 2rem; }
+        .nav-links a {
+            color: #888; text-decoration: none; text-transform: uppercase;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; transition: 0.3s; 
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+        /* --- 3. Hamburger "X" Logic --- */
+        .hamburger {
+            display: none; width: 35px; height: 20px;
+            flex-direction: column; justify-content: space-between;
+            cursor: pointer; position: relative;
+        }
+        .hamburger span { 
+            width: 100%; height: 2px; background: #fff; 
+            transition: all 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+        .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        /* --- 4. Mobile Overlay Menu --- */
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #0a0a0a; 
+            z-index: 9000; 
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; gap: 30px;
+            visibility: hidden; opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+        .mobile-menu.active { visibility: visible; opacity: 1; }
+        .mobile-menu a {
+            font-size: 2rem; font-weight: 200; text-decoration: none;
+            color: #fff; text-transform: uppercase; letter-spacing: 10px;
+        }
+
+        /* --- 5. Content Layout --- */
+        .contact-section {
+            min-height: 100vh; padding: 220px 5vw 100px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .page-title {
+            font-size: clamp(3rem, 8vw, 10rem); font-weight: 900; 
+            line-height: 0.85; letter-spacing: -0.04em; 
+            text-transform: uppercase; margin-bottom: 60px;
+        }
+        .contact-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 8vw; }
+
+        .form-group { margin-bottom: 40px; }
+        input, textarea {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff; font-size: 1.1rem; padding: 15px 0; outline: none; border-radius: 0;
+        }
+        input:focus, textarea:focus { border-bottom: 1px solid #fff; }
+        .submit-btn {
+            background: transparent; color: #fff; border: 1px solid #fff;
+            padding: 20px 40px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 4px; cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:hover { background: #fff; color: #000; }
+
+        .info-block { margin-bottom: 40px; }
+        .info-block h3 { font-size: 0.65rem; color: #555; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 10px; }
+        .info-block p, .info-block a { font-size: 1.2rem; color: #fff; text-decoration: none; }
+
+        .footer { padding: 80px 5%; text-align: center; border-top: 1px solid #111; }
+        .footer-links { display: flex; gap: 30px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .footer-links a { color: #666; text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- 6. RESPONSIVE FIXES --- */
+        @media (max-width: 1100px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; } 
+            
+            .logo { height: 60px; }
+            .nav-brand .name { font-size: 0.9rem; letter-spacing: 2px; }
+            .nav-brand .sub { display: none; } 
+            
+            .contact-grid { grid-template-columns: 1fr; gap: 60px; }
+            .contact-section { padding-top: 150px; }
+            .page-title { margin-bottom: 40px; font-size: 4rem; }
+        }
+
+        @media (max-width: 600px) {
+            .logo { height: 45px; }
+            .nav-brand .name { font-size: 0.8rem; }
+            .page-title { font-size: 3.2rem; }
+            .footer-links { flex-direction: column; gap: 15px; }
+        }
+
+        .fade-up { opacity: 0; transform: translateY(30px); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link">
+            <img src="Mohith LOGO.png" alt="Logo" class="logo">
+        </a>
+        
+        <div class="nav-brand">
+            <span class="name">Mohith Rai Srivastav</span>
+            <span class="sub">Architectural Photography</span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#work">Work</a></li>
+            <li><a href="workshops.html">Workshops</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+
+        <div class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html" onclick="toggleMenu()">About</a>
+        <a href="index.html#work" onclick="toggleMenu()">Work</a>
+        <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
+        <a href="shop.html" onclick="toggleMenu()">Shop</a>
+        <a href="contact.html" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <main>
+        <section class="contact-section">
+            <h1 class="page-title fade-up">Initiate<br>Project.</h1>
+            <div class="contact-grid">
+                <div class="form-side fade-up">
+                    <form action="#" method="POST">
+                        <div class="form-group"><input type="text" placeholder="FULL NAME" required></div>
+                        <div class="form-group"><input type="email" placeholder="EMAIL" required></div>
+                        <div class="form-group"><textarea placeholder="PROJECT DETAILS" required></textarea></div>
+                        <button type="submit" class="submit-btn">Send Transmission &rarr;</button>
+                    </form>
+                </div>
+                <div class="info-side fade-up">
+                    <div class="info-block">
+                        <h3>Direct</h3>
+                        <a href="mailto:info@mohithraisrivastav.com">info@mohithraisrivastav.com</a><br>
+                        <a href="https://wa.me/919014753403">+91 90147 53403</a>
+                    </div>
+                    <div class="info-block">
+                        <h3>Operations</h3>
+                        <p>Goa, India / Global Commissions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <h2 style="font-weight: 300; letter-spacing: 5px;">MOHITH RAI SRIVASTAV</h2>
+            <div class="footer-links">
+                <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank">Instagram</a>
+                <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank">LinkedIn</a>
+                <a href="https://vimeo.com/user140494679" target="_blank">Vimeo</a>
+                <a href="https://wa.me/919014753403" target="_blank">WhatsApp</a>
+                <a href="mailto:info@mohithraisrivastav.com">Email</a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.getElementById('hamburgerBtn');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+            
+            if(menu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        const lenis = new Lenis();
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        gsap.to(".fade-up", { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power3.out" });
+    </script>
+</body>
+</html>

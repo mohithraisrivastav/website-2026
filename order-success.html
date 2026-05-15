@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="author" content="Mohith Rai Srivastav">
+    <title>Order Confirmed | Mohith Rai Srivastav</title>
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <link rel="stylesheet" href="assets/css/pages/order-success.css">
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <nav class="navbar">
+        <a href="index.html"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+    </nav>
+
+    <main class="success-wrap" id="main-content">
+        <div class="check-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+
+        <div class="success-label">Order Confirmed</div>
+        <h1>Thank You.</h1>
+        <p class="success-msg">Your order has been received and payment confirmed. A receipt has been sent to your email. We'll notify you the moment your prints ship.</p>
+
+        <div class="order-detail" id="orderDetail">
+            <div class="detail-row"><span class="detail-label">Order ID</span><span class="detail-value" id="orderId">&mdash;</span></div>
+            <div class="detail-row"><span class="detail-label">Payment ID</span><span class="detail-value" id="paymentId">&mdash;</span></div>
+            <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value" id="email">&mdash;</span></div>
+            <div class="detail-row"><span class="detail-label">Total Paid</span><span class="detail-value" id="total">&mdash;</span></div>
+
+            <div class="items-list">
+                <h3>Items</h3>
+                <div id="itemsList"></div>
+            </div>
+        </div>
+
+        <div class="downloads" id="downloadsBlock" style="display:none;">
+            <h3>Digital Downloads</h3>
+            <div id="downloadsList"></div>
+            <p style="font-size:0.8625rem; color:#666; margin-top:20px; line-height:1.7;">Links also sent to your email. Valid for 7 days.</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>What Happens Next</h3>
+            <div class="step">
+                <div class="step-num">01</div>
+                <div class="step-text">Your prints are hand-packed in archival sleeves and a rigid tube with corner protection. This takes 2–3 business days.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <div class="step-text">You'll receive a dispatch email with courier tracking (Sequel/DHL for International, Blue Dart domestic) once the package leaves the studio.</div>
+            </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <div class="step-text">Estimated delivery: 7–10 days domestic, 14–21 days international. Signed certificate of authenticity enclosed with every print.</div>
+            </div>
+        </div>
+
+        <div class="cta-row">
+            <a href="index.html" class="cta-btn primary">Return Home</a>
+            <a href="shop.html" class="cta-btn">Back to Shop</a>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+    <div class="sf-cta">
+        <span class="sf-cta-label">Open for Commissions: 2026</span>
+        <h2 class="sf-heading">Let's Work<br>Together.</h2>
+        <a href="contact.html" class="sf-contact-btn">Start a Project &nbsp;&rarr;</a>
+    </div>
+    <div class="sf-body">
+        <div class="sf-brand">
+            <a href="index.html" class="sf-logo-link">
+              <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="sf-logo">
+            </a>
+            <p class="sf-tagline">Architectural Photographer · Filmmaker · Educator<br>Goa, India &mdash; Global Commissions</p>
+        </div>
+        <nav class="sf-nav">
+            <span class="sf-nav-label">Pages</span>
+            <a href="about.html">About</a>
+            <a href="work.html">Work</a>
+            <a href="film.html">Films</a>
+            <a href="journal.html" style="display:none">Journal</a>
+            <a href="workshops.html">Workshops</a>
+            <a href="shop.html">Shop</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <nav class="sf-legal">
+            <span class="sf-nav-label">Legal Print</span>
+            <a href="shipping.html">Shipping Policy</a>
+            <a href="returns.html">Returns Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="support.html">Support</a>
+        </nav>
+        <div class="sf-newsletter-col">
+            <span class="sf-nav-label">Field Notes</span>
+            <p>New work and workshop openings &mdash; sent rarely.</p>
+            <form class="sf-form" id="sfForm">
+                <label for="sfEmailInput" class="sr-only">Email address</label>
+                <input type="email" id="sfEmailInput" placeholder="your@email.com" required>
+                <button type="submit" aria-label="Subscribe">&rarr;</button>
+            </form>
+            <span class="sf-form-ok" id="sfFormOk">Received.</span>
+        </div>
+    </div>
+    <div class="sf-base">
+        <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
+        <div class="sf-social">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener noreferrer">Vimeo</a>
+            <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:info@mohithraisrivastav.com">Email</a>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        const order = JSON.parse(localStorage.getItem('lastOrder') || 'null');
+
+        if (!order) {
+            document.getElementById('orderDetail').innerHTML = '<p style="text-align:center; color:#666; font-size:0.8625rem;">No recent order found. Check your email for details.</p>';
+        } else {
+            document.getElementById('orderId').innerText = order.orderId || '&mdash;';
+            document.getElementById('paymentId').innerText = order.paymentId || '&mdash;';
+            document.getElementById('email').innerText = order.email || '&mdash;';
+            document.getElementById('total').innerText = '₹' + Math.round(order.total).toLocaleString('en-IN');
+
+            document.getElementById('itemsList').innerHTML = (order.items || []).map(i =>
+                `<div class="order-item"><span>${i.title}</span><span>₹${i.price.toLocaleString('en-IN')}</span></div>
+`
+            ).join('');
+
+            if (order.downloads && order.downloads.length) {
+                document.getElementById('downloadsBlock').style.display = 'block';
+                document.getElementById('downloadsList').innerHTML = order.downloads.map(d =>
+                    `<div class="download-link"><span>${d.title}</span><a href="${d.url}" download>Download ?</a></div>
+`
+                ).join('');
+            }
+        }
+    </script>
+<script src="assets/js/site.js"></script>
+
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/transitions.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+
+</body>
+</html>
+
+
+
+
+

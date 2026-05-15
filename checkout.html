@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="assets/js/theme.js"></script>
+
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#CFA246">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Checkout | Mohith Rai Srivastav</title>
+<link rel="stylesheet" href="assets/css/typo.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <link rel="stylesheet" href="assets/css/pages/checkout.css">
+    <script src="assets/js/translate.js" defer></script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="page-curtain"></div>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Logo" class="logo"></a>
+        <div class="nav-brand"><span class="name">Checkout</span></div>
+        <a href="shop.html" class="nav-back global-back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back to Shop</a>
+    </nav>
+
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <div class="loader-spin"></div>
+            <div class="loader-text" id="loaderText">Processing</div>
+        </div>
+    </div>
+
+    <main class="checkout-wrap" id="main-content">
+        <div class="form-side">
+            <h1 class="page-title">Complete<br>Order.</h1>
+
+            <div class="error-box" id="errorBox"></div>
+
+            <form id="checkoutForm">
+                <div class="form-section">
+                    <div class="form-label">01 / Contact</div>
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label>Full Name <span class="req">*</span></label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-field">
+                            <label>Email <span class="req">*</span></label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-field">
+                            <label>Phone <span class="req">*</span></label>
+                            <input type="tel" name="phone" required placeholder="+91 98765 43210">
+                        </div>
+                        <div class="form-field">
+                            <label>GSTIN (optional)</label>
+                            <input type="text" name="gstin" placeholder="For business invoice">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" id="shippingSection">
+                    <div class="form-label">02 / Shipping Address</div>
+                    <div class="form-grid">
+                        <div class="form-field" style="grid-column: 1 / -1;">
+                            <label>Country <span class="req">*</span></label>
+                            <select name="country" id="countrySelect" required>
+                                <option value="IN" selected>India</option>
+                                <option value="US">United States</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="AE">United Arab Emirates</option>
+                                <option value="SG">Singapore</option>
+                                <option value="AU">Australia</option>
+                                <option value="CA">Canada</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="IT">Italy</option>
+                                <option value="ES">Spain</option>
+                                <option value="NL">Netherlands</option>
+                                <option value="JP">Japan</option>
+                                <option value="OTHER">Other (International)</option>
+                            </select>
+                        </div>
+                        <div class="form-field" style="grid-column: 1 / -1;">
+                            <label>Address Line 1 <span class="req">*</span></label>
+                            <input type="text" name="address1" required>
+                        </div>
+                        <div class="form-field" style="grid-column: 1 / -1;">
+                            <label>Address Line 2</label>
+                            <input type="text" name="address2">
+                        </div>
+                        <div class="form-field">
+                            <label>City <span class="req">*</span></label>
+                            <input type="text" name="city" required>
+                        </div>
+                        <div class="form-field" id="stateFieldWrap">
+                            <label>State / Province <span class="req">*</span></label>
+                            <select name="state" id="stateSelect" required></select>
+                            <input type="text" name="state_text" id="stateText" placeholder="State / Province" style="display:none;">
+                        </div>
+                        <div class="form-field">
+                            <label>Postal Code <span class="req">*</span></label>
+                            <input type="text" name="postal" required>
+                        </div>
+                        <div class="form-field">
+                            <label>Delivery Notes</label>
+                            <input type="text" name="notes" placeholder="Landmark, gate code, etc.">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-label">03 / Confirmation</div>
+                    <div class="form-field">
+                        <label style="color: #888; font-size: 0.8625rem; text-transform: none; letter-spacing: 0.5px; line-height: 1.8;">
+                            By completing this order, you acknowledge that Resurface series prints are large-format archival works, hand-packed and shipped via insured courier. Ship time: 7-10 days (domestic) / 14-21 days (International). You will receive tracking on dispatch.
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <aside class="summary-panel">
+            <div class="summary-title">Order Summary</div>
+            <div class="summary-items" id="summaryItems"></div>
+            <div class="summary-breakdown" id="breakdown">
+                <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="subtotalVal">&#8377;0</span></div>
+                <div class="summary-row"><span class="label">Shipping</span><span class="value" id="shippingVal">&mdash;</span></div>
+                <div class="summary-row" id="gstRow"><span class="label">GST (12%)</span><span class="value" id="gstVal">&#8377;0</span></div>
+                <div class="summary-row total"><span class="label">Total</span><span class="value" id="totalVal">&#8377;0</span></div>
+            </div>
+
+            <button type="button" class="pay-btn" id="payBtn" onclick="initiatePayment()">Pay Securely →</button>
+
+            <div class="payment-methods">
+                <div class="label">Accepted Methods</div>
+                <div class="methods">UPI &middot; Cards &middot; Netbanking &middot; EMI &middot; Wallets</div>
+            </div>
+
+            <div class="security-note">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                256-bit SSL &middot; Razorpay secure checkout
+            </div>
+        </aside>
+    </main>
+
+    <script src="assets/js/currency.js"></script>
+    <script src="js/checkout.js"></script>
+    <script>
+    document.addEventListener('currencychange', function () {
+        if (typeof renderCart === 'function') renderCart();
+    });
+    </script>
+<script src="assets/js/preloader.js"></script>
+<script src="assets/js/cursor.js"></script>
+<script>
+(function() {
+    var STATES = {
+        IN: ["Andaman & Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra & Nagar Haveli and Daman & Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu & Kashmir","Jharkhand","Karnataka","Kerala","Ladakh","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal"],
+        US: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming","Washington DC"],
+        CA: ["Alberta","British Columbia","Manitoba","New Brunswick","Newfoundland and Labrador","Northwest Territories","Nova Scotia","Nunavut","Ontario","Prince Edward Island","Quebec","Saskatchewan","Yukon"],
+        AU: ["Australian Capital Territory","New South Wales","Northern Territory","Queensland","South Australia","Tasmania","Victoria","Western Australia"],
+        GB: ["England","Northern Ireland","Scotland","Wales"],
+        AE: ["Abu Dhabi","Ajman","Dubai","Fujairah","Ras Al Khaimah","Sharjah","Umm Al Quwain"],
+        DE: ["Baden-W&mdash;rttemberg","Bavaria","Berlin","Brandenburg","Bremen","Hamburg","Hesse","Lower Saxony","Mecklenburg-Vorpommern","North Rhine-Westphalia","Rhineland-Palatinate","Saarland","Saxony","Saxony-Anhalt","Schleswig-Holstein","Thuringia"],
+        FR: ["Auvergne-Rh&mdash;ne-Alpes","Bourgogne-Franche-Comt&mdash;","Brittany","Centre-Val de Loire","Corsica","Grand Est","Hauts-de-France","&mdash;le-de-France","Normandy","Nouvelle-Aquitaine","Occitanie","Pays de la Loire","Provence-Alpes-C&mdash;te d'Azur"]
+    };
+
+    function updateStateField() {
+        var country = document.getElementById('countrySelect').value;
+        var sel = document.getElementById('stateSelect');
+        var txt = document.getElementById('stateText');
+        var states = STATES[country];
+        if (states) {
+            sel.style.display = '';
+            txt.style.display = 'none';
+            sel.required = true;
+            txt.required = false;
+            sel.innerHTML = '<option value="">Select state&mdash;</option>' +
+                states.map(function(s){ return '<option value="' + s + '">' + s + '</option>'; }).join('');
+        } else {
+            sel.style.display = 'none';
+            txt.style.display = '';
+            sel.required = false;
+            txt.required = true;
+            sel.innerHTML = '';
+            txt.value = '';
+        }
+    }
+
+    var cSelect = document.getElementById('countrySelect');
+    if (cSelect) {
+        cSelect.addEventListener('change', updateStateField);
+        updateStateField(); // init on load
+    }
+
+    // Patch checkout form to read state from whichever field is active
+    var origInitiate = window.initiatePayment;
+    window.initiatePayment = function() {
+        var sel = document.getElementById('stateSelect');
+        var txt = document.getElementById('stateText');
+        // Normalise: write active value into a hidden input named "state"
+        if (sel && sel.style.display !== 'none' && sel.value) {
+            txt.name = ''; sel.name = 'state';
+        } else if (txt && txt.style.display !== 'none') {
+            sel.name = ''; txt.name = 'state';
+        }
+        if (origInitiate) origInitiate();
+    };
+})();
+</script>
+<script>
+(function(){const s=document.createElement('div');s.className='sline-stage';const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);document.querySelector('.navbar').insertAdjacentElement('afterend',s);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
+</script>
+
+
+<script src="assets/js/transitions.js"></script>
+</body>
+</html>
+
