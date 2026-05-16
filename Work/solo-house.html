@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="../assets/js/theme.js"></script>
@@ -12,24 +12,25 @@
 <meta name="robots" content="index,follow">
 <meta name="description" content="Solo House — Interior photography by Mohith Rai Srivastav. Light, threshold and dissolved boundaries in an Anjuna residence, Goa. Studio Terra Firma, 2024.">
 <meta name="author" content="Mohith Rai Srivastav">
+<meta name="keywords" content="Solo House, Anjuna Goa, interior photography, light and threshold, Mohith Rai Srivastav">
 <meta property="og:site_name" content="Mohith Rai Srivastav">
-<meta property="og:title" content="Solo House â€” Mohith Rai Srivastav">
-<meta property="og:description" content="Interior light and threshold studies â€” a room between rooms, Anjuna, Goa.">
+<meta property="og:title" content="Solo House — Mohith Rai Srivastav">
+<meta property="og:description" content="Interior light and threshold studies — a room between rooms, Anjuna, Goa.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mohithraisrivastav.com/work/solo-house.html">
 <meta property="og:image" content="https://mohithraisrivastav.com/Work/Projects/Solo House/_DSC4279-HDR.webp">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Solo House â€” Mohith Rai Srivastav">
-<meta name="twitter:description" content="Interior light and threshold studies â€” a room between rooms, Anjuna, Goa.">
+<meta name="twitter:title" content="Solo House — Mohith Rai Srivastav">
+<meta name="twitter:description" content="Interior light and threshold studies — a room between rooms, Anjuna, Goa.">
 <meta name="twitter:image" content="https://mohithraisrivastav.com/Work/Projects/Solo House/_DSC4279-HDR.webp">
 <link rel="canonical" href="https://mohithraisrivastav.com/work/solo-house.html">
-<title>Solo House â€” Mohith Rai Srivastav</title>
+<title>Solo House — Mohith Rai Srivastav</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
 <link rel="preload" as="image" href="Projects/Solo House/_DSC4279-HDR.webp" fetchpriority="high">
 
 <style>
@@ -287,6 +288,34 @@ body.js-cursor { cursor: none; }
 .mobile-nav-children a { font-size: 1.1rem !important; letter-spacing: 5px !important; font-weight: 300 !important; color: rgba(26,22,18,0.65) !important; text-decoration: none; transition: color 0.25s; }
 .mobile-nav-children a:hover { color: #CFA246 !important; }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VisualArtwork",
+  "url": "https://mohithraisrivastav.com/Work/solo-house.html",
+  "name": "Solo House",
+  "description": "Interior photography by Mohith Rai Srivastav. Light, threshold and dissolved boundaries in an Anjuna residence, Goa.",
+  "image": "https://mohithraisrivastav.com/Work/Projects/Solo House/_DSC4279-HDR.webp",
+  "locationCreated": {
+    "@type": "Place",
+    "name": "Anjuna, Goa, India"
+  },
+  "creator": {
+    "@type": "Person",
+    "@id": "https://mohithraisrivastav.com/#person",
+    "name": "Mohith Rai Srivastav"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mohithraisrivastav.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Work", "item": "https://mohithraisrivastav.com/work.html" },
+      { "@type": "ListItem", "position": 3, "name": "Solo House", "item": "https://mohithraisrivastav.com/Work/solo-house.html" }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -487,13 +516,13 @@ body.js-cursor { cursor: none; }
 <div class="lb" id="lb" role="dialog" aria-modal="true">
   <button class="lb-close" id="lbClose">&#10005;&nbsp;&nbsp;Close</button>
   <button class="lb-nav lb-prev" id="lbPrev">&#8592;</button>
-  <img class="lb-img" id="lbImg" src="" alt="">
+  <img class="lb-img" id="lbImg" src="" alt="" loading="lazy">
   <button class="lb-nav lb-next" id="lbNext">&#8594;</button>
   <span class="lb-counter" id="lbCounter"></span>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 <script>
 'use strict';
 const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -623,9 +652,9 @@ if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const
 (function(){const s=document.querySelector('.sline-stage');const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
 </script>
 
-<script src="../assets/js/site.js"></script>
-<script src="../assets/js/preloader.js"></script>
-<script src="../assets/js/cursor.js"></script>
+<script src="../assets/js/site.js" defer></script>
+<script src="../assets/js/preloader.js" defer></script>
+<script src="../assets/js/cursor.js" defer></script>
 
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
@@ -639,8 +668,8 @@ if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const
         <a href="../checkout.html" class="checkout-btn">Proceed to Checkout</a>
     </div>
 </div>
-<script src="../assets/js/transitions.js"></script>
-<script src="../assets/js/cart.js"></script>
+<script src="../assets/js/transitions.js" defer></script>
+<script src="../assets/js/cart.js" defer></script>
 <script>
 /* â”€â”€ Smart focal-point framing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Pass 1: apply cached / manual positions instantly (no flicker).
@@ -660,7 +689,7 @@ if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const
 
   var imgs = document.querySelectorAll('.p-inner img');
 
-  /* Pass 1 â€” instant: manual overrides + cached positions */
+  /* Pass 1 — instant: manual overrides + cached positions */
   imgs.forEach(function (img) {
     var p = img.closest('.p');
     if (p && p.dataset.position) {
@@ -671,7 +700,7 @@ if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const
     if (cached) img.style.objectPosition = cached;
   });
 
-  /* Pass 2 â€” async: compute uncached images via smartcrop */
+  /* Pass 2 — async: compute uncached images via smartcrop */
   var sc = document.createElement('script');
   sc.src = 'https://cdn.jsdelivr.net/npm/smartcrop@2.0.5/smartcrop.js';
   sc.onload = function () {
@@ -702,5 +731,7 @@ if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const
   document.head.appendChild(sc);
 }());
 </script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

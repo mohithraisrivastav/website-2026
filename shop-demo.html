@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +25,7 @@
 
     <div id="lightbox">
         <div class="lightbox-inner" onclick="event.stopPropagation()">
-            <img id="lb-img" src="" alt="">
+            <img id="lb-img" src="" alt="" loading="lazy">
             <div class="lightbox-title" id="lb-title"></div>
             <div class="lightbox-details" id="lb-details"></div>
             <button class="add-cart-btn" id="lb-add">Add to Selection</button>
@@ -398,5 +398,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

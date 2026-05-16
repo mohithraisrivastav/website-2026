@@ -64,7 +64,7 @@
   }
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -138,7 +138,7 @@ function loadImage(src) {
 
 const MAX_TEX = 2048;  /* cap texture — only lever on file weight for flat art */
 
-/* Downscale, then re-encode as a real <img> element. GLTFExporter only
+/* Downscale, then re-encode as a real <img loading="lazy"> element. GLTFExporter only
    embeds textures whose source is an HTMLImageElement — canvas-sourced
    textures are silently dropped by some exporter builds → blank print. */
 function prepImageEl(image) {
@@ -194,7 +194,7 @@ async function buildScene(image, wIn, hIn) {
   );
   scene.add(frame);
 
-  /* the print face — decoded, downscaled, real <img> texture */
+  /* the print face — decoded, downscaled, real <img loading="lazy"> texture */
   const texImg = await prepImageEl(image);
   const tex = new THREE.Texture(texImg);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -281,5 +281,7 @@ document.getElementById('goBtn').addEventListener('click', async () => {
   btn.disabled = false;
 });
 </script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

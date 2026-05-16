@@ -1,4 +1,4 @@
-﻿<!-- ============================================================
+<!-- ============================================================
      SHOP PAGE &mdash; SOURCE OF TRUTH
      Products are consolidated here with in-page filters.
      Legacy category pages redirect to this page.
@@ -48,12 +48,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
 
     <link rel="stylesheet" href="assets/css/pages/shop.css">
     <script src="assets/js/translate.js" defer></script>
@@ -67,7 +67,7 @@
     }
     </script>
     <!-- model-viewer: native AR Quick Look (iOS) + Scene Viewer (Android) -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js" defer></script>
     <!-- on-demand framed-print 3D builder -->
     <script type="module">
     import * as THREE from 'three';
@@ -88,7 +88,7 @@
         im.src = src;
       });
     }
-    /* downscale → real <img> (exporters skip canvas-sourced textures) */
+    /* downscale → real <img loading="lazy"> (exporters skip canvas-sourced textures) */
     function prepImageEl(image) {
       var w = image.naturalWidth, h = image.naturalHeight;
       var s = Math.min(1, MAX_TEX / Math.max(w, h));
@@ -669,7 +669,7 @@
         <button id="imgViewerClose" onclick="closeImgViewer()" aria-label="Close viewer">&times;</button>
         <button class="img-viewer-nav prev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image">&#8592;</button>
         <button class="img-viewer-nav next" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image">&#8594;</button>
-        <img id="imgViewerImg" src="" alt="">
+        <img id="imgViewerImg" src="" alt="" loading="lazy">
         <div id="imgViewerHint">Click to close &nbsp;&mdash;&nbsp; ESC</div>
     </div>
 
@@ -686,7 +686,7 @@
             <div class="modal-content">
                 <div class="modal-gallery">
                     <div class="gallery-main" onclick="openImgViewer(document.getElementById('modalMainImage').src, document.getElementById('modalMainImage').alt)">
-                        <img id="modalMainImage" src="" alt="">
+                        <img id="modalMainImage" src="" alt="" loading="lazy">
                         <div class="gallery-zoom-hint">Click to enlarge</div>
                         <button class="gallery-nav gallery-prev" id="galleryPrev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
                         <button class="gallery-nav gallery-next" id="galleryNext" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -799,6 +799,7 @@
                         <li><a href="about.html">About</a></li>
                         <li style="display:none"><a href="journal.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="publications.html">Publications</a></li>
                     </ul>
                 </li>
                 <li><a href="workshops.html">Workshops</a></li>
@@ -829,6 +830,7 @@
                 <a href="about.html" onclick="toggleMenu()">About</a>
                 <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+          <a href="publications.html" onclick="toggleMenu()">Publications</a>
             </div>
         </div>
         <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -872,7 +874,7 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cosmic-return')" data-orig-w="42" data-orig-h="31.5" data-base-price="125000">
-                    <div class="product-image"><img loading="lazy" src="images/Cosmic Return 05.png" alt="Cosmic Return"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Cosmic Return 05.webp" alt="Cosmic Return"></div>
                     <div class="product-title">Cosmic Return</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 2 + 1 AP</span><span class="spec-tag dim-tag">42 &times; 31.5 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="125000" class="product-price">&#8377;1,25,000</div>
@@ -882,14 +884,14 @@
                     </div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('burnt-earth')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Burnt Earth 03.png" alt="Burnt Earth"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Burnt Earth 03.webp" alt="Burnt Earth"></div>
                     <div class="product-title">Burnt Earth</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Burnt Earth','Burnt Earth.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Burnt Earth','Burnt Earth.jpg')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('chromatic-rupture')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Chromatic Rupture 01.png" alt="Chromatic Rupture"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Chromatic Rupture 01.webp" alt="Chromatic Rupture"></div>
                     <div class="product-title">Chromatic Rupture</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
@@ -903,35 +905,35 @@
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'After The Fall','After The Fall 02.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'After The Fall','After The Fall 02.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cracked-spectrum')" data-orig-w="32" data-orig-h="21.3" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Cracked Spectrum 01.png" alt="Cracked Spectrum"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Cracked Spectrum 01.webp" alt="Cracked Spectrum"></div>
                     <div class="product-title">Cracked Spectrum</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 21.3 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('still-organism')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/The Still Organism 01.png" alt="Still Organism"></div>
+                    <div class="product-image"><img loading="lazy" src="images/The Still Organism 01.webp" alt="Still Organism"></div>
                     <div class="product-title">Still Organism</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Still Organism','The Still Organism.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Still Organism','The Still Organism.jpg')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('forgotten-skin')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/The Forgotten Skin 01.png" alt="Forgotten Skin"></div>
+                    <div class="product-image"><img loading="lazy" src="images/The Forgotten Skin 01.webp" alt="Forgotten Skin"></div>
                     <div class="product-title">Forgotten Skin</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Forgotten Skin','The Forgotten Skin.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Forgotten Skin','The Forgotten Skin.jpg')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('erosion')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Erosion 01.png" alt="Erosion"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Erosion 01.webp" alt="Erosion"></div>
                     <div class="product-title">Erosion</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Erosion','Erosion.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Erosion','Erosion.jpg')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('imprint')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Imprint 03.png" alt="Imprint"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Imprint 03.webp" alt="Imprint"></div>
                     <div class="product-title">Imprint</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
@@ -973,7 +975,7 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" onclick="openProductModal('explorer-deck')" data-product-id="explorer-deck" data-shop-category="tools">
-                    <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" onerror="this.onerror=null;this.src='images/Cracked Spectrum.jpg';"></div>
+                    <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" onerror="this.onerror=null;this.src='images/Cracked Spectrum.webp';"></div>
                     <div class="product-title">Explorer's Deck</div>
                     <div class="product-specs"><span class="spec-tag">76 Cards</span><span class="spec-tag">6 Suits + Wild</span><span class="spec-tag">Matte Tactile Stock</span></div>
                     <div data-inr="2100" class="product-price">&#8377;2,100</div>
@@ -1362,7 +1364,7 @@
 
             const thumbs = document.getElementById('modalThumbs');
             thumbs.innerHTML = p.images.length > 1 ? p.images.map((img, i) =>
-                `<div class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="switchModalImage('${imgPath(img)}', this, ${i})"><img src="${imgPath(img)}" alt="${p.title} - image ${i+1}"></div>
+                `<div class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="switchModalImage('${imgPath(img)}', this, ${i})"><img src="${imgPath(img)}" alt="${p.title} - image ${i+1}" loading="lazy"></div>
 `
             ).join('') : '';
 
@@ -2613,7 +2615,7 @@
                     html = favs.map(id => {
                         const p = products[id] || { title: id, price: 0, images: [], description: '' };
                         return `<div class="saved-item">
-                            <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${p.title}">
+                            <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${p.title}" loading="lazy">
                             <div class="saved-item-meta">
                                 <div class="saved-item-title">${p.title}</div>
                                 <div class="saved-item-price">${formatPrice(p.price || 0)}</div>
@@ -2638,7 +2640,7 @@
                             const id = Object.keys(products).find(key => products[key].title === title) || title;
                             const p = products[id] || { title, price: 0, images: [] };
                             return `<div class="saved-item" style="grid-template-columns: 90px 1fr auto;">
-                                <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${title}">
+                                <img src="${p.images && p.images[0] ? imgPath(p.images[0]) : 'images/Cosmic Return.webp'}" alt="${title}" loading="lazy">
                                 <div class="saved-item-meta">
                                     <div class="saved-item-title">${title}</div>
                                     <div class="saved-item-price">${formatPrice(p.price || 0)}</div>
@@ -2977,7 +2979,9 @@
                 + '<div class="pf"><span class="pk">Signed</span><span class="pv">' + p.specs.Signed + '</span></div>'
                 + '<div class="pn"><p>' + pr.frame + '</p></div>'
                 + '<div class="pfoot"><span>mohithraisrivastav.com</span><span>Goa, India &nbsp;&middot;&nbsp; 2026</span></div>'
-                + '</body></html>';
+                + '<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body></html>';
             var w = window.open('', '_blank', 'width=860,height=1100');
             if (w) { w.document.write(html); w.document.close(); setTimeout(function() { w.print(); }, 500); }
         }
@@ -3131,7 +3135,7 @@
   <video id="rvVideo" autoplay playsinline muted></video>
 
   <div id="rvPrintWrap">
-    <img id="rvPrint" src="" alt="Print preview" draggable="false">
+    <img id="rvPrint" src="" alt="Print preview" draggable="false" loading="lazy">
   </div>
 
   <div id="rvChrome">
@@ -3164,18 +3168,20 @@
   </div>
 </div>
 
-<script src="assets/js/currency.js"></script>
-<script src="assets/js/cart.js"></script>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/currency.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/site.js" defer></script>
 
-<script src="assets/js/preloader.js"></script>
-<script src="assets/js/transitions.js"></script>
-<script src="assets/js/cursor.js"></script>
-<script src="assets/js/reveals.js"></script>
+<script src="assets/js/preloader.js" defer></script>
+<script src="assets/js/transitions.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
+<script src="assets/js/reveals.js" defer></script>
 <script>
 (function(){const s=document.querySelector('.sline-stage');const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#1A1612';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
 </script>
 
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
 

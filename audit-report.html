@@ -644,10 +644,10 @@ if (!prefersReducedMotion) {
       <div class="issue-desc">When the onerror fallback fires, the image source changes but the <code>alt</code> text still says "Resurface" or "The Matter of Pause", which may no longer describe the fallback image.</div>
       <span class="label-small">Current</span>
       <div class="code-block code-bad">&lt;img src="images/RESURFACE_PREVIEW.jpg" alt="Resurface" loading="lazy"
-     onerror="this.onerror=null;this.src='images/Chromatic Rupture.jpg';"&gt;</div>
+     onerror="this.onerror=null;this.src='images/Chromatic Rupture.webp';"&gt;</div>
       <span class="label-small">Fix</span>
       <div class="code-block code-good">&lt;img src="images/RESURFACE_PREVIEW.jpg" alt="Resurface — ongoing research project" loading="lazy"
-     onerror="this.onerror=null; this.src='images/Chromatic Rupture.jpg'; this.alt='Resurface — alternate image';"&gt;</div>
+     onerror="this.onerror=null; this.src='images/Chromatic Rupture.webp'; this.alt='Resurface — alternate image';"&gt;</div>
     </div>
   </div>
 
@@ -970,5 +970,7 @@ padding-inline: 5vw;
   Generated: May 2026
 </div>
 
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

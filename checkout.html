@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="assets/js/theme.js"></script>
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <link rel="stylesheet" href="assets/css/pages/checkout.css">
     <script src="assets/js/translate.js" defer></script>
@@ -149,15 +149,15 @@
         </aside>
     </main>
 
-    <script src="assets/js/currency.js"></script>
-    <script src="js/checkout.js"></script>
+    <script src="assets/js/currency.js" defer></script>
+    <script src="js/checkout.js" defer></script>
     <script>
     document.addEventListener('currencychange', function () {
         if (typeof renderCart === 'function') renderCart();
     });
     </script>
-<script src="assets/js/preloader.js"></script>
-<script src="assets/js/cursor.js"></script>
+<script src="assets/js/preloader.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
 <script>
 (function() {
     var STATES = {
@@ -219,7 +219,9 @@
 </script>
 
 
-<script src="assets/js/transitions.js"></script>
+<script src="assets/js/transitions.js" defer></script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
 

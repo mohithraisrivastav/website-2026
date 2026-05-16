@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="assets/js/theme.js"></script>
@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
 
     <link rel="stylesheet" href="assets/css/pages/membership.css">
     <script src="assets/js/translate.js" defer></script>
@@ -243,8 +243,8 @@
 
 <script src="assets/js/site.js" defer></script>
 
-<script src="assets/js/preloader.js"></script>
-<script src="assets/js/cursor.js"></script>
+<script src="assets/js/preloader.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
 <script>
 /* -- Razorpay config --------------------------------------------------- */
 var RAZORPAY_KEY_ID = '';
@@ -474,8 +474,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
     </div>
 </div>
-<script src="assets/js/transitions.js"></script>
-<script src="assets/js/cart.js"></script>
+<script src="assets/js/transitions.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
 

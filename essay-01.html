@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="assets/js/theme.js"></script>
@@ -10,6 +10,7 @@
 <title>On the Patience of Walls &mdash; Mohith Rai Srivastav</title>
 <meta name="description" content="What eighteen months inside a single laterite residence taught me about accumulation, surface, and the long, unhurried authorship of weather.">
 <meta name="author" content="Mohith Rai Srivastav">
+<meta name="keywords" content="laterite architecture, walls, materiality, surface photography, Goa architecture, architectural essay">
 <link rel="canonical" href="https://mohithraisrivastav.com/essay-01.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Mohith Rai Srivastav">
@@ -48,7 +49,7 @@
 <div id="rProgress"></div>
 <div id="imageModal">
   <span class="close">&times;</span>
-  <img id="modalImage" src="" alt="">
+  <img id="modalImage" src="" alt="" loading="lazy">
 </div>
 <nav class="navbar">
   <a href="index.html" class="logo-link"><img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav" class="logo"></a>
@@ -66,6 +67,7 @@
               <li><a href="about.html">About</a></li>
               <li><a href="journal.html" class="active">Journal</a></li>
               <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="publications.html">Publications</a></li>
           </ul>
       </li>
       <li><a href="workshops.html">Workshops</a></li>
@@ -91,6 +93,7 @@
           <a href="about.html" onclick="toggleMenu()">About</a>
           <a href="journal.html" onclick="toggleMenu()" class="active">Journal</a>
           <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+          <a href="publications.html" onclick="toggleMenu()">Publications</a>
       </div>
   </div>
   <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -123,7 +126,7 @@
     <p>I had been asking the wrong question. I had been asking: <em>how do I photograph this wall well?</em> The better question turned out to be: <em>when does the wall want to be photographed?</em> And that question cannot be answered in advance. It can only be answered by returning.</p>
     <h2>Slowness as method</h2>
     <p>But slowness is not only a poetic position. It is also a <strong>methodological</strong> one. When you return to a wall ninety times, you do not simply see more frames. You see the wall <em>differently</em>. The wall acquires a temperament. It becomes, in an almost uncomfortable sense, a collaborator.</p>
-    <figure><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85" alt=" Interior detail"><figcaption>Detail, west face &mdash; the chalk mark had been there three weeks before I noticed it.</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=85" alt=" Interior detail" loading="lazy"><figcaption>Detail, west face &mdash; the chalk mark had been there three weeks before I noticed it.</figcaption></figure>
     <h2>What the wall taught me</h2>
     <p>First: the wall is not the subject. The weather is the subject, and the wall is the instrument through which the weather records itself.</p>
     <p>Second: duration is a kind of access. A wall photographed once shows you what it looks like. A wall photographed ninety times shows you what it <em>is</em>.</p>
@@ -215,12 +218,14 @@ modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('active'))closeModal();});
 </script>
 
-<script src="assets/js/preloader.js"></script>
+<script src="assets/js/preloader.js" defer></script>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <div id="page-curtain"></div>
-<script src="assets/js/transitions.js"></script>
-<script src="assets/js/cursor.js"></script>
-<script src="assets/js/cart.js"></script>
+<script src="assets/js/transitions.js" defer></script>
+<script src="assets/js/cursor.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
 

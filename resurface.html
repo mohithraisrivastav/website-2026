@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <script src="assets/js/theme.js"></script>
@@ -10,17 +10,24 @@
     <title>Resurface — A Photographic Series | Mohith Rai Srivastav</title>
     <meta name="description" content="How does the built world remain active, even when its transformations go unnoticed? Resurface is a photographic enquiry by Mohith Rai Srivastav — moving through climates, materials, and conditions.">
     <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="keywords" content="Resurface series, architectural photography, materiality, surface, weathering, built environment, Mohith Rai Srivastav">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://mohithraisrivastav.com/resurface.html">
+    <meta property="og:site_name" content="Mohith Rai Srivastav">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Resurface — A Photographic Enquiry | Mohith Rai Srivastav">
     <meta property="og:description" content="How does the built world remain active, even when its transformations go unnoticed? A photographic series moving through climates, materials, and conditions.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mohithraisrivastav.com/resurface.html">
     <meta property="og:image" content="https://mohithraisrivastav.com/images/Burnt Earth.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Resurface — A Photographic Enquiry | Mohith Rai Srivastav">
+    <meta name="twitter:description" content="How does the built world remain active, even when its transformations go unnoticed? A photographic series moving through climates, materials, and conditions.">
+    <meta name="twitter:image" content="https://mohithraisrivastav.com/images/Burnt Earth.webp">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -748,6 +755,29 @@
             .station-figure.portrait { width: 92vw; }
         }
     </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "url": "https://mohithraisrivastav.com/resurface.html",
+  "name": "Resurface — A Photographic Series",
+  "description": "How does the built world remain active, even when its transformations go unnoticed? Resurface is a photographic enquiry by Mohith Rai Srivastav — moving through climates, materials, and conditions.",
+  "creator": {
+    "@type": "Person",
+    "@id": "https://mohithraisrivastav.com/#person",
+    "name": "Mohith Rai Srivastav"
+  },
+  "image": "https://mohithraisrivastav.com/images/Burnt Earth.webp",
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mohithraisrivastav.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Resurface", "item": "https://mohithraisrivastav.com/resurface.html" }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -770,6 +800,7 @@
                         <li><a href="about.html">About</a></li>
                         <li style="display:none"><a href="journal.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="publications.html">Publications</a></li>
                     </ul>
                 </li>
                 <li><a href="workshops.html">Workshops</a></li>
@@ -796,6 +827,7 @@
                 <a href="about.html" onclick="toggleMenu()">About</a>
                 <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+          <a href="publications.html" onclick="toggleMenu()">Publications</a>
             </div>
         </div>
         <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -857,7 +889,7 @@
 <section class="book-section reveal">
     <div class="book-cover">
         <img src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause — Monograph" loading="lazy"
-             onerror="this.onerror=null;this.src='images/Imprint.jpg';">
+             onerror="this.onerror=null;this.src='images/Imprint.webp';">
     </div>
     <div class="book-info">
         <p class="book-label" aria-hidden="true">The Monograph</p>
@@ -1147,7 +1179,7 @@
     <button class="lb-nav lb-prev" id="lbPrev" onclick="event.stopPropagation();lbStep(-1)" aria-label="Previous image">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="15 18 9 12 15 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <img class="lb-img" id="lbImg" src="" alt="">
+    <img class="lb-img" id="lbImg" src="" alt="" loading="lazy">
     <button class="lb-nav lb-next" id="lbNext" onclick="event.stopPropagation();lbStep(1)" aria-label="Next image">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="9 6 15 12 9 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -1300,6 +1332,8 @@
     }, { threshold: 0.08 });
     stations.forEach(s => stationReveal.observe(s));
 </script>
+<script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments);};</script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
 
