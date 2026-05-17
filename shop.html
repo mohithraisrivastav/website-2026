@@ -1,4 +1,4 @@
-﻿<!-- ============================================================
+<!-- ============================================================
      SHOP PAGE &mdash; SOURCE OF TRUTH
      Products are consolidated here with in-page filters.
      Legacy category pages redirect to this page.
@@ -6,9 +6,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="assets/js/theme.js"></script>
-
     <meta charset="UTF-8">
+    <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#CFA246">
@@ -329,10 +328,7 @@
             line-height: 1.6; font-weight: 300;
         }
 
-        /* ── View in Room trigger button (mobile + tablet only) ── */
-        @media (hover: hover) and (pointer: fine) {
-            .rv-trigger-btn { display: none !important; }
-        }
+        /* ── View in Room trigger button ── */
         .rv-trigger-btn {
             display: flex; align-items: center; gap: 9px;
             margin-top: 10px; width: 100%;
@@ -560,12 +556,13 @@
         .rv-top {
             pointer-events: auto;
             display: flex; align-items: flex-start; justify-content: space-between;
-            padding: 52px 24px 80px;
+            gap: 18px;
+            padding: 36px 24px 92px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
         }
         .rv-bottom {
             pointer-events: auto;
-            padding: 80px 24px 44px;
+            padding: 90px 24px 32px;
             background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
             display: flex; flex-direction: column; align-items: center; gap: 16px;
         }
@@ -582,8 +579,29 @@
         }
         .rv-close:hover { background: rgba(0,0,0,0.5); }
 
+        .rv-meta {
+            color: rgba(255,255,255,0.88);
+            max-width: min(58vw, 460px);
+        }
+        .rv-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.05;
+        }
+        .rv-status {
+            margin-top: 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 2.2px;
+            line-height: 1.45;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.58);
+        }
+
         /* Top-right controls */
-        .rv-controls { display: flex; gap: 10px; }
+        .rv-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; max-width: min(54vw, 520px); }
         .rv-ctl {
             display: flex; align-items: center; gap: 7px;
             background: rgba(0,0,0,0.3); border: none;
@@ -630,6 +648,196 @@
             background: rgba(207,162,70,0.3);
             border-color: rgba(207,162,70,0.7);
             color: #d4a94f;
+        }
+        .rv-tool-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        .rv-mini-btn {
+            min-width: 42px;
+            height: 38px;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.28);
+            color: rgba(255,255,255,0.82);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            cursor: pointer;
+        }
+        .rv-mini-btn:hover { background: rgba(255,255,255,0.14); }
+        .rv-slider-wrap {
+            width: min(430px, 86vw);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.72);
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .rv-slider-wrap input { width: 100%; accent-color: #CFA246; }
+
+        #rvGuides {
+            display: none;
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        #roomViewer.rv-guides-on #rvGuides { display: block; }
+        .rv-guide-cross::before,
+        .rv-guide-cross::after {
+            content: '';
+            position: absolute;
+            background: rgba(207,162,70,0.45);
+            box-shadow: 0 0 18px rgba(207,162,70,0.2);
+        }
+        .rv-guide-cross::before { left: 50%; top: 10%; bottom: 10%; width: 1px; }
+        .rv-guide-cross::after { top: 50%; left: 7%; right: 7%; height: 1px; }
+        .rv-guide-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px);
+            background-size: 12.5% 12.5%;
+            opacity: 0.45;
+        }
+        .rv-eye-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 42%;
+            height: 1px;
+            background: rgba(255,255,255,0.34);
+        }
+        .rv-eye-line span {
+            position: absolute;
+            right: 16px;
+            top: -18px;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
+
+        #rvCalibration {
+            display: none;
+            position: absolute;
+            left: 50%;
+            bottom: 186px;
+            z-index: 5;
+            width: min(420px, calc(100vw - 32px));
+            transform: translateX(-50%);
+            padding: 16px;
+            border: 1px solid rgba(207,162,70,0.35);
+            border-radius: 8px;
+            background: rgba(14,12,10,0.78);
+            color: rgba(247,243,236,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 22px 70px rgba(0,0,0,0.42);
+        }
+        #roomViewer.rv-calibrating #rvCalibration { display: block; }
+        .rv-cal-title {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #CFA246;
+            margin-bottom: 10px;
+        }
+        .rv-cal-text {
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: rgba(247,243,236,0.72);
+            margin-bottom: 12px;
+        }
+        .rv-cal-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        .rv-cal-row select,
+        .rv-cal-row input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #F7F3ED;
+            border-radius: 6px;
+            padding: 11px;
+        }
+        .rv-cal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .rv-cal-actions button {
+            flex: 1;
+            min-height: 40px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.08);
+            color: #F7F3ED;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .rv-cal-actions button:first-child {
+            background: #CFA246;
+            border-color: #CFA246;
+            color: #1A1612;
+        }
+        #rvMarker {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 4;
+            width: 190px;
+            height: 124px;
+            transform: translate(-50%, -50%);
+            border: 2px dashed rgba(207,162,70,0.9);
+            background: rgba(207,162,70,0.08);
+            pointer-events: none;
+        }
+        #rvMarker::before,
+        #rvMarker::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(255,255,255,0.36);
+        }
+        #rvMarker span {
+            position: absolute;
+            left: 50%;
+            bottom: -26px;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            color: rgba(255,255,255,0.78);
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        #roomViewer.rv-calibrating #rvMarker { display: block; }
+        @media (max-width: 680px) {
+            .rv-top { padding: 24px 14px 80px; }
+            .rv-bottom { padding: 88px 14px 24px; }
+            .rv-controls { max-width: 60vw; gap: 7px; }
+            .rv-ctl { padding: 8px 11px; font-size: 0.58rem; letter-spacing: 1.8px; }
+            .rv-status { font-size: 0.58rem; letter-spacing: 1.7px; }
+            #rvCalibration { bottom: 178px; }
         }
 
         /* No camera */
@@ -1503,7 +1711,13 @@
                 });
                 var rvId = id, rvTitle = p.title;
                 rvBtn.onclick = function() {
-                    openArSheet(rvId, rvTitle, rvImg, rvAspW, rvAspH, rvSizeList);
+                    var selected = sizeWrap.querySelector('.size-select option:checked');
+                    var selectedLabel = selected ? selected.dataset.sizeLabel : '';
+                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList, {
+                        id: rvId,
+                        title: rvTitle,
+                        selectedLabel: selectedLabel
+                    });
                 };
             } else {
                 rvBtn.style.display = 'none';
@@ -2169,131 +2383,158 @@
 
         /* ══ ROOM VIEWER JS ══════════════════════════════════════ */
         (function() {
-            var rvStream     = null;
-            var rvPos        = { x: 0, y: 0 };
-            var rvSize       = 280;
-            var rvAspect     = 1;
-            var rvSizes      = [];
-            var rvSelIdx     = 0;
-            var isDragging   = false;
-            var dragOffset   = { x: 0, y: 0 };
-            var isFramed     = false;
-            var pinchStart   = 0;
-            var pinchSzStart = 0;
-            var hideTimer    = null;
+            var rvStream = null;
+            var rvPos = { x: 0, y: 0 };
+            var rvSize = 280;
+            var rvAspect = 1;
+            var rvSizes = [];
+            var rvSelIdx = 0;
+            var rvRotation = 0;
+            var rvDepth = 1;
+            var rvPixelsPerInch = 0;
+            var rvCalibrated = false;
+            var rvPointerId = null;
+            var rvDragOffset = { x: 0, y: 0 };
+            var rvPinchStart = 0;
+            var rvPinchSizeStart = 0;
+            var rvRotateStart = 0;
+            var rvRotateBase = 0;
+            var isFramed = false;
+            var hideTimer = null;
 
-            /* ── helpers ── */
             function pdist(t) {
-                var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY;
-                return Math.sqrt(dx*dx+dy*dy);
+                var dx = t[0].clientX - t[1].clientX;
+                var dy = t[0].clientY - t[1].clientY;
+                return Math.sqrt(dx * dx + dy * dy);
             }
-            function clamp(s) { return Math.max(80, Math.min(s, window.innerWidth*0.92)); }
-            function updateTransform() {
-                var w=document.getElementById('rvPrintWrap');
-                w.style.left=rvPos.x+'px'; w.style.top=rvPos.y+'px';
-                w.style.width=rvSize+'px'; w.style.height=(rvSize/rvAspect)+'px';
+            function pangle(t) {
+                return Math.atan2(t[1].clientY - t[0].clientY, t[1].clientX - t[0].clientX) * 180 / Math.PI;
             }
+            function clampSize(s, allowOversize) {
+                var max = allowOversize ? Math.max(window.innerWidth, window.innerHeight) * 2.2 : window.innerWidth * 0.94;
+                return Math.max(72, Math.min(s, max));
+            }
+            function activeSize() { return rvSizes[rvSelIdx] || rvSizes[0] || { label: 'Print', w: 24, h: 18 }; }
+            function roundDim(v) { return (Math.round(v * 10) / 10).toString().replace(/\.0$/, ''); }
+            function currentScaleText() { return Math.round(rvDepth * 100) + '%'; }
             function setChrome(visible) {
                 document.getElementById('rvChrome').classList.toggle('rv-hidden', !visible);
             }
             function scheduleHide() {
                 clearTimeout(hideTimer);
-                hideTimer = setTimeout(function(){ setChrome(false); }, 3500);
+                hideTimer = setTimeout(function(){ setChrome(false); }, 15000);
             }
             function showChrome() { setChrome(true); scheduleHide(); }
-
+            function updateStatus() {
+                var status = document.getElementById('rvStatus');
+                var s = activeSize();
+                status.textContent = (rvCalibrated ? 'Calibrated scale' : 'Estimated scale') + ' · ' + s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' in · depth ' + currentScaleText();
+                document.getElementById('rvDepthValue').textContent = currentScaleText();
+            }
+            function updateTransform() {
+                var wrap = document.getElementById('rvPrintWrap');
+                var s = activeSize();
+                rvAspect = s.w / s.h;
+                wrap.style.left = rvPos.x + 'px';
+                wrap.style.top = rvPos.y + 'px';
+                wrap.style.width = rvSize + 'px';
+                wrap.style.height = (rvSize / rvAspect) + 'px';
+                wrap.style.transform = 'rotate(' + rvRotation.toFixed(1) + 'deg)';
+                document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
+                updateStatus();
+            }
+            function sizeFromScale(s) {
+                if (rvPixelsPerInch) return clampSize(s.w * rvPixelsPerInch * rvDepth, rvCalibrated);
+                return clampSize(Math.min(window.innerWidth, window.innerHeight) * 0.55 * rvDepth, false);
+            }
+            function recenterForSize(nextSize) {
+                var nextH = nextSize / rvAspect;
+                rvPos.x = (window.innerWidth - nextSize) / 2;
+                rvPos.y = (window.innerHeight - nextH) / 2;
+            }
             function selectSize(idx) {
                 rvSelIdx = idx;
-                var s = rvSizes[idx];
-                /* proportional resize: keep aspect, scale from viewport */
+                var s = activeSize();
                 rvAspect = s.w / s.h;
-                rvSize   = clamp(Math.min(window.innerWidth, window.innerHeight) * 0.55);
-                rvPos.x  = (window.innerWidth  - rvSize) / 2;
-                rvPos.y  = (window.innerHeight - rvSize / rvAspect) / 2;
+                rvSize = sizeFromScale(s);
+                recenterForSize(rvSize);
                 var wrap = document.getElementById('rvPrintWrap');
                 wrap.classList.add('rv-sizing');
                 updateTransform();
                 setTimeout(function(){ wrap.classList.remove('rv-sizing'); }, 600);
-                /* dim display */
-                document.getElementById('rvDim').textContent = s.w + ' × ' + s.h + ' inches';
-                /* chips */
-                document.querySelectorAll('.rv-chip').forEach(function(c,i){
-                    c.classList.toggle('rv-active', i===idx);
+                document.querySelectorAll('.rv-chip').forEach(function(c, i) {
+                    c.classList.toggle('rv-active', i === idx);
                 });
             }
+            function markerWidthInches() {
+                var sel = document.getElementById('rvMarkerSelect');
+                return parseFloat(sel.value) || 8.27;
+            }
 
-            /* ── open ── */
-            window.openRoomViewer = function(imgSrc, aspW, aspH, sizes) {
-                rvAspect = (aspW&&aspH) ? aspW/aspH : 1;
-                rvSizes  = sizes || [{ label: aspW+'×'+aspH, w: aspW, h: aspH }];
-                rvSelIdx = 0;
+            window.openRoomViewer = function(imgSrc, aspW, aspH, sizes, options) {
+                options = options || {};
+                rvSizes = (sizes && sizes.length) ? sizes.slice() : [{ label: 'Print', w: aspW, h: aspH }];
+                rvSelIdx = Math.max(0, rvSizes.findIndex(function(s) { return s.label === options.selectedLabel; }));
+                if (rvSelIdx < 0) rvSelIdx = 0;
+                rvRotation = 0;
+                rvDepth = 1;
+                rvCalibrated = false;
+                rvPixelsPerInch = 0;
+                rvAspect = activeSize().w / activeSize().h;
+                rvSize = sizeFromScale(activeSize());
+                rvPixelsPerInch = rvSize / activeSize().w;
+                recenterForSize(rvSize);
 
+                document.getElementById('rvTitle').textContent = options.title || 'View in Your Room';
                 document.getElementById('rvPrint').src = imgSrc;
+                document.getElementById('rvDepthSlider').value = 100;
+                document.getElementById('rvNoCam').style.display = 'none';
+                document.getElementById('roomViewer').classList.remove('rv-sample-wall', 'rv-calibrating', 'rv-guides-on');
+                document.getElementById('rvGuideToggle').classList.remove('rv-on');
+                document.getElementById('rvCalBtn').classList.remove('rv-on');
 
-                /* initial size */
-                rvSize  = clamp(Math.min(window.innerWidth, window.innerHeight) * 0.55);
-                rvPos.x = (window.innerWidth  - rvSize) / 2;
-                rvPos.y = (window.innerHeight - rvSize / rvAspect) / 2;
-                updateTransform();
-
-                /* build chips */
                 var chipsEl = document.getElementById('rvChips');
                 chipsEl.innerHTML = '';
-                rvSizes.forEach(function(s,i){
+                rvSizes.forEach(function(s, i) {
                     var b = document.createElement('button');
-                    b.className = 'rv-chip' + (i===0 ? ' rv-active' : '');
+                    b.className = 'rv-chip' + (i === rvSelIdx ? ' rv-active' : '');
                     b.textContent = s.label;
-                    (function(idx){ b.onclick = function(){ selectSize(idx); showChrome(); }; })(i);
+                    b.setAttribute('aria-label', s.label + ' size, ' + roundDim(s.w) + ' by ' + roundDim(s.h) + ' inches');
+                    b.onclick = function() { selectSize(i); showChrome(); };
                     chipsEl.appendChild(b);
                 });
 
-                /* dim label */
-                var s0 = rvSizes[0];
-                document.getElementById('rvDim').textContent = s0.w + ' × ' + s0.h + ' inches';
-
-                /* reset frame */
                 isFramed = false;
                 document.getElementById('rvPrintWrap').classList.remove('rv-framed');
                 document.getElementById('rvFrameBtn').classList.remove('rv-on');
-
-                document.getElementById('rvNoCam').style.display = 'none';
-                var rvEl = document.getElementById('roomViewer');
-                rvEl.classList.remove('rv-sample-wall');
                 var vEl = document.getElementById('rvVideo');
                 if (vEl) vEl.style.display = '';
-                rvEl.classList.add('rv-open');
+                document.getElementById('roomViewer').classList.add('rv-open');
                 document.body.style.overflow = 'hidden';
+                updateTransform();
 
-                /* fade print in after a beat */
-                setTimeout(function(){
+                setTimeout(function() {
                     document.getElementById('rvPrintWrap').classList.add('rv-visible');
                 }, 120);
 
                 showChrome();
                 startRvCamera();
-                /* orientation is requested only AFTER camera succeeds —
-                   requesting both in the same gesture makes iOS kill the camera prompt */
             };
 
-            /* ── close ── */
             window.closeRoomViewer = function() {
                 clearTimeout(hideTimer);
-                document.getElementById('roomViewer').classList.remove('rv-open');
+                document.getElementById('roomViewer').classList.remove('rv-open', 'rv-calibrating');
                 document.getElementById('rvPrintWrap').classList.remove('rv-visible');
                 document.body.style.overflow = '';
-                if (rvStream) { rvStream.getTracks().forEach(function(t){t.stop();}); rvStream=null; }
-                window.unbindRvOrientation && window.unbindRvOrientation();
+                if (rvStream) { rvStream.getTracks().forEach(function(t){ t.stop(); }); rvStream = null; }
             };
 
-            /* ── camera ── */
             window.startRvCamera = function() {
                 var nc = document.getElementById('rvNoCam');
-                var p  = nc.querySelector('p');
-                var b  = nc.querySelector('.rv-allow-btn');
-
-                /* reset from any previous failed state */
+                var p = nc.querySelector('p');
+                var b = nc.querySelector('.rv-allow-btn');
                 nc.style.display = 'none';
-                if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; }
+                if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; b.onclick = window.startRvCamera; }
 
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                     p.textContent = 'Camera is not supported in this browser.';
@@ -2302,10 +2543,8 @@
                     return;
                 }
 
-                /* try rear camera, fall back to any camera */
                 function tryCamera(constraints) {
-                    return navigator.mediaDevices.getUserMedia(constraints)
-                    .then(function(stream) {
+                    return navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
                         rvStream = stream;
                         var v = document.getElementById('rvVideo');
                         v.srcObject = stream;
@@ -2313,20 +2552,15 @@
                         v.style.display = '';
                         document.getElementById('roomViewer').classList.remove('rv-sample-wall');
                         nc.style.display = 'none';
-                        /* now safe to request orientation — separate gesture window */
-                        setTimeout(startRvOrientation, 400);
                     });
                 }
 
                 tryCamera({ video: { facingMode: { ideal: 'environment' } } })
-                .catch(function() {
-                    /* rear camera failed — try any camera */
-                    return tryCamera({ video: true });
-                })
+                .catch(function() { return tryCamera({ video: true }); })
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
                     if (denied) {
-                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">To use your own room, enable camera in<br><strong>Settings → Safari → Camera</strong>.</span>';
+                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">Enable camera access, or use the sample wall preview.</span>';
                     } else if (err.name === 'NotFoundError') {
                         p.textContent = 'No camera found on this device.';
                     } else {
@@ -2341,7 +2575,6 @@
                 });
             };
 
-            /* ── sample wall fallback ── */
             window.useRvSampleWall = function() {
                 document.getElementById('rvNoCam').style.display = 'none';
                 var v = document.getElementById('rvVideo');
@@ -2351,96 +2584,182 @@
                 showChrome();
             };
 
-            /* ── frame ── */
+            window.toggleRvGuides = function(force) {
+                var rv = document.getElementById('roomViewer');
+                var on = typeof force === 'boolean' ? force : !rv.classList.contains('rv-guides-on');
+                rv.classList.toggle('rv-guides-on', on);
+                document.getElementById('rvGuideToggle').classList.toggle('rv-on', on);
+                showChrome();
+            };
+
+            window.toggleRvCalibration = function(force) {
+                var rv = document.getElementById('roomViewer');
+                var on = typeof force === 'boolean' ? force : !rv.classList.contains('rv-calibrating');
+                rv.classList.toggle('rv-calibrating', on);
+                document.getElementById('rvCalBtn').classList.toggle('rv-on', on);
+                if (on) window.toggleRvGuides(true);
+                updateRvMarkerFromControl();
+                showChrome();
+            };
+
+            window.updateRvMarkerFromControl = function() {
+                var marker = document.getElementById('rvMarker');
+                var width = parseFloat(document.getElementById('rvMarkerWidth').value) || 190;
+                marker.style.width = width + 'px';
+                marker.style.height = Math.max(46, width * 0.62) + 'px';
+            };
+
+            window.confirmRvCalibration = function() {
+                var markerWidthPx = parseFloat(document.getElementById('rvMarkerWidth').value) || 190;
+                rvPixelsPerInch = markerWidthPx / markerWidthInches();
+                rvCalibrated = true;
+                rvDepth = 1;
+                document.getElementById('rvDepthSlider').value = 100;
+                rvSize = sizeFromScale(activeSize());
+                recenterForSize(rvSize);
+                updateTransform();
+                window.toggleRvCalibration(false);
+            };
+
             window.toggleRvFrame = function() {
-                isFramed=!isFramed;
+                isFramed = !isFramed;
                 document.getElementById('rvPrintWrap').classList.toggle('rv-framed', isFramed);
                 document.getElementById('rvFrameBtn').classList.toggle('rv-on', isFramed);
+                showChrome();
             };
 
-            /* ── save ── */
+            window.adjustRvRotation = function(delta) {
+                rvRotation += delta;
+                updateTransform();
+                showChrome();
+            };
+
+            window.setRvDepth = function(value) {
+                rvDepth = Math.max(0.7, Math.min(1.4, parseFloat(value) / 100 || 1));
+                rvSize = sizeFromScale(activeSize());
+                updateTransform();
+                showChrome();
+            };
+
+            window.nudgeRvScale = function(delta) {
+                rvDepth = Math.max(0.7, Math.min(1.4, rvDepth + delta));
+                document.getElementById('rvDepthSlider').value = Math.round(rvDepth * 100);
+                rvSize = sizeFromScale(activeSize());
+                updateTransform();
+                showChrome();
+            };
+
+            window.resetRvPlacement = function() {
+                rvRotation = 0;
+                rvDepth = 1;
+                document.getElementById('rvDepthSlider').value = 100;
+                rvSize = sizeFromScale(activeSize());
+                recenterForSize(rvSize);
+                updateTransform();
+                showChrome();
+            };
+
             window.saveRvSnapshot = function() {
-                var c=document.createElement('canvas');
-                c.width=window.innerWidth; c.height=window.innerHeight;
-                var ctx=c.getContext('2d');
-                var vid=document.getElementById('rvVideo');
-                if(vid.readyState>=2) ctx.drawImage(vid,0,0,c.width,c.height);
-                var wrap=document.getElementById('rvPrintWrap');
-                var r=wrap.getBoundingClientRect();
-                if(isFramed){ var b=14; ctx.fillStyle='#ede8de'; ctx.fillRect(r.left-b,r.top-b,r.width+b*2,r.height+b*2); }
-                try{ ctx.drawImage(document.getElementById('rvPrint'),r.left,r.top,r.width,r.height); }catch(e){}
-                try{ var l=document.createElement('a'); l.download='room-view.jpg'; l.href=c.toDataURL('image/jpeg',0.92); l.click(); }
-                catch(e){ alert('Use your screenshot button to save.'); }
+                var c = document.createElement('canvas');
+                c.width = window.innerWidth;
+                c.height = window.innerHeight;
+                var ctx = c.getContext('2d');
+                var vid = document.getElementById('rvVideo');
+                if (vid && vid.readyState >= 2 && vid.style.display !== 'none') {
+                    ctx.drawImage(vid, 0, 0, c.width, c.height);
+                } else {
+                    var grd = ctx.createLinearGradient(0, 0, c.width, c.height);
+                    grd.addColorStop(0, '#d8d2c6');
+                    grd.addColorStop(1, '#bdb5a4');
+                    ctx.fillStyle = grd;
+                    ctx.fillRect(0, 0, c.width, c.height);
+                }
+                var wrap = document.getElementById('rvPrintWrap');
+                var img = document.getElementById('rvPrint');
+                var r = wrap.getBoundingClientRect();
+                ctx.save();
+                ctx.translate(r.left + r.width / 2, r.top + r.height / 2);
+                ctx.rotate(rvRotation * Math.PI / 180);
+                if (isFramed) {
+                    ctx.fillStyle = '#ede8de';
+                    ctx.fillRect(-r.width / 2 - 14, -r.height / 2 - 14, r.width + 28, r.height + 28);
+                }
+                try { ctx.drawImage(img, -r.width / 2, -r.height / 2, r.width, r.height); } catch(e) {}
+                ctx.restore();
+                try {
+                    var l = document.createElement('a');
+                    l.download = 'room-view.jpg';
+                    l.href = c.toDataURL('image/jpeg', 0.92);
+                    l.click();
+                } catch(e) {
+                    alert('Use your screenshot button to save.');
+                }
             };
 
-            /* ── gyroscope ── */
-            var rvOrientBound=false, rvBaseB=null, rvBaseG=null;
-            function handleOrientation(e){
-                if(!document.getElementById('roomViewer').classList.contains('rv-open')) return;
-                if(rvBaseB===null){rvBaseB=e.beta; rvBaseG=e.gamma; return;}
-                var dB=Math.max(-16,Math.min(16,(e.beta-rvBaseB)*0.3));
-                var dG=Math.max(-16,Math.min(16,(e.gamma-rvBaseG)*0.3));
-                document.getElementById('rvPrintWrap').style.transform=
-                    'perspective(700px) rotateX('+(-dB)+'deg) rotateY('+dG+'deg)';
-            }
-            window.bindRvOrientation=function(){
-                if(rvOrientBound) return; rvOrientBound=true; rvBaseB=null; rvBaseG=null;
-                window.addEventListener('deviceorientation', handleOrientation);
-            };
-            window.unbindRvOrientation=function(){
-                window.removeEventListener('deviceorientation', handleOrientation);
-                rvOrientBound=false;
-                var w=document.getElementById('rvPrintWrap'); if(w) w.style.transform='';
-            };
-            function startRvOrientation(){
-                if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
-                    DeviceOrientationEvent.requestPermission().then(function(s){if(s==='granted') window.bindRvOrientation();}).catch(function(){});
-                } else if(window.DeviceOrientationEvent){ window.bindRvOrientation(); }
-            }
+            document.addEventListener('DOMContentLoaded', function() {
+                var wrap = document.getElementById('rvPrintWrap');
+                var rv = document.getElementById('roomViewer');
 
-            /* ── events (after DOM ready) ── */
-            document.addEventListener('DOMContentLoaded', function(){
-                var wrap=document.getElementById('rvPrintWrap');
-                var rv=document.getElementById('roomViewer');
-
-                /* tap to show chrome */
-                rv.addEventListener('touchstart', function(){ showChrome(); }, { passive:true });
-
-                /* drag */
-                wrap.addEventListener('touchstart',function(e){
-                    if(e.touches.length===1){
-                        isDragging=true;
-                        dragOffset.x=e.touches[0].clientX-rvPos.x;
-                        dragOffset.y=e.touches[0].clientY-rvPos.y;
-                    } else if(e.touches.length===2){
-                        isDragging=false;
-                        pinchStart=pdist(e.touches);
-                        pinchSzStart=rvSize;
+                rv.addEventListener('pointerdown', function() { showChrome(); });
+                wrap.addEventListener('pointerdown', function(e) {
+                    if (e.pointerType === 'touch') return;
+                    rvPointerId = e.pointerId;
+                    wrap.setPointerCapture(rvPointerId);
+                    rvDragOffset.x = e.clientX - rvPos.x;
+                    rvDragOffset.y = e.clientY - rvPos.y;
+                    wrap.classList.add('rv-dragging');
+                    e.preventDefault();
+                });
+                wrap.addEventListener('pointermove', function(e) {
+                    if (rvPointerId !== e.pointerId) return;
+                    rvPos.x = e.clientX - rvDragOffset.x;
+                    rvPos.y = e.clientY - rvDragOffset.y;
+                    updateTransform();
+                });
+                wrap.addEventListener('pointerup', function(e) {
+                    if (rvPointerId === e.pointerId) {
+                        rvPointerId = null;
+                        wrap.classList.remove('rv-dragging');
                     }
+                });
+
+                wrap.addEventListener('touchstart', function(e) {
+                    if (e.touches.length === 1) {
+                        rvDragOffset.x = e.touches[0].clientX - rvPos.x;
+                        rvDragOffset.y = e.touches[0].clientY - rvPos.y;
+                    } else if (e.touches.length === 2) {
+                        rvPinchStart = pdist(e.touches);
+                        rvPinchSizeStart = rvSize;
+                        rvRotateStart = pangle(e.touches);
+                        rvRotateBase = rvRotation;
+                    }
+                    showChrome();
                     e.stopPropagation();
                     e.preventDefault();
-                },{ passive:false });
+                }, { passive: false });
 
-                wrap.addEventListener('touchmove',function(e){
-                    if(e.touches.length===1&&isDragging){
-                        rvPos.x=e.touches[0].clientX-dragOffset.x;
-                        rvPos.y=e.touches[0].clientY-dragOffset.y;
-                        updateTransform();
-                    } else if(e.touches.length===2){
-                        rvSize=clamp(pinchSzStart*(pdist(e.touches)/pinchStart));
-                        updateTransform();
-                        /* update dim while pinching */
-                        var s=rvSizes[rvSelIdx];
-                        if(s) document.getElementById('rvDim').textContent=s.w+' × '+s.h+' inches';
+                wrap.addEventListener('touchmove', function(e) {
+                    if (e.touches.length === 1) {
+                        rvPos.x = e.touches[0].clientX - rvDragOffset.x;
+                        rvPos.y = e.touches[0].clientY - rvDragOffset.y;
+                    } else if (e.touches.length === 2) {
+                        var ratio = pdist(e.touches) / Math.max(1, rvPinchStart);
+                        rvSize = clampSize(rvPinchSizeStart * ratio);
+                        rvDepth = Math.max(0.7, Math.min(1.4, rvSize / Math.max(1, sizeFromScale(activeSize()) / rvDepth)));
+                        document.getElementById('rvDepthSlider').value = Math.round(rvDepth * 100);
+                        rvRotation = rvRotateBase + (pangle(e.touches) - rvRotateStart);
                     }
+                    updateTransform();
                     e.preventDefault();
-                },{ passive:false });
+                }, { passive: false });
 
-                wrap.addEventListener('touchend',function(){ isDragging=false; });
-
-                /* keyboard */
-                document.addEventListener('keydown',function(e){
-                    if(e.key==='Escape'&&rv.classList.contains('rv-open')) window.closeRoomViewer();
+                document.addEventListener('keydown', function(e) {
+                    if (!rv.classList.contains('rv-open')) return;
+                    if (e.key === 'Escape') window.closeRoomViewer();
+                    if (e.key === 'ArrowLeft') { rvPos.x -= 8; updateTransform(); }
+                    if (e.key === 'ArrowRight') { rvPos.x += 8; updateTransform(); }
+                    if (e.key === 'ArrowUp') { rvPos.y -= 8; updateTransform(); }
+                    if (e.key === 'ArrowDown') { rvPos.y += 8; updateTransform(); }
                 });
             });
         })();
@@ -3129,6 +3448,12 @@
 <!-- ── Room Viewer ──────────────────────────────────────── -->
 <div id="roomViewer" role="dialog" aria-modal="true" aria-label="View print in your room">
   <video id="rvVideo" autoplay playsinline muted></video>
+  <div id="rvGuides" aria-hidden="true">
+    <div class="rv-guide-grid"></div>
+    <div class="rv-guide-cross"></div>
+    <div class="rv-eye-line"><span>Eye level</span></div>
+  </div>
+  <div id="rvMarker" aria-hidden="true"><span>Match marker</span></div>
 
   <div id="rvPrintWrap">
     <img id="rvPrint" src="" alt="Print preview" draggable="false">
@@ -3139,10 +3464,26 @@
       <button class="rv-close" onclick="closeRoomViewer()" aria-label="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
+      <div class="rv-meta">
+        <div class="rv-title" id="rvTitle">View in Your Room</div>
+        <div class="rv-status" id="rvStatus">Estimated scale until calibrated</div>
+      </div>
       <div class="rv-controls">
+        <button class="rv-ctl" id="rvCalBtn" onclick="toggleRvCalibration()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 14h6"/></svg>
+          Calibrate
+        </button>
+        <button class="rv-ctl" id="rvGuideToggle" onclick="toggleRvGuides()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          Guides
+        </button>
         <button class="rv-ctl" id="rvFrameBtn" onclick="toggleRvFrame()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="6" y="6" width="12" height="12"/></svg>
           Frame
+        </button>
+        <button class="rv-ctl" onclick="resetRvPlacement()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><path d="M3 12a9 9 0 1 0 9-9"/><polyline points="3 4 3 12 11 12"/></svg>
+          Reset
         </button>
         <button class="rv-ctl" onclick="saveRvSnapshot()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="13" height="13"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
@@ -3153,6 +3494,35 @@
     <div class="rv-bottom">
       <div class="rv-dim" id="rvDim"></div>
       <div class="rv-chips" id="rvChips"></div>
+      <div class="rv-tool-row" aria-label="Placement controls">
+        <button class="rv-mini-btn" onclick="adjustRvRotation(-1.5)" aria-label="Rotate left">-1.5°</button>
+        <button class="rv-mini-btn" onclick="adjustRvRotation(1.5)" aria-label="Rotate right">+1.5°</button>
+        <button class="rv-mini-btn" onclick="nudgeRvScale(-0.05)" aria-label="Push back">Back</button>
+        <button class="rv-mini-btn" onclick="nudgeRvScale(0.05)" aria-label="Pull closer">Closer</button>
+      </div>
+      <label class="rv-slider-wrap">
+        <span>Depth</span>
+        <input id="rvDepthSlider" type="range" min="70" max="140" value="100" oninput="setRvDepth(this.value)">
+        <span id="rvDepthValue">100%</span>
+      </label>
+    </div>
+  </div>
+
+  <div id="rvCalibration" role="group" aria-label="Scale calibration">
+    <div class="rv-cal-title">Scale calibration</div>
+    <div class="rv-cal-text">Place a known object on the wall, match the gold marker to it, then confirm. This sets the print closer to real size.</div>
+    <div class="rv-cal-row">
+      <select id="rvMarkerSelect" onchange="updateRvMarkerFromControl()">
+        <option value="8.27">A4 paper width — 8.27 in</option>
+        <option value="11.69">A4 paper height — 11.69 in</option>
+        <option value="3.37">Credit card width — 3.37 in</option>
+        <option value="12">12 in ruler</option>
+      </select>
+      <input id="rvMarkerWidth" type="range" min="80" max="340" value="190" oninput="updateRvMarkerFromControl()">
+    </div>
+    <div class="rv-cal-actions">
+      <button type="button" onclick="confirmRvCalibration()">Set Scale</button>
+      <button type="button" onclick="toggleRvCalibration(false)">Cancel</button>
     </div>
   </div>
 
