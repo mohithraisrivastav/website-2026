@@ -7,12 +7,6 @@
  * Disabled on touch devices & prefers-reduced-motion.
  */
 (function () {
-    // Dark charcoal arrow cursor via encoded SVG data URI
-    const svg = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18"><path d="M1 1 L1 15 L4.5 11 L7.5 17.5 L10.5 16.5 L7 10 L13 10 Z" fill="#1A1612" stroke="#F7F3ED" stroke-width="0.8" stroke-linejoin="round"/></svg>`);
-    const style = document.createElement('style');
-    style.textContent = `*, *::before, *::after { cursor: url("data:image/svg+xml,${svg}") 0 0, auto !important; }`;
-    document.head.appendChild(style);
-    return;
     if (window.matchMedia('(hover: none)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -51,10 +45,10 @@
             transform: translate(-50%, -50%);
             will-change: transform;
             display: flex; align-items: center; justify-content: center;
-            transition: width 0.3s cubic-bezier(0.25,0.1,0.25,1),
-                        height 0.3s cubic-bezier(0.25,0.1,0.25,1),
-                        opacity 0.2s ease,
-                        border-color 0.2s ease;
+            transition: width 0.12s ease,
+                        height 0.12s ease,
+                        opacity 0.12s ease,
+                        border-color 0.12s ease;
         }
         #c-ring.img-hover {
             width: 80px; height: 80px;
@@ -74,7 +68,7 @@
             text-transform: uppercase;
             color: #1A1612;
             opacity: 0;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.1s ease;
             user-select: none;
             line-height: 1;
             pointer-events: none;
@@ -96,7 +90,7 @@
     /* ─── Position state ──────────────────────────────────────── */
     let mx = -200, my = -200;
     let rx = mx,   ry = my;
-    const LERP = 0.12;
+    const LERP = 0.35;
 
     /* Dot follows instantly */
     document.addEventListener('mousemove', e => {
