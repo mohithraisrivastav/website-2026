@@ -28,6 +28,9 @@
     border: 0;
 }
 
+/* ── Global Reset ───────────────────────────────────────────────────────── */
+html, body { cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M 0 0 L 0 14 L 11 7 Z" fill="%231A1612" stroke="%231A1612" stroke-width="0.5"/></svg>') 0 0, auto; }
+
 /* ── Google Translate – suppress injected toolbar & tooltips ──────────────── */
 .goog-te-banner-frame,
 .goog-te-balloon-frame,
