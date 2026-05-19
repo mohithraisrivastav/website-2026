@@ -1736,7 +1736,13 @@
             if (p.origW) {
                 const sizes = calcPrintSizes(p.origW, p.origH);
                 const foundIdx   = sizes.findIndex(s => s.price === p.price);
-                const defaultIdx = Math.min(foundIdx !== -1 ? foundIdx : 2, sizes.length - 1);
+                /* Sync modal with whatever size the user already picked on the card */
+                const cardEl  = document.querySelector('.product-card[onclick*="\'' + id + '\'"]');
+                const cardSel = cardEl && cardEl.querySelector('.size-select');
+                const cardIdx = cardSel ? parseInt(cardSel.value, 10) : -1;
+                const defaultIdx = (cardIdx >= 0 && cardIdx < sizes.length)
+                    ? cardIdx
+                    : Math.min(foundIdx !== -1 ? foundIdx : 2, sizes.length - 1);
 
                 selectedPrice    = sizes[defaultIdx].price;
                 selectedDimLabel = sizes[defaultIdx].str;
@@ -1789,9 +1795,18 @@
                 wrap.appendChild(sel);
                 sizeWrap.appendChild(wrap);
 
-                /* set initial price to match default selection */
+                /* set initial price + specs to match default selected size */
                 document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
                 document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
+                /* sync Edition + Dimensions in the specs grid with the default size */
+                const defOpt = sel.options[defaultIdx];
+                if (defOpt) {
+                    document.getElementById('modalSpecs').querySelectorAll('.spec-item').forEach(function(row) {
+                        const key = row.querySelector('.spec-label').textContent;
+                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = defOpt.dataset.edition.replace('Ed. ', '');
+                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = defOpt.dataset.dim;
+                    });
+                }
 
                 /* render edition registry for the default size */
                 renderRegistry(id, sizes[defaultIdx].label);
@@ -3203,7 +3218,15 @@
 
                 sel.addEventListener('change', function() {
                     var opt = this.options[this.selectedIndex];
-                    if (priceEl) priceEl.textContent = formatPrice(parseInt(opt.dataset.price));
+                    var newPrice = parseInt(opt.dataset.price);
+                    if (priceEl) {
+                        /* formatPrice lives in currency.js — fall back to plain INR if not ready */
+                        priceEl.textContent = (typeof window.formatPrice === 'function')
+                            ? window.formatPrice(newPrice)
+                            : '₹' + newPrice.toLocaleString('en-IN');
+                        /* keep data-inr in sync so currency-switch re-renders correctly */
+                        priceEl.setAttribute('data-inr', newPrice);
+                    }
                     if (dimTag)  dimTag.textContent  = opt.dataset.dim;
                     if (edTag)   edTag.textContent   = opt.dataset.edition;
                 });
