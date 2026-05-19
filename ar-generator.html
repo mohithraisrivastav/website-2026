@@ -157,21 +157,28 @@ document.getElementById('imgFolder').addEventListener('change', function(e) {
   imgFileMap.clear();
 
   for (const file of e.target.files) {
-    imgFileMap.set(file.name, URL.createObjectURL(file));
+    const url = URL.createObjectURL(file);
+    /* index by full filename ("Burnt Earth.jpg") AND by base name without
+       extension ("Burnt Earth") so .jpg / .webp mismatches still resolve */
+    imgFileMap.set(file.name, url);
+    const base = file.name.replace(/\.[^/.]+$/, '');
+    if (!imgFileMap.has(base)) imgFileMap.set(base, url);
   }
-  const n = imgFileMap.size;
+  const n = e.target.files.length;
   document.getElementById('folderStatus').innerHTML =
     n > 0
       ? '<span style="color:#8fbf6f">✓ ' + n + ' image' + (n === 1 ? '' : 's') + ' ready</span>'
-      : '<span style="color:#d98f8f">No images found in that folder</span>';
+      : '<span style="color:#d98f8f">No images found</span>';
 });
 
 function loadImage(src) {
-  /* src = 'images/Burnt Earth.jpg' → filename = 'Burnt Earth.jpg' */
+  /* src = 'images/Burnt Earth.jpg'
+     Try: exact filename → base name without extension → raw path fallback */
   const filename = src.split('/').pop();
-  /* Use the blob URL if the user picked the folder (works from file://).
-     Fall back to the path directly when served via HTTP.             */
-  const resolvedSrc = imgFileMap.has(filename) ? imgFileMap.get(filename) : src;
+  const base     = filename.replace(/\.[^/.]+$/, '');
+  const resolvedSrc = imgFileMap.has(filename) ? imgFileMap.get(filename)
+                    : imgFileMap.has(base)     ? imgFileMap.get(base)
+                    : src; /* HTTP fallback */
 
   return new Promise((res, rej) => {
     const im = new Image();
