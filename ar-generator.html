@@ -124,7 +124,10 @@ function log(msg, cls) {
 function loadImage(src) {
   return new Promise((res, rej) => {
     const im = new Image();
-    im.crossOrigin = 'anonymous';
+    /* crossOrigin is NOT set here: this tool runs from file:// where browsers
+       treat crossOrigin='anonymous' as a CORS request with no server to answer
+       it, causing every local image to silently fail. Local files are same-origin
+       by definition — no crossOrigin needed. */
     im.onload = async () => {
       /* onload fires before a large image is DECODED — drawing it now
          yields a blank canvas. decode() guarantees the pixels exist. */
