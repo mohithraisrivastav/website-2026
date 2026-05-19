@@ -74,7 +74,7 @@
 
     const IN_TO_M = 0.0254;
     const FRAME_BORDER = 0.018;
-    const FRAME_DEPTH = 0.032;
+    const FRAME_DEPTH = 0.038;  /* 3.8 cm ≈ 1.5 inches */
     const MAX_TEX = 2048;
 
     function loadImage(src) {
@@ -3432,8 +3432,8 @@
     min-camera-orbit="-Infinity 25deg 60%"
     max-camera-orbit="Infinity 155deg 200%"
     touch-action="none"
-    shadow-intensity="1.15"
-    shadow-softness="0.95"
+    shadow-intensity="1"
+    shadow-softness="1"
     exposure="1.0"
     tone-mapping="commerce"
     environment-image="neutral"
