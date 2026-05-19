@@ -72,90 +72,97 @@
     import * as THREE from 'three';
     import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
-    var IN_TO_M = 0.0254, FRAME_BORDER = 0.018, FRAME_DEPTH = 0.032, MAX_TEX = 2048;
+    const IN_TO_M = 0.0254;
+    const FRAME_BORDER = 0.018;
+    const FRAME_DEPTH = 0.032;
+    const MAX_TEX = 2048;
 
     function loadImage(src) {
-      return new Promise(function(res, rej) {
-        var im = new Image();
+      return new Promise((resolve, reject) => {
+        const im = new Image();
         im.crossOrigin = 'anonymous';
-        im.onload = function(){
-          /* onload precedes DECODE for large images → blank draw */
-          if (im.decode) { im.decode().then(function(){ res(im); }, function(){ res(im); }); }
-          else res(im);
-        };
-        im.onerror = function(){ rej(new Error('image load failed')); };
+        im.onload = () => resolve(im);
+        im.onerror = () => reject(new Error('Image load failed'));
         im.src = src;
       });
     }
-    /* downscale → real <img> (exporters skip canvas-sourced textures) */
+
     function prepImageEl(image) {
-      var w = image.naturalWidth, h = image.naturalHeight;
-      var s = Math.min(1, MAX_TEX / Math.max(w, h));
+      let w = image.naturalWidth, h = image.naturalHeight;
+      const s = Math.min(1, MAX_TEX / Math.max(w, h));
       w = Math.round(w * s); h = Math.round(h * s);
-      var c = document.createElement('canvas');
+
+      const c = document.createElement('canvas');
       c.width = w; c.height = h;
-      var x = c.getContext('2d');
-      x.imageSmoothingQuality = 'high';
-      x.drawImage(image, 0, 0, w, h);
-      var dataUrl = c.toDataURL('image/jpeg', 0.86);
-      return new Promise(function(res, rej) {
-        var out = new Image();
-        out.onload = function(){
-          if (out.decode) { out.decode().then(function(){ res(out); }, function(){ res(out); }); }
-          else res(out);
-        };
-        out.onerror = function(){ rej(new Error('texture re-encode failed')); };
-        out.src = dataUrl;
+      const ctx = c.getContext('2d');
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(image, 0, 0, w, h);
+
+      return new Promise((resolve, reject) => {
+        const out = new Image();
+        out.onload = () => resolve(out);
+        out.onerror = () => reject(new Error('Texture re-encode failed'));
+        out.src = c.toDataURL('image/jpeg', 0.90);
       });
     }
+
     function buildScene(image, wIn, hIn) {
-      var scene = new THREE.Scene();
-      var artW = wIn * IN_TO_M, artH = hIn * IN_TO_M;
-      var outW = artW + FRAME_BORDER * 2, outH = artH + FRAME_BORDER * 2;
+      const scene = new THREE.Scene();
+      const artW = wIn * IN_TO_M;
+      const artH = hIn * IN_TO_M;
+      const outW = artW + (FRAME_BORDER * 2);
+      const outH = artH + (FRAME_BORDER * 2);
 
-      /* no baked shadow plane — bounding box must equal the framed print
-         or native AR seats, scales, and manipulates it wrong */
+      // Anchor fix: translate the box so its BACK face is exactly at Z=0.
+      // With ar-placement="wall", Z=0 is the physical wall surface.
+      // BoxGeometry builds centred on the origin, so without this the rear
+      // half of the frame sinks into the wall. Shifting by +FRAME_DEPTH/2
+      // moves the entire frame in front of the wall where it belongs.
+      const frameGeo = new THREE.BoxGeometry(outW, outH, FRAME_DEPTH);
+      frameGeo.translate(0, 0, FRAME_DEPTH / 2);
 
-      var frame = new THREE.Mesh(
-        new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
-        new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
+      const frame = new THREE.Mesh(
+        frameGeo,
+        new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 })
       );
       scene.add(frame);
 
-      return prepImageEl(image).then(function(texImg) {
-        var tex = new THREE.Texture(texImg);
+      return prepImageEl(image).then((texImg) => {
+        const tex = new THREE.Texture(texImg);
         tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = 8;
         tex.needsUpdate = true;
-        var art = new THREE.Mesh(
+
+        // Art sits on the front face of the frame; +0.001 prevents z-fighting
+        const art = new THREE.Mesh(
           new THREE.PlaneGeometry(artW, artH),
-          new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+          new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5 })
         );
-        art.position.z = FRAME_DEPTH / 2 + 0.0012;
+        art.position.z = FRAME_DEPTH + 0.001;
         scene.add(art);
+
         return scene;
       });
     }
 
     function glbExport(scene) {
-      var ex = new GLTFExporter(), opts = { binary: true };
-      if (typeof ex.parseAsync === 'function') return ex.parseAsync(scene, opts);
-      return new Promise(function (resolve, reject) {
-        try {
-          ex.parse(scene, function (r) { resolve(r); }, function (e) { reject(e); }, opts);
-        } catch (e1) {
-          try { ex.parse(scene, function (r) { resolve(r); }, opts); }
-          catch (e2) { reject(e2); }
-        }
+      const exporter = new GLTFExporter();
+      const opts = { binary: true };
+      return new Promise((resolve, reject) => {
+        exporter.parse(
+          scene,
+          (result) => resolve(result),
+          (error) => reject(error),
+          opts
+        );
       });
     }
 
     window.__buildArGLB = function(imgUrl, wIn, hIn) {
       return loadImage(imgUrl)
-        .then(function(image) { return buildScene(image, wIn, hIn); })
-        .then(function(scene) { return glbExport(scene); })
-        .then(function(glb) {
-          var blob = new Blob([glb], { type: 'model/gltf-binary' });
+        .then(image => buildScene(image, wIn, hIn))
+        .then(scene => glbExport(scene))
+        .then(glb => {
+          const blob = new Blob([glb], { type: 'model/gltf-binary' });
           return URL.createObjectURL(blob);
         });
     };
