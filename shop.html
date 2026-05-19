@@ -2074,7 +2074,7 @@
 
                 sheet.classList.add('ar-open');
                 document.body.style.overflow = 'hidden';
-                arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
+                arSession = { id: id, title: title, img: img, w: wIn, h: hIn, sizes: sizeList, t0: Date.now() };
 
                 /* ── in-app browser: cannot do native AR here ── */
                 if (isInAppBrowser()) {
@@ -2338,17 +2338,26 @@
                     if (viewer.canActivateAR) {
                         if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
-                    } else if (!window.__arNative) {
-                        /* hosted .glb/.usdz not published yet — be honest */
-                        viewer.cameraOrbit = '12deg 82deg 108%';
-                        document.getElementById('arHint').textContent =
-                            'Live wall AR for this print is being published. Drag to explore in 3D.';
-                        if (arSession) track('ar_native_unpublished', { item_id: arSession.id });
                     } else {
-                        /* hosted model exists but device has no AR (desktop) */
-                        viewer.cameraOrbit = '12deg 82deg 108%';
-                        document.getElementById('arHint').textContent =
-                            'Open on your phone for live wall AR. Drag to explore in 3D.';
+                        /* No native AR — route mobile silently to camera room viewer;
+                           keep desktop in 3D-spin mode with a gentle hint.            */
+                        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                        if (isMobile && arSession && typeof window.openRoomViewer === 'function') {
+                            if (arSession) track('ar_fallback_room', { item_id: arSession.id });
+                            var sess = arSession;
+                            window.closeArSheet();
+                            window.openRoomViewer(
+                                sess.img, sess.w, sess.h,
+                                sess.sizes && sess.sizes.length
+                                    ? sess.sizes
+                                    : [{ label: 'Standard', w: sess.w, h: sess.h }],
+                                { title: sess.title }
+                            );
+                        } else {
+                            viewer.cameraOrbit = '12deg 82deg 108%';
+                            document.getElementById('arHint').textContent =
+                                'Drag to explore in 3D · open on your phone for live AR';
+                        }
                     }
                 });
 
