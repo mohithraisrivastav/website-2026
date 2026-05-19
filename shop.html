@@ -2554,25 +2554,9 @@
                 tryCamera({ video: { facingMode: { ideal: 'environment' } } })
                 .catch(function() { return tryCamera({ video: true }); })
                 .catch(function(err) {
-                    var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
-                    var hint = '';
-                    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                    var isAndroid = /Android/.test(navigator.userAgent);
-                    if (denied) {
-                        hint = isIOS
-                            ? 'Settings → Safari → Camera → Allow, then tap Try Again.'
-                            : isAndroid
-                            ? 'Tap the lock icon in address bar → Camera → Allow, then tap Try Again.'
-                            : 'Allow camera access in browser settings, then tap Try Again.';
-                        p.innerHTML = 'Camera access is blocked.<br><span style="font-size:0.78rem;font-style:normal;opacity:0.55;line-height:1.8;display:block;margin-top:8px;">' + hint + '</span>';
-                        if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
-                    } else if (err.name === 'NotFoundError') {
-                        p.textContent = 'No camera found. Open on your phone to view in your room.';
-                        if (b) b.style.display = 'none';
-                    } else {
-                        p.textContent = 'Camera could not start. Try reloading the page.';
-                        if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
-                    }
+                    /* DEBUG — show raw error so we can diagnose */
+                    p.innerHTML = 'Error: <strong>' + err.name + '</strong><br><span style="font-size:0.75rem;opacity:0.6;display:block;margin-top:6px;">' + (err.message || 'no message') + '</span>';
+                    if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     nc.style.display = 'flex';
                 });
             };
