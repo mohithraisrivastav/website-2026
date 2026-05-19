@@ -810,14 +810,17 @@
             .edeck-inner{ grid-template-columns:1fr; height:auto; }
             .edeck-right{ order:-1; padding:32px 24px; border-bottom:1px solid rgba(207, 162, 70, .15); border-top:none; min-height:280px; }
             .edeck-left{ order:1; padding:32px 24px; }
-            .edeck-stage{ width:min(200px,55vw); }
-            /* Remove rotation on mobile — it causes left-edge bleed on narrow cards */
-            .edeck-sc:nth-child(1){ transform:translate(4px,4px) rotate(0deg); }
-            .edeck-sc:nth-child(2){ transform:translate(3px,3px) rotate(0deg); }
-            .edeck-sc:nth-child(3){ transform:translate(2px,2px) rotate(0deg); }
-            .edeck-sc:nth-child(4){ transform:translate(1px,1px) rotate(0deg); }
+            /* Clip at stage level so rotated shadow cards don't bleed (hover-lift doesn't fire on touch) */
+            .edeck-stage{ width:min(200px,55vw); overflow:hidden; }
+            /* Restore original rotations — clipped by stage overflow */
+            .edeck-sc:nth-child(1){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
+            .edeck-sc:nth-child(2){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
+            .edeck-sc:nth-child(3){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
+            .edeck-sc:nth-child(4){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
             /* Reduce letter-spacing on idle label so it fits on narrow card */
             .edeck-idle span{ letter-spacing:2px; font-size:0.75rem; }
+            /* Remove blue tap highlight on mobile */
+            .edeck-dc{ -webkit-tap-highlight-color: transparent; }
 
             /* Timeline — hide left nav, show detail only */
             .journey{ grid-template-columns:1fr; gap:0; min-height:auto; }
