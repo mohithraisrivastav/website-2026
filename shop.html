@@ -530,13 +530,8 @@
             filter: blur(7px); pointer-events: none; z-index: -1;
         }
         #rvPrintWrap.rv-framed {
-            outline: 13px solid #111;
+            /* outline & box-shadow width set dynamically in JS (1 inch at print scale) */
             filter: none;
-            box-shadow:
-                0 0 0 14px #111,
-                0 0 0 15px rgba(0,0,0,0.15),
-                0 20px 60px rgba(0,0,0,0.6),
-                0 50px 100px rgba(0,0,0,0.3);
         }
         #rvPrint {
             display: block; width: 100%; height: 100%;
@@ -2431,6 +2426,19 @@
                 status.textContent = (rvCalibrated ? 'Calibrated scale' : 'Estimated scale') + ' · ' + s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' in · depth ' + currentScaleText();
                 document.getElementById('rvDepthValue').textContent = currentScaleText();
             }
+            /* 1-inch frame at current print scale */
+            function applyRvFrame() {
+                var fw = Math.round(rvPixelsPerInch > 2 ? rvPixelsPerInch : Math.min(window.innerWidth, window.innerHeight) * 0.04);
+                fw = Math.max(6, fw); // never invisible
+                var wrap = document.getElementById('rvPrintWrap');
+                wrap.style.outline = fw + 'px solid #111';
+                wrap.style.boxShadow =
+                    '0 0 0 ' + (fw + 1) + 'px #111,' +
+                    '0 0 0 ' + (fw + 2) + 'px rgba(0,0,0,0.18),' +
+                    '0 20px 60px rgba(0,0,0,0.6),' +
+                    '0 50px 100px rgba(0,0,0,0.3)';
+            }
+
             function updateTransform() {
                 var wrap = document.getElementById('rvPrintWrap');
                 var s = activeSize();
@@ -2441,6 +2449,7 @@
                 wrap.style.height = (rvSize / rvAspect) + 'px';
                 wrap.style.transform = 'rotate(' + rvRotation.toFixed(1) + 'deg)';
                 document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
+                if (isFramed) applyRvFrame();
                 updateStatus();
             }
             function sizeFromScale(s) {
@@ -2623,8 +2632,15 @@
 
             window.toggleRvFrame = function() {
                 isFramed = !isFramed;
-                document.getElementById('rvPrintWrap').classList.toggle('rv-framed', isFramed);
+                var wrap = document.getElementById('rvPrintWrap');
+                wrap.classList.toggle('rv-framed', isFramed);
                 document.getElementById('rvFrameBtn').classList.toggle('rv-on', isFramed);
+                if (isFramed) {
+                    applyRvFrame();
+                } else {
+                    wrap.style.outline = '';
+                    wrap.style.boxShadow = '';
+                }
                 showChrome();
             };
 
