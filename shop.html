@@ -1775,20 +1775,21 @@
                 sel.appendChild(reqOpt);
 
                 sel.addEventListener('change', function() {
-                    const opt     = this.options[this.selectedIndex];
-                    selectedPrice     = parseInt(opt.dataset.price);
-                    selectedDimLabel  = opt.dataset.dim;
+                    const sz = sizes[this.selectedIndex];
+                    if (!sz) return;   /* guard: disabled "larger sizes" option */
+                    selectedPrice    = sz.price;
+                    selectedDimLabel = sz.str;
                     document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
                     document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
                     /* update Edition + Dimensions in the specs grid */
                     const specsEl = document.getElementById('modalSpecs');
                     specsEl.querySelectorAll('.spec-item').forEach(function(row) {
                         const key = row.querySelector('.spec-label').textContent;
-                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = opt.dataset.edition.replace('Ed. ', '');
-                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = opt.dataset.dim;
+                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = sz.edition.replace('Ed. ', '');
+                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = sz.str;
                     });
                     /* re-render edition registry for the newly selected size */
-                    renderRegistry(currentProduct, opt.dataset.sizeLabel);
+                    renderRegistry(currentProduct, sz.label);
                 });
 
                 wrap.appendChild(lbl);
