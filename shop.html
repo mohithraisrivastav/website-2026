@@ -2531,48 +2531,79 @@
 
             window.startRvCamera = function() {
                 var nc = document.getElementById('rvNoCam');
-                var p = nc.querySelector('p');
-                var b = nc.querySelector('.rv-allow-btn');
-                nc.style.display = 'none';
-                if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; b.onclick = window.startRvCamera; }
+                var p  = nc.querySelector('p');
+                var b  = nc.querySelector('.rv-allow-btn');
+                var sub = nc.querySelector('.rv-nocam-sub');
+
+                var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                var isAndroid = /Android/.test(navigator.userAgent);
+
+                var STYLE_HINT = 'font-size:0.8rem;font-style:normal;opacity:0.55;line-height:1.75;display:block;margin-top:10px;';
+
+                function showDenied() {
+                    var hint = isIOS
+                        ? 'On iPhone: Settings → Safari → Camera → Allow for this site, then tap Allow Camera.'
+                        : isAndroid
+                        ? 'In Chrome: tap the lock icon in the address bar → Camera → Allow, then tap Allow Camera.'
+                        : 'Open browser settings → Site permissions → Camera → Allow for this site, then try again.';
+                    p.innerHTML = 'Camera access is blocked.<br><span style="' + STYLE_HINT + '">' + hint + '</span>';
+                    if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; b.onclick = window.startRvCamera; }
+                    if (sub) sub.style.display = 'none';
+                    nc.style.display = 'flex';
+                }
+
+                function showError(msg) {
+                    p.textContent = msg;
+                    if (b) { b.style.display = ''; b.textContent = 'Use Sample Wall Instead'; b.onclick = window.useRvSampleWall; }
+                    if (sub) sub.style.display = 'none';
+                    nc.style.display = 'flex';
+                }
+
+                function showLoading() {
+                    p.textContent = 'Starting camera…';
+                    if (b) b.style.display = 'none';
+                    if (sub) sub.style.display = 'none';
+                    nc.style.display = 'flex';
+                }
 
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    p.textContent = 'Camera is not supported in this browser.';
-                    if (b) b.style.display = 'none';
-                    nc.style.display = 'flex';
+                    showError('Camera is not supported in this browser. Try Safari on iPhone or Chrome on Android.');
                     return;
                 }
 
-                function tryCamera(constraints) {
-                    return navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
-                        rvStream = stream;
-                        var v = document.getElementById('rvVideo');
-                        v.srcObject = stream;
-                        v.play().catch(function(){});
-                        v.style.display = '';
-                        document.getElementById('roomViewer').classList.remove('rv-sample-wall');
-                        nc.style.display = 'none';
+                function doStartCamera() {
+                    showLoading();
+                    function tryCamera(constraints) {
+                        return navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                            rvStream = stream;
+                            var v = document.getElementById('rvVideo');
+                            v.srcObject = stream;
+                            v.play().catch(function(){});
+                            v.style.display = '';
+                            document.getElementById('roomViewer').classList.remove('rv-sample-wall');
+                            nc.style.display = 'none';
+                            if (sub) sub.style.display = '';
+                        });
+                    }
+                    tryCamera({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } })
+                    .catch(function() { return tryCamera({ video: true }); })
+                    .catch(function(err) {
+                        var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
+                        if (denied) { showDenied(); }
+                        else if (err.name === 'NotFoundError') { showError('No camera found on this device.'); }
+                        else { showError('Camera could not start. Try reloading the page.'); }
                     });
                 }
 
-                tryCamera({ video: { facingMode: { ideal: 'environment' } } })
-                .catch(function() { return tryCamera({ video: true }); })
-                .catch(function(err) {
-                    var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
-                    if (denied) {
-                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">Enable camera access, or use the sample wall preview.</span>';
-                    } else if (err.name === 'NotFoundError') {
-                        p.textContent = 'No camera found on this device.';
-                    } else {
-                        p.textContent = 'Camera could not start.';
-                    }
-                    if (b) {
-                        b.style.display = '';
-                        b.textContent = 'View on a Sample Wall';
-                        b.onclick = window.useRvSampleWall;
-                    }
-                    nc.style.display = 'flex';
-                });
+                /* Check if already denied without prompting the user */
+                if (navigator.permissions && navigator.permissions.query) {
+                    navigator.permissions.query({ name: 'camera' }).then(function(result) {
+                        if (result.state === 'denied') { showDenied(); }
+                        else { doStartCamera(); }
+                    }).catch(doStartCamera);
+                } else {
+                    doStartCamera();
+                }
             };
 
             window.useRvSampleWall = function() {
