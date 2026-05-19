@@ -2401,6 +2401,13 @@
             var rvRotateBase = 0;
             var isFramed = false;
             var hideTimer = null;
+            /* ── Wall-tracking via device orientation ──────────────────────── */
+            var rvOrientBase    = null;          /* { b, g } angles at placement  */
+            var rvPosAtOrient   = { x:0, y:0 }; /* rvPos when base was recorded  */
+            var rvOrientActive  = false;
+            var rvTouching      = false;
+            var rvLastBeta      = null;          /* latest beta for perspective   */
+            var rvOrientSens    = 0;             /* px per degree                 */
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
@@ -2452,10 +2459,17 @@
                 wrap.style.height = (rvSize / rvAspect) + 'px';
                 /* Use translate() for position so the composited layer, hit area,
                    and visual all stay in sync on mobile (left/top can diverge
-                   from the composited hit region when filter+will-change are set). */
+                   from the composited hit region when filter+will-change are set).
+                   Add perspective tilt when phone is vertical (wall mode):
+                   beta ~90° = phone upright looking at wall → 0° rotateX (flat)
+                   beta ~50° = phone tilted back → ~20° rotateX (wall foreshortening) */
+                var perspTilt = (rvLastBeta !== null)
+                    ? Math.max(0, (88 - Math.abs(rvLastBeta)) * 0.55)
+                    : 0;
                 wrap.style.transform =
                     'translate(' + rvPos.x.toFixed(1) + 'px,' + rvPos.y.toFixed(1) + 'px)' +
-                    ' rotate(' + rvRotation.toFixed(1) + 'deg)';
+                    ' rotate(' + rvRotation.toFixed(1) + 'deg)' +
+                    (perspTilt > 1 ? ' perspective(900px) rotateX(' + perspTilt.toFixed(1) + 'deg)' : '');
                 document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
                 if (isFramed) applyRvFrame();
                 updateStatus();
@@ -2493,6 +2507,50 @@
             function markerWidthInches() {
                 var sel = document.getElementById('rvMarkerSelect');
                 return parseFloat(sel.value) || 8.27;
+            }
+
+            /* ── Orientation tracking: keeps print fixed on wall as phone moves ── */
+            function rvOrientHandler(e) {
+                if (!rvOrientActive) return;
+                var beta  = e.beta;
+                var gamma = e.gamma;
+                if (beta === null || gamma === null) return;
+                rvLastBeta = beta;
+                if (rvTouching) {
+                    /* Manual drag in progress — just update perspective, no position */
+                    updateTransform();
+                    return;
+                }
+                if (!rvOrientBase) {
+                    /* First event after placement — lock this as the wall reference */
+                    rvOrientBase = { b: beta, g: gamma };
+                    rvPosAtOrient.x = rvPos.x;
+                    rvPosAtOrient.y = rvPos.y;
+                    return;
+                }
+                /* Compensate for phone movement so the print stays on the wall */
+                rvPos.x = rvPosAtOrient.x - (gamma - rvOrientBase.g) * rvOrientSens;
+                rvPos.y = rvPosAtOrient.y + (beta  - rvOrientBase.b) * rvOrientSens;
+                updateTransform();
+            }
+
+            function startRvOrient() {
+                rvOrientActive = false;
+                rvOrientBase   = null;
+                rvOrientSens   = Math.min(window.innerWidth, window.innerHeight) / 52;
+                if (typeof DeviceOrientationEvent === 'undefined') return;
+                function go() {
+                    rvOrientActive = true;
+                    window.addEventListener('deviceorientation', rvOrientHandler);
+                }
+                /* iOS 13+ requires explicit permission via a user gesture */
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(function(s) { if (s === 'granted') go(); })
+                        .catch(function() {});
+                } else {
+                    go(); /* Android / older iOS — no permission needed */
+                }
             }
 
             window.openRoomViewer = function(imgSrc, aspW, aspH, sizes, options) {
@@ -2543,10 +2601,14 @@
 
                 showChrome();
                 startRvCamera();
+                startRvOrient(); /* begin wall-tracking via gyroscope */
             };
 
             window.closeRoomViewer = function() {
                 clearTimeout(hideTimer);
+                /* Stop orientation tracking */
+                rvOrientActive = false;
+                window.removeEventListener('deviceorientation', rvOrientHandler);
                 document.getElementById('roomViewer').classList.remove('rv-open', 'rv-calibrating');
                 document.getElementById('rvPrintWrap').classList.remove('rv-visible');
                 document.body.style.overflow = '';
@@ -2756,6 +2818,7 @@
                     showChrome();
                     /* Let button/chip taps through untouched */
                     if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    rvTouching = true; /* pause wall-tracking while finger is down */
                     if (e.touches.length === 1) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
                         rvDragOffset.y = e.touches[0].clientY - rvPos.y;
@@ -2782,6 +2845,15 @@
                     updateTransform();
                     e.preventDefault();
                 }, { passive: false });
+
+                rv.addEventListener('touchend', function(e) {
+                    if (e.touches.length > 0) return; /* still fingers on screen */
+                    rvTouching = false;
+                    /* Re-arm wall-tracking from new position after manual drag */
+                    rvOrientBase = null;
+                    rvPosAtOrient.x = rvPos.x;
+                    rvPosAtOrient.y = rvPos.y;
+                }, { passive: true });
 
                 document.addEventListener('keydown', function(e) {
                     if (!rv.classList.contains('rv-open')) return;
