@@ -2554,8 +2554,21 @@
                 tryCamera({ video: { facingMode: { ideal: 'environment' } } })
                 .catch(function() { return tryCamera({ video: true }); })
                 .catch(function(err) {
-                    /* DEBUG — show raw error so we can diagnose */
-                    p.innerHTML = 'Error: <strong>' + err.name + '</strong><br><span style="font-size:0.75rem;opacity:0.6;display:block;margin-top:6px;">' + (err.message || 'no message') + '</span>';
+                    var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
+                    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    var isAndroid = /Android/.test(navigator.userAgent);
+                    if (denied) {
+                        var hint = isIOS
+                            ? 'Go to Settings → Safari → Camera → Allow.'
+                            : isAndroid
+                            ? 'Tap the lock icon in address bar → Camera → Allow.'
+                            : 'Allow camera access in browser settings.';
+                        p.innerHTML = 'Camera access is blocked.<br><span style="font-size:0.78rem;font-style:normal;opacity:0.55;line-height:1.8;display:block;margin-top:8px;">' + hint + '</span>';
+                    } else if (err.name === 'NotFoundError') {
+                        p.textContent = 'No camera found. Open on your phone to view in your room.';
+                    } else {
+                        p.textContent = 'Camera could not start. Try reloading the page.';
+                    }
                     if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     nc.style.display = 'flex';
                 });
