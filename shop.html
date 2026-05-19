@@ -485,7 +485,7 @@
         /* ══ ROOM VIEWER ══════════════════════════════════════════ */
         #roomViewer {
             display: none; position: fixed; inset: 0; z-index: 99999;
-            background: #000; overscroll-behavior: none;
+            background: #000; overscroll-behavior: none; touch-action: none;
         }
         #roomViewer.rv-open { display: block; }
 
@@ -497,7 +497,7 @@
 
         /* Print */
         #rvPrintWrap {
-            position: absolute;
+            position: absolute; left: 0; top: 0;
             user-select: none; touch-action: none;
             transform-origin: center center;
             will-change: transform, width, height;
@@ -2431,11 +2431,14 @@
                 var wrap = document.getElementById('rvPrintWrap');
                 var s = activeSize();
                 rvAspect = s.w / s.h;
-                wrap.style.left = rvPos.x + 'px';
-                wrap.style.top = rvPos.y + 'px';
                 wrap.style.width = rvSize + 'px';
                 wrap.style.height = (rvSize / rvAspect) + 'px';
-                wrap.style.transform = 'rotate(' + rvRotation.toFixed(1) + 'deg)';
+                /* Use translate() for position so the composited layer, hit area,
+                   and visual all stay in sync on mobile (left/top can diverge
+                   from the composited hit region when filter+will-change are set). */
+                wrap.style.transform =
+                    'translate(' + rvPos.x.toFixed(1) + 'px,' + rvPos.y.toFixed(1) + 'px)' +
+                    ' rotate(' + rvRotation.toFixed(1) + 'deg)';
                 document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
                 if (isFramed) applyRvFrame();
                 updateStatus();
