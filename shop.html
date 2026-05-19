@@ -2467,14 +2467,21 @@
             function recenterForSize(nextSize) {
                 var nextH = nextSize / rvAspect;
                 rvPos.x = (window.innerWidth - nextSize) / 2;
-                rvPos.y = (window.innerHeight - nextH) / 2;
+                /* Place in upper zone — walls live here in typical room photos, not the floor/table area */
+                rvPos.y = Math.max(60, Math.round(window.innerHeight * 0.18));
             }
             function selectSize(idx) {
+                /* Resize in-place — keep the print centre at the same screen position
+                   so the user's wall placement isn't destroyed when they tap a size chip */
+                var oldH = rvSize / Math.max(0.01, rvAspect);
+                var centerX = rvPos.x + rvSize / 2;
+                var centerY = rvPos.y + oldH / 2;
                 rvSelIdx = idx;
                 var s = activeSize();
                 rvAspect = s.w / s.h;
                 rvSize = sizeFromScale(s);
-                recenterForSize(rvSize);
+                rvPos.x = centerX - rvSize / 2;
+                rvPos.y = centerY - (rvSize / rvAspect) / 2;
                 var wrap = document.getElementById('rvPrintWrap');
                 wrap.classList.add('rv-sizing');
                 updateTransform();
@@ -2741,7 +2748,14 @@
                     }
                 });
 
-                wrap.addEventListener('touchstart', function(e) {
+                /* ── Touch: drag from ANYWHERE on screen ───────────────────────────
+                   Single finger on background or print → move the print.
+                   Two fingers → pinch-resize + twist-rotate.
+                   Taps on buttons/chips are excluded so the chrome still works.   */
+                rv.addEventListener('touchstart', function(e) {
+                    showChrome();
+                    /* Let button/chip taps through untouched */
+                    if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
                     if (e.touches.length === 1) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
                         rvDragOffset.y = e.touches[0].clientY - rvPos.y;
@@ -2751,12 +2765,10 @@
                         rvRotateStart = pangle(e.touches);
                         rvRotateBase = rvRotation;
                     }
-                    showChrome();
-                    e.stopPropagation();
-                    e.preventDefault();
-                }, { passive: false });
+                }, { passive: true });  /* passive keeps click events alive on buttons */
 
-                wrap.addEventListener('touchmove', function(e) {
+                rv.addEventListener('touchmove', function(e) {
+                    if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
                     if (e.touches.length === 1) {
                         rvPos.x = e.touches[0].clientX - rvDragOffset.x;
                         rvPos.y = e.touches[0].clientY - rvDragOffset.y;
