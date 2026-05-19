@@ -493,19 +493,7 @@
             position: absolute; inset: 0; width: 100%; height: 100%;
             object-fit: cover;
         }
-        /* sample gallery wall — used when camera is unavailable */
-        #roomViewer.rv-sample-wall {
-            background:
-                radial-gradient(ellipse 120% 80% at 50% 18%, rgba(255,255,255,0.06) 0%, transparent 60%),
-                linear-gradient(176deg, #d8d2c6 0%, #cdc6b8 42%, #bdb5a4 100%);
-        }
-        #roomViewer.rv-sample-wall #rvVideo { display: none; }
-        #roomViewer.rv-sample-wall::after {
-            content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-            height: 26%;
-            background: linear-gradient(to top, rgba(120,110,92,0.32) 0%, transparent 100%);
-            pointer-events: none;
-        }
+        /* Camera-only AR — no sample wall fallback */
 
         /* Print */
         #rvPrintWrap {
@@ -2498,7 +2486,7 @@
                 document.getElementById('rvPrint').src = imgSrc;
                 document.getElementById('rvDepthSlider').value = 100;
                 document.getElementById('rvNoCam').style.display = 'none';
-                document.getElementById('roomViewer').classList.remove('rv-sample-wall', 'rv-calibrating', 'rv-guides-on');
+                document.getElementById('roomViewer').classList.remove('rv-calibrating', 'rv-guides-on');
                 document.getElementById('rvGuideToggle').classList.remove('rv-on');
                 document.getElementById('rvCalBtn').classList.remove('rv-on');
 
@@ -2559,7 +2547,6 @@
                         v.srcObject = stream;
                         v.play().catch(function(){});
                         v.style.display = '';
-                        document.getElementById('roomViewer').classList.remove('rv-sample-wall');
                         nc.style.display = 'none';
                     });
                 }
@@ -2568,30 +2555,28 @@
                 .catch(function() { return tryCamera({ video: true }); })
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
+                    var hint = '';
+                    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    var isAndroid = /Android/.test(navigator.userAgent);
                     if (denied) {
-                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">Enable camera access, or use the sample wall preview.</span>';
+                        hint = isIOS
+                            ? 'Settings → Safari → Camera → Allow, then tap Try Again.'
+                            : isAndroid
+                            ? 'Tap the lock icon in address bar → Camera → Allow, then tap Try Again.'
+                            : 'Allow camera access in browser settings, then tap Try Again.';
+                        p.innerHTML = 'Camera access is blocked.<br><span style="font-size:0.78rem;font-style:normal;opacity:0.55;line-height:1.8;display:block;margin-top:8px;">' + hint + '</span>';
+                        if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     } else if (err.name === 'NotFoundError') {
-                        p.textContent = 'No camera found on this device.';
+                        p.textContent = 'No camera found. Open on your phone to view in your room.';
+                        if (b) b.style.display = 'none';
                     } else {
-                        p.textContent = 'Camera could not start.';
-                    }
-                    if (b) {
-                        b.style.display = '';
-                        b.textContent = 'View on a Sample Wall';
-                        b.onclick = window.useRvSampleWall;
+                        p.textContent = 'Camera could not start. Try reloading the page.';
+                        if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     }
                     nc.style.display = 'flex';
                 });
             };
 
-            window.useRvSampleWall = function() {
-                document.getElementById('rvNoCam').style.display = 'none';
-                var v = document.getElementById('rvVideo');
-                if (v) v.style.display = 'none';
-                document.getElementById('roomViewer').classList.add('rv-sample-wall');
-                document.getElementById('rvPrintWrap').classList.add('rv-visible');
-                showChrome();
-            };
 
             window.toggleRvGuides = function(force) {
                 var rv = document.getElementById('roomViewer');
