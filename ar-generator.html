@@ -187,9 +187,14 @@ async function buildScene(image, wIn, hIn) {
   const outW = artW + FRAME_BORDER * 2;
   const outH = artH + FRAME_BORDER * 2;
 
-  /* matte black frame body — bounding box = exactly the framed print */
+  /* matte black frame body */
+  const frameGeo = new THREE.BoxGeometry(outW, outH, FRAME_DEPTH);
+
+  // Shift the origin so the back of the frame sits exactly at Z=0
+  frameGeo.translate(0, 0, FRAME_DEPTH / 2);
+
   const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
+    frameGeo,
     new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
   );
   scene.add(frame);
@@ -205,7 +210,8 @@ async function buildScene(image, wIn, hIn) {
     new THREE.PlaneGeometry(artW, artH),
     new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
   );
-  art.position.z = FRAME_DEPTH / 2 + 0.0012;
+  // Adjusted to sit on the newly shifted front face
+  art.position.z = FRAME_DEPTH + 0.0012;
   scene.add(art);
 
   return scene;
