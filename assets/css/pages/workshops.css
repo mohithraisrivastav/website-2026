@@ -811,11 +811,13 @@
             .edeck-right{ order:-1; padding:32px 24px; border-bottom:1px solid rgba(207, 162, 70, .15); border-top:none; min-height:280px; }
             .edeck-left{ order:1; padding:32px 24px; }
             .edeck-stage{ width:min(200px,55vw); }
-            /* Tighten shadow card offsets so they don't bleed outside the container */
-            .edeck-sc:nth-child(1){ transform:translate(4px,4px) rotate(1.2deg); }
-            .edeck-sc:nth-child(2){ transform:translate(3px,3px) rotate(0.8deg); }
-            .edeck-sc:nth-child(3){ transform:translate(2px,2px) rotate(0.4deg); }
-            .edeck-sc:nth-child(4){ transform:translate(1px,1px) rotate(0.1deg); }
+            /* Remove rotation on mobile — it causes left-edge bleed on narrow cards */
+            .edeck-sc:nth-child(1){ transform:translate(4px,4px) rotate(0deg); }
+            .edeck-sc:nth-child(2){ transform:translate(3px,3px) rotate(0deg); }
+            .edeck-sc:nth-child(3){ transform:translate(2px,2px) rotate(0deg); }
+            .edeck-sc:nth-child(4){ transform:translate(1px,1px) rotate(0deg); }
+            /* Reduce letter-spacing on idle label so it fits on narrow card */
+            .edeck-idle span{ letter-spacing:2px; font-size:0.75rem; }
 
             /* Timeline — hide left nav, show detail only */
             .journey{ grid-template-columns:1fr; gap:0; min-height:auto; }
