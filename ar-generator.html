@@ -55,6 +55,20 @@
   }
   .steps strong { color: #f3ede0; }
   code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 3px; }
+  .folder-row {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px; padding: 14px 16px;
+    background: rgba(207,162,70,0.07); border: 1px solid rgba(207,162,70,0.2);
+    border-radius: 4px;
+  }
+  .folder-label {
+    flex-shrink: 0; background: rgba(207,162,70,0.18); border: 1px solid rgba(207,162,70,0.4);
+    color: #CFA246; font-size: 0.74rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 8px 16px; cursor: pointer;
+    border-radius: 2px; transition: background 0.2s;
+  }
+  .folder-label:hover { background: rgba(207,162,70,0.3); }
+  .folder-status { font-size: 0.78rem; color: rgba(243,237,224,0.5); line-height: 1.4; }
 </style>
 <script type="importmap">
 {
@@ -75,9 +89,18 @@
     <code>.glb</code> (Android) and <code>.usdz</code> (iPhone) per print.
   </p>
 
+  <!-- Step 1: pick the images folder so Chrome can read local files -->
+  <div class="folder-row">
+    <label class="folder-label" for="imgFolder">Select images/ folder</label>
+    <input type="file" id="imgFolder" webkitdirectory accept="image/*" style="display:none">
+    <span class="folder-status" id="folderStatus">
+      Select your <code>images/</code> folder first, then Generate.
+    </span>
+  </div>
+
   <button id="goBtn">Generate AR Files</button>
 
-  <div class="log" id="log"><span class="dim">Ready. Make sure this page is opened from the site root so <code>images/</code> resolves.</span></div>
+  <div class="log" id="log"><span class="dim">Ready.</span></div>
 
   <div class="steps">
     <strong>After it downloads:</strong><br>
@@ -121,21 +144,43 @@ function log(msg, cls) {
   logEl.scrollTop = logEl.scrollHeight;
 }
 
+/* ── Folder picker ─────────────────────────────────────────────────
+   Chrome blocks canvas reads on file:// regardless of crossOrigin.
+   The only reliable fix without a local server: let the user grant
+   explicit file access via an <input webkitdirectory>. We store each
+   File as a blob URL keyed by filename and use those in loadImage.   */
+const imgFileMap = new Map(); /* filename → blob URL */
+
+document.getElementById('imgFolder').addEventListener('change', function(e) {
+  /* revoke any previous blob URLs to free memory */
+  for (const url of imgFileMap.values()) URL.revokeObjectURL(url);
+  imgFileMap.clear();
+
+  for (const file of e.target.files) {
+    imgFileMap.set(file.name, URL.createObjectURL(file));
+  }
+  const n = imgFileMap.size;
+  document.getElementById('folderStatus').innerHTML =
+    n > 0
+      ? '<span style="color:#8fbf6f">✓ ' + n + ' image' + (n === 1 ? '' : 's') + ' ready</span>'
+      : '<span style="color:#d98f8f">No images found in that folder</span>';
+});
+
 function loadImage(src) {
+  /* src = 'images/Burnt Earth.jpg' → filename = 'Burnt Earth.jpg' */
+  const filename = src.split('/').pop();
+  /* Use the blob URL if the user picked the folder (works from file://).
+     Fall back to the path directly when served via HTTP.             */
+  const resolvedSrc = imgFileMap.has(filename) ? imgFileMap.get(filename) : src;
+
   return new Promise((res, rej) => {
     const im = new Image();
-    /* crossOrigin is NOT set here: this tool runs from file:// where browsers
-       treat crossOrigin='anonymous' as a CORS request with no server to answer
-       it, causing every local image to silently fail. Local files are same-origin
-       by definition — no crossOrigin needed. */
     im.onload = async () => {
-      /* onload fires before a large image is DECODED — drawing it now
-         yields a blank canvas. decode() guarantees the pixels exist. */
       try { if (im.decode) await im.decode(); } catch (e) {}
       res(im);
     };
     im.onerror = () => rej(new Error('Image not found: ' + src));
-    im.src = src;
+    im.src = resolvedSrc;
   });
 }
 
