@@ -2595,15 +2595,7 @@
                     });
                 }
 
-                /* Check if already denied without prompting the user */
-                if (navigator.permissions && navigator.permissions.query) {
-                    navigator.permissions.query({ name: 'camera' }).then(function(result) {
-                        if (result.state === 'denied') { showDenied(); }
-                        else { doStartCamera(); }
-                    }).catch(doStartCamera);
-                } else {
-                    doStartCamera();
-                }
+                doStartCamera();
             };
 
             window.useRvSampleWall = function() {
