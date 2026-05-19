@@ -2402,7 +2402,8 @@
             var isFramed = false;
             var hideTimer = null;
             /* ── Wall-tracking via device orientation ──────────────────────── */
-            var rvOrientBase    = null;          /* { b, g } angles at placement  */
+            var rvOrientBase    = null;          /* { a, b } angles at placement  */
+            var rvOrientSmooth  = null;          /* EMA-smoothed { a, b, g }      */
             var rvPosAtOrient   = { x:0, y:0 }; /* rvPos when base was recorded  */
             var rvOrientActive  = false;
             var rvTouching      = false;
@@ -2509,35 +2510,61 @@
                 return parseFloat(sel.value) || 8.27;
             }
 
-            /* ── Orientation tracking: keeps print fixed on wall as phone moves ── */
+            /* ── Orientation tracking: keeps print fixed on wall as phone moves ──
+               Axis mapping (phone held vertical in portrait, pointing at wall):
+                 alpha (0-360°) = compass yaw  → panning left/right
+                 beta  (-180–180°) = pitch      → tilting up/down
+               Signs: pan right → alpha ↑ → wall objects move LEFT → rvPos.x ↓
+                       tilt up  → beta  ↓ → wall objects move DOWN → rvPos.y ↑
+               EMA smoothing suppresses sensor noise/jitter.                    */
             function rvOrientHandler(e) {
                 if (!rvOrientActive) return;
+                var alpha = (e.alpha !== null && e.alpha !== undefined) ? e.alpha : 0;
                 var beta  = e.beta;
                 var gamma = e.gamma;
                 if (beta === null || gamma === null) return;
+
                 rvLastBeta = beta;
-                if (rvTouching) {
-                    /* Manual drag in progress — just update perspective, no position */
-                    updateTransform();
-                    return;
+
+                /* EMA smooth — k=0.12 keeps jitter low without too much lag */
+                var k = 0.12;
+                if (!rvOrientSmooth) {
+                    rvOrientSmooth = { a: alpha, b: beta, g: gamma };
+                } else {
+                    var da = alpha - rvOrientSmooth.a;
+                    if (da >  180) da -= 360; /* wrap-around guard */
+                    if (da < -180) da += 360;
+                    rvOrientSmooth.a = (rvOrientSmooth.a + k * da + 360) % 360;
+                    rvOrientSmooth.b += k * (beta  - rvOrientSmooth.b);
+                    rvOrientSmooth.g += k * (gamma - rvOrientSmooth.g);
                 }
+
+                if (rvTouching) { updateTransform(); return; }
+
                 if (!rvOrientBase) {
-                    /* First event after placement — lock this as the wall reference */
-                    rvOrientBase = { b: beta, g: gamma };
+                    rvOrientBase = { a: rvOrientSmooth.a, b: rvOrientSmooth.b };
                     rvPosAtOrient.x = rvPos.x;
                     rvPosAtOrient.y = rvPos.y;
                     return;
                 }
-                /* Compensate for phone movement so the print stays on the wall */
-                rvPos.x = rvPosAtOrient.x - (gamma - rvOrientBase.g) * rvOrientSens;
-                rvPos.y = rvPosAtOrient.y + (beta  - rvOrientBase.b) * rvOrientSens;
+
+                var dAlpha = rvOrientSmooth.a - rvOrientBase.a;
+                if (dAlpha >  180) dAlpha -= 360;
+                if (dAlpha < -180) dAlpha += 360;
+                var dBeta = rvOrientSmooth.b - rvOrientBase.b;
+
+                /* pan right (dAlpha +) → print moves left (x -)
+                   tilt up  (dBeta  -) → print moves down (y +) */
+                rvPos.x = rvPosAtOrient.x - dAlpha * rvOrientSens;
+                rvPos.y = rvPosAtOrient.y - dBeta  * rvOrientSens;
                 updateTransform();
             }
 
             function startRvOrient() {
                 rvOrientActive = false;
                 rvOrientBase   = null;
-                rvOrientSens   = Math.min(window.innerWidth, window.innerHeight) / 52;
+                rvOrientSmooth = null;
+                rvOrientSens   = Math.min(window.innerWidth, window.innerHeight) / 72;
                 if (typeof DeviceOrientationEvent === 'undefined') return;
                 function go() {
                     rvOrientActive = true;
@@ -2549,7 +2576,7 @@
                         .then(function(s) { if (s === 'granted') go(); })
                         .catch(function() {});
                 } else {
-                    go(); /* Android / older iOS — no permission needed */
+                    go(); /* Android — no permission needed */
                 }
             }
 
@@ -2850,7 +2877,8 @@
                     if (e.touches.length > 0) return; /* still fingers on screen */
                     rvTouching = false;
                     /* Re-arm wall-tracking from new position after manual drag */
-                    rvOrientBase = null;
+                    rvOrientBase   = null;
+                    rvOrientSmooth = null; /* reset smooth state so new base is clean */
                     rvPosAtOrient.x = rvPos.x;
                     rvPosAtOrient.y = rvPos.y;
                 }, { passive: true });
