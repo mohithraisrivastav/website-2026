@@ -2542,12 +2542,12 @@
 
                 function showDenied() {
                     var hint = isIOS
-                        ? 'On iPhone: Settings → Safari → Camera → Allow for this site, then tap Allow Camera.'
+                        ? 'On iPhone: Settings → Safari → Camera → Allow for this site, then tap Try Again.'
                         : isAndroid
-                        ? 'In Chrome: tap the lock icon in the address bar → Camera → Allow, then tap Allow Camera.'
-                        : 'Open browser settings → Site permissions → Camera → Allow for this site, then try again.';
+                        ? 'In Chrome: tap the lock icon in the address bar → Camera → Allow, then tap Try Again.'
+                        : 'Open browser settings → Site permissions → Camera → Allow for this site, then tap Try Again.';
                     p.innerHTML = 'Camera access is blocked.<br><span style="' + STYLE_HINT + '">' + hint + '</span>';
-                    if (b) { b.style.display = ''; b.textContent = 'Allow Camera'; b.onclick = window.startRvCamera; }
+                    if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = doStartCamera; }
                     if (sub) sub.style.display = 'none';
                     nc.style.display = 'flex';
                 }
