@@ -588,10 +588,30 @@
             padding: 36px 24px 92px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
         }
+        /* ── Persistent size-selection bar — always visible over camera ── */
+        #rvSizeBar {
+            display: none;
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 6;
+            padding: 28px 24px 36px;
+            background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.0) 100%);
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            pointer-events: none; /* let touches pass through gradient — only children are interactive */
+        }
+        #roomViewer.rv-open #rvSizeBar { display: flex; }
+        /* Hide size bar while calibration panel is open so it doesn't stack on top */
+        #roomViewer.rv-calibrating #rvSizeBar { opacity: 0; pointer-events: none; }
+        #rvSizeBar .rv-dim,
+        #rvSizeBar .rv-chips,
+        #rvSizeBar .rv-ar-launch { pointer-events: auto; }
+
+        /* Secondary controls panel — auto-hides, sits above the persistent bar */
         .rv-bottom {
             pointer-events: auto;
-            padding: 90px 24px 32px;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+            padding: 72px 24px 220px; /* 220px clears the always-visible #rvSizeBar below */
             display: flex; flex-direction: column; align-items: center; gap: 16px;
         }
 
@@ -4041,8 +4061,6 @@
       </div>
     </div>
     <div class="rv-bottom">
-      <div class="rv-dim" id="rvDim"></div>
-      <div class="rv-chips" id="rvChips"></div>
       <div class="rv-tool-row" aria-label="Placement controls">
         <button class="rv-mini-btn" onclick="adjustRvRotation(-1.5)" aria-label="Rotate left">-1.5°</button>
         <button class="rv-mini-btn" onclick="adjustRvRotation(1.5)" aria-label="Rotate right">+1.5°</button>
@@ -4054,11 +4072,17 @@
         <input id="rvDepthSlider" type="range" min="70" max="140" value="100" oninput="setRvDepth(this.value)">
         <span id="rvDepthValue">100%</span>
       </label>
-      <button class="rv-ar-launch" onclick="launchRvAR()" id="rvArBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        Open in True AR
-      </button>
     </div>
+  </div>
+
+  <!-- Always-visible size selection + True AR launch — never auto-hides -->
+  <div id="rvSizeBar" aria-label="Size selection">
+    <div class="rv-dim" id="rvDim"></div>
+    <div class="rv-chips" id="rvChips"></div>
+    <button class="rv-ar-launch" onclick="launchRvAR()" id="rvArBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Open in True AR
+    </button>
   </div>
 
   <div id="rvCalibration" role="group" aria-label="Scale calibration">
