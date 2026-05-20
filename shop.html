@@ -713,6 +713,20 @@
         }
         .rv-slider-wrap input { width: 100%; accent-color: #CFA246; }
 
+        /* AR launch button inside room viewer */
+        .rv-ar-launch {
+            width: min(430px, 86vw);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: #CFA246; color: #14110d; border: none;
+            padding: 14px 24px; font-size: 0.74rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+            margin-top: 4px;
+        }
+        .rv-ar-launch:hover  { background: #d8ad52; }
+        .rv-ar-launch:active { transform: scale(0.98); }
+
         #rvGuides {
             display: none;
             position: absolute;
@@ -2186,7 +2200,8 @@
                 return /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|Twitter|TikTok|Musical|Snapchat|Pinterest|LinkedInApp|WhatsApp/i.test(ua);
             }
 
-            window.openArSheet = function(id, title, img, wIn, hIn, sizeList) {
+            window.openArSheet = function(id, title, img, wIn, hIn, sizeList, options) {
+                options = options || {};
                 var sheet  = document.getElementById('arSheet');
                 var viewer = document.getElementById('arViewer');
                 var load   = document.getElementById('arLoading');
@@ -2197,10 +2212,10 @@
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
 
-                /* reset scale multiplier for each new product */
-                arScaleMult = 1.0;
+                /* apply calibrated scale from room viewer (or reset to 1) */
+                arScaleMult = options.scaleMult ? Math.max(0.5, Math.min(2.0, options.scaleMult)) : 1.0;
                 var scaleValEl = document.getElementById('arScaleVal');
-                if (scaleValEl) scaleValEl.textContent = '100%';
+                if (scaleValEl) scaleValEl.textContent = Math.round(arScaleMult * 100) + '%';
 
                 sheet.classList.add('ar-open');
                 document.body.style.overflow = 'hidden';
@@ -2244,6 +2259,14 @@
                 viewer.addEventListener('load', function onL() {
                     load.classList.add('ar-gone');
                     viewer.removeEventListener('load', onL);
+                    /* auto-launch AR if triggered from the room viewer */
+                    if (options.autoLaunch) {
+                        setTimeout(function() {
+                            if (viewer.canActivateAR) {
+                                viewer.activateAR();
+                            }
+                        }, 600);
+                    }
                 });
 
                 /* ── sizes ── */
@@ -2574,6 +2597,8 @@
             var rvRotateBase = 0;
             var isFramed = false;
             var hideTimer = null;
+            var rvProductId = '';
+            var rvProductTitle = '';
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
@@ -2695,6 +2720,8 @@
                 rvPixelsPerInch = rvSize / activeSize().w;
                 recenterForSize(rvSize);
 
+                rvProductId    = options.id    || '';
+                rvProductTitle = options.title || '';
                 document.getElementById('rvTitle').textContent = options.title || 'View in Your Room';
                 document.getElementById('rvPrint').src = imgSrc;
                 document.getElementById('rvDepthSlider').value = 100;
@@ -3056,6 +3083,23 @@
                     if (e.key === 'ArrowDown') { rvPos.y += 8; updateTransform(); }
                 });
             });
+
+            /* ── Launch native wall AR from the room viewer ──────────────────
+               Reads the calibrated rvDepth as the scale multiplier so whatever
+               size the user set during calibration is preserved in AR.         */
+            window.launchRvAR = function() {
+                if (typeof window.openArSheet !== 'function') return;
+                var sel  = rvSizes[rvSelIdx] || rvSizes[0] || { w: 12, h: 12 };
+                var img  = document.getElementById('rvPrint').src;
+                var id   = rvProductId;
+                var titl = rvProductTitle;
+                var scale = rvDepth || 1.0;
+                window.closeRoomViewer();
+                window.openArSheet(id, titl, img, sel.w, sel.h, rvSizes, {
+                    scaleMult: scale,
+                    autoLaunch: true
+                });
+            };
         })();
         /* ══ end Room Viewer JS ══════════════════════════════════ */
 
@@ -3831,6 +3875,10 @@
         <input id="rvDepthSlider" type="range" min="70" max="140" value="100" oninput="setRvDepth(this.value)">
         <span id="rvDepthValue">100%</span>
       </label>
+      <button class="rv-ar-launch" onclick="launchRvAR()" id="rvArBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        See it on your wall
+      </button>
     </div>
   </div>
 
