@@ -511,19 +511,21 @@
             will-change: transform, width, height;
             opacity: 0;
             transition: opacity 0.6s ease, width 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1);
+            /* Wall-mount shadow: tight primary + soft ambient — no big downward float */
             filter:
-                drop-shadow(0 4px 6px rgba(0,0,0,0.4))
-                drop-shadow(0 16px 40px rgba(0,0,0,0.5))
-                drop-shadow(0 40px 80px rgba(0,0,0,0.25));
+                drop-shadow(0 1px 2px rgba(0,0,0,0.75))
+                drop-shadow(0 3px 8px rgba(0,0,0,0.5))
+                drop-shadow(0 8px 22px rgba(0,0,0,0.28));
         }
         #rvPrintWrap.rv-visible { opacity: 1; }
         #rvPrintWrap.rv-sizing  { transition: opacity 0.6s ease, width 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1); }
         #rvPrintWrap.rv-dragging { transition: none; }
+        /* Ambient wall contact shadow — radiates from behind the frame, not below it */
         #rvPrintWrap::after {
             content: ''; position: absolute;
-            bottom: -16px; left: 10%; right: 10%; height: 20px;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%);
-            filter: blur(7px); pointer-events: none; z-index: -1;
+            inset: -10px; z-index: -1;
+            background: radial-gradient(ellipse at 50% 55%, rgba(0,0,0,0.45) 0%, transparent 68%);
+            filter: blur(14px); pointer-events: none;
         }
         #rvPrintWrap.rv-framed {
             /* outline & box-shadow width set dynamically in JS (1 inch at print scale) */
@@ -854,6 +856,32 @@
         .rv-nocam-sub {
             font-size: 0.7rem; color: rgba(247,243,236,0.25);
             letter-spacing: 0.5px; max-width: 240px; line-height: 1.6;
+        }
+
+        /* Opening hint — fades automatically, dismisses on touch */
+        #rvHint {
+            position: absolute; inset: 0; z-index: 20;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 20px;
+            background: rgba(0,0,0,0.52);
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+        #rvHint.rv-hint-gone { opacity: 0; }
+        .rv-hint-icon {
+            width: 56px; height: 56px; color: rgba(207,162,70,0.75);
+        }
+        .rv-hint-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.4rem, 5vw, 2.1rem);
+            font-style: italic; font-weight: 300;
+            color: rgba(255,255,255,0.92); letter-spacing: 0.01em;
+            text-align: center; line-height: 1.15;
+        }
+        .rv-hint-sub {
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(255,255,255,0.45);
+            text-align: center; line-height: 2;
         }
         /* ══ end Room Viewer ══════════════════════════════════════ */
 
@@ -2558,6 +2586,18 @@
                     document.getElementById('rvPrintWrap').classList.add('rv-visible');
                 }, 120);
 
+                /* Show opening hint, fade it out after 3 s or on first touch */
+                var hintEl = document.getElementById('rvHint');
+                hintEl.classList.remove('rv-hint-gone');
+                var hintTimer = setTimeout(function() {
+                    hintEl.classList.add('rv-hint-gone');
+                }, 3000);
+                rv.addEventListener('touchstart', function dismissHint() {
+                    clearTimeout(hintTimer);
+                    hintEl.classList.add('rv-hint-gone');
+                    rv.removeEventListener('touchstart', dismissHint);
+                }, { passive: true, once: true });
+
                 showChrome();
                 startRvCamera();
             };
@@ -2595,8 +2635,18 @@
                     });
                 }
 
-                tryCamera({ video: { facingMode: { ideal: 'environment' } } })
-                .catch(function() { return tryCamera({ video: true }); })
+                tryCamera({
+                    audio: false,
+                    video: {
+                        facingMode: { ideal: 'environment' },
+                        width:  { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    }
+                })
+                .catch(function() {
+                    return tryCamera({ audio: false, video: { facingMode: { ideal: 'environment' } } });
+                })
+                .catch(function() { return tryCamera({ audio: false, video: true }); })
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
                     var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -2799,6 +2849,16 @@
                     updateTransform();
                     e.preventDefault();
                 }, { passive: false });
+
+                /* When a pinch ends and one finger stays on screen, re-anchor the
+                   drag offset to the remaining finger so the print doesn't jump.   */
+                rv.addEventListener('touchend', function(e) {
+                    if (e.touches.length === 1 &&
+                        !e.target.closest('button, .rv-chip, select, input, label, a')) {
+                        rvDragOffset.x = e.touches[0].clientX - rvPos.x;
+                        rvDragOffset.y = e.touches[0].clientY - rvPos.y;
+                    }
+                }, { passive: true });
 
 
                 document.addEventListener('keydown', function(e) {
@@ -3504,6 +3564,17 @@
 <!-- ── Room Viewer ──────────────────────────────────────── -->
 <div id="roomViewer" role="dialog" aria-modal="true" aria-label="View print in your room">
   <video id="rvVideo" autoplay playsinline muted></video>
+
+  <!-- Opening hint — auto-fades, dismissed on first touch -->
+  <div id="rvHint" class="rv-hint-gone" aria-hidden="true">
+    <svg class="rv-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="14" rx="2"/>
+      <path d="M7 21h10M12 17v4"/>
+      <circle cx="8.5" cy="9.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <div class="rv-hint-title">Point camera at a wall</div>
+    <div class="rv-hint-sub">Drag to position &nbsp;·&nbsp; Pinch to resize<br>Pinch-rotate to spin</div>
+  </div>
   <div id="rvGuides" aria-hidden="true">
     <div class="rv-guide-grid"></div>
     <div class="rv-guide-cross"></div>
