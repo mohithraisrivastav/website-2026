@@ -2501,7 +2501,12 @@
                 return Math.atan2(t[1].clientY - t[0].clientY, t[1].clientX - t[0].clientX) * 180 / Math.PI;
             }
             function clampSize(s, allowOversize) {
-                var max = allowOversize ? Math.max(window.innerWidth, window.innerHeight) * 2.2 : window.innerWidth * 0.94;
+                /* Uncalibrated: stay within screen width.
+                   Calibrated / pinch-resized: allow up to 1.5× screen width
+                   so users can zoom in, but never so big they lose context. */
+                var max = allowOversize
+                    ? Math.max(window.innerWidth, window.innerHeight) * 1.5
+                    : window.innerWidth * 0.92;
                 return Math.max(72, Math.min(s, max));
             }
             function activeSize() { return rvSizes[rvSelIdx] || rvSizes[0] || { label: 'Print', w: 24, h: 18 }; }
@@ -2778,7 +2783,15 @@
 
             window.confirmRvCalibration = function() {
                 var markerWidthPx = parseFloat(document.getElementById('rvMarkerWidth').value) || 190;
-                rvPixelsPerInch = markerWidthPx / markerWidthInches();
+                var rawPpi = markerWidthPx / markerWidthInches();
+                /* Cap ppi so the current print never exceeds 80% of the screen's
+                   shorter dimension — prevents "print fills everything" when the
+                   user calibrated too close to the wall. Relative sizes between
+                   Small / Medium / Standard / Large remain proportionally correct. */
+                var s = activeSize();
+                var maxPx = Math.min(window.innerWidth, window.innerHeight) * 0.80;
+                var maxPpi = maxPx / Math.max(s.w, s.h);
+                rvPixelsPerInch = Math.min(rawPpi, maxPpi);
                 rvCalibrated = true;
                 rvDepth = 1;
                 document.getElementById('rvDepthSlider').value = 100;
