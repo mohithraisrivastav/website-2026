@@ -2491,11 +2491,23 @@
             var rvRotateBase = 0;
             var isFramed = false;
             var hideTimer = null;
+            /* Orientation (wall-lock) tracking */
+            var rvOrientActive  = false;
+            var rvOrientAnchor  = null;  /* { alpha, beta, px, py } */
+            var rvLastAlpha     = null;
+            var rvLastBeta      = null;
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
                 var dy = t[0].clientY - t[1].clientY;
                 return Math.sqrt(dx * dx + dy * dy);
+            }
+            function angleDiff(a, b) {
+                if (a == null || b == null) return 0;
+                var d = a - b;
+                while (d >  180) d -= 360;
+                while (d < -180) d += 360;
+                return d;
             }
             function pangle(t) {
                 return Math.atan2(t[1].clientY - t[0].clientY, t[1].clientX - t[0].clientX) * 180 / Math.PI;
@@ -2660,6 +2672,7 @@
                 document.getElementById('rvPrintWrap').classList.remove('rv-visible');
                 document.body.style.overflow = '';
                 if (rvStream) { rvStream.getTracks().forEach(function(t){ t.stop(); }); rvStream = null; }
+                window.setRvLock(false);
             };
 
             window.startRvCamera = function() {
@@ -2720,6 +2733,68 @@
                 });
             };
 
+
+            /* ── Wall-lock orientation tracking ─────────────────── */
+            (function() {
+                function onOrient(e) {
+                    rvLastAlpha = e.alpha;
+                    rvLastBeta  = e.beta;
+                    if (!rvOrientActive || !rvOrientAnchor) return;
+                    if (!document.getElementById('roomViewer').classList.contains('rv-open')) return;
+                    /* horizontal pan (compass yaw) */
+                    var da = angleDiff(e.alpha, rvOrientAnchor.alpha);
+                    /* vertical tilt (beta: ~90° upright, decreases when tilting back/up) */
+                    var db = (e.beta || 0) - rvOrientAnchor.beta;
+                    /* FOV estimates — typical phone rear camera */
+                    var ppdH = window.innerWidth  / 68;
+                    var ppdV = window.innerHeight / 90;
+                    rvPos.x = rvOrientAnchor.px - da * ppdH;
+                    rvPos.y = rvOrientAnchor.py - db * ppdV;
+                    updateTransform();
+                }
+                /* deviceorientationabsolute gives true compass heading on Android;
+                   fall back to deviceorientation (iOS uses this for absolute too). */
+                var gotAbsolute = false;
+                window.addEventListener('deviceorientationabsolute', function(e) {
+                    gotAbsolute = true;
+                    onOrient(e);
+                });
+                window.addEventListener('deviceorientation', function(e) {
+                    if (!gotAbsolute) onOrient(e);
+                });
+            }());
+
+            window.setRvLock = function(on) {
+                var btn = document.getElementById('rvLockBtn');
+                if (on) {
+                    rvOrientActive = true;
+                    rvOrientAnchor = { alpha: rvLastAlpha, beta: rvLastBeta,
+                                       px: rvPos.x, py: rvPos.y };
+                    if (btn) btn.classList.add('rv-on');
+                } else {
+                    rvOrientActive = false;
+                    rvOrientAnchor = null;
+                    if (btn) btn.classList.remove('rv-on');
+                }
+                showChrome();
+            };
+
+            window.toggleRvLock = function() {
+                if (rvOrientActive) {
+                    window.setRvLock(false);
+                    return;
+                }
+                /* iOS 13+ requires a permission gesture */
+                if (typeof DeviceOrientationEvent !== 'undefined' &&
+                    typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(function(s) { if (s === 'granted') window.setRvLock(true); })
+                        .catch(function()  { window.setRvLock(true); });
+                } else {
+                    window.setRvLock(true);
+                }
+            };
+            /* ── end wall-lock ──────────────────────────────────── */
 
             window.toggleRvGuides = function(force) {
                 var rv = document.getElementById('roomViewer');
@@ -2918,6 +2993,8 @@
                     showChrome();
                     /* Let button/chip taps through untouched */
                     if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    /* Dragging the print = unlock from wall so user can reposition */
+                    if (rvOrientActive) window.setRvLock(false);
                     if (e.touches.length === 1) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
                         rvDragOffset.y = e.touches[0].clientY - rvPos.y;
@@ -3622,7 +3699,7 @@
 
   <model-viewer id="arViewer"
     ar
-    ar-modes="scene-viewer webxr quick-look"
+    ar-modes="webxr scene-viewer quick-look"
     ar-placement="wall"
     ar-scale="fixed"
     camera-controls
@@ -3691,6 +3768,10 @@
         <div class="rv-status" id="rvStatus">Estimated scale until calibrated</div>
       </div>
       <div class="rv-controls">
+        <button class="rv-ctl" id="rvLockBtn" onclick="toggleRvLock()" aria-label="Lock print to wall — print follows camera rotation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          Lock to Wall
+        </button>
         <button class="rv-ctl" id="rvCalBtn" onclick="toggleRvCalibration()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="13" height="13"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 14h6"/></svg>
           Calibrate
