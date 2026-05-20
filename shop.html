@@ -976,9 +976,9 @@
                         <button class="action-btn" id="modalAddBtn">Add to Cart</button>
                         <button class="action-btn buy-now-btn" id="modalBuyBtn">Buy Now</button>
                     </div>
-                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="View this print in your room">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                        View in Your Room
+                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="See this print on your wall in AR">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        See it on Your Wall
                     </button>
 
                     <div class="modal-reassurance" id="modalReassurance"></div>
@@ -1778,11 +1778,10 @@
                 rvBtn.onclick = function() {
                     var selected = sizeWrap.querySelector('.size-select option:checked');
                     var selectedLabel = selected ? selected.dataset.sizeLabel : '';
-                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList, {
-                        id: rvId,
-                        title: rvTitle,
-                        selectedLabel: selectedLabel
-                    });
+                    var selSize = rvSizeList.find(function(s) { return s.label === selectedLabel; })
+                                  || rvSizeList[0]
+                                  || { w: rvAspW, h: rvAspH };
+                    openArSheet(rvId, rvTitle, rvImg, selSize.w, selSize.h, rvSizeList);
                 };
             } else {
                 rvBtn.style.display = 'none';
