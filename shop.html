@@ -2491,11 +2491,9 @@
             var rvRotateBase = 0;
             var isFramed = false;
             var hideTimer = null;
-            /* Orientation (wall-lock) tracking */
+            /* Wall-lock tracking */
             var rvOrientActive  = false;
-            var rvOrientAnchor  = null;  /* { alpha, beta, px, py } */
-            var rvLastAlpha     = null;
-            var rvLastBeta      = null;
+            var rvOrientAnchor  = null;  /* { px, py } — position at lock time */
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
@@ -2734,42 +2732,46 @@
             };
 
 
-            /* ── Wall-lock orientation tracking ─────────────────── */
+            /* ── Wall-lock: gyroscope integration (no magnetometer noise) ── */
+            var rvGyroX  = 0;     /* accumulated horizontal pan, degrees */
+            var rvGyroY  = 0;     /* accumulated vertical tilt, degrees  */
+            var rvGyroT  = null;  /* last event timestamp                 */
+            var RV_DEAD  = 0.08;  /* deg/s dead zone — absorbs resting noise */
+
             (function() {
-                function onOrient(e) {
-                    rvLastAlpha = e.alpha;
-                    rvLastBeta  = e.beta;
+                function onMotion(e) {
+                    var rr = e.rotationRate;
+                    if (!rr) return;
+                    var now = e.timeStamp;
+                    if (rvGyroT === null) { rvGyroT = now; return; }
+                    var dt = (now - rvGyroT) / 1000;   /* seconds */
+                    rvGyroT = now;
                     if (!rvOrientActive || !rvOrientAnchor) return;
                     if (!document.getElementById('roomViewer').classList.contains('rv-open')) return;
-                    /* horizontal pan (compass yaw) */
-                    var da = angleDiff(e.alpha, rvOrientAnchor.alpha);
-                    /* vertical tilt (beta: ~90° upright, decreases when tilting back/up) */
-                    var db = (e.beta || 0) - rvOrientAnchor.beta;
-                    /* FOV estimates — typical phone rear camera */
+                    /* rotationRate.alpha ≈ d(compass-yaw)/dt   — pure gyro, stable
+                       rotationRate.beta  ≈ d(pitch)/dt
+                       Apply dead zone to kill sub-threshold resting noise. */
+                    var rrA = Math.abs(rr.alpha) > RV_DEAD ? rr.alpha : 0;
+                    var rrB = Math.abs(rr.beta)  > RV_DEAD ? rr.beta  : 0;
+                    rvGyroX += rrA * dt;
+                    rvGyroY += rrB * dt;
                     var ppdH = window.innerWidth  / 68;
                     var ppdV = window.innerHeight / 90;
-                    rvPos.x = rvOrientAnchor.px - da * ppdH;
-                    rvPos.y = rvOrientAnchor.py - db * ppdV;
+                    rvPos.x = rvOrientAnchor.px - rvGyroX * ppdH;
+                    rvPos.y = rvOrientAnchor.py - rvGyroY * ppdV;
                     updateTransform();
                 }
-                /* deviceorientationabsolute gives true compass heading on Android;
-                   fall back to deviceorientation (iOS uses this for absolute too). */
-                var gotAbsolute = false;
-                window.addEventListener('deviceorientationabsolute', function(e) {
-                    gotAbsolute = true;
-                    onOrient(e);
-                });
-                window.addEventListener('deviceorientation', function(e) {
-                    if (!gotAbsolute) onOrient(e);
-                });
+                /* iOS 13+ DeviceMotion needs same permission as DeviceOrientation */
+                window.addEventListener('devicemotion', onMotion);
             }());
 
             window.setRvLock = function(on) {
                 var btn = document.getElementById('rvLockBtn');
                 if (on) {
                     rvOrientActive = true;
-                    rvOrientAnchor = { alpha: rvLastAlpha, beta: rvLastBeta,
-                                       px: rvPos.x, py: rvPos.y };
+                    /* Reset gyro accumulation from the current position */
+                    rvGyroX = 0; rvGyroY = 0; rvGyroT = null;
+                    rvOrientAnchor = { px: rvPos.x, py: rvPos.y };
                     if (btn) btn.classList.add('rv-on');
                 } else {
                     rvOrientActive = false;
