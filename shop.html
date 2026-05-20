@@ -133,10 +133,13 @@
         tex.anisotropy = 8;
         tex.needsUpdate = true;
 
-        // Art sits on the front face of the frame; +0.0012 prevents z-fighting
+        // MeshBasicMaterial = unlit — renders the texture at full original brightness
+        // regardless of scene lighting. Ink on paper has its own colour; it should
+        // not be darkened by a dim room. Exports as KHR_materials_unlit in GLB,
+        // supported by model-viewer, iOS Quick Look, and Android Scene Viewer.
         const art = new THREE.Mesh(
           new THREE.PlaneGeometry(artW, artH),
-          new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+          new THREE.MeshBasicMaterial({ map: tex })
         );
         art.position.z = FRAME_DEPTH + 0.0012;
         scene.add(art);
@@ -4032,7 +4035,7 @@
     shadow-intensity="1"
     shadow-softness="1"
     exposure="1.0"
-    tone-mapping="commerce"
+    tone-mapping="neutral"
     environment-image="neutral"
     interaction-prompt="none"
     disable-tap>
