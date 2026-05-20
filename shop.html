@@ -2748,13 +2748,15 @@
                     rvGyroT = now;
                     if (!rvOrientActive || !rvOrientAnchor) return;
                     if (!document.getElementById('roomViewer').classList.contains('rv-open')) return;
-                    /* rotationRate.alpha ≈ d(compass-yaw)/dt   — pure gyro, stable
-                       rotationRate.beta  ≈ d(pitch)/dt
-                       Apply dead zone to kill sub-threshold resting noise. */
-                    var rrA = Math.abs(rr.alpha) > RV_DEAD ? rr.alpha : 0;
-                    var rrB = Math.abs(rr.beta)  > RV_DEAD ? rr.beta  : 0;
-                    rvGyroX += rrA * dt;
-                    rvGyroY += rrB * dt;
+                    /* Phone held vertically (portrait) pointing at wall:
+                       rotationRate.gamma = rotation around device Y (long axis) = horizontal pan/yaw
+                       rotationRate.beta  = rotation around device X              = vertical tilt/pitch
+                       rotationRate.alpha = rotation around device Z (screen out) = roll — NOT pan
+                       Dead zone kills sub-threshold resting sensor noise. */
+                    var rrH = Math.abs(rr.gamma) > RV_DEAD ? rr.gamma : 0;
+                    var rrV = Math.abs(rr.beta)  > RV_DEAD ? rr.beta  : 0;
+                    rvGyroX += rrH * dt;
+                    rvGyroY += rrV * dt;
                     var ppdH = window.innerWidth  / 68;
                     var ppdV = window.innerHeight / 90;
                     rvPos.x = rvOrientAnchor.px - rvGyroX * ppdH;
