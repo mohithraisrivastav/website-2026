@@ -476,6 +476,32 @@
             font-size: 0.66rem; letter-spacing: 2px; text-transform: uppercase;
             color: rgba(247,243,236,0.32);
         }
+        .ar-size-label {
+            font-size: 0.6rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(247,243,236,0.35);
+        }
+        .ar-scale-row {
+            pointer-events: auto;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .ar-scale-btn {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(247,243,236,0.7); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 1px; padding: 7px 16px; border-radius: 40px;
+            cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            transition: background 0.2s;
+        }
+        .ar-scale-btn:hover { background: rgba(255,255,255,0.14); }
+        .ar-scale-val {
+            font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(247,243,236,0.45); min-width: 48px; text-align: center;
+        }
+        .ar-overlay-link {
+            pointer-events: auto; background: none; border: none; cursor: pointer;
+            font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase;
+            color: rgba(247,243,236,0.25); transition: color 0.2s; padding: 0;
+        }
+        .ar-overlay-link:hover { color: rgba(247,243,236,0.55); }
         /* model-viewer's own AR button (Android Scene Viewer entry) — hidden, we use ours */
         #arViewer::part(default-ar-button) { display: none; }
 
@@ -2125,6 +2151,7 @@
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
             var arSession = null;
+            var arScaleMult = 1.0;   /* 0.5 – 2.0 scale multiplier for GLB build */
 
             /* analytics — no-ops if no gtag/dataLayer present */
             function track(event, params) {
@@ -2160,6 +2187,11 @@
 
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
+
+                /* reset scale multiplier for each new product */
+                arScaleMult = 1.0;
+                var scaleValEl = document.getElementById('arScaleVal');
+                if (scaleValEl) scaleValEl.textContent = '100%';
 
                 sheet.classList.add('ar-open');
                 document.body.style.overflow = 'hidden';
@@ -2267,8 +2299,13 @@
                 var buildCache = {};   /* key "wxh" -> blob url */
 
                 function buildAt(sz, isDefault) {
+                    var bW = +(sz.w * arScaleMult).toFixed(2);
+                    var bH = +(sz.h * arScaleMult).toFixed(2);
+                    var scaleLabel = arScaleMult !== 1
+                        ? ' · ' + Math.round(arScaleMult * 100) + '% scale'
+                        : ' · true size';
                     document.getElementById('arDimText').textContent =
-                        sz.w + ' × ' + sz.h + ' inches · true size';
+                        sz.w + ' × ' + sz.h + ' inches' + scaleLabel;
                     load.classList.remove('ar-gone');
                     load.textContent = 'Building the framed print…';
                     hintEl.textContent = 'Building the framed print…';
@@ -2279,7 +2316,7 @@
                         applyNative(sz, isDefault);
                     }
 
-                    var key = sz.w + 'x' + sz.h;
+                    var key = bW + 'x' + bH;
                     if (buildCache[key]) { mountBlob(buildCache[key]); return; }
 
                     if (typeof window.__buildArGLB !== 'function') {
@@ -2295,7 +2332,7 @@
                         track('ar_build_timeout', { item_id: id });
                     }, 18000);
 
-                    window.__buildArGLB(img, sz.w, sz.h)
+                    window.__buildArGLB(img, bW, bH)
                         .then(function(url) {
                             if (settled) return;
                             settled = true; clearTimeout(watchdog);
@@ -2465,6 +2502,44 @@
                         document.getElementById('arSheet').classList.contains('ar-open')) {
                         window.closeArSheet();
                     }
+                });
+
+                /* ── Scale buttons (Smaller / Larger) ── */
+                function updateScaleVal() {
+                    document.getElementById('arScaleVal').textContent =
+                        Math.round(arScaleMult * 100) + '%';
+                }
+                document.getElementById('arScaleDown').addEventListener('click', function() {
+                    arScaleMult = Math.max(0.5, Math.round((arScaleMult - 0.1) * 10) / 10);
+                    updateScaleVal();
+                    if (arSession) {
+                        var chipsEl = document.getElementById('arSizeChips');
+                        var active  = chipsEl.querySelector('.ar-sz-on');
+                        if (active) active.click();
+                    }
+                });
+                document.getElementById('arScaleUp').addEventListener('click', function() {
+                    arScaleMult = Math.min(2.0, Math.round((arScaleMult + 0.1) * 10) / 10);
+                    updateScaleVal();
+                    if (arSession) {
+                        var chipsEl = document.getElementById('arSizeChips');
+                        var active  = chipsEl.querySelector('.ar-sz-on');
+                        if (active) active.click();
+                    }
+                });
+
+                /* ── Camera overlay fallback link ── */
+                document.getElementById('arOverlayLink').addEventListener('click', function() {
+                    if (!arSession) return;
+                    var sess = arSession;
+                    window.closeArSheet();
+                    window.openRoomViewer(
+                        sess.img, sess.w, sess.h,
+                        sess.sizes && sess.sizes.length
+                            ? sess.sizes
+                            : [{ label: 'Standard', w: sess.w, h: sess.h }],
+                        { title: sess.title }
+                    );
                 });
             });
         })();
@@ -3653,13 +3728,20 @@
   <div class="ar-loading" id="arLoading">Preparing the print…</div>
 
   <div class="ar-foot">
+    <div class="ar-size-label">Choose a size</div>
     <div class="ar-size-chips" id="arSizeChips"></div>
     <div class="ar-dim" id="arDimText"></div>
+    <div class="ar-scale-row">
+      <button class="ar-scale-btn" id="arScaleDown">Smaller</button>
+      <span class="ar-scale-val" id="arScaleVal">100%</span>
+      <button class="ar-scale-btn" id="arScaleUp">Larger</button>
+    </div>
     <button id="arLaunch">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       See it on your wall
     </button>
     <span class="ar-hint" id="arHint">Point your phone at the wall</span>
+    <button class="ar-overlay-link" id="arOverlayLink">or use camera overlay →</button>
   </div>
 </div>
 
