@@ -464,7 +464,7 @@
             pointer-events: auto;
             display: flex; align-items: center; gap: 11px;
             background: #CFA246; color: #14110d; border: none;
-            padding: 16px 34px; font-size: 0.78rem; font-weight: 700;
+            padding: 16px 28px; font-size: 0.78rem; font-weight: 700;
             letter-spacing: 3.5px; text-transform: uppercase; cursor: pointer;
             transition: background 0.2s, transform 0.2s;
             box-shadow: 0 14px 40px rgba(0,0,0,0.45);
@@ -496,12 +496,21 @@
             font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
             color: rgba(247,243,236,0.45); min-width: 48px; text-align: center;
         }
-        .ar-overlay-link {
-            pointer-events: auto; background: none; border: none; cursor: pointer;
-            font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase;
-            color: rgba(247,243,236,0.25); transition: color 0.2s; padding: 0;
+        .ar-launch-row {
+            pointer-events: auto;
+            display: flex; gap: 12px; align-items: stretch;
         }
-        .ar-overlay-link:hover { color: rgba(247,243,236,0.55); }
+        .ar-cal-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.22);
+            color: rgba(247,243,236,0.75);
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 2.5px;
+            text-transform: uppercase; padding: 0 22px; cursor: pointer;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            transition: background 0.2s, color 0.2s;
+        }
+        .ar-cal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
         /* model-viewer's own AR button (Android Scene Viewer entry) — hidden, we use ours */
         #arViewer::part(default-ar-button) { display: none; }
 
@@ -3736,12 +3745,17 @@
       <span class="ar-scale-val" id="arScaleVal">100%</span>
       <button class="ar-scale-btn" id="arScaleUp">Larger</button>
     </div>
-    <button id="arLaunch">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      See it on your wall
-    </button>
-    <span class="ar-hint" id="arHint">Point your phone at the wall</span>
-    <button class="ar-overlay-link" id="arOverlayLink">or use camera overlay →</button>
+    <div class="ar-launch-row">
+      <button id="arLaunch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        See it on your wall
+      </button>
+      <button id="arOverlayLink" class="ar-cal-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="14" height="14"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 14h6"/></svg>
+        Calibrate
+      </button>
+    </div>
+    <span class="ar-hint" id="arHint">AR auto-scales · Calibrate to set exact size</span>
   </div>
 </div>
 
