@@ -2175,6 +2175,11 @@
             var pending  = null;
             var arSession = null;
             var arScaleMult = 1.0;   /* 0.5 – 2.0 scale multiplier for GLB build */
+            /* current size list + selected index — kept at IIFE scope so the
+               Smaller/Larger buttons can call buildAt() without re-entering openArSheet */
+            var sizes = [];
+            var defIdx = 0;
+            var buildAt; /* forward-declared; assigned inside openArSheet */
 
             /* analytics — no-ops if no gtag/dataLayer present */
             function track(event, params) {
@@ -2269,11 +2274,11 @@
                     }
                 });
 
-                /* ── sizes ── */
-                var sizes = (sizeList && sizeList.length)
+                /* ── sizes (assign to IIFE-scope vars so Smaller/Larger can access) ── */
+                sizes = (sizeList && sizeList.length)
                     ? sizeList.slice()
                     : [{ label: 'Standard', w: wIn, h: hIn }];
-                var defIdx = 0;
+                defIdx = 0;
                 for (var si = 0; si < sizes.length; si++) {
                     if (Math.abs(sizes[si].w - wIn) < 0.01 && Math.abs(sizes[si].h - hIn) < 0.01) {
                         defIdx = si; break;
@@ -2330,7 +2335,7 @@
 
                 var buildCache = {};   /* key "wxh" -> blob url */
 
-                function buildAt(sz, isDefault) {
+                buildAt = function(sz, isDefault) {
                     var bW = +(sz.w * arScaleMult).toFixed(2);
                     var bH = +(sz.h * arScaleMult).toFixed(2);
                     var scaleLabel = arScaleMult !== 1
@@ -2383,7 +2388,7 @@
                 sizes.forEach(function(sz, idx) {
                     var b = document.createElement('button');
                     b.className = 'ar-size-chip' + (idx === defIdx ? ' ar-sz-on' : '');
-                    b.textContent = sz.label;
+                    b.textContent = sz.label + ' · ' + Math.round(sz.w) + '×' + Math.round(sz.h) + '"';
                     b.addEventListener('click', function() {
                         if (b.classList.contains('ar-sz-on')) return;
                         Array.prototype.forEach.call(chipsEl.children, function(c) {
@@ -2541,23 +2546,26 @@
                     document.getElementById('arScaleVal').textContent =
                         Math.round(arScaleMult * 100) + '%';
                 }
+                function rebuildCurrentSize() {
+                    /* Directly rebuild — do NOT click() the active chip because
+                       it has an early-return guard that prevents re-triggering */
+                    if (!arSession) return;
+                    var idx = 0;
+                    document.getElementById('arSizeChips').querySelectorAll('.ar-size-chip').forEach(function(b, i) {
+                        if (b.classList.contains('ar-sz-on')) idx = i;
+                    });
+                    var sz = sizes[idx] || sizes[0];
+                    if (sz) buildAt(sz, idx === defIdx);
+                }
                 document.getElementById('arScaleDown').addEventListener('click', function() {
                     arScaleMult = Math.max(0.5, Math.round((arScaleMult - 0.1) * 10) / 10);
                     updateScaleVal();
-                    if (arSession) {
-                        var chipsEl = document.getElementById('arSizeChips');
-                        var active  = chipsEl.querySelector('.ar-sz-on');
-                        if (active) active.click();
-                    }
+                    rebuildCurrentSize();
                 });
                 document.getElementById('arScaleUp').addEventListener('click', function() {
                     arScaleMult = Math.min(2.0, Math.round((arScaleMult + 0.1) * 10) / 10);
                     updateScaleVal();
-                    if (arSession) {
-                        var chipsEl = document.getElementById('arSizeChips');
-                        var active  = chipsEl.querySelector('.ar-sz-on');
-                        if (active) active.click();
-                    }
+                    rebuildCurrentSize();
                 });
 
                 /* ── Camera overlay fallback link ── */
@@ -2735,7 +2743,7 @@
                 rvSizes.forEach(function(s, i) {
                     var b = document.createElement('button');
                     b.className = 'rv-chip' + (i === rvSelIdx ? ' rv-active' : '');
-                    b.textContent = s.label;
+                    b.textContent = s.label + ' · ' + Math.round(s.w) + '×' + Math.round(s.h) + '"';
                     b.setAttribute('aria-label', s.label + ' size, ' + roundDim(s.w) + ' by ' + roundDim(s.h) + ' inches');
                     b.onclick = function() { selectSize(i); showChrome(); };
                     chipsEl.appendChild(b);
@@ -2901,15 +2909,7 @@
 
             window.confirmRvCalibration = function() {
                 var markerWidthPx = parseFloat(document.getElementById('rvMarkerWidth').value) || 190;
-                var rawPpi = markerWidthPx / markerWidthInches();
-                /* Cap ppi so the current print never exceeds 80% of the screen's
-                   shorter dimension — prevents "print fills everything" when the
-                   user calibrated too close to the wall. Relative sizes between
-                   Small / Medium / Standard / Large remain proportionally correct. */
-                var s = activeSize();
-                var maxPx = Math.min(window.innerWidth, window.innerHeight) * 0.80;
-                var maxPpi = maxPx / Math.max(s.w, s.h);
-                rvPixelsPerInch = Math.min(rawPpi, maxPpi);
+                rvPixelsPerInch = markerWidthPx / markerWidthInches();
                 rvCalibrated = true;
                 rvDepth = 1;
                 document.getElementById('rvDepthSlider').value = 100;
