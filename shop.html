@@ -2294,6 +2294,17 @@
                 return /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|Twitter|TikTok|Musical|Snapchat|Pinterest|LinkedInApp|WhatsApp/i.test(ua);
             }
 
+            /* Chrome, Firefox, Edge, Opera on iOS all run on WebKit but Apple
+               blocks AR Quick Look and WebXR in every browser except Safari.
+               Detect these so we can prompt the user to switch to Safari. */
+            function isIOSNonSafari() {
+                var ua = navigator.userAgent || '';
+                var isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+                if (!isiOS) return false;
+                /* Safari's UA contains "Version/" but NOT CriOS / FxiOS / EdgiOS */
+                return /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|Brave/i.test(ua);
+            }
+
             window.openArSheet = function(id, title, img, wIn, hIn, sizeList, options) {
                 options = options || {};
                 var sheet  = document.getElementById('arSheet');
@@ -2315,20 +2326,40 @@
                 document.body.style.overflow = 'hidden';
                 arSession = { id: id, title: title, img: img, w: wIn, h: hIn, sizes: sizeList, t0: Date.now() };
 
+                /* ── iOS non-Safari (Chrome, Firefox, Edge…): AR blocked by Apple ── */
+                if (isIOSNonSafari()) {
+                    arMode = 'inapp';
+                    track('ar_ios_nonsafari', { item_id: id, item_name: title });
+                    load.classList.remove('ar-gone');
+                    load.innerHTML =
+                        '<div style=”max-width:300px;text-align:center;”>'
+                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;”>AR requires Safari on iPhone</div>'
+                      + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.84rem;line-height:1.8;color:rgba(247,243,236,0.52);”>'
+                      + 'Apple only allows AR Quick Look in Safari.<br>'
+                      + 'Copy the link below and open it in <strong style=”color:rgba(247,243,236,0.8);”>Safari</strong> for the full wall AR experience.</div>'
+                      + '</div>';
+                    document.getElementById('arDimText').textContent = '';
+                    launch.innerHTML =
+                        '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link for Safari';
+                    hintEl.textContent = 'Paste into Safari · then tap “See it on Your Wall”';
+                    chipsEl.innerHTML = '';
+                    return;
+                }
+
                 /* ── in-app browser: cannot do native AR here ── */
                 if (isInAppBrowser()) {
                     arMode = 'inapp';
                     track('ar_inapp_blocked', { item_id: id, item_name: title });
                     load.classList.remove('ar-gone');
                     load.innerHTML =
-                        '<div style="max-width:300px;text-align:center;">'
-                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;">Open in your browser</div>'
-                      + '<div style="font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);">Live AR needs Chrome or Safari. '
-                      + 'Tap the <strong style="color:rgba(247,243,236,0.8);">⋮</strong> menu at the top of this screen and choose <strong style="color:rgba(247,243,236,0.8);">“Open in browser”</strong>.</div>'
+                        '<div style=”max-width:300px;text-align:center;”>'
+                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
+                      + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);”>Live AR needs Chrome or Safari. '
+                      + 'Tap the <strong style=”color:rgba(247,243,236,0.8);”>⋮</strong> menu at the top of this screen and choose <strong style=”color:rgba(247,243,236,0.8);”>”Open in browser”</strong>.</div>'
                       + '</div>';
                     document.getElementById('arDimText').textContent = '';
                     launch.innerHTML =
-                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link';
+                        '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link';
                     hintEl.textContent = 'Then paste it into Chrome or Safari';
                     chipsEl.innerHTML = '';
                     return;
