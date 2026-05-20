@@ -1093,8 +1093,8 @@
                         <button class="action-btn" id="modalAddBtn">Add to Cart</button>
                         <button class="action-btn buy-now-btn" id="modalBuyBtn">Buy Now</button>
                     </div>
-                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="See this print on your wall in AR">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="See this print on your wall">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><circle cx="12" cy="13" r="3"/></svg>
                         See it on Your Wall
                     </button>
 
@@ -1895,10 +1895,11 @@
                 rvBtn.onclick = function() {
                     var selected = sizeWrap.querySelector('.size-select option:checked');
                     var selectedLabel = selected ? selected.dataset.sizeLabel : '';
-                    var selSize = rvSizeList.find(function(s) { return s.label === selectedLabel; })
-                                  || rvSizeList[0]
-                                  || { w: rvAspW, h: rvAspH };
-                    openArSheet(rvId, rvTitle, rvImg, selSize.w, selSize.h, rvSizeList);
+                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList, {
+                        id: rvId,
+                        title: rvTitle,
+                        selectedLabel: selectedLabel
+                    });
                 };
             } else {
                 rvBtn.style.display = 'none';
@@ -2636,7 +2637,7 @@
                     rebuildCurrentSize();
                 });
 
-                /* ── Camera overlay fallback link ── */
+                /* ── "Camera View" — return to the room viewer ── */
                 document.getElementById('arOverlayLink').addEventListener('click', function() {
                     if (!arSession) return;
                     var sess = arSession;
@@ -2646,7 +2647,12 @@
                         sess.sizes && sess.sizes.length
                             ? sess.sizes
                             : [{ label: 'Standard', w: sess.w, h: sess.h }],
-                        { title: sess.title }
+                        {
+                            id: sess.id || '',
+                            title: sess.title || '',
+                            /* restore the scale the user set in AR */
+                            scaleMult: typeof arScaleMult !== 'undefined' ? arScaleMult : 1
+                        }
                     );
                 });
             });
@@ -3950,14 +3956,14 @@
     <div class="ar-launch-row">
       <button id="arLaunch">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        See it on your wall
+        Place on Wall
       </button>
       <button id="arOverlayLink" class="ar-cal-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="14" height="14"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 14h6"/></svg>
-        Calibrate
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="14" height="14"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><circle cx="12" cy="13" r="3"/></svg>
+        Camera View
       </button>
     </div>
-    <span class="ar-hint" id="arHint">AR auto-scales · Calibrate to set exact size</span>
+    <span class="ar-hint" id="arHint">Tap Place on Wall · adjust size below · Camera View to re-calibrate</span>
   </div>
 </div>
 
@@ -4050,7 +4056,7 @@
       </label>
       <button class="rv-ar-launch" onclick="launchRvAR()" id="rvArBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        See it on your wall
+        Open in True AR
       </button>
     </div>
   </div>
