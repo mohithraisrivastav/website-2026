@@ -2739,22 +2739,44 @@
             var RV_DEAD  = 0.08;  /* deg/s dead zone — absorbs resting noise */
 
             (function() {
+                var dbgCount = 0;
                 function onMotion(e) {
                     var rr = e.rotationRate;
                     if (!rr) return;
+
+                    /* Live debug HUD — updates even when lock is off so we can diagnose */
+                    dbgCount++;
+                    var dbg = document.getElementById('rvDbg');
+                    if (dbg && dbg.style.display !== 'none') {
+                        var dG = document.getElementById('rvDbgG');
+                        var dB = document.getElementById('rvDbgB');
+                        var dX = document.getElementById('rvDbgX');
+                        var dY = document.getElementById('rvDbgY');
+                        var dN = document.getElementById('rvDbgN');
+                        if (dG) dG.textContent = (rr.gamma != null ? rr.gamma.toFixed(2) : 'null') + ' °/s';
+                        if (dB) dB.textContent = (rr.beta  != null ? rr.beta.toFixed(2)  : 'null') + ' °/s';
+                        if (dX) dX.textContent = rvGyroX.toFixed(1) + '°';
+                        if (dY) dY.textContent = rvGyroY.toFixed(1) + '°';
+                        if (dN) dN.textContent = dbgCount;
+                    }
+
                     var now = e.timeStamp;
                     if (rvGyroT === null) { rvGyroT = now; return; }
                     var dt = (now - rvGyroT) / 1000;   /* seconds */
                     rvGyroT = now;
                     if (!rvOrientActive || !rvOrientAnchor) return;
                     if (!document.getElementById('roomViewer').classList.contains('rv-open')) return;
+
                     /* Phone held vertically (portrait) pointing at wall:
                        rotationRate.gamma = rotation around device Y (long axis) = horizontal pan/yaw
                        rotationRate.beta  = rotation around device X              = vertical tilt/pitch
                        rotationRate.alpha = rotation around device Z (screen out) = roll — NOT pan
+                       Values can be null on some Android devices — treat null as zero.
                        Dead zone kills sub-threshold resting sensor noise. */
-                    var rrH = Math.abs(rr.gamma) > RV_DEAD ? rr.gamma : 0;
-                    var rrV = Math.abs(rr.beta)  > RV_DEAD ? rr.beta  : 0;
+                    var rawH = (rr.gamma != null) ? rr.gamma : 0;
+                    var rawV = (rr.beta  != null) ? rr.beta  : 0;
+                    var rrH = Math.abs(rawH) > RV_DEAD ? rawH : 0;
+                    var rrV = Math.abs(rawV) > RV_DEAD ? rawV : 0;
                     rvGyroX += rrH * dt;
                     rvGyroY += rrV * dt;
                     var ppdH = window.innerWidth  / 68;
@@ -2763,22 +2785,29 @@
                     rvPos.y = rvOrientAnchor.py - rvGyroY * ppdV;
                     updateTransform();
                 }
-                /* iOS 13+ DeviceMotion needs same permission as DeviceOrientation */
                 window.addEventListener('devicemotion', onMotion);
             }());
 
             window.setRvLock = function(on) {
                 var btn = document.getElementById('rvLockBtn');
+                var dbg = document.getElementById('rvDbg');
                 if (on) {
                     rvOrientActive = true;
                     /* Reset gyro accumulation from the current position */
                     rvGyroX = 0; rvGyroY = 0; rvGyroT = null;
                     rvOrientAnchor = { px: rvPos.x, py: rvPos.y };
                     if (btn) btn.classList.add('rv-on');
+                    /* Show debug overlay so we can read sensor values */
+                    if (dbg) {
+                        dbg.style.display = '';
+                        var dN = document.getElementById('rvDbgN');
+                        if (dN) dN.textContent = '0';
+                    }
                 } else {
                     rvOrientActive = false;
                     rvOrientAnchor = null;
                     if (btn) btn.classList.remove('rv-on');
+                    if (dbg) dbg.style.display = 'none';
                 }
                 showChrome();
             };
@@ -2788,10 +2817,12 @@
                     window.setRvLock(false);
                     return;
                 }
-                /* iOS 13+ requires a permission gesture */
-                if (typeof DeviceOrientationEvent !== 'undefined' &&
-                    typeof DeviceOrientationEvent.requestPermission === 'function') {
-                    DeviceOrientationEvent.requestPermission()
+                /* iOS 13+ gates devicemotion (rotationRate) behind DeviceMotionEvent.requestPermission.
+                   NOTE: DeviceOrientationEvent.requestPermission is a SEPARATE permission and does NOT
+                   unlock devicemotion — must use DeviceMotionEvent specifically. */
+                if (typeof DeviceMotionEvent !== 'undefined' &&
+                    typeof DeviceMotionEvent.requestPermission === 'function') {
+                    DeviceMotionEvent.requestPermission()
                         .then(function(s) { if (s === 'granted') window.setRvLock(true); })
                         .catch(function()  { window.setRvLock(true); });
                 } else {
@@ -3760,6 +3791,16 @@
 
   <div id="rvPrintWrap">
     <img id="rvPrint" src="" alt="Print preview" draggable="false">
+  </div>
+
+  <!-- Sensor debug overlay — visible while lock is active, helps diagnose gyro issues -->
+  <div id="rvDbg" style="display:none;position:absolute;top:72px;left:12px;background:rgba(0,0,0,0.78);color:#e8e8e8;font-size:10.5px;font-family:monospace;padding:9px 13px;border-radius:7px;z-index:6;line-height:2;pointer-events:none;border:1px solid rgba(255,255,255,0.1);">
+    <div style="color:#cfa246;font-size:9px;letter-spacing:1.5px;margin-bottom:2px;">SENSOR DEBUG</div>
+    <div>γ pan: <span id="rvDbgG" style="color:#7ef">waiting…</span></div>
+    <div>β tilt: <span id="rvDbgB" style="color:#7ef">—</span></div>
+    <div>X drift: <span id="rvDbgX" style="color:#afa">0°</span></div>
+    <div>Y drift: <span id="rvDbgY" style="color:#afa">0°</span></div>
+    <div>Events: <span id="rvDbgN" style="color:#fa8">0</span></div>
   </div>
 
   <div id="rvChrome">
