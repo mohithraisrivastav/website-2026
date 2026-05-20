@@ -2736,7 +2736,7 @@
             var rvGyroX  = 0;     /* accumulated horizontal pan, degrees */
             var rvGyroY  = 0;     /* accumulated vertical tilt, degrees  */
             var rvGyroT  = null;  /* last event timestamp                 */
-            var RV_DEAD  = 0.08;  /* deg/s dead zone — absorbs resting noise */
+            var RV_DEAD  = 1.2;   /* deg/s dead zone — sensor bias at rest ~1 deg/s, filter it out */
 
             (function() {
                 var dbgCount = 0;
@@ -2757,6 +2757,8 @@
                         if (dB) dB.textContent = (rr.beta  != null ? rr.beta.toFixed(2)  : 'null') + ' °/s';
                         if (dX) dX.textContent = rvGyroX.toFixed(1) + '°';
                         if (dY) dY.textContent = rvGyroY.toFixed(1) + '°';
+                        var dPX = document.getElementById('rvDbgPX');
+                        if (dPX) dPX.textContent = rvPos.x.toFixed(0) + 'px';
                         if (dN) dN.textContent = dbgCount;
                     }
 
@@ -2781,7 +2783,10 @@
                     rvGyroY += rrV * dt;
                     var ppdH = window.innerWidth  / 68;
                     var ppdV = window.innerHeight / 90;
-                    rvPos.x = rvOrientAnchor.px - rvGyroX * ppdH;
+                    /* Sign: panning right = clockwise around device Y = NEGATIVE gamma.
+                       anchor + negative → print moves left = opposite of camera = sticks to wall.
+                       (Using minus was backwards — made print follow camera.) */
+                    rvPos.x = rvOrientAnchor.px + rvGyroX * ppdH;
                     rvPos.y = rvOrientAnchor.py - rvGyroY * ppdV;
                     updateTransform();
                 }
@@ -3800,6 +3805,7 @@
     <div>β tilt: <span id="rvDbgB" style="color:#7ef">—</span></div>
     <div>X drift: <span id="rvDbgX" style="color:#afa">0°</span></div>
     <div>Y drift: <span id="rvDbgY" style="color:#afa">0°</span></div>
+    <div>posX: <span id="rvDbgPX" style="color:#fd7">—</span></div>
     <div>Events: <span id="rvDbgN" style="color:#fa8">0</span></div>
   </div>
 
