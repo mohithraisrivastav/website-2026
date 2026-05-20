@@ -1769,7 +1769,7 @@
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalPrice').innerText = formatPrice(p.price);
             document.getElementById('modalPrice').dataset.inrPrice = p.price;
-            document.getElementById('modalDescription').innerText = p.description;
+            document.getElementById('modalDescription').innerHTML = p.description;
             document.getElementById('modalMainImage').src = imgPath(p.images[0]);
             document.getElementById('modalMainImage').alt = p.title;
 
@@ -1906,12 +1906,9 @@
                 rvBtn.style.display = 'flex';
                 var rvImg  = imgPath(p.images[0]);
                 var rvAspW = p.origW, rvAspH = p.origH;
+                /* Build size list — str uses "32 × 24 in" format, split on × */
                 var rvSizeList = calcPrintSizes(p.origW, p.origH).map(function(s) {
-                    return { label: s.label, w: parseFloat(s.str), h: parseFloat(s.str.split(/[×x]/)[1]) || p.origH };
-                });
-                /* build clean size list from the size strings */
-                rvSizeList = calcPrintSizes(p.origW, p.origH).map(function(s) {
-                    var parts = s.str.replace(/&mdash;|—/g,'×').split('×').map(function(v){ return parseFloat(v); });
+                    var parts = s.str.split('×').map(function(v){ return parseFloat(v); });
                     return { label: s.label, w: parts[0] || p.origW, h: parts[1] || p.origH };
                 });
                 var rvId = id, rvTitle = p.title;
@@ -2154,7 +2151,11 @@
 
                 // Toggle individual cards (for "Showing N products" count + future sub-filters)
                 cards.forEach(function(card) {
-                    const isVisible = selected === 'all' || card.dataset.shopCategory === selected;
+                    const section = card.closest('.shop-section');
+                    /* Don't count cards inside sections that are permanently hidden
+                       via inline style (e.g. books / tools not yet launched) */
+                    const sectionHidden = section && section.style.display === 'none';
+                    const isVisible = !sectionHidden && (selected === 'all' || card.dataset.shopCategory === selected);
                     card.classList.toggle('is-filtered-out', !isVisible);
                     if (isVisible) visibleCount += 1;
                 });
@@ -3787,6 +3788,23 @@
                 wrap.appendChild(sel);
                 var actionsEl = card.querySelector('.product-actions');
                 if (actionsEl) card.insertBefore(wrap, actionsEl);
+
+                /* Sync card price / edition / dim to the default selection on load.
+                   Without this, Cosmic Return (and any card whose data-base-price
+                   differs from the Standard-tier price) shows Large-tier data while
+                   the Standard option is already selected. */
+                var defOpt = sel.options[cardDefaultIdx];
+                if (defOpt) {
+                    var defPrice = parseInt(defOpt.dataset.price);
+                    if (priceEl) {
+                        priceEl.textContent = (typeof window.formatPrice === 'function')
+                            ? window.formatPrice(defPrice)
+                            : '₹' + defPrice.toLocaleString('en-IN');
+                        priceEl.setAttribute('data-inr', defPrice);
+                    }
+                    if (dimTag) dimTag.textContent = defOpt.dataset.dim;
+                    if (edTag)  edTag.textContent  = defOpt.dataset.edition;
+                }
             });
         })();
 
