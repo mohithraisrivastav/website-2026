@@ -865,6 +865,11 @@
         #roomViewer.rv-calibrating #rvMarker { display: block; }
         /* In match phase, marker nudges up so it's clear of the bottom strip */
         #roomViewer.rv-cal-matching #rvMarker { top: calc(50% - 40px); }
+        /* Fade print during calibration so wall is clearly visible */
+        #roomViewer.rv-calibrating #rvPrintWrap {
+            opacity: 0.12 !important;
+            pointer-events: none;
+        }
         @media (max-width: 680px) {
             .rv-top { padding: 24px 14px 80px; }
             .rv-bottom { padding: 88px 14px 24px; }
@@ -2747,6 +2752,13 @@
                 if (p2) p2.style.display = '';
                 if (cal) cal.classList.add('rv-cal-matching');
                 rv.classList.add('rv-cal-matching');
+                /* Seed slider: use calibrated ppi if available, else estimate from screen width */
+                var inp = document.getElementById('rvMarkerWidth');
+                if (inp) {
+                    var ppi = rvPixelsPerInch > 0 ? rvPixelsPerInch : (window.innerWidth / 16);
+                    var guess = Math.round(markerWidthInches() * ppi);
+                    inp.value = Math.min(340, Math.max(80, guess));
+                }
                 updateRvMarkerFromControl();
             };
 
