@@ -2592,10 +2592,11 @@
                 var hintTimer = setTimeout(function() {
                     hintEl.classList.add('rv-hint-gone');
                 }, 3000);
-                rv.addEventListener('touchstart', function dismissHint() {
+                var rvEl = document.getElementById('roomViewer');
+                rvEl.addEventListener('touchstart', function dismissHint() {
                     clearTimeout(hintTimer);
                     hintEl.classList.add('rv-hint-gone');
-                    rv.removeEventListener('touchstart', dismissHint);
+                    rvEl.removeEventListener('touchstart', dismissHint);
                 }, { passive: true, once: true });
 
                 showChrome();
