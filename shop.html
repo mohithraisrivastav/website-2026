@@ -723,24 +723,40 @@
             color: rgba(255,255,255,0.6);
         }
 
+        /* ── Calibration panel ── */
         #rvCalibration {
             display: none;
             position: absolute;
             left: 50%;
             bottom: 186px;
             z-index: 5;
-            width: min(420px, calc(100vw - 32px));
+            width: min(400px, calc(100vw - 32px));
             transform: translateX(-50%);
-            padding: 16px;
+            padding: 16px 16px 14px;
             border: 1px solid rgba(207,162,70,0.35);
-            border-radius: 8px;
-            background: rgba(14,12,10,0.78);
+            border-radius: 10px;
+            background: rgba(14,12,10,0.88);
             color: rgba(247,243,236,0.82);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 22px 70px rgba(0,0,0,0.42);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 22px 70px rgba(0,0,0,0.5);
+            transition: bottom 0.3s cubic-bezier(.4,0,.2,1),
+                        padding 0.3s cubic-bezier(.4,0,.2,1),
+                        border-radius 0.3s;
+        }
+        /* Phase 2: slim strip pinned to very bottom, full camera visible */
+        #rvCalibration.rv-cal-matching {
+            bottom: 0;
+            left: 0; right: 0;
+            width: 100%;
+            transform: none;
+            border-radius: 0;
+            border-left: none; border-right: none; border-bottom: none;
+            border-top: 1px solid rgba(207,162,70,0.28);
+            padding: 10px 16px 20px;
         }
         #roomViewer.rv-calibrating #rvCalibration { display: block; }
+
         .rv-cal-title {
             font-size: 0.68rem;
             font-weight: 800;
@@ -750,8 +766,8 @@
             margin-bottom: 10px;
         }
         .rv-cal-text {
-            font-size: 0.82rem;
-            line-height: 1.55;
+            font-size: 0.85rem;
+            line-height: 1.5;
             color: rgba(247,243,236,0.72);
             margin-bottom: 12px;
         }
@@ -760,8 +776,7 @@
             grid-template-columns: 1fr;
             gap: 10px;
         }
-        .rv-cal-row select,
-        .rv-cal-row input {
+        .rv-cal-row select {
             width: 100%;
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.18);
@@ -769,13 +784,34 @@
             border-radius: 6px;
             padding: 11px;
         }
+        /* Phase 2 match row */
+        .rv-cal-match-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rv-cal-match-row input[type=range] {
+            flex: 1;
+            accent-color: #CFA246;
+            height: 4px;
+        }
+        .rv-cal-nudge {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            color: #F7F3ED;
+            font-size: 1.1rem; line-height: 1;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
         .rv-cal-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
         }
-        .rv-cal-actions button {
-            flex: 1;
+        .rv-cal-actions button,
+        .rv-cal-match-row button {
             min-height: 40px;
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.18);
@@ -786,11 +822,14 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .rv-cal-actions button:first-child {
+        .rv-cal-actions button:first-child,
+        .rv-cal-primary {
             background: #CFA246;
             border-color: #CFA246;
             color: #1A1612;
         }
+        .rv-cal-actions .rv-cal-primary { flex: 1.6; }
+        .rv-cal-match-row .rv-cal-primary { padding: 0 14px; white-space: nowrap; }
         #rvMarker {
             display: none;
             position: absolute;
@@ -824,6 +863,8 @@
             text-transform: uppercase;
         }
         #roomViewer.rv-calibrating #rvMarker { display: block; }
+        /* In match phase, marker nudges up so it's clear of the bottom strip */
+        #roomViewer.rv-cal-matching #rvMarker { top: calc(50% - 40px); }
         @media (max-width: 680px) {
             .rv-top { padding: 24px 14px 80px; }
             .rv-bottom { padding: 88px 14px 24px; }
@@ -2682,10 +2723,38 @@
                 var rv = document.getElementById('roomViewer');
                 var on = typeof force === 'boolean' ? force : !rv.classList.contains('rv-calibrating');
                 rv.classList.toggle('rv-calibrating', on);
+                rv.classList.remove('rv-cal-matching');
                 document.getElementById('rvCalBtn').classList.toggle('rv-on', on);
+                /* Reset to phase 1 */
+                var p1 = document.getElementById('rvCalPhase1');
+                var p2 = document.getElementById('rvCalPhase2');
+                var cal = document.getElementById('rvCalibration');
+                if (p1) p1.style.display = '';
+                if (p2) p2.style.display = 'none';
+                if (cal) cal.classList.remove('rv-cal-matching');
                 if (on) window.toggleRvGuides(true);
                 updateRvMarkerFromControl();
                 showChrome();
+            };
+
+            /* Phase 1 → Phase 2: hide panel, show slim strip */
+            window.rvCalStartMatch = function() {
+                var rv   = document.getElementById('roomViewer');
+                var cal  = document.getElementById('rvCalibration');
+                var p1   = document.getElementById('rvCalPhase1');
+                var p2   = document.getElementById('rvCalPhase2');
+                if (p1) p1.style.display = 'none';
+                if (p2) p2.style.display = '';
+                if (cal) cal.classList.add('rv-cal-matching');
+                rv.classList.add('rv-cal-matching');
+                updateRvMarkerFromControl();
+            };
+
+            window.rvCalNudge = function(delta) {
+                var inp = document.getElementById('rvMarkerWidth');
+                if (!inp) return;
+                inp.value = Math.min(340, Math.max(80, parseFloat(inp.value) + delta));
+                updateRvMarkerFromControl();
             };
 
             window.updateRvMarkerFromControl = function() {
@@ -3637,21 +3706,36 @@
   </div>
 
   <div id="rvCalibration" role="group" aria-label="Scale calibration">
-    <div class="rv-cal-title">Scale calibration</div>
-    <div class="rv-cal-text">Place a known object on the wall, match the gold marker to it, then confirm. This sets the print closer to real size.</div>
-    <div class="rv-cal-row">
-      <select id="rvMarkerSelect" onchange="updateRvMarkerFromControl()">
-        <option value="8.27">A4 paper width — 8.27 in</option>
-        <option value="11.69">A4 paper height — 11.69 in</option>
-        <option value="3.37">Credit card width — 3.37 in</option>
-        <option value="12">12 in ruler</option>
-      </select>
-      <input id="rvMarkerWidth" type="range" min="80" max="340" value="190" oninput="updateRvMarkerFromControl()">
+
+    <!-- Phase 1: pick reference object -->
+    <div id="rvCalPhase1">
+      <div class="rv-cal-title">Scale calibration</div>
+      <div class="rv-cal-text">What's on your wall right now?</div>
+      <div class="rv-cal-row">
+        <select id="rvMarkerSelect" onchange="updateRvMarkerFromControl()">
+          <option value="8.27">A4 paper — short edge (8.27 in)</option>
+          <option value="11.69">A4 paper — long edge (11.69 in)</option>
+          <option value="3.37">Credit card width (3.37 in)</option>
+          <option value="12">30 cm ruler (11.8 in)</option>
+        </select>
+      </div>
+      <div class="rv-cal-actions">
+        <button type="button" class="rv-cal-primary" onclick="rvCalStartMatch()">Place it on the wall &rarr;</button>
+        <button type="button" onclick="toggleRvCalibration(false)">Cancel</button>
+      </div>
     </div>
-    <div class="rv-cal-actions">
-      <button type="button" onclick="confirmRvCalibration()">Set Scale</button>
-      <button type="button" onclick="toggleRvCalibration(false)">Cancel</button>
+
+    <!-- Phase 2: fine-tune slider, full camera visible -->
+    <div id="rvCalPhase2" style="display:none">
+      <div class="rv-cal-match-row">
+        <button class="rv-cal-nudge" type="button" onclick="rvCalNudge(-5)" aria-label="Smaller">&#8722;</button>
+        <input id="rvMarkerWidth" type="range" min="80" max="340" value="190" oninput="updateRvMarkerFromControl()">
+        <button class="rv-cal-nudge" type="button" onclick="rvCalNudge(5)" aria-label="Larger">&#43;</button>
+        <button class="rv-cal-primary" type="button" onclick="confirmRvCalibration()">&#10003; Matches</button>
+        <button type="button" onclick="toggleRvCalibration(false)">&#10005;</button>
+      </div>
     </div>
+
   </div>
 
   <div id="rvNoCam" style="display:none">
