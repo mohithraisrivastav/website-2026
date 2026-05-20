@@ -2336,8 +2336,12 @@
 
                 arMode = 'ar';
                 launch.innerHTML =
-                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> See it on your wall';
+                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
                 hintEl.textContent = 'Building the framed print…';
+
+                /* ── Platform detection (done once, used in mountBlob + applyNative) ── */
+                var isAndroid = /Android/i.test(navigator.userAgent);
+                var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
                 load.classList.remove('ar-gone');
                 load.textContent = 'Building the framed print…';
@@ -2350,16 +2354,22 @@
 
                 track('ar_open', { item_id: id, item_name: title });
 
+                /* model-viewer fires 'load' once per src change — it fires for the
+                   blob src first, then again when applyNative swaps in the hosted URL.
+                   We auto-launch on EVERY load until AR activates, so Android (which
+                   can only launch after the hosted URL replaces the blob) isn't skipped. */
                 viewer.addEventListener('load', function onL() {
                     load.classList.add('ar-gone');
-                    viewer.removeEventListener('load', onL);
-                    /* auto-launch AR if triggered from the room viewer */
                     if (options.autoLaunch) {
                         setTimeout(function() {
                             if (viewer.canActivateAR) {
+                                viewer.removeEventListener('load', onL);
                                 viewer.activateAR();
                             }
-                        }, 600);
+                            /* if still not ready, leave listener — next load event will retry */
+                        }, 700);
+                    } else {
+                        viewer.removeEventListener('load', onL);
                     }
                 });
 
@@ -2393,13 +2403,27 @@
                     var canUsd = 'ar/' + id + '.usdz' + v;
 
                     function use(glb, usdz) {
+                        /* Hosted URL available — restore full ar-modes for this platform.
+                           Android: scene-viewer first (best UX when URL is public),
+                                    webxr as fallback.
+                           iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
+                                    are fallbacks — keep current order. */
+                        if (isAndroid) {
+                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+                        } else {
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                        }
                         viewer.setAttribute('src', glb);
                         viewer.setAttribute('ios-src', usdz);
                         window.__arNative = true;
                         setTimeout(function() {
-                            hintEl.textContent = viewer.canActivateAR
-                                ? 'Move your phone slowly to find a wall'
-                                : 'Drag to explore · open on a phone for live AR';
+                            if (!viewer.canActivateAR) {
+                                hintEl.textContent = 'Drag to explore · open on your phone for live AR';
+                                return;
+                            }
+                            hintEl.textContent = isAndroid
+                                ? 'Tap Place on Wall · point at a flat wall and move your phone slowly'
+                                : 'Tap Place on Wall · move your phone to scan for a wall';
                         }, 400);
                     }
                     function canonicalAttempt() {
@@ -2410,8 +2434,21 @@
                         }
                         fetch(canGlb, { method: 'HEAD' })
                             .then(function(r) {
-                                if (r.ok) use(canGlb, canUsd);
-                                else hintEl.textContent = 'Drag to explore — live wall AR coming soon';
+                                if (r.ok) { use(canGlb, canUsd); return; }
+                                /* No hosted file — blob is the only src.
+                                   iOS Quick Look handles blobs natively; stays at full ar-modes.
+                                   Android: already set to webxr-only in mountBlob; try activating. */
+                                setTimeout(function() {
+                                    if (viewer.canActivateAR) {
+                                        hintEl.textContent = isAndroid
+                                            ? 'Tap Place on Wall · point at a flat wall and move slowly'
+                                            : 'Tap Place on Wall · move your phone to scan for a wall';
+                                    } else {
+                                        hintEl.textContent = isAndroid
+                                            ? 'For best AR: open in Chrome and install Google Play Services for AR'
+                                            : 'Drag to explore · open on your phone for live AR';
+                                    }
+                                }, 600);
                             })
                             .catch(function() {
                                 hintEl.textContent = 'Drag to explore — live wall AR coming soon';
@@ -2437,7 +2474,14 @@
                     hintEl.textContent = 'Building the framed print…';
 
                     function mountBlob(url) {
-                        /* blob preview always shows the SELECTED true size */
+                        /* blob preview always shows the SELECTED true size.
+                           Android Scene Viewer is an external app — it CANNOT open
+                           blob:// URLs. Switch to WebXR-only while blob is the src;
+                           applyNative() will upgrade to scene-viewer once the hosted
+                           GLB lands. iOS Quick Look runs in-process and handles blobs fine. */
+                        if (isAndroid) {
+                            viewer.setAttribute('ar-modes', 'webxr');
+                        }
                         viewer.setAttribute('src', url);
                         applyNative(sz, isDefault);
                     }
@@ -3944,6 +3988,7 @@
     ar-modes="webxr scene-viewer quick-look"
     ar-placement="wall"
     ar-scale="fixed"
+    xr-environment
     camera-controls
     auto-rotate
     auto-rotate-delay="1200"
