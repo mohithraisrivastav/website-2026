@@ -2566,6 +2566,7 @@
                 document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
                 if (isFramed) applyRvFrame();
                 updateStatus();
+                if (typeof updateRvOffscreenArrow === 'function') updateRvOffscreenArrow();
             }
             function sizeFromScale(s) {
                 if (rvPixelsPerInch) return clampSize(s.w * rvPixelsPerInch * rvDepth, rvCalibrated);
@@ -2761,7 +2762,7 @@
                         if (dB) dB.textContent = 'β Δ ' + dBeta + '°';
                         if (dX) dX.textContent = (e.alpha != null ? e.alpha.toFixed(1) : 'null') + '°';
                         if (dY) dY.textContent = (e.beta  != null ? e.beta.toFixed(1)  : 'null') + '°';
-                        if (dPX) dPX.textContent = rvPos.x.toFixed(0) + 'px';
+                        if (dPX) dPX.textContent = 'x:' + rvPos.x.toFixed(0) + ' y:' + rvPos.y.toFixed(0);
                         if (dN) dN.textContent = dbgCount;
                     }
 
@@ -2787,10 +2788,11 @@
                     var ppdV = window.innerHeight / 90;
 
                     /* alpha increases clockwise (panning right) → print moves left (x decreases)
-                       beta increases when top goes away (tilt up) → print moves down (y increases) */
+                       beta increases when top tilts away → empirically print moves UP (y decreases) */
                     rvPos.x = rvOrientAnchor.px - dH * ppdH;
-                    rvPos.y = rvOrientAnchor.py + dV * ppdV;
+                    rvPos.y = rvOrientAnchor.py - dV * ppdV;
                     updateTransform();
+                    updateRvOffscreenArrow();
                 }
                 window.addEventListener('deviceorientation', onOrientation);
             }());
@@ -2814,9 +2816,54 @@
                     rvOrientAnchor = null;
                     if (btn) btn.classList.remove('rv-on');
                     if (dbg) dbg.style.display = 'none';
+                    var arr = document.getElementById('rvOffscreenArrow');
+                    if (arr) arr.style.display = 'none';
                 }
                 showChrome();
             };
+
+            /* Show a gold arrow at the screen edge when the print is off-screen */
+            function updateRvOffscreenArrow() {
+                var arr = document.getElementById('rvOffscreenArrow');
+                if (!arr || !rvOrientActive) { if (arr) arr.style.display = 'none'; return; }
+                var wrap = document.getElementById('rvPrintWrap');
+                var pw = parseFloat(wrap.style.width)  || 200;
+                var ph = parseFloat(wrap.style.height) || 150;
+                var cx = rvPos.x + pw / 2;   /* print centre x */
+                var cy = rvPos.y + ph / 2;   /* print centre y */
+                var sw = window.innerWidth;
+                var sh = window.innerHeight;
+                var onScreen = (rvPos.x + pw > 0) && (rvPos.x < sw) &&
+                               (rvPos.y + ph > 0) && (rvPos.y < sh);
+                if (onScreen) { arr.style.display = 'none'; return; }
+                /* Compute direction from screen centre to print centre */
+                var dx = cx - sw / 2, dy = cy - sh / 2;
+                var angle = Math.atan2(dy, dx); /* radians */
+                /* Pick which edge the arrow should hug */
+                var margin = 28;
+                var ax, ay;
+                var absDx = Math.abs(dx), absDy = Math.abs(dy);
+                if (absDx * sh > absDy * sw) {
+                    /* Hit left or right edge */
+                    ax = dx > 0 ? sw - margin - 52 : margin;
+                    ay = sw / 2 * (dy / absDx) + sh / 2;
+                    ay = Math.max(80, Math.min(sh - 120, ay));
+                } else {
+                    /* Hit top or bottom edge */
+                    ay = dy > 0 ? sh - margin - 52 : 80;
+                    ax = sh / 2 * (dx / absDy) + sw / 2;
+                    ax = Math.max(margin, Math.min(sw - margin - 52, ax));
+                }
+                /* Arrow symbol: pick closest cardinal direction */
+                var deg = angle * 180 / Math.PI;
+                var icon = deg > -45 && deg <= 45  ? '→' :
+                           deg > 45  && deg <= 135 ? '↓' :
+                           deg > 135 || deg <= -135 ? '←' : '↑';
+                document.getElementById('rvArrowIcon').textContent = icon;
+                arr.style.left = ax + 'px';
+                arr.style.top  = ay + 'px';
+                arr.style.display = 'flex';
+            }
 
             window.toggleRvLock = function() {
                 if (rvOrientActive) {
@@ -3795,6 +3842,15 @@
 
   <div id="rvPrintWrap">
     <img id="rvPrint" src="" alt="Print preview" draggable="false">
+  </div>
+
+  <!-- Off-screen indicator — points toward print when it's outside the visible area -->
+  <div id="rvOffscreenArrow" style="display:none;position:absolute;z-index:8;pointer-events:none;
+       background:rgba(207,162,70,0.85);color:#111;font-size:11px;font-weight:700;
+       letter-spacing:1.5px;padding:6px 11px 6px 9px;border-radius:20px;
+       display:none;align-items:center;gap:5px;">
+    <span id="rvArrowIcon" style="font-size:14px;">→</span>
+    <span>PRINT</span>
   </div>
 
   <!-- Sensor debug overlay — visible while lock is active, helps diagnose gyro issues -->
