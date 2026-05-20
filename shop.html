@@ -2494,8 +2494,10 @@
             /* Wall-lock tracking */
             var rvOrientActive  = false;
             var rvOrientAnchor  = null;  /* { px, py } — screen position at lock time */
-            var rvOrientAngles  = null;  /* { alpha, beta } — device angles at lock time */
-            var RV_DEAD_DEG     = 1.5;   /* degrees — absolute dead zone, filters compass jitter */
+            var rvGyroX  = 0;     /* accumulated horizontal pan (degrees) */
+            var rvGyroY  = 0;     /* accumulated vertical tilt  (degrees) */
+            var rvGyroT  = null;  /* last event timestamp */
+            var RV_DEAD  = 1.5;   /* deg/s — filters resting sensor noise */
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
@@ -2735,66 +2737,74 @@
             };
 
 
-            /* ── Wall-lock: absolute orientation tracking ──────────────────────
-               Uses deviceorientation ABSOLUTE angles, NOT gyro integration.
-               Key advantage: no drift — position is always computed relative to
-               the angle at lock time, so it can never accumulate errors.
-               alpha = compass heading (0–360, clockwise) → horizontal pan
-               beta  = pitch (≈90 when upright, increases when top goes away)  → vertical tilt
+            /* ── Wall-lock: gyroscope with drift decay ──────────────────────────
+               devicemotion.rotationRate only — NO compass/magnetometer.
+               Compass (alpha) is unusable indoors (TV, metal → ±5-10° jitter).
+               Drift fix: when phone is still (below dead zone), accumulated
+               angle decays back to zero → print gently returns to anchor.
+               gamma = rotation around device Y (long/vertical axis) → pan
+               beta  = rotation around device X (short/horizontal axis) → tilt
             ─────────────────────────────────────────────────────────────────── */
             (function() {
                 var dbgCount = 0;
-                function onOrientation(e) {
+                function onMotion(e) {
+                    var rr = e.rotationRate;
+                    if (!rr) return;
+
                     /* Live debug HUD */
                     dbgCount++;
                     var dbg = document.getElementById('rvDbg');
                     if (dbg && dbg.style.display !== 'none') {
-                        var dG = document.getElementById('rvDbgG');
-                        var dB = document.getElementById('rvDbgB');
-                        var dX = document.getElementById('rvDbgX');
-                        var dY = document.getElementById('rvDbgY');
+                        var dG  = document.getElementById('rvDbgG');
+                        var dB  = document.getElementById('rvDbgB');
+                        var dX  = document.getElementById('rvDbgX');
+                        var dY  = document.getElementById('rvDbgY');
                         var dPX = document.getElementById('rvDbgPX');
-                        var dN = document.getElementById('rvDbgN');
-                        var aLocked = rvOrientAngles;
-                        var dA = aLocked ? angleDiff(e.alpha, aLocked.alpha).toFixed(1) : '—';
-                        var dBeta = aLocked && e.beta != null ? (e.beta - aLocked.beta).toFixed(1) : '—';
-                        if (dG) dG.textContent = 'α Δ ' + dA + '°';
-                        if (dB) dB.textContent = 'β Δ ' + dBeta + '°';
-                        if (dX) dX.textContent = (e.alpha != null ? e.alpha.toFixed(1) : 'null') + '°';
-                        if (dY) dY.textContent = (e.beta  != null ? e.beta.toFixed(1)  : 'null') + '°';
+                        var dN  = document.getElementById('rvDbgN');
+                        if (dG)  dG.textContent  = (rr.gamma != null ? rr.gamma.toFixed(2) : 'null') + ' °/s';
+                        if (dB)  dB.textContent  = (rr.beta  != null ? rr.beta.toFixed(2)  : 'null') + ' °/s';
+                        if (dX)  dX.textContent  = 'gX:' + rvGyroX.toFixed(1) + '°';
+                        if (dY)  dY.textContent  = 'gY:' + rvGyroY.toFixed(1) + '°';
                         if (dPX) dPX.textContent = 'x:' + rvPos.x.toFixed(0) + ' y:' + rvPos.y.toFixed(0);
-                        if (dN) dN.textContent = dbgCount;
+                        if (dN)  dN.textContent  = dbgCount;
                     }
 
+                    var now = e.timeStamp;
+                    if (rvGyroT === null) { rvGyroT = now; return; }
+                    var dt = (now - rvGyroT) / 1000;
+                    rvGyroT = now;
                     if (!rvOrientActive || !rvOrientAnchor) return;
-                    if (e.alpha == null) return;
                     if (!document.getElementById('roomViewer').classList.contains('rv-open')) return;
 
-                    /* Capture lock-time angles on first event after locking */
-                    if (!rvOrientAngles) {
-                        rvOrientAngles = { alpha: e.alpha, beta: (e.beta || 0) };
-                        return;
+                    var rawH = (rr.gamma != null) ? rr.gamma : 0;
+                    var rawV = (rr.beta  != null) ? rr.beta  : 0;
+                    var rrH  = Math.abs(rawH) > RV_DEAD ? rawH : 0;
+                    var rrV  = Math.abs(rawV) > RV_DEAD ? rawV : 0;
+
+                    if (rrH !== 0 || rrV !== 0) {
+                        /* Moving — integrate rotation rates into accumulated angle */
+                        rvGyroX += rrH * dt;
+                        rvGyroY += rrV * dt;
+                    } else {
+                        /* Still — slowly decay accumulated angle back to zero.
+                           0.998/frame at 60 Hz ≈ 11%/second, ~30s to fully return.
+                           Eliminates long-term drift without jarring snaps. */
+                        rvGyroX *= 0.998;
+                        rvGyroY *= 0.998;
                     }
-
-                    /* Absolute deltas from lock position — angleDiff handles 0/360 wrap */
-                    var dAlpha = angleDiff(e.alpha, rvOrientAngles.alpha);
-                    var dBeta  = (e.beta != null) ? (e.beta - rvOrientAngles.beta) : 0;
-
-                    /* Dead zone — filters compass jitter at rest */
-                    var dH = Math.abs(dAlpha) > RV_DEAD_DEG ? dAlpha : 0;
-                    var dV = Math.abs(dBeta)  > RV_DEAD_DEG ? dBeta  : 0;
 
                     var ppdH = window.innerWidth  / 68;
                     var ppdV = window.innerHeight / 90;
-
-                    /* alpha increases clockwise (panning right) → print moves left (x decreases)
-                       beta increases when top tilts away → empirically print moves UP (y decreases) */
-                    rvPos.x = rvOrientAnchor.px - dH * ppdH;
-                    rvPos.y = rvOrientAnchor.py - dV * ppdV;
+                    /* Pan right = clockwise around Y = negative gamma → rvGyroX decreases
+                       → anchor + (negative) → x decreases → print moves left = sticks to wall.
+                       Tilt down = positive beta → rvGyroY increases
+                       → anchor - (positive) → y decreases → print moves up = sticks to wall. */
+                    rvPos.x = rvOrientAnchor.px + rvGyroX * ppdH;
+                    rvPos.y = rvOrientAnchor.py - rvGyroY * ppdV;
                     updateTransform();
                     updateRvOffscreenArrow();
                 }
-                window.addEventListener('deviceorientation', onOrientation);
+                window.addEventListener('devicemotion', onMotion);
             }());
 
             window.setRvLock = function(on) {
@@ -2802,7 +2812,7 @@
                 var dbg = document.getElementById('rvDbg');
                 if (on) {
                     rvOrientActive = true;
-                    rvOrientAngles = null;   /* captured on next orientation event */
+                    rvGyroX = 0; rvGyroY = 0; rvGyroT = null;
                     rvOrientAnchor = { px: rvPos.x, py: rvPos.y };
                     if (btn) btn.classList.add('rv-on');
                     /* Show debug overlay so we can read sensor values */
@@ -2870,10 +2880,10 @@
                     window.setRvLock(false);
                     return;
                 }
-                /* iOS 13+ requires a user gesture to access deviceorientation */
-                if (typeof DeviceOrientationEvent !== 'undefined' &&
-                    typeof DeviceOrientationEvent.requestPermission === 'function') {
-                    DeviceOrientationEvent.requestPermission()
+                /* iOS 13+ requires a user gesture to unlock devicemotion */
+                if (typeof DeviceMotionEvent !== 'undefined' &&
+                    typeof DeviceMotionEvent.requestPermission === 'function') {
+                    DeviceMotionEvent.requestPermission()
                         .then(function(s) { if (s === 'granted') window.setRvLock(true); })
                         .catch(function()  { window.setRvLock(true); });
                 } else {
