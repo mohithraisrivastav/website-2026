@@ -727,6 +727,74 @@
         .rv-ar-launch:hover  { background: #d8ad52; }
         .rv-ar-launch:active { transform: scale(0.98); }
 
+        /* ── Floor / wall junction marker ── */
+        #rvFloorLine {
+            display: none;
+            position: absolute;
+            left: 0; right: 0;
+            top: 72%;           /* JS overrides; 72% is the default starting position */
+            pointer-events: none;
+            z-index: 3;
+        }
+        #roomViewer.rv-open #rvFloorLine { display: block; }
+
+        /* The dashed amber rule */
+        .rv-floor-rule {
+            position: absolute;
+            left: 0; right: 0; top: 0; height: 2px;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(207,162,70,0.9) 0, rgba(207,162,70,0.9) 10px,
+                transparent 10px, transparent 20px
+            );
+            box-shadow: 0 0 10px rgba(207,162,70,0.45);
+            transition: box-shadow 0.15s, background 0.15s;
+        }
+        /* Perspective fill — darkens the "floor" area below the line */
+        .rv-floor-fill {
+            position: absolute;
+            left: 0; right: 0; top: 2px;
+            height: 110px;
+            background: linear-gradient(to bottom, rgba(28,18,6,0.28) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        /* "Floor · drag" label */
+        .rv-floor-label {
+            position: absolute;
+            right: 60px; top: -20px;
+            font-size: 0.53rem; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(207,162,70,0.72);
+            white-space: nowrap; pointer-events: none;
+        }
+        /* Drag handle — finger-friendly pill, centred on the line */
+        .rv-floor-handle {
+            position: absolute;
+            left: 50%; top: 0;
+            transform: translate(-50%, -50%);
+            min-width: 88px; min-height: 38px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: rgba(207,162,70,0.92);
+            color: #14110d;
+            font-size: 0.58rem; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 16px; border-radius: 40px;
+            pointer-events: auto;
+            cursor: grab;
+            user-select: none; -webkit-user-select: none;
+            touch-action: none;
+            white-space: nowrap;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.5);
+        }
+        .rv-floor-handle:active { cursor: grabbing; }
+        /* Glow when print bottom snaps to the floor line */
+        #rvFloorLine.rv-floor-snap .rv-floor-rule {
+            background: rgba(207,162,70,1);
+            box-shadow: 0 0 0 1px rgba(207,162,70,0.9),
+                        0 0 22px rgba(207,162,70,0.85),
+                        0 0 55px rgba(207,162,70,0.35);
+        }
+
         #rvGuides {
             display: none;
             position: absolute;
@@ -2608,6 +2676,12 @@
             var rvProductId = '';
             var rvProductTitle = '';
 
+            /* Floor/wall alignment marker */
+            var rvFloorY        = 0.72;   /* fraction of viewport height; updated by drag */
+            var rvFloorDragging = false;
+            var rvFloorDragStartY = 0;    /* clientY at drag start */
+            var rvFloorYStart   = 0;      /* rvFloorY at drag start */
+
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
                 var dy = t[0].clientY - t[1].clientY;
@@ -2713,6 +2787,11 @@
                 return parseFloat(sel.value) || 8.27;
             }
 
+            function updateFloorLine() {
+                var el = document.getElementById('rvFloorLine');
+                if (!el) return;
+                el.style.top = Math.round(rvFloorY * window.innerHeight) + 'px';
+            }
 
             window.openRoomViewer = function(imgSrc, aspW, aspH, sizes, options) {
                 options = options || {};
@@ -2737,6 +2816,13 @@
                 document.getElementById('roomViewer').classList.remove('rv-calibrating', 'rv-guides-on');
                 document.getElementById('rvGuideToggle').classList.remove('rv-on');
                 document.getElementById('rvCalBtn').classList.remove('rv-on');
+
+                /* Reset floor line to default position */
+                rvFloorY = 0.72;
+                rvFloorDragging = false;
+                var floorEl = document.getElementById('rvFloorLine');
+                if (floorEl) floorEl.classList.remove('rv-floor-snap');
+                updateFloorLine();
 
                 var chipsEl = document.getElementById('rvChips');
                 chipsEl.innerHTML = '';
@@ -2781,8 +2867,11 @@
 
             window.closeRoomViewer = function() {
                 clearTimeout(hideTimer);
+                rvFloorDragging = false;
                 document.getElementById('roomViewer').classList.remove('rv-open', 'rv-calibrating');
                 document.getElementById('rvPrintWrap').classList.remove('rv-visible');
+                var floorEl = document.getElementById('rvFloorLine');
+                if (floorEl) floorEl.classList.remove('rv-floor-snap');
                 document.body.style.overflow = '';
                 if (rvStream) { rvStream.getTracks().forEach(function(t){ t.stop(); }); rvStream = null; }
             };
@@ -3019,6 +3108,16 @@
                     if (rvPointerId !== e.pointerId) return;
                     rvPos.x = e.clientX - rvDragOffset.x;
                     rvPos.y = e.clientY - rvDragOffset.y;
+                    /* Snap print bottom to floor line when within 30 px */
+                    var floorPx  = rvFloorY * window.innerHeight;
+                    var printH   = rvSize / Math.max(0.01, rvAspect);
+                    var flEl     = document.getElementById('rvFloorLine');
+                    if (Math.abs((rvPos.y + printH) - floorPx) < 30) {
+                        rvPos.y = floorPx - printH;
+                        if (flEl) flEl.classList.add('rv-floor-snap');
+                    } else {
+                        if (flEl) flEl.classList.remove('rv-floor-snap');
+                    }
                     updateTransform();
                 });
                 wrap.addEventListener('pointerup', function(e) {
@@ -3034,8 +3133,15 @@
                    Taps on buttons/chips are excluded so the chrome still works.   */
                 rv.addEventListener('touchstart', function(e) {
                     showChrome();
-                    /* Let button/chip taps through untouched */
+                    /* Let button/chip and floor-handle taps through untouched */
                     if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    /* Floor handle: begin floor-line drag */
+                    if (e.target.closest('.rv-floor-handle')) {
+                        rvFloorDragging = true;
+                        rvFloorDragStartY = e.touches[0].clientY;
+                        rvFloorYStart = rvFloorY;
+                        return;
+                    }
                     if (e.touches.length === 1) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
                         rvDragOffset.y = e.touches[0].clientY - rvPos.y;
@@ -3049,9 +3155,33 @@
 
                 rv.addEventListener('touchmove', function(e) {
                     if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    /* ── Floor line drag ── */
+                    if (rvFloorDragging && e.touches.length === 1) {
+                        var dy = e.touches[0].clientY - rvFloorDragStartY;
+                        rvFloorY = Math.max(0.2, Math.min(0.92,
+                            rvFloorYStart + dy / window.innerHeight));
+                        updateFloorLine();
+                        /* Clear snap glow since user is repositioning the line */
+                        var floorEl = document.getElementById('rvFloorLine');
+                        if (floorEl) floorEl.classList.remove('rv-floor-snap');
+                        e.preventDefault();
+                        return;
+                    }
+                    /* ── Print drag ── */
                     if (e.touches.length === 1) {
                         rvPos.x = e.touches[0].clientX - rvDragOffset.x;
                         rvPos.y = e.touches[0].clientY - rvDragOffset.y;
+                        /* Snap print bottom to floor line when within 30 px */
+                        var floorPx  = rvFloorY * window.innerHeight;
+                        var printH   = rvSize / Math.max(0.01, rvAspect);
+                        var printBot = rvPos.y + printH;
+                        var flEl     = document.getElementById('rvFloorLine');
+                        if (Math.abs(printBot - floorPx) < 30) {
+                            rvPos.y = floorPx - printH;   /* lock bottom to floor line */
+                            if (flEl) flEl.classList.add('rv-floor-snap');
+                        } else {
+                            if (flEl) flEl.classList.remove('rv-floor-snap');
+                        }
                     } else if (e.touches.length === 2) {
                         var ratio = pdist(e.touches) / Math.max(1, rvPinchStart);
                         rvSize = clampSize(rvPinchSizeStart * ratio);
@@ -3066,6 +3196,10 @@
                 /* When a pinch ends and one finger stays on screen, re-anchor the
                    drag offset to the remaining finger so the print doesn't jump.   */
                 rv.addEventListener('touchend', function(e) {
+                    if (rvFloorDragging) {
+                        rvFloorDragging = false;
+                        return;
+                    }
                     if (e.touches.length === 1 &&
                         !e.target.closest('button, .rv-chip, select, input, label, a')) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
@@ -3073,6 +3207,30 @@
                     }
                 }, { passive: true });
 
+
+                /* ── Floor handle — mouse drag (desktop) ── */
+                var floorHandle = document.getElementById('rvFloorHandle');
+                if (floorHandle) {
+                    floorHandle.addEventListener('mousedown', function(e) {
+                        rvFloorDragging   = true;
+                        rvFloorDragStartY = e.clientY;
+                        rvFloorYStart     = rvFloorY;
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                }
+                document.addEventListener('mousemove', function(e) {
+                    if (!rvFloorDragging) return;
+                    var dy = e.clientY - rvFloorDragStartY;
+                    rvFloorY = Math.max(0.2, Math.min(0.92,
+                        rvFloorYStart + dy / window.innerHeight));
+                    updateFloorLine();
+                    var flEl = document.getElementById('rvFloorLine');
+                    if (flEl) flEl.classList.remove('rv-floor-snap');
+                });
+                document.addEventListener('mouseup', function() {
+                    rvFloorDragging = false;
+                });
 
                 document.addEventListener('keydown', function(e) {
                     if (!rv.classList.contains('rv-open')) return;
@@ -3817,6 +3975,21 @@
     <div class="rv-hint-title">Point camera at a wall</div>
     <div class="rv-hint-sub">Drag to position &nbsp;·&nbsp; Pinch to resize<br>Pinch-rotate to spin</div>
   </div>
+  <!-- Floor / wall junction marker — drag the pill to align with the real floor -->
+  <div id="rvFloorLine" aria-label="Floor alignment — drag to match where the floor meets the wall">
+    <div class="rv-floor-fill"></div>
+    <div class="rv-floor-rule"></div>
+    <span class="rv-floor-label">Floor &middot; drag to align</span>
+    <div class="rv-floor-handle" id="rvFloorHandle">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" width="10" height="10">
+        <polyline points="4,6 8,2 12,6"/>
+        <polyline points="4,10 8,14 12,10"/>
+      </svg>
+      Floor
+    </div>
+  </div>
+
   <div id="rvGuides" aria-hidden="true">
     <div class="rv-guide-grid"></div>
     <div class="rv-guide-cross"></div>
