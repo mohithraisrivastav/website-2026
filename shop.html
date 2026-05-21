@@ -1118,7 +1118,7 @@
             <div class="modal-content">
                 <div class="modal-gallery">
                     <div class="gallery-main" onclick="openImgViewer(document.getElementById('modalMainImage').src, document.getElementById('modalMainImage').alt)">
-                        <img id="modalMainImage" src="" alt="">
+                        <img id="modalMainImage" src="" alt="" onerror="this.style.opacity='0'">
                         <div class="gallery-zoom-hint">Click to enlarge</div>
                         <button class="gallery-nav gallery-prev" id="galleryPrev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
                         <button class="gallery-nav gallery-next" id="galleryNext" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -1380,7 +1380,9 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" onclick="openProductModal('matter-of-pause')" data-product-id="matter-of-pause" data-shop-category="books">
-                    <div class="product-image"><img loading="lazy" src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause (Monograph)" onerror="this.onerror=null;this.src='images/Cosmic Return.webp';"></div>
+                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#C8C2B8;">
+                        <span style="font-size:0.5rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(26,22,18,0.35);">Coming Soon</span>
+                    </div>
                     <div class="product-title">The Matter of Pause (Monograph)</div>
                     <div class="product-specs" id="bookSpecsDisplay"><span class="spec-tag">176 Pages</span><span class="spec-tag">English</span><span class="spec-tag">Digital / Softcover</span></div>
                     <div data-inr="1500" class="product-price" id="bookPriceDisplay">&#8377;1,500</div>
