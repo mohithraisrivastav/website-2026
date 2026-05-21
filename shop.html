@@ -2390,14 +2390,25 @@
                     return;
                 }
 
-                arMode = 'ar';
-                launch.innerHTML =
-                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
-                hintEl.textContent = 'Building the framed print…';
-
-                /* ── Platform detection (done once, used in mountBlob + applyNative) ── */
+                /* ── Platform detection (hoisted — used for button state + mountBlob + applyNative) ── */
                 var isAndroid = /Android/i.test(navigator.userAgent);
                 var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                var isDesktop = !isAndroid && !isIOS;
+
+                arMode = 'ar';
+                if (isDesktop) {
+                    /* Desktop has no AR capability — show the 3D spin viewer but
+                       replace "Place on Wall" with a clipboard link so the user
+                       can easily open it on their phone. */
+                    arMode = 'desktop';
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link for Phone';
+                    hintEl.textContent = 'Drag to explore in 3D · open on your phone to place on your wall';
+                } else {
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
+                    hintEl.textContent = 'Building the framed print…';
+                }
 
                 load.classList.remove('ar-gone');
                 load.textContent = 'Building the framed print…';
@@ -2744,20 +2755,24 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
-                    /* in-app browser: copy the link so they can paste into a real browser */
-                    if (arMode === 'inapp') {
+                    /* in-app browser or desktop: copy the link so the user can open it
+                       in a real mobile browser that supports AR. */
+                    if (arMode === 'inapp' || arMode === 'desktop') {
                         var url = location.href;
+                        var doneLabel = arMode === 'desktop'
+                            ? 'Open on your phone to place on your wall'
+                            : 'Paste into Chrome or Safari to view in AR';
                         var done = function() {
                             launch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Link Copied';
-                            document.getElementById('arHint').textContent = 'Paste into Chrome or Safari to view in AR';
-                            if (arSession) track('ar_link_copied', { item_id: arSession.id });
+                            document.getElementById('arHint').textContent = doneLabel;
+                            if (arSession) track('ar_link_copied', { item_id: arSession.id, mode: arMode });
                         };
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(url).then(done).catch(function() {
-                                window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                                window.prompt('Copy this link and open it on your phone:', url);
                             });
                         } else {
-                            window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                            window.prompt('Copy this link and open it on your phone:', url);
                         }
                         return;
                     }
