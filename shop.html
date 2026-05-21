@@ -2282,7 +2282,7 @@
         /* ══ AR SHEET (model-viewer) ═════════════════════════════ */
         /* Bump on EVERY /ar regeneration so iOS Quick Look fetches fresh
            USDZ instead of its cached copy at the same URL. */
-        window.AR_MODEL_VER = '2';
+        window.AR_MODEL_VER = '3';
         (function() {
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
@@ -2481,6 +2481,9 @@
                    Switching sizes aborts the previous fetch so a slow Small response
                    cannot stomp a Large src that was already applied (Bugs #4 & #5). */
                 var _nativeController = null;
+                /* Pre-probe results: canonical GLB/USDZ confirmed before the blob
+                   build finishes. null = not yet confirmed; string = confirmed URL. */
+                var _probeGlb = null, _probeUsdz = null;
 
                 function applyNative(sz, isDefault) {
                     /* abort any previous in-flight HEAD requests */
@@ -2516,17 +2519,15 @@
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
                         viewer.setAttribute('src', glb);
-                        /* ios-src is only set after verifying the USDZ exists.
-                           iOS Quick Look shows a hard error screen on a 404 — never
-                           set ios-src blindly. model-viewer silently skips Quick Look
-                           when ios-src is absent, so WebXR remains as the fallback. */
+                        /* Set ios-src directly — all USDZ files are pre-built and
+                           deployed alongside the GLBs. The HEAD check was removed
+                           because it introduced a latency gap on slow mobile connections:
+                           the check completed AFTER model-viewer fired 'load', meaning
+                           a user who tapped "Place on Wall" immediately saw canActivateAR=false.
+                           When regenerating /ar, always deploy all .usdz files and bump AR_MODEL_VER. */
                         viewer.removeAttribute('ios-src');
                         if (isIOS && usdz) {
-                            fetch(usdz, { method: 'HEAD', signal: sig })
-                                .then(function(r) {
-                                    if (r.ok) viewer.setAttribute('ios-src', usdz);
-                                })
-                                .catch(function(e) { /* AbortError or network — leave ios-src unset */ });
+                            viewer.setAttribute('ios-src', usdz);
                         }
                         window.__arNative = true;
                         setTimeout(function() {
@@ -2545,6 +2546,9 @@
                                 'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
                             return;
                         }
+                        /* If the parallel pre-probe already confirmed the canonical
+                           GLB, use it immediately — no extra round-trip needed. */
+                        if (_probeGlb) { use(_probeGlb, _probeUsdz); return; }
                         fetch(canGlb, { method: 'HEAD', signal: sig })
                             .then(function(r) {
                                 if (r.ok) { use(canGlb, canUsd); return; }
@@ -2608,6 +2612,22 @@
 
                     var key = id + ':' + bW + 'x' + bH;
                     if (glbCache[key]) { mountBlob(glbCache[key]); return; }
+
+                    /* iOS parallel probe: start the canonical GLB HEAD request NOW
+                       so it completes during the 5–15 s blob build, not after.
+                       When canonicalAttempt() runs it finds _probeGlb already set
+                       and calls use() immediately — zero extra round-trips. */
+                    if (isIOS && isDefault && !_probeGlb) {
+                        var _pv = '?v=' + (window.AR_MODEL_VER || '1');
+                        fetch('ar/' + id + '.glb' + _pv, { method: 'HEAD' })
+                            .then(function(r) {
+                                if (r.ok) {
+                                    _probeGlb  = 'ar/' + id + '.glb'  + _pv;
+                                    _probeUsdz = 'ar/' + id + '.usdz' + _pv;
+                                }
+                            })
+                            .catch(function() {});
+                    }
 
                     if (typeof window.__buildArGLB !== 'function') {
                         load.textContent = '3D engine still loading — try again in a moment.';
