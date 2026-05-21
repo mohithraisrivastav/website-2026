@@ -2592,12 +2592,24 @@
                     }
 
                     var settled = false;
+                    /* Intermediate feedback so the user knows the build is alive.
+                       All three timers are cleared the moment the build settles. */
+                    var t1 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Rendering artwork at full resolution…';
+                    }, 5000);
+                    var t2 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Almost ready…';
+                    }, 11000);
                     var watchdog = setTimeout(function() {
                         if (settled) return;
                         settled = true;
                         load.textContent = 'This is taking long on this device — try reloading.';
                         track('ar_build_timeout', { item_id: id });
                     }, 18000);
+
+                    function clearBuildTimers() {
+                        clearTimeout(t1); clearTimeout(t2); clearTimeout(watchdog);
+                    }
 
                     window.__buildArGLB(img, bW, bH)
                         .then(function(url) {
@@ -2607,12 +2619,12 @@
                                 URL.revokeObjectURL(url);
                                 return;
                             }
-                            settled = true; clearTimeout(watchdog);
+                            settled = true; clearBuildTimers();
                             glbCache[key] = url; mountBlob(url);
                         })
                         .catch(function(e) {
                             if (settled) return;
-                            settled = true; clearTimeout(watchdog);
+                            settled = true; clearBuildTimers();
                             load.textContent = 'Could not build the 3D model.';
                             track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
                         });
