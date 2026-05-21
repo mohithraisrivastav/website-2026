@@ -2513,7 +2513,10 @@
                         .catch(canonicalAttempt);
                 }
 
-                var buildCache = {};   /* key "wxh" -> blob url */
+                /* glbCache lives at IIFE scope — survives across re-opens for the
+                   same session so we never rebuild the same print+size twice.
+                   Key format: "productId:scaledW x scaledH" — includes id so two
+                   different prints at the same size don't share a cached GLB. */
 
                 buildAt = function(sz, isDefault) {
                     var bW = +(sz.w * arScaleMult).toFixed(2);
@@ -2540,8 +2543,8 @@
                         applyNative(sz, isDefault);
                     }
 
-                    var key = bW + 'x' + bH;
-                    if (buildCache[key]) { mountBlob(buildCache[key]); return; }
+                    var key = id + ':' + bW + 'x' + bH;
+                    if (glbCache[key]) { mountBlob(glbCache[key]); return; }
 
                     if (typeof window.__buildArGLB !== 'function') {
                         load.textContent = '3D engine still loading — try again in a moment.';
@@ -2560,7 +2563,7 @@
                         .then(function(url) {
                             if (settled) return;
                             settled = true; clearTimeout(watchdog);
-                            buildCache[key] = url; mountBlob(url);
+                            glbCache[key] = url; mountBlob(url);
                         })
                         .catch(function(e) {
                             if (settled) return;
