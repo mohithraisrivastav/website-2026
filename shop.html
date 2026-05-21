@@ -2288,6 +2288,8 @@
 
             /* cache built GLB blob URLs per print (per session) */
             var glbCache = {};
+            /* single tracked 'load' listener — replaced on every openArSheet, removed on close */
+            var _arLoadListener = null;
             var arMode = 'ar';   /* 'ar' | 'inapp' */
 
             /* In-app webviews (Instagram, Facebook, TikTok, etc.) destroy the
@@ -2389,24 +2391,41 @@
 
                 track('ar_open', { item_id: id, item_name: title });
 
+                /* remove any stale listener left over from a previous opening */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
+                }
+
                 /* model-viewer fires 'load' once per src change — it fires for the
                    blob src first, then again when applyNative swaps in the hosted URL.
                    We auto-launch on EVERY load until AR activates, so Android (which
-                   can only launch after the hosted URL replaces the blob) isn't skipped. */
-                viewer.addEventListener('load', function onL() {
+                   can only launch after the hosted URL replaces the blob) isn't skipped.
+                   _autoLaunchRetries caps the retry loop so the listener never becomes
+                   permanently orphaned (Bug #8). */
+                var _autoLaunchRetries = 0;
+                _arLoadListener = function() {
                     load.classList.add('ar-gone');
                     if (options.autoLaunch) {
+                        _autoLaunchRetries++;
                         setTimeout(function() {
                             if (viewer.canActivateAR) {
-                                viewer.removeEventListener('load', onL);
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
                                 viewer.activateAR();
+                            } else if (_autoLaunchRetries >= 3) {
+                                /* safety cap — stop retrying after 3 load events */
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
                             }
-                            /* if still not ready, leave listener — next load event will retry */
+                            /* otherwise keep listener — next src swap (blob→hosted) will retry */
                         }, 700);
                     } else {
-                        viewer.removeEventListener('load', onL);
+                        viewer.removeEventListener('load', _arLoadListener);
+                        _arLoadListener = null;
                     }
-                });
+                };
+                viewer.addEventListener('load', _arLoadListener);
 
                 /* ── sizes (assign to IIFE-scope vars so Smaller/Larger can access) ── */
                 sizes = (sizeList && sizeList.length)
@@ -2584,6 +2603,11 @@
                         seconds: Math.round((Date.now() - arSession.t0) / 1000)
                     });
                     arSession = null;
+                }
+                /* remove any pending load listener so it can't fire after close */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
                 }
                 /* free the model */
                 viewer.removeAttribute('src');
