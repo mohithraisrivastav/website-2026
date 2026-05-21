@@ -2482,7 +2482,18 @@
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
                         viewer.setAttribute('src', glb);
-                        viewer.setAttribute('ios-src', usdz);
+                        /* ios-src is only set after verifying the USDZ exists.
+                           iOS Quick Look shows a hard error screen on a 404 — never
+                           set ios-src blindly. model-viewer silently skips Quick Look
+                           when ios-src is absent, so WebXR remains as the fallback. */
+                        viewer.removeAttribute('ios-src');
+                        if (isIOS && usdz) {
+                            fetch(usdz, { method: 'HEAD', signal: sig })
+                                .then(function(r) {
+                                    if (r.ok) viewer.setAttribute('ios-src', usdz);
+                                })
+                                .catch(function(e) { /* AbortError or network — leave ios-src unset */ });
+                        }
                         window.__arNative = true;
                         setTimeout(function() {
                             if (!viewer.canActivateAR) {
