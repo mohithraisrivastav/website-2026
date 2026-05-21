@@ -2505,16 +2505,20 @@
                     var canUsd = 'ar/' + id + '.usdz' + v;
 
                     function use(glb, usdz) {
-                        /* Hosted URL available — restore full ar-modes for this platform.
-                           Android: webxr FIRST — Scene Viewer ignores ar-placement="wall"
-                                    and always drops prints on the floor. WebXR respects the
-                                    wall-placement attribute, giving the correct wall-mounted
-                                    preview. Scene Viewer remains as the fallback for devices
-                                    where WebXR is unavailable.
+                        /* Hosted URL available — set ar-modes for this platform.
+                           Android: scene-viewer FIRST — it is the most reliable AR path
+                                    on Android and respects ar-placement="wall" via the
+                                    ar_placement=wall deep-link param (Play Services for AR
+                                    v1.26+, broadly available on modern devices).
+                                    WebXR is kept as a fallback for devices that support
+                                    ARCore WebXR but whose Scene Viewer install is stale.
+                                    (Previously webxr was first, but WebXR initialization
+                                    failures are silent and leave canActivateAR=false with
+                                    no automatic fall-through to scene-viewer.)
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
+                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
@@ -2599,13 +2603,15 @@
 
                     function mountBlob(url) {
                         /* blob preview always shows the SELECTED true size.
-                           Android Scene Viewer is an external app — it CANNOT open
-                           blob:// URLs. Switch to WebXR-only while blob is the src;
-                           applyNative() will upgrade to scene-viewer once the hosted
-                           GLB lands. iOS Quick Look runs in-process and handles blobs fine. */
-                        if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'webxr');
-                        }
+                           We intentionally do NOT restrict ar-modes during the blob phase.
+                           Previously we set ar-modes="webxr" here so Scene Viewer wouldn't
+                           receive a blob:// URL it can't access; but model-viewer v3.5.0
+                           appears not to re-evaluate Scene Viewer availability when ar-modes
+                           is later expanded, leaving canActivateAR=false on devices that
+                           support Scene Viewer but not WebXR.
+                           applyNative() is called immediately after and — thanks to the
+                           parallel probe — swaps in the hosted HTTPS src within ~100ms,
+                           well before any user can tap "Place on Wall". */
                         viewer.setAttribute('src', url);
                         applyNative(sz, isDefault);
                     }
