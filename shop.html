@@ -60,8 +60,8 @@
     <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
       }
     }
     </script>
@@ -73,9 +73,25 @@
     import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
     const IN_TO_M = 0.0254;
-    const FRAME_BORDER = 0.018;
     const FRAME_DEPTH = 0.038;  /* 3.8 cm ≈ 1.5 inches */
-    const MAX_TEX = 2048;
+    /* Frame border scales proportionally with print size.
+       Reference: 42-inch (largest) print → 1.8 cm border.
+       Smaller prints use the same ratio so the frame looks
+       visually consistent at every size. */
+    const FRAME_BORDER_REF   = 0.018;              /* metres — reference for 42" print */
+    const FRAME_BORDER_RATIO = FRAME_BORDER_REF / (42 * IN_TO_M); /* ≈ 1.69 % of dim */
+    /* Texture cap scales with device pixel ratio so low-DPR displays
+       (desktop preview, 1× screens) don't waste GPU memory, while
+       flagship 3× phones get extra detail in AR.
+         DPR < 2  → 1024  (1× / low-end)
+         DPR = 2  → 2048  (retina / mid-range — unchanged from original)
+         DPR > 2  → 3072  (3× flagship — capped to avoid OOM on some ARCore devices) */
+    const MAX_TEX = (function() {
+        var dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+        if (dpr >= 3) return 3072;
+        if (dpr >= 2) return 2048;
+        return 1024;
+    }());
 
     function loadImage(src) {
       return new Promise((resolve, reject) => {
@@ -110,8 +126,11 @@
       const scene = new THREE.Scene();
       const artW = wIn * IN_TO_M;
       const artH = hIn * IN_TO_M;
-      const outW = artW + (FRAME_BORDER * 2);
-      const outH = artH + (FRAME_BORDER * 2);
+      /* Scale border with the larger dimension so portrait and landscape
+         prints at the same nominal size get identical border width. */
+      const frameBorder = Math.max(artW, artH) * FRAME_BORDER_RATIO;
+      const outW = artW + (frameBorder * 2);
+      const outH = artH + (frameBorder * 2);
 
       // Anchor fix: translate the box so its BACK face is exactly at Z=0.
       // With ar-placement="wall", Z=0 is the physical wall surface.
@@ -2288,7 +2307,9 @@
 
             /* cache built GLB blob URLs per print (per session) */
             var glbCache = {};
-            var arMode = 'ar';   /* 'ar' | 'inapp' */
+            /* single tracked 'load' listener — replaced on every openArSheet, removed on close */
+            var _arLoadListener = null;
+            var arMode = 'ar';   /* 'ar' | 'inapp' | 'desktop' */
 
             /* In-app webviews (Instagram, Facebook, TikTok, etc.) destroy the
                page when native AR launches and barely support the 3D pipeline.
@@ -2369,14 +2390,25 @@
                     return;
                 }
 
-                arMode = 'ar';
-                launch.innerHTML =
-                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
-                hintEl.textContent = 'Building the framed print…';
-
-                /* ── Platform detection (done once, used in mountBlob + applyNative) ── */
+                /* ── Platform detection (hoisted — used for button state + mountBlob + applyNative) ── */
                 var isAndroid = /Android/i.test(navigator.userAgent);
                 var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                var isDesktop = !isAndroid && !isIOS;
+
+                arMode = 'ar';
+                if (isDesktop) {
+                    /* Desktop has no AR capability — show the 3D spin viewer but
+                       replace "Place on Wall" with a clipboard link so the user
+                       can easily open it on their phone. */
+                    arMode = 'desktop';
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link for Phone';
+                    hintEl.textContent = 'Drag to explore in 3D · open on your phone to place on your wall';
+                } else {
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
+                    hintEl.textContent = 'Building the framed print…';
+                }
 
                 load.classList.remove('ar-gone');
                 load.textContent = 'Building the framed print…';
@@ -2389,24 +2421,41 @@
 
                 track('ar_open', { item_id: id, item_name: title });
 
+                /* remove any stale listener left over from a previous opening */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
+                }
+
                 /* model-viewer fires 'load' once per src change — it fires for the
                    blob src first, then again when applyNative swaps in the hosted URL.
                    We auto-launch on EVERY load until AR activates, so Android (which
-                   can only launch after the hosted URL replaces the blob) isn't skipped. */
-                viewer.addEventListener('load', function onL() {
+                   can only launch after the hosted URL replaces the blob) isn't skipped.
+                   _autoLaunchRetries caps the retry loop so the listener never becomes
+                   permanently orphaned (Bug #8). */
+                var _autoLaunchRetries = 0;
+                _arLoadListener = function() {
                     load.classList.add('ar-gone');
                     if (options.autoLaunch) {
+                        _autoLaunchRetries++;
                         setTimeout(function() {
                             if (viewer.canActivateAR) {
-                                viewer.removeEventListener('load', onL);
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
                                 viewer.activateAR();
+                            } else if (_autoLaunchRetries >= 3) {
+                                /* safety cap — stop retrying after 3 load events */
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
                             }
-                            /* if still not ready, leave listener — next load event will retry */
+                            /* otherwise keep listener — next src swap (blob→hosted) will retry */
                         }, 700);
                     } else {
-                        viewer.removeEventListener('load', onL);
+                        viewer.removeEventListener('load', _arLoadListener);
+                        _arLoadListener = null;
                     }
-                });
+                };
+                viewer.addEventListener('load', _arLoadListener);
 
                 /* ── sizes (assign to IIFE-scope vars so Smaller/Larger can access) ── */
                 sizes = (sizeList && sizeList.length)
@@ -2425,8 +2474,22 @@
 
                 /* native AR needs REAL hosted urls — blobs can't drive it.
                    Preview-only scope: per-size hosted file if it exists, else
-                   the canonical file (only meaningful at the default size). */
+                   the canonical file (only meaningful at the default size).
+
+                   _nativeController tracks the most recent in-flight HEAD request.
+                   Switching sizes aborts the previous fetch so a slow Small response
+                   cannot stomp a Large src that was already applied (Bugs #4 & #5). */
+                var _nativeController = null;
+
                 function applyNative(sz, isDefault) {
+                    /* abort any previous in-flight HEAD requests */
+                    if (_nativeController) {
+                        try { _nativeController.abort(); } catch (e) {}
+                    }
+                    var ctrl = new AbortController();
+                    _nativeController = ctrl;
+                    var sig = ctrl.signal;
+
                     window.__arNative = false;
                     var sc = slug(sz.label);
                     /* AR_MODEL_VER busts iOS Quick Look's aggressive USDZ
@@ -2439,17 +2502,31 @@
 
                     function use(glb, usdz) {
                         /* Hosted URL available — restore full ar-modes for this platform.
-                           Android: scene-viewer first (best UX when URL is public),
-                                    webxr as fallback.
+                           Android: webxr FIRST — Scene Viewer ignores ar-placement="wall"
+                                    and always drops prints on the floor. WebXR respects the
+                                    wall-placement attribute, giving the correct wall-mounted
+                                    preview. Scene Viewer remains as the fallback for devices
+                                    where WebXR is unavailable.
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
                         viewer.setAttribute('src', glb);
-                        viewer.setAttribute('ios-src', usdz);
+                        /* ios-src is only set after verifying the USDZ exists.
+                           iOS Quick Look shows a hard error screen on a 404 — never
+                           set ios-src blindly. model-viewer silently skips Quick Look
+                           when ios-src is absent, so WebXR remains as the fallback. */
+                        viewer.removeAttribute('ios-src');
+                        if (isIOS && usdz) {
+                            fetch(usdz, { method: 'HEAD', signal: sig })
+                                .then(function(r) {
+                                    if (r.ok) viewer.setAttribute('ios-src', usdz);
+                                })
+                                .catch(function(e) { /* AbortError or network — leave ios-src unset */ });
+                        }
                         window.__arNative = true;
                         setTimeout(function() {
                             if (!viewer.canActivateAR) {
@@ -2467,7 +2544,7 @@
                                 'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
                             return;
                         }
-                        fetch(canGlb, { method: 'HEAD' })
+                        fetch(canGlb, { method: 'HEAD', signal: sig })
                             .then(function(r) {
                                 if (r.ok) { use(canGlb, canUsd); return; }
                                 /* No hosted file — blob is the only src.
@@ -2485,16 +2562,23 @@
                                     }
                                 }, 600);
                             })
-                            .catch(function() {
+                            .catch(function(e) {
+                                if (e && e.name === 'AbortError') return;
                                 hintEl.textContent = 'Drag to explore — live wall AR coming soon';
                             });
                     }
-                    fetch(perGlb, { method: 'HEAD' })
+                    fetch(perGlb, { method: 'HEAD', signal: sig })
                         .then(function(r) { if (r.ok) use(perGlb, perUsd); else canonicalAttempt(); })
-                        .catch(canonicalAttempt);
+                        .catch(function(e) {
+                            if (e && e.name === 'AbortError') return;
+                            canonicalAttempt();
+                        });
                 }
 
-                var buildCache = {};   /* key "wxh" -> blob url */
+                /* glbCache lives at IIFE scope — survives across re-opens for the
+                   same session so we never rebuild the same print+size twice.
+                   Key format: "productId:scaledW x scaledH" — includes id so two
+                   different prints at the same size don't share a cached GLB. */
 
                 buildAt = function(sz, isDefault) {
                     var bW = +(sz.w * arScaleMult).toFixed(2);
@@ -2521,8 +2605,8 @@
                         applyNative(sz, isDefault);
                     }
 
-                    var key = bW + 'x' + bH;
-                    if (buildCache[key]) { mountBlob(buildCache[key]); return; }
+                    var key = id + ':' + bW + 'x' + bH;
+                    if (glbCache[key]) { mountBlob(glbCache[key]); return; }
 
                     if (typeof window.__buildArGLB !== 'function') {
                         load.textContent = '3D engine still loading — try again in a moment.';
@@ -2530,6 +2614,14 @@
                     }
 
                     var settled = false;
+                    /* Intermediate feedback so the user knows the build is alive.
+                       All three timers are cleared the moment the build settles. */
+                    var t1 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Rendering artwork at full resolution…';
+                    }, 5000);
+                    var t2 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Almost ready…';
+                    }, 11000);
                     var watchdog = setTimeout(function() {
                         if (settled) return;
                         settled = true;
@@ -2537,15 +2629,24 @@
                         track('ar_build_timeout', { item_id: id });
                     }, 18000);
 
+                    function clearBuildTimers() {
+                        clearTimeout(t1); clearTimeout(t2); clearTimeout(watchdog);
+                    }
+
                     window.__buildArGLB(img, bW, bH)
                         .then(function(url) {
-                            if (settled) return;
-                            settled = true; clearTimeout(watchdog);
-                            buildCache[key] = url; mountBlob(url);
+                            if (settled) {
+                                /* watchdog already fired — GLB arrived too late.
+                                   Revoke immediately so the browser can free the memory. */
+                                URL.revokeObjectURL(url);
+                                return;
+                            }
+                            settled = true; clearBuildTimers();
+                            glbCache[key] = url; mountBlob(url);
                         })
                         .catch(function(e) {
                             if (settled) return;
-                            settled = true; clearTimeout(watchdog);
+                            settled = true; clearBuildTimers();
                             load.textContent = 'Could not build the 3D model.';
                             track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
                         });
@@ -2584,6 +2685,11 @@
                         seconds: Math.round((Date.now() - arSession.t0) / 1000)
                     });
                     arSession = null;
+                }
+                /* remove any pending load listener so it can't fire after close */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
                 }
                 /* free the model */
                 viewer.removeAttribute('src');
@@ -2649,20 +2755,24 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
-                    /* in-app browser: copy the link so they can paste into a real browser */
-                    if (arMode === 'inapp') {
+                    /* in-app browser or desktop: copy the link so the user can open it
+                       in a real mobile browser that supports AR. */
+                    if (arMode === 'inapp' || arMode === 'desktop') {
                         var url = location.href;
+                        var doneLabel = arMode === 'desktop'
+                            ? 'Open on your phone to place on your wall'
+                            : 'Paste into Chrome or Safari to view in AR';
                         var done = function() {
                             launch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Link Copied';
-                            document.getElementById('arHint').textContent = 'Paste into Chrome or Safari to view in AR';
-                            if (arSession) track('ar_link_copied', { item_id: arSession.id });
+                            document.getElementById('arHint').textContent = doneLabel;
+                            if (arSession) track('ar_link_copied', { item_id: arSession.id, mode: arMode });
                         };
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(url).then(done).catch(function() {
-                                window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                                window.prompt('Copy this link and open it on your phone:', url);
                             });
                         } else {
-                            window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                            window.prompt('Copy this link and open it on your phone:', url);
                         }
                         return;
                     }
@@ -2692,12 +2802,30 @@
                     }
                 });
 
+                /* Update wall-detection guidance text based on ARCore tracking quality */
+                viewer.addEventListener('ar-tracking', function(e) {
+                    var promptText = document.getElementById('arWallPromptText');
+                    if (!promptText) return;
+                    if (e.detail.status === 'not-tracking') {
+                        promptText.textContent = 'Slow down · looking for a flat wall surface';
+                    } else {
+                        promptText.textContent = 'Point camera at a wall · move slowly';
+                    }
+                });
+
                 /* track when native AR session actually starts/ends */
                 viewer.addEventListener('ar-status', function(e) {
                     if (!arSession) return;
-                    if (e.detail.status === 'session-started') {
+                    var status = e.detail.status;
+                    if (status === 'session-started') {
                         track('ar_session_start', { item_id: arSession.id, item_name: arSession.title });
-                    } else if (e.detail.status === 'not-presenting') {
+                        /* Short tick — confirms AR session is live.
+                           navigator.vibrate is Android WebXR only; iOS ignores it silently. */
+                        if (navigator.vibrate) navigator.vibrate(30);
+                    } else if (status === 'object-placed') {
+                        /* Satisfying thud when the print lands on the wall. */
+                        if (navigator.vibrate) navigator.vibrate(80);
+                    } else if (status === 'not-presenting') {
                         track('ar_session_end', { item_id: arSession.id, item_name: arSession.title });
                     }
                 });
@@ -2753,6 +2881,39 @@
                             scaleMult: typeof arScaleMult !== 'undefined' ? arScaleMult : 1
                         }
                     );
+                });
+            });
+
+            /* Pre-build hook — called by openRoomViewer so the GLB is ready in
+               glbCache before the user taps "Open in True AR".
+               Always uses arScaleMult=1 (true size; the room viewer doesn't
+               expose scale at pre-build time). If the user later adjusts scale
+               inside the AR sheet a new key is generated and rebuilt then. */
+            window.preloadArGLB = function(id, imgSrc, wIn, hIn) {
+                if (!id || !imgSrc || !wIn || !hIn) return;
+                if (typeof window.__buildArGLB !== 'function') return;
+                /* Mirror the key format used in buildAt() with arScaleMult=1 */
+                var bW  = +parseFloat(wIn).toFixed(2);
+                var bH  = +parseFloat(hIn).toFixed(2);
+                var key = id + ':' + bW + 'x' + bH;
+                if (glbCache[key]) return;   /* already built — nothing to do */
+                window.__buildArGLB(imgSrc, bW, bH)
+                    .then(function(url) {
+                        /* Another call may have populated the key while we were
+                           building — revoke the duplicate to avoid a leak. */
+                        if (glbCache[key]) { URL.revokeObjectURL(url); return; }
+                        glbCache[key] = url;
+                    })
+                    .catch(function() { /* silent — pre-build is best-effort */ });
+            };
+
+            /* Revoke all cached blob URLs when the page is unloaded so the
+               browser can free the GLB ArrayBuffer memory (each build is
+               several MB). We keep them alive during the session for instant
+               re-open (Bug #2 cache), but release them on exit. */
+            window.addEventListener('beforeunload', function() {
+                Object.keys(glbCache).forEach(function(k) {
+                    URL.revokeObjectURL(glbCache[k]);
                 });
             });
         })();
@@ -2968,6 +3129,20 @@
 
                 showChrome();
                 startRvCamera();
+
+                /* Pre-build the GLB for the default size in the background so
+                   "Open in True AR" loads instantly rather than showing the
+                   "Building the framed print…" spinner. Delayed 1.5 s to let
+                   camera startup and first paint finish first. */
+                if (rvProductId) {
+                    var _preW = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].w : aspW;
+                    var _preH = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].h : aspH;
+                    setTimeout(function() {
+                        if (typeof window.preloadArGLB === 'function') {
+                            window.preloadArGLB(rvProductId, imgSrc, _preW, _preH);
+                        }
+                    }, 1500);
+                }
             };
 
             window.closeRoomViewer = function() {
@@ -4055,8 +4230,35 @@
     exposure="1.0"
     tone-mapping="neutral"
     environment-image="neutral"
-    interaction-prompt="none"
-    disable-tap>
+    interaction-prompt="none">
+    <!-- ar-prompt slot: shown inside the WebXR session as an overlay before
+         the model is placed. Updated by the ar-tracking event listener. -->
+    <div slot="ar-prompt" id="arWallPrompt" style="
+        position:fixed;
+        bottom:128px;
+        left:50%;
+        transform:translateX(-50%);
+        background:rgba(10,10,10,0.68);
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+        border:1px solid rgba(247,243,236,0.15);
+        border-radius:24px;
+        padding:11px 20px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        pointer-events:none;
+        white-space:nowrap;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+        <rect x="7" y="7" width="10" height="10" rx="1"/>
+      </svg>
+      <span id="arWallPromptText" style="
+          font-family:Inter,sans-serif;
+          font-size:0.87rem;
+          color:rgba(247,243,236,0.92);
+          letter-spacing:0.01em;">Point camera at a wall · move slowly</span>
+    </div>
   </model-viewer>
 
   <div class="ar-loading" id="arLoading">Preparing the print…</div>
