@@ -2561,7 +2561,12 @@
 
                     window.__buildArGLB(img, bW, bH)
                         .then(function(url) {
-                            if (settled) return;
+                            if (settled) {
+                                /* watchdog already fired — GLB arrived too late.
+                                   Revoke immediately so the browser can free the memory. */
+                                URL.revokeObjectURL(url);
+                                return;
+                            }
                             settled = true; clearTimeout(watchdog);
                             glbCache[key] = url; mountBlob(url);
                         })
@@ -2780,6 +2785,16 @@
                             scaleMult: typeof arScaleMult !== 'undefined' ? arScaleMult : 1
                         }
                     );
+                });
+            });
+
+            /* Revoke all cached blob URLs when the page is unloaded so the
+               browser can free the GLB ArrayBuffer memory (each build is
+               several MB). We keep them alive during the session for instant
+               re-open (Bug #2 cache), but release them on exit. */
+            window.addEventListener('beforeunload', function() {
+                Object.keys(glbCache).forEach(function(k) {
+                    URL.revokeObjectURL(glbCache[k]);
                 });
             });
         })();
