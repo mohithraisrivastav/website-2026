@@ -80,7 +80,18 @@
        visually consistent at every size. */
     const FRAME_BORDER_REF   = 0.018;              /* metres — reference for 42" print */
     const FRAME_BORDER_RATIO = FRAME_BORDER_REF / (42 * IN_TO_M); /* ≈ 1.69 % of dim */
-    const MAX_TEX = 2048;
+    /* Texture cap scales with device pixel ratio so low-DPR displays
+       (desktop preview, 1× screens) don't waste GPU memory, while
+       flagship 3× phones get extra detail in AR.
+         DPR < 2  → 1024  (1× / low-end)
+         DPR = 2  → 2048  (retina / mid-range — unchanged from original)
+         DPR > 2  → 3072  (3× flagship — capped to avoid OOM on some ARCore devices) */
+    const MAX_TEX = (function() {
+        var dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+        if (dpr >= 3) return 3072;
+        if (dpr >= 2) return 2048;
+        return 1024;
+    }());
 
     function loadImage(src) {
       return new Promise((resolve, reject) => {
