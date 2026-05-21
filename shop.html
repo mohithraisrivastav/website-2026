@@ -73,8 +73,13 @@
     import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
     const IN_TO_M = 0.0254;
-    const FRAME_BORDER = 0.018;
     const FRAME_DEPTH = 0.038;  /* 3.8 cm ≈ 1.5 inches */
+    /* Frame border scales proportionally with print size.
+       Reference: 42-inch (largest) print → 1.8 cm border.
+       Smaller prints use the same ratio so the frame looks
+       visually consistent at every size. */
+    const FRAME_BORDER_REF   = 0.018;              /* metres — reference for 42" print */
+    const FRAME_BORDER_RATIO = FRAME_BORDER_REF / (42 * IN_TO_M); /* ≈ 1.69 % of dim */
     const MAX_TEX = 2048;
 
     function loadImage(src) {
@@ -110,8 +115,11 @@
       const scene = new THREE.Scene();
       const artW = wIn * IN_TO_M;
       const artH = hIn * IN_TO_M;
-      const outW = artW + (FRAME_BORDER * 2);
-      const outH = artH + (FRAME_BORDER * 2);
+      /* Scale border with the larger dimension so portrait and landscape
+         prints at the same nominal size get identical border width. */
+      const frameBorder = Math.max(artW, artH) * FRAME_BORDER_RATIO;
+      const outW = artW + (frameBorder * 2);
+      const outH = artH + (frameBorder * 2);
 
       // Anchor fix: translate the box so its BACK face is exactly at Z=0.
       // With ar-placement="wall", Z=0 is the physical wall surface.
