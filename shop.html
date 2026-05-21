@@ -1934,11 +1934,10 @@
                 rvBtn.onclick = function() {
                     var selected = sizeWrap.querySelector('.size-select option:checked');
                     var selectedLabel = selected ? selected.dataset.sizeLabel : '';
-                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList, {
-                        id: rvId,
-                        title: rvTitle,
-                        selectedLabel: selectedLabel
-                    });
+                    var selSize = rvSizeList.filter(function(s) {
+                        return s.label === selectedLabel;
+                    })[0] || rvSizeList[0];
+                    window.openArSheet(rvId, rvTitle, rvImg, selSize.w, selSize.h, rvSizeList);
                 };
             } else {
                 rvBtn.style.display = 'none';
@@ -2780,25 +2779,14 @@
                         if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
                     } else {
-                        /* No native AR — route mobile silently to camera room viewer;
-                           keep desktop in 3D-spin mode with a gentle hint.            */
-                        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-                        if (isMobile && arSession && typeof window.openRoomViewer === 'function') {
-                            if (arSession) track('ar_fallback_room', { item_id: arSession.id });
-                            var sess = arSession;
-                            window.closeArSheet();
-                            window.openRoomViewer(
-                                sess.img, sess.w, sess.h,
-                                sess.sizes && sess.sizes.length
-                                    ? sess.sizes
-                                    : [{ label: 'Standard', w: sess.w, h: sess.h }],
-                                { title: sess.title }
-                            );
-                        } else {
-                            viewer.cameraOrbit = '12deg 82deg 108%';
-                            document.getElementById('arHint').textContent =
-                                'Drag to explore in 3D · open on your phone for live AR';
-                        }
+                        /* AR not available on this device */
+                        viewer.cameraOrbit = '12deg 82deg 108%';
+                        document.getElementById('arHint').textContent =
+                            isAndroid
+                                ? 'AR not available · install Google Play Services for AR in the Play Store'
+                                : isIOS
+                                    ? 'AR not available · try opening in Safari'
+                                    : 'Drag to explore in 3D · open on your phone for live AR';
                     }
                 });
 
@@ -2864,24 +2852,6 @@
                     rebuildCurrentSize();
                 });
 
-                /* ── "Camera View" — return to the room viewer ── */
-                document.getElementById('arOverlayLink').addEventListener('click', function() {
-                    if (!arSession) return;
-                    var sess = arSession;
-                    window.closeArSheet();
-                    window.openRoomViewer(
-                        sess.img, sess.w, sess.h,
-                        sess.sizes && sess.sizes.length
-                            ? sess.sizes
-                            : [{ label: 'Standard', w: sess.w, h: sess.h }],
-                        {
-                            id: sess.id || '',
-                            title: sess.title || '',
-                            /* restore the scale the user set in AR */
-                            scaleMult: typeof arScaleMult !== 'undefined' ? arScaleMult : 1
-                        }
-                    );
-                });
             });
 
             /* Pre-build hook — called by openRoomViewer so the GLB is ready in
@@ -4277,12 +4247,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         Place on Wall
       </button>
-      <button id="arOverlayLink" class="ar-cal-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" width="14" height="14"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><circle cx="12" cy="13" r="3"/></svg>
-        Camera View
-      </button>
     </div>
-    <span class="ar-hint" id="arHint">Tap Place on Wall · adjust size below · Camera View to re-calibrate</span>
+    <span class="ar-hint" id="arHint">Tap Place on Wall · adjust size with the chips below</span>
   </div>
 </div>
 
