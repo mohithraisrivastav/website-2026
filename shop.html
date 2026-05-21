@@ -2590,7 +2590,18 @@
                             });
                     }
                     fetch(perGlb, { method: 'HEAD', signal: sig })
-                        .then(function(r) { if (r.ok) use(perGlb, perUsd); else canonicalAttempt(); })
+                        .then(function(r) {
+                            if (r.ok) {
+                                /* Per-size GLB exists. Pass null for USDZ — per-size USDZ
+                                   files are not pre-generated, so ios-src would 404 if we
+                                   used perUsd. iOS Quick Look stays disabled for non-default
+                                   sizes (same as before per-size GLBs existed); Android
+                                   Scene Viewer gets the correctly-sized GLB. */
+                                use(perGlb, null);
+                            } else {
+                                canonicalAttempt();
+                            }
+                        })
                         .catch(function(e) {
                             if (e && e.name === 'AbortError') return;
                             canonicalAttempt();

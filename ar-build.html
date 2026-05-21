@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR GLB Builder — GOAF</title>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+* { box-sizing: border-box; }
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 920px; margin: 48px auto; padding: 0 24px;
+    color: #1a1a1a; background: #fafafa;
+}
+h1 { font-size: 1.25rem; font-weight: 700; margin: 0 0 6px; }
+.sub { color: #666; font-size: 0.85rem; line-height: 1.5; margin: 0 0 8px; }
+.note {
+    background: #fff8e7; border: 1px solid #f0c040; border-radius: 6px;
+    padding: 12px 16px; font-size: 0.82rem; color: #7a5a00;
+    margin-bottom: 24px; line-height: 1.5;
+}
+.note code { background: #fef3c7; padding: 1px 4px; border-radius: 3px; }
+.controls { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+button {
+    padding: 11px 22px; background: #111; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer;
+    font-size: 0.875rem; font-weight: 600; letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
+button:hover:not(:disabled) { background: #333; }
+button:disabled { background: #aaa; cursor: not-allowed; }
+progress { flex: 1; min-width: 160px; height: 8px; border-radius: 4px; }
+#progText { font-size: 0.78rem; color: #555; width: 100%; margin-top: -4px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead tr { background: #f0f0f0; }
+th { padding: 9px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #ddd; }
+td { padding: 8px 12px; border-bottom: 1px solid #eee; }
+code { font-size: 0.78rem; background: #f0f0f0; padding: 2px 5px; border-radius: 3px; }
+.st { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; }
+.st-pending  { color: #999; }
+.st-building { color: #d97706; }
+.st-done     { color: #16a34a; }
+.st-error    { color: #dc2626; }
+.dims { color: #666; }
+</style>
+</head>
+<body>
+
+<h1>AR GLB Builder — GOAF Fine Art Prints</h1>
+<p class="sub">Generates the 27 missing per-size GLB files (Small · Medium · Large) for all 9 products.<br>
+Standard-size GLBs already live in <code>ar/</code> — this tool only builds the three additional sizes.</p>
+
+<div class="note">
+  <strong>How to use:</strong>
+  Open this page from your local server (e.g. <code>npx serve .</code> inside the project root) so it can load
+  images from the <code>images/</code> folder, then click <strong>Generate All</strong>.
+  Each GLB is downloaded automatically as it finishes.
+  Move all downloaded files into the <code>ar/</code> directory and deploy.
+  Name format: <code>ar/{product-id}-{size}.glb</code> — exactly what the AR sheet expects.
+</div>
+
+<div class="controls">
+    <button id="buildBtn" onclick="buildAll()">Generate All (27 GLBs)</button>
+    <progress id="prog" value="0" max="27"></progress>
+    <span id="progText">Ready</span>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Output filename</th>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Dimensions</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="tbl"></tbody>
+</table>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+
+/* ── GLB builder (same constants as shop.html) ──────────────────── */
+const IN_TO_M            = 0.0254;
+const FRAME_DEPTH        = 0.038;
+const FRAME_BORDER_REF   = 0.018;
+const FRAME_BORDER_RATIO = FRAME_BORDER_REF / (42 * IN_TO_M);
+const MAX_TEX            = 2048;   /* fixed quality for pre-built server files */
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload  = () => resolve(img);
+        img.onerror = () => reject(new Error('Could not load: ' + src));
+        img.src = src;
+    });
+}
+
+function prepImageEl(image) {
+    let w = image.naturalWidth, h = image.naturalHeight;
+    const s = Math.min(1, MAX_TEX / Math.max(w, h));
+    w = Math.round(w * s); h = Math.round(h * s);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const ctx = c.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(image, 0, 0, w, h);
+    return new Promise((resolve, reject) => {
+        const out = new Image();
+        out.onload  = () => resolve(out);
+        out.onerror = () => reject(new Error('Texture re-encode failed'));
+        out.src = c.toDataURL('image/jpeg', 0.90);
+    });
+}
+
+function buildScene(image, wIn, hIn) {
+    const scene = new THREE.Scene();
+    const artW = wIn * IN_TO_M;
+    const artH = hIn * IN_TO_M;
+    const frameBorder = Math.max(artW, artH) * FRAME_BORDER_RATIO;
+    const outW = artW + (frameBorder * 2);
+    const outH = artH + (frameBorder * 2);
+
+    const frameGeo = new THREE.BoxGeometry(outW, outH, FRAME_DEPTH);
+    frameGeo.translate(0, 0, FRAME_DEPTH / 2);
+    const frame = new THREE.Mesh(
+        frameGeo,
+        new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
+    );
+    scene.add(frame);
+
+    return prepImageEl(image).then(texImg => {
+        const tex = new THREE.Texture(texImg);
+        tex.colorSpace   = THREE.SRGBColorSpace;
+        tex.anisotropy   = 8;
+        tex.needsUpdate  = true;
+        const art = new THREE.Mesh(
+            new THREE.PlaneGeometry(artW, artH),
+            new THREE.MeshBasicMaterial({ map: tex })
+        );
+        art.position.z = FRAME_DEPTH + 0.0012;
+        scene.add(art);
+        return scene;
+    });
+}
+
+function glbExport(scene) {
+    const exporter = new GLTFExporter();
+    return new Promise((resolve, reject) => {
+        exporter.parse(scene, r => resolve(r), e => reject(e), { binary: true });
+    });
+}
+
+async function buildGLB(imgUrl, wIn, hIn) {
+    const image = await loadImage(imgUrl);
+    const scene = await buildScene(image, wIn, hIn);
+    const glb   = await glbExport(scene);
+    return new Blob([glb], { type: 'model/gltf-binary' });
+}
+
+/* ── Product + size data (mirrors shop.html) ────────────────────── */
+function slug(s) {
+    return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function calcDims(origW, origH, longest) {
+    /* same logic as calcPrintSizes() → dim() in shop.html */
+    if (origW >= origH) {
+        return { w: longest, h: +((longest / origW) * origH).toFixed(2) };
+    } else {
+        return { h: longest, w: +((longest / origH) * origW).toFixed(2) };
+    }
+}
+
+const PRODUCTS = [
+    { id: 'cosmic-return',    title: 'Cosmic Return',    origW: 42,  origH: 31.5, image: 'Cosmic Return.webp'       },
+    { id: 'burnt-earth',      title: 'Burnt Earth',      origW: 32,  origH: 24,   image: 'Burnt Earth.jpg'           },
+    { id: 'chromatic-rupture',title: 'Chromatic Rupture',origW: 32,  origH: 24,   image: 'Chromatic Rupture.jpg'     },
+    { id: 'after-the-fall',   title: 'After The Fall',   origW: 32,  origH: 25.5, image: 'After The Fall.jpg'        },
+    { id: 'cracked-spectrum', title: 'Cracked Spectrum', origW: 32,  origH: 21.3, image: 'Cracked Spectrum.jpg'      },
+    { id: 'still-organism',   title: 'Still Organism',   origW: 24,  origH: 32,   image: 'The Still Organism.jpg'    },
+    { id: 'forgotten-skin',   title: 'Forgotten Skin',   origW: 24,  origH: 32,   image: 'The Forgotten Skin.jpg'    },
+    { id: 'erosion',          title: 'Erosion',          origW: 24,  origH: 32,   image: 'Erosion.jpg'               },
+    { id: 'imprint',          title: 'Imprint',          origW: 24,  origH: 32,   image: 'Imprint.jpg'               },
+];
+
+/* Standard (32") already deployed as ar/{id}.glb — skip it here */
+const NON_DEFAULT_SIZES = [
+    { label: 'Small',  longest: 18 },
+    { label: 'Medium', longest: 24 },
+    { label: 'Large',  longest: 42 },
+];
+
+/* Build full task list */
+const TASKS = [];
+for (const p of PRODUCTS) {
+    for (const s of NON_DEFAULT_SIZES) {
+        const dims     = calcDims(p.origW, p.origH, s.longest);
+        const filename = p.id + '-' + slug(s.label) + '.glb';
+        TASKS.push({ product: p, size: s, dims, filename });
+    }
+}
+
+/* ── Populate table ─────────────────────────────────────────────── */
+const tbody = document.getElementById('tbl');
+TASKS.forEach((t, i) => {
+    const tr = document.createElement('tr');
+    tr.id = 'row-' + i;
+    tr.innerHTML =
+        '<td><code>' + t.filename + '</code></td>' +
+        '<td>' + t.product.title + '</td>' +
+        '<td>' + t.size.label + '</td>' +
+        '<td class="dims">' + t.dims.w + ' × ' + t.dims.h + ' in</td>' +
+        '<td><span id="st-' + i + '" class="st st-pending">pending</span></td>';
+    tbody.appendChild(tr);
+});
+
+/* ── Build & download ───────────────────────────────────────────── */
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+window.buildAll = async function() {
+    const btn      = document.getElementById('buildBtn');
+    const prog     = document.getElementById('prog');
+    const progText = document.getElementById('progText');
+    btn.disabled   = true;
+
+    let doneCount = 0, errorCount = 0;
+
+    for (let i = 0; i < TASKS.length; i++) {
+        const t  = TASKS[i];
+        const st = document.getElementById('st-' + i);
+
+        st.className = 'st st-building';
+        st.textContent = 'building…';
+        progText.textContent = '(' + (i + 1) + '/' + TASKS.length + ')  ' + t.filename;
+
+        try {
+            const imgUrl = 'images/' + t.product.image;
+            const blob   = await buildGLB(imgUrl, t.dims.w, t.dims.h);
+
+            /* Trigger download */
+            const url = URL.createObjectURL(blob);
+            const a   = document.createElement('a');
+            a.href     = url;
+            a.download = t.filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            /* Wait before revoking so browser can start the download */
+            await delay(800);
+            URL.revokeObjectURL(url);
+
+            st.className   = 'st st-done';
+            st.textContent = '✓ downloaded';
+            doneCount++;
+        } catch (err) {
+            st.className   = 'st st-error';
+            st.textContent = '✗ ' + (err && err.message ? err.message : String(err));
+            errorCount++;
+        }
+
+        prog.value = i + 1;
+        /* Small pause between builds keeps the tab responsive */
+        await delay(200);
+    }
+
+    if (errorCount === 0) {
+        progText.textContent =
+            '✓ All ' + doneCount + ' GLBs downloaded.  ' +
+            'Move them into the ar/ directory, then commit & deploy.';
+    } else {
+        progText.textContent =
+            doneCount + ' downloaded, ' + errorCount + ' failed.  ' +
+            'Check errors above — usually a missing image file.';
+    }
+    btn.disabled = false;
+};
+</script>
+
+</body>
+</html>
