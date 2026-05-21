@@ -2546,8 +2546,20 @@
                     }
                     function canonicalAttempt() {
                         if (!isDefault) {
-                            hintEl.textContent =
-                                'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
+                            /* No hosted HTTPS GLB for this size — Scene Viewer unavailable.
+                               WebXR (in-browser) CAN use the blob src and shows the correct
+                               physical dimensions, so check if it is available before
+                               showing the "switch to Standard" fallback message. */
+                            setTimeout(function() {
+                                if (viewer.canActivateAR) {
+                                    hintEl.textContent = isAndroid
+                                        ? 'Tap Place on Wall · point at a flat wall and move your phone slowly'
+                                        : 'Tap Place on Wall · move your phone to scan for a wall';
+                                } else {
+                                    hintEl.textContent = 'Switch to ' + sizes[defIdx].label
+                                        + ' for live wall AR · other sizes preview only';
+                                }
+                            }, 500);
                             return;
                         }
                         /* If the parallel pre-probe already confirmed the canonical
@@ -2556,9 +2568,10 @@
                         fetch(canGlb, { method: 'HEAD', signal: sig })
                             .then(function(r) {
                                 if (r.ok) { use(canGlb, canUsd); return; }
-                                /* No hosted file — blob is the only src.
+                                /* No hosted file — blob is the only src for the default size.
                                    iOS Quick Look handles blobs natively; stays at full ar-modes.
-                                   Android: already set to webxr-only in mountBlob; try activating. */
+                                   Android: ar-modes was not restricted (default size path),
+                                   so check canActivateAR and update hint accordingly. */
                                 setTimeout(function() {
                                     if (viewer.canActivateAR) {
                                         hintEl.textContent = isAndroid
@@ -2602,16 +2615,17 @@
                     hintEl.textContent = 'Building the framed print…';
 
                     function mountBlob(url) {
-                        /* blob preview always shows the SELECTED true size.
-                           We intentionally do NOT restrict ar-modes during the blob phase.
-                           Previously we set ar-modes="webxr" here so Scene Viewer wouldn't
-                           receive a blob:// URL it can't access; but model-viewer v3.5.0
-                           appears not to re-evaluate Scene Viewer availability when ar-modes
-                           is later expanded, leaving canActivateAR=false on devices that
-                           support Scene Viewer but not WebXR.
-                           applyNative() is called immediately after and — thanks to the
-                           parallel probe — swaps in the hosted HTTPS src within ~100ms,
-                           well before any user can tap "Place on Wall". */
+                        /* Non-default sizes have no hosted HTTPS GLB — the blob is the
+                           permanent src. Scene Viewer is an external app and cannot open
+                           blob:// URLs; restrict to WebXR (in-browser) for those sizes.
+                           Default size: do NOT restrict ar-modes here — use() swaps in
+                           the hosted HTTPS src within ~100ms (parallel probe already ran),
+                           and pre-restricting to webxr prevents model-viewer v3.5.0 from
+                           re-evaluating Scene Viewer after the swap, leaving canActivateAR
+                           false on devices that support ARCore but not WebXR sessions. */
+                        if (isAndroid && !isDefault) {
+                            viewer.setAttribute('ar-modes', 'webxr');
+                        }
                         viewer.setAttribute('src', url);
                         applyNative(sz, isDefault);
                     }
