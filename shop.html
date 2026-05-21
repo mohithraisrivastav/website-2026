@@ -2790,9 +2790,16 @@
                 /* track when native AR session actually starts/ends */
                 viewer.addEventListener('ar-status', function(e) {
                     if (!arSession) return;
-                    if (e.detail.status === 'session-started') {
+                    var status = e.detail.status;
+                    if (status === 'session-started') {
                         track('ar_session_start', { item_id: arSession.id, item_name: arSession.title });
-                    } else if (e.detail.status === 'not-presenting') {
+                        /* Short tick — confirms AR session is live.
+                           navigator.vibrate is Android WebXR only; iOS ignores it silently. */
+                        if (navigator.vibrate) navigator.vibrate(30);
+                    } else if (status === 'object-placed') {
+                        /* Satisfying thud when the print lands on the wall. */
+                        if (navigator.vibrate) navigator.vibrate(80);
+                    } else if (status === 'not-presenting') {
                         track('ar_session_end', { item_id: arSession.id, item_name: arSession.title });
                     }
                 });
