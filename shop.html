@@ -2309,7 +2309,7 @@
             var glbCache = {};
             /* single tracked 'load' listener — replaced on every openArSheet, removed on close */
             var _arLoadListener = null;
-            var arMode = 'ar';   /* 'ar' | 'inapp' */
+            var arMode = 'ar';   /* 'ar' | 'inapp' | 'desktop' */
 
             /* In-app webviews (Instagram, Facebook, TikTok, etc.) destroy the
                page when native AR launches and barely support the 3D pipeline.
