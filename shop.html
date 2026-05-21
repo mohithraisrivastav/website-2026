@@ -2828,6 +2828,29 @@
                 });
             });
 
+            /* Pre-build hook — called by openRoomViewer so the GLB is ready in
+               glbCache before the user taps "Open in True AR".
+               Always uses arScaleMult=1 (true size; the room viewer doesn't
+               expose scale at pre-build time). If the user later adjusts scale
+               inside the AR sheet a new key is generated and rebuilt then. */
+            window.preloadArGLB = function(id, imgSrc, wIn, hIn) {
+                if (!id || !imgSrc || !wIn || !hIn) return;
+                if (typeof window.__buildArGLB !== 'function') return;
+                /* Mirror the key format used in buildAt() with arScaleMult=1 */
+                var bW  = +parseFloat(wIn).toFixed(2);
+                var bH  = +parseFloat(hIn).toFixed(2);
+                var key = id + ':' + bW + 'x' + bH;
+                if (glbCache[key]) return;   /* already built — nothing to do */
+                window.__buildArGLB(imgSrc, bW, bH)
+                    .then(function(url) {
+                        /* Another call may have populated the key while we were
+                           building — revoke the duplicate to avoid a leak. */
+                        if (glbCache[key]) { URL.revokeObjectURL(url); return; }
+                        glbCache[key] = url;
+                    })
+                    .catch(function() { /* silent — pre-build is best-effort */ });
+            };
+
             /* Revoke all cached blob URLs when the page is unloaded so the
                browser can free the GLB ArrayBuffer memory (each build is
                several MB). We keep them alive during the session for instant
@@ -3050,6 +3073,20 @@
 
                 showChrome();
                 startRvCamera();
+
+                /* Pre-build the GLB for the default size in the background so
+                   "Open in True AR" loads instantly rather than showing the
+                   "Building the framed print…" spinner. Delayed 1.5 s to let
+                   camera startup and first paint finish first. */
+                if (rvProductId) {
+                    var _preW = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].w : aspW;
+                    var _preH = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].h : aspH;
+                    setTimeout(function() {
+                        if (typeof window.preloadArGLB === 'function') {
+                            window.preloadArGLB(rvProductId, imgSrc, _preW, _preH);
+                        }
+                    }, 1500);
+                }
             };
 
             window.closeRoomViewer = function() {
