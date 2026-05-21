@@ -2444,8 +2444,22 @@
 
                 /* native AR needs REAL hosted urls — blobs can't drive it.
                    Preview-only scope: per-size hosted file if it exists, else
-                   the canonical file (only meaningful at the default size). */
+                   the canonical file (only meaningful at the default size).
+
+                   _nativeController tracks the most recent in-flight HEAD request.
+                   Switching sizes aborts the previous fetch so a slow Small response
+                   cannot stomp a Large src that was already applied (Bugs #4 & #5). */
+                var _nativeController = null;
+
                 function applyNative(sz, isDefault) {
+                    /* abort any previous in-flight HEAD requests */
+                    if (_nativeController) {
+                        try { _nativeController.abort(); } catch (e) {}
+                    }
+                    var ctrl = new AbortController();
+                    _nativeController = ctrl;
+                    var sig = ctrl.signal;
+
                     window.__arNative = false;
                     var sc = slug(sz.label);
                     /* AR_MODEL_VER busts iOS Quick Look's aggressive USDZ
@@ -2486,7 +2500,7 @@
                                 'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
                             return;
                         }
-                        fetch(canGlb, { method: 'HEAD' })
+                        fetch(canGlb, { method: 'HEAD', signal: sig })
                             .then(function(r) {
                                 if (r.ok) { use(canGlb, canUsd); return; }
                                 /* No hosted file — blob is the only src.
@@ -2504,13 +2518,17 @@
                                     }
                                 }, 600);
                             })
-                            .catch(function() {
+                            .catch(function(e) {
+                                if (e && e.name === 'AbortError') return;
                                 hintEl.textContent = 'Drag to explore — live wall AR coming soon';
                             });
                     }
-                    fetch(perGlb, { method: 'HEAD' })
+                    fetch(perGlb, { method: 'HEAD', signal: sig })
                         .then(function(r) { if (r.ok) use(perGlb, perUsd); else canonicalAttempt(); })
-                        .catch(canonicalAttempt);
+                        .catch(function(e) {
+                            if (e && e.name === 'AbortError') return;
+                            canonicalAttempt();
+                        });
                 }
 
                 /* glbCache lives at IIFE scope — survives across re-opens for the
