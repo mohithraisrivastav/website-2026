@@ -2802,6 +2802,17 @@
                     }
                 });
 
+                /* Update wall-detection guidance text based on ARCore tracking quality */
+                viewer.addEventListener('ar-tracking', function(e) {
+                    var promptText = document.getElementById('arWallPromptText');
+                    if (!promptText) return;
+                    if (e.detail.status === 'not-tracking') {
+                        promptText.textContent = 'Slow down · looking for a flat wall surface';
+                    } else {
+                        promptText.textContent = 'Point camera at a wall · move slowly';
+                    }
+                });
+
                 /* track when native AR session actually starts/ends */
                 viewer.addEventListener('ar-status', function(e) {
                     if (!arSession) return;
@@ -4220,6 +4231,34 @@
     tone-mapping="neutral"
     environment-image="neutral"
     interaction-prompt="none">
+    <!-- ar-prompt slot: shown inside the WebXR session as an overlay before
+         the model is placed. Updated by the ar-tracking event listener. -->
+    <div slot="ar-prompt" id="arWallPrompt" style="
+        position:fixed;
+        bottom:128px;
+        left:50%;
+        transform:translateX(-50%);
+        background:rgba(10,10,10,0.68);
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+        border:1px solid rgba(247,243,236,0.15);
+        border-radius:24px;
+        padding:11px 20px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        pointer-events:none;
+        white-space:nowrap;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+        <rect x="7" y="7" width="10" height="10" rx="1"/>
+      </svg>
+      <span id="arWallPromptText" style="
+          font-family:Inter,sans-serif;
+          font-size:0.87rem;
+          color:rgba(247,243,236,0.92);
+          letter-spacing:0.01em;">Point camera at a wall · move slowly</span>
+    </div>
   </model-viewer>
 
   <div class="ar-loading" id="arLoading">Preparing the print…</div>
