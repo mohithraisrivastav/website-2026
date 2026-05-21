@@ -2472,12 +2472,15 @@
 
                     function use(glb, usdz) {
                         /* Hosted URL available — restore full ar-modes for this platform.
-                           Android: scene-viewer first (best UX when URL is public),
-                                    webxr as fallback.
+                           Android: webxr FIRST — Scene Viewer ignores ar-placement="wall"
+                                    and always drops prints on the floor. WebXR respects the
+                                    wall-placement attribute, giving the correct wall-mounted
+                                    preview. Scene Viewer remains as the fallback for devices
+                                    where WebXR is unavailable.
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
