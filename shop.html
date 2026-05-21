@@ -2613,11 +2613,15 @@
                     var key = id + ':' + bW + 'x' + bH;
                     if (glbCache[key]) { mountBlob(glbCache[key]); return; }
 
-                    /* iOS parallel probe: start the canonical GLB HEAD request NOW
+                    /* Mobile parallel probe: start the canonical GLB HEAD request NOW
                        so it completes during the 5–15 s blob build, not after.
+                       iOS: allows ios-src to be set before model-viewer fires 'load'.
+                       Android: allows ar-modes to include scene-viewer before the user
+                                taps "Place on Wall" (Scene Viewer needs a real HTTPS URL,
+                                not the blob src used during the build phase).
                        When canonicalAttempt() runs it finds _probeGlb already set
                        and calls use() immediately — zero extra round-trips. */
-                    if (isIOS && isDefault && !_probeGlb) {
+                    if (!isDesktop && isDefault && !_probeGlb) {
                         var _pv = '?v=' + (window.AR_MODEL_VER || '1');
                         fetch('ar/' + id + '.glb' + _pv, { method: 'HEAD' })
                             .then(function(r) {
