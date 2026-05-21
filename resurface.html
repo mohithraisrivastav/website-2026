@@ -6,16 +6,7 @@
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#CFA246">
-    <title>Resurface — A Photographic Series | Mohith Rai Srivastav</title>
-    <meta name="description" content="How does the built world remain active, even when its transformations go unnoticed? Resurface is a photographic enquiry by Mohith Rai Srivastav — moving through climates, materials, and conditions.">
-    <meta name="author" content="Mohith Rai Srivastav">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mohithraisrivastav.com/resurface.html">
-    <meta property="og:title" content="Resurface — A Photographic Enquiry | Mohith Rai Srivastav">
-    <meta property="og:description" content="How does the built world remain active, even when its transformations go unnoticed? A photographic series moving through climates, materials, and conditions.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mohithraisrivastav.com/resurface.html">
-    <meta property="og:image" content="https://mohithraisrivastav.com/images/Burnt Earth.webp">
+    <title>Resurface — Demo Concept | Mohith Rai Srivastav</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,6 +135,90 @@
         }
 
         /* ══════════════════════════════════════════
+           [NEW] MATERIAL NOTES — on the physical object
+        ══════════════════════════════════════════ */
+        .material-notes {
+            padding: 14vh 8vw 12vh;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8vw;
+            align-items: start;
+        }
+        .material-left {}
+        .material-label {
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.22);
+            margin-bottom: 36px;
+            font-family: var(--font-main) !important;
+        }
+        .material-heading {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(3rem, 5vw, 6.5rem);
+            line-height: 0.92;
+            letter-spacing: -0.02em;
+            color: #1A1612;
+        }
+        .material-right {
+            padding-top: 2px;
+        }
+        .material-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 44px;
+            border-top: 1px solid rgba(26, 22, 18,0.06);
+        }
+        .material-spec {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 24px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(26, 22, 18,0.06);
+            align-items: baseline;
+        }
+        .spec-label {
+            font-size: 0.5625rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18,0.28);
+            font-family: var(--font-main) !important;
+            flex-shrink: 0;
+        }
+        .spec-value {
+            font-size: 0.8125rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: rgba(26, 22, 18,0.7);
+            font-family: var(--font-main) !important;
+            line-height: 1.6;
+        }
+        .material-note {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1rem, 1.3vw, 1.2rem);
+            line-height: 1.9;
+            color: rgba(26, 22, 18,0.6);
+        }
+        .material-note + .material-note {
+            margin-top: 1.4em;
+        }
+        .material-note em {
+            font-style: normal;
+            color: rgba(26, 22, 18,0.85);
+        }
+        @media (max-width: 900px) {
+            .material-notes { grid-template-columns: 1fr; gap: 48px; }
+        }
+
+        /* ══════════════════════════════════════════
            BOOK SECTION
         ══════════════════════════════════════════ */
         .book-section {
@@ -167,6 +242,25 @@
             transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .book-cover:hover img { transform: scale(1.03); }
+
+        /* Coming-soon placeholder */
+        .book-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #C8C2B8;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 22px;
+        }
+        .book-placeholder-label {
+            font-size: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.28);
+            font-family: var(--font-main, 'Inter'), sans-serif;
+        }
         .book-info { display: flex; flex-direction: column; gap: 0; }
         .book-label {
             font-size: 0.625rem;
@@ -386,32 +480,53 @@
             color: rgba(26, 22, 18,0.16);
             font-family: var(--font-main) !important;
         }
-
-        /* The figure is the art object */
         .station-figure {
             margin: 0 auto;
             cursor: zoom-in;
         }
         .station-figure.landscape { width: min(72vw, 1020px); }
         .station-figure.portrait  { width: min(42vw, 500px);  }
-
         .station-figure img {
             display: block;
             width: 100%;
             height: auto;
-            box-shadow:
-                0 2px 8px  rgba(26, 22, 18,0.04),
-                0 8px 48px rgba(26, 22, 18,0.07);
-            transition: box-shadow 0.5s ease, transform 0.5s ease;
-        }
-        .station-figure:hover img {
-            box-shadow:
-                0 4px 16px rgba(26, 22, 18,0.06),
-                0 16px 72px rgba(26, 22, 18,0.11);
-            transform: translateY(-2px);
         }
 
-        /* Wall label */
+        /* Matte black frame — directional edge lighting */
+        .print-frame {
+            display: block;
+            padding: 18px;
+            position: relative;
+            background: #181614;
+            box-shadow:
+                /* Top edge: catches overhead light */
+                inset 0  3px 0 rgba(255,255,255,0.20),
+                /* Left edge: catches side light */
+                inset  3px 0 0 rgba(255,255,255,0.13),
+                /* Bottom edge: in shadow */
+                inset 0 -3px 0 rgba(0,0,0,0.55),
+                /* Right edge: in shadow */
+                inset -3px 0 0 rgba(0,0,0,0.38);
+            transition: box-shadow 0.5s ease, transform 0.5s ease;
+        }
+        /* Rabbet — the inner lip where frame meets the print */
+        .print-frame::after {
+            content: '';
+            position: absolute;
+            inset: 17px;
+            box-shadow:
+                inset  2px  2px 5px rgba(0,0,0,0.55),
+                inset -1px -1px 3px rgba(0,0,0,0.25);
+            pointer-events: none;
+        }
+        .station-figure:hover .print-frame {
+            box-shadow:
+                inset 0  3px 0 rgba(255,255,255,0.20),
+                inset  3px 0 0 rgba(255,255,255,0.13),
+                inset 0 -3px 0 rgba(0,0,0,0.55),
+                inset -3px 0 0 rgba(0,0,0,0.38);
+            transform: translateY(-3px);
+        }
         .station-label {
             margin-top: 40px;
             padding: 0 2px;
@@ -436,15 +551,57 @@
             line-height: 1.7;
             font-family: var(--font-main) !important;
         }
-        .label-text {
-            margin-top: 22px;
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
-            font-weight: 300;
-            font-style: italic;
-            font-size: 1rem;
-            line-height: 1.9;
-            color: rgba(26, 22, 18, 0.58);
-            max-width: 440px;
+
+        /* [NEW] Edition signal — scarcity indicator */
+        .edition-signal {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-size: 0.5625rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.38);
+            font-family: var(--font-main) !important;
+        }
+        .edition-signal::before {
+            content: '';
+            display: block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #CFA246;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+        .edition-signal.scarce { color: rgba(26, 22, 18, 0.6); }
+        .edition-signal.scarce::before { opacity: 1; }
+
+        /* ══════════════════════════════════════════
+           STATION ACQUIRE LINK
+        ══════════════════════════════════════════ */
+        .station-acquire {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.32);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(207, 162, 70, 0.3);
+            padding-bottom: 4px;
+            font-family: var(--font-main) !important;
+            transition: color 0.3s, border-color 0.3s, letter-spacing 0.3s;
+        }
+        .station-acquire:hover {
+            color: #CFA246;
+            border-color: #CFA246;
+            letter-spacing: 5px;
         }
 
         /* ══════════════════════════════════════════
@@ -472,6 +629,46 @@
             color: #1A1612;
             margin-bottom: 64px;
         }
+
+        /* [NEW] Exhibition narrative — the story of what happened */
+        .views-narrative {
+            max-width: 720px;
+            margin-bottom: 72px;
+            padding-left: 28px;
+            border-left: 1px solid rgba(207, 162, 70, 0.35);
+        }
+        .narrative-pull {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1.4rem, 2.2vw, 2.2rem);
+            line-height: 1.25;
+            color: #1A1612;
+            margin-bottom: 28px;
+        }
+        .narrative-body {
+            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+            line-height: 1.9;
+            color: rgba(26, 22, 18, 0.6);
+        }
+        .narrative-body + .narrative-body { margin-top: 1.2em; }
+        .narrative-body em {
+            font-style: normal;
+            color: rgba(26, 22, 18, 0.82);
+        }
+        .narrative-attribution {
+            margin-top: 28px;
+            font-size: 0.5625rem;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: rgba(26, 22, 18, 0.22);
+            font-family: var(--font-main) !important;
+        }
+
         .views-mosaic {
             columns: 3;
             column-gap: 5px;
@@ -575,7 +772,6 @@
             border: 1px solid rgba(255,255,255,0.4);
             border-radius: 50%;
             z-index: 100;
-            /* Bypass custom cursor hide so a pointer is always shown */
             pointer-events: auto;
         }
         .lb-close:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.7); }
@@ -601,20 +797,7 @@
         .lb-prev { left: 24px; }
         .lb-next { right: 24px; }
         .lb-nav[hidden] { display: none; }
-
-        /* ── Cursor: switch multiply→difference on dark overlay so dot stays visible ── */
-        #lbOverlay.open ~ #c-dot {
-            mix-blend-mode: difference !important;
-            background: #fff !important;
-        }
-        #lbOverlay.open ~ #c-ring {
-            mix-blend-mode: difference !important;
-            border-color: rgba(255,255,255,0.75) !important;
-        }
-        /* ── cursor.js sets cursor:none on everything; restore pointer inside lb ── */
-        .lb-overlay button {
-            cursor: pointer !important;
-        }
+        .lb-overlay button { cursor: pointer !important; }
         .lb-footer {
             position: absolute;
             bottom: 24px;
@@ -639,31 +822,6 @@
             letter-spacing: 3px;
             color: rgba(255,255,255,0.35);
             white-space: nowrap;
-        }
-
-        /* ══════════════════════════════════════════
-           STATION ACQUIRE LINK
-        ══════════════════════════════════════════ */
-        .station-acquire {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 28px;
-            font-size: 0.625rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: rgba(26, 22, 18, 0.32);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(207, 162, 70, 0.3);
-            padding-bottom: 4px;
-            font-family: var(--font-main) !important;
-            transition: color 0.3s, border-color 0.3s, letter-spacing 0.3s;
-        }
-        .station-acquire:hover {
-            color: #CFA246;
-            border-color: #CFA246;
-            letter-spacing: 5px;
         }
 
         /* ══════════════════════════════════════════
@@ -723,6 +881,26 @@
         .dot-item:hover:not(.active) { background: rgba(26, 22, 18, 0.44); }
 
         /* ══════════════════════════════════════════
+           DEMO BANNER — floating indicator
+        ══════════════════════════════════════════ */
+        .demo-banner {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9000;
+            background: #1A1612;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            border-radius: 3px;
+            font-family: var(--font-main, 'Inter'), sans-serif;
+            pointer-events: none;
+        }
+
+        /* ══════════════════════════════════════════
            RESPONSIVE
         ══════════════════════════════════════════ */
         @media (max-width: 1100px) {
@@ -739,6 +917,7 @@
             .views-mosaic { columns: 2; }
             .chapter-divider .ch-count { margin-left: 0; width: 100%; }
             .entry-title { font-size: clamp(4rem, 15vw, 7rem); }
+            .views-narrative { padding-left: 18px; }
         }
         @media (max-width: 480px) {
             .views-mosaic { columns: 1; }
@@ -749,6 +928,10 @@
     </style>
 </head>
 <body>
+
+<!-- Demo indicator -->
+<div class="demo-banner">Demo Concept</div>
+
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <div id="page-curtain"></div>
 
@@ -767,7 +950,6 @@
                 <li class="nav-has-dropdown"><a href="about.html">Practice</a>
                     <ul class="nav-dropdown">
                         <li><a href="about.html">About</a></li>
-                        <li style="display:none"><a href="journal.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
                     </ul>
                 </li>
@@ -775,7 +957,7 @@
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-        <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
+        <a href="#" class="nav-cart" onclick="event.preventDefault();if(window.toggleCart)toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
         <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
     </div>
 </nav>
@@ -793,7 +975,6 @@
             <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
             <div class="mobile-nav-children">
                 <a href="about.html" onclick="toggleMenu()">About</a>
-                <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
             </div>
         </div>
@@ -802,11 +983,11 @@
         <a href="contact.html" onclick="toggleMenu()">Contact</a>
     </div>
 
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-overlay" id="cartOverlay" onclick="if(window.toggleCart)toggleCart()"></div>
 <div class="cart-sidebar" id="cartSidebar" tabindex="-1">
     <div class="cart-header">
         <h2>Your Cart</h2>
-        <button class="close-cart" onclick="toggleCart()" aria-label="Close cart">Close</button>
+        <button class="close-cart" onclick="if(window.toggleCart)toggleCart()" aria-label="Close cart">Close</button>
     </div>
     <div id="cartItemsList"></div>
     <div class="cart-footer">
@@ -851,11 +1032,53 @@
 
 
 <!-- ═══════════════════════════════════════════════════
+     [NEW] MATERIAL NOTES — on the physical object
+════════════════════════════════════════════════════ -->
+<section class="material-notes reveal" id="material">
+    <div class="material-left">
+        <p class="material-label" aria-hidden="true">Print Decisions</p>
+        <h2 class="material-heading">Print<br>Decisions</h2>
+    </div>
+    <div class="material-right">
+        <div class="material-specs">
+            <div class="material-spec">
+                <span class="spec-label">Surface</span>
+                <span class="spec-value">310 gsm etching rag — matte, uncoated, fine grain texture</span>
+            </div>
+            <div class="material-spec">
+                <span class="spec-label">Mounting</span>
+                <span class="spec-value">Glass-mounted — sold with glass</span>
+            </div>
+            <div class="material-spec">
+                <span class="spec-label">Process</span>
+                <span class="spec-value">Archival pigment print — lightfast, permanent inks</span>
+            </div>
+            <div class="material-spec">
+                <span class="spec-label">Finish</span>
+                <span class="spec-value">Matte — no laminate, no varnish</span>
+            </div>
+        </div>
+        <p class="material-note">At the Goa Open Arts Festival 2026, the works were hung without glass — a deliberate choice for that exhibition. The matte grain of the etching rag, exposed directly to ambient light, produced a response that confused the medium. Visitors asked whether the works were <em>backlit</em>. Some reached out to touch the surface. Others asked which colours had been used — water, or oil.</p>
+        <p class="material-note">The works are photographs. <em>The surface is responding to the room.</em> The editions available for acquisition are mounted with glass.</p>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
      EXHIBITION VIEWS — Goa Open Arts Festival 2026
 ════════════════════════════════════════════════════ -->
 <section class="exhibition-views reveal" id="exhibition">
     <p class="views-eyebrow">Exhibition Views</p>
     <h2 class="views-title">Goa Open Arts Festival 2026</h2>
+
+    <!-- [NEW] Exhibition narrative -->
+    <div class="views-narrative">
+        <p class="narrative-pull">&ldquo;Which colours did you use, water or oil?&rdquo;</p>
+        <p class="narrative-body">I had put up do not touch signs, but they were not enough. I ended up stationing three people at the walls for five days. Visitors thought the works were glowing from inside and kept looking for the light source. When they asked which colours I had used, water or oil, and I told them these were photographs, most did not believe me at first.</p>
+        <p class="narrative-body">People came back more than once over those five days. On the last day, a person in a wheelchair returned and simply said: <em>I am back again.</em> I did not know what to respond. The artists sharing the festival with me left their own rooms to bring their families here.</p>
+        <p class="narrative-body">This was my first time showing personal work. I was nervous.</p>
+        <p class="narrative-attribution">Goa Open Arts Festival &nbsp;&middot;&nbsp; February 2026 &nbsp;&middot;&nbsp; Goa, India</p>
+    </div>
 
     <div class="views-mosaic">
         <img src="images/exhibition/_DSC5259-HDR.webp"          alt="Exhibition view — GOAF 2026"     loading="lazy" onclick="openLightbox(this)" onerror="this.style.display='none'">
@@ -914,7 +1137,6 @@
     <a href="#work-09" class="guide-item" data-target="work-09"><span class="g-num">09</span><span class="g-tick"></span></a>
 </nav>
 
-<!-- Tablet dot-nav: shown ≤1100px when gallery-guide is hidden -->
 <nav class="gallery-dots" id="galleryDots" aria-label="Works in this chapter">
     <a href="#work-01" class="dot-item" data-target="work-01" aria-label="Work 01"></a>
     <a href="#work-02" class="dot-item" data-target="work-02" aria-label="Work 02"></a>
@@ -935,10 +1157,11 @@
 <section class="gallery-station" id="work-01" data-index="1">
     <span class="station-num">01 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure landscape" onclick="openLightbox(this)">
-        <img src="images/Cosmic Return.webp" alt="Cosmic Return" loading="lazy">
+        <div class="print-frame"><img src="images/Cosmic Return.webp" alt="Cosmic Return" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Cosmic Return</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 2 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal scarce">Edition of 2 + 1 AP</span>
             <a href="shop.html#cosmic-return" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -947,10 +1170,11 @@
 <section class="gallery-station" id="work-02" data-index="2">
     <span class="station-num">02 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure landscape" onclick="openLightbox(this)">
-        <img src="images/Burnt Earth.webp" alt="Burnt Earth" loading="lazy">
+        <div class="print-frame"><img src="images/Burnt Earth.webp" alt="Burnt Earth" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Burnt Earth</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#burnt-earth" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -959,10 +1183,11 @@
 <section class="gallery-station" id="work-03" data-index="3">
     <span class="station-num">03 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure landscape" onclick="openLightbox(this)">
-        <img src="images/Chromatic Rupture.webp" alt="Chromatic Rupture" loading="lazy">
+        <div class="print-frame"><img src="images/Chromatic Rupture.webp" alt="Chromatic Rupture" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Chromatic Rupture</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#chromatic-rupture" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -971,10 +1196,11 @@
 <section class="gallery-station" id="work-04" data-index="4">
     <span class="station-num">04 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/After The Fall.webp" alt="After The Fall" loading="lazy">
+        <div class="print-frame"><img src="images/After The Fall.webp" alt="After The Fall" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">After The Fall</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#after-the-fall" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -983,10 +1209,11 @@
 <section class="gallery-station" id="work-05" data-index="5">
     <span class="station-num">05 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/Cracked Spectrum.webp" alt="Cracked Spectrum" loading="lazy">
+        <div class="print-frame"><img src="images/Cracked Spectrum.webp" alt="Cracked Spectrum" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Cracked Spectrum</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#cracked-spectrum" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -995,10 +1222,11 @@
 <section class="gallery-station" id="work-06" data-index="6">
     <span class="station-num">06 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/The Still Organism.webp" alt="The Still Organism" loading="lazy">
+        <div class="print-frame"><img src="images/The Still Organism.webp" alt="The Still Organism" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">The Still Organism</h3>
-            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2023 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#still-organism" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -1007,10 +1235,11 @@
 <section class="gallery-station" id="work-07" data-index="7">
     <span class="station-num">07 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/The Forgotten Skin.webp" alt="The Forgotten Skin" loading="lazy">
+        <div class="print-frame"><img src="images/The Forgotten Skin.webp" alt="The Forgotten Skin" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">The Forgotten Skin</h3>
-            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#forgotten-skin" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -1019,10 +1248,11 @@
 <section class="gallery-station" id="work-08" data-index="8">
     <span class="station-num">08 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/Erosion.webp" alt="Erosion" loading="lazy">
+        <div class="print-frame"><img src="images/Erosion.webp" alt="Erosion" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Erosion</h3>
-            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#erosion" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -1031,10 +1261,11 @@
 <section class="gallery-station" id="work-09" data-index="9">
     <span class="station-num">09 &thinsp;/&thinsp; IX</span>
     <figure class="station-figure portrait" onclick="openLightbox(this)">
-        <img src="images/Imprint.webp" alt="Imprint" loading="lazy">
+        <div class="print-frame"><img src="images/Imprint.webp" alt="Imprint" loading="lazy"></div>
         <div class="station-label">
             <h3 class="label-title">Imprint</h3>
-            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag &nbsp;&middot;&nbsp; Edition of 5 + 1 AP</p>
+            <p class="label-meta">Goa, India &mdash; 2024 &nbsp;&middot;&nbsp; Archival pigment print, 310&thinsp;gsm etching rag</p>
+            <span class="edition-signal">Edition of 5 + 1 AP</span>
             <a href="shop.html#imprint" class="station-acquire" onclick="event.stopPropagation()">Acquire an edition &nbsp;&rarr;</a>
         </div>
     </figure>
@@ -1046,14 +1277,20 @@
 ════════════════════════════════════════════════════ -->
 <section class="book-section reveal">
     <div class="book-cover">
-        <img src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause — Monograph" loading="lazy"
-             onerror="this.onerror=null;this.src='images/Imprint.jpg';">
+        <div class="book-placeholder">
+            <span class="book-placeholder-label">Coming Soon</span>
+        </div>
     </div>
     <div class="book-info">
         <p class="book-label" aria-hidden="true">The Monograph</p>
         <h2 class="book-title">The Matter<br>of Pause</h2>
         <div class="book-rule"></div>
         <p class="book-desc">176 pages of photographs, notes, and fieldwork drawn from years of sustained looking. An enquiry into duration, stillness, and the gradual unfolding of perception — available in digital and softcover editions.</p>
+        <div class="book-meta">
+            <span class="book-price">— Add price —</span>
+            <span class="book-specs-inline">176 Pages &nbsp;&middot;&nbsp; Softcover &nbsp;&middot;&nbsp; Digital Edition Available</span>
+        </div>
+        <a href="shop.html#matter-of-pause" class="book-cta">Order the book &nbsp;&rarr;</a>
     </div>
 </section>
 
@@ -1090,7 +1327,6 @@
             <a href="about.html">About</a>
             <a href="work.html">Work</a>
             <a href="film.html">Films</a>
-            <a href="journal.html" style="display:none">Journal</a>
             <a href="workshops.html">Workshops</a>
             <a href="shop.html">Shop</a>
             <a href="contact.html">Contact</a>
@@ -1151,7 +1387,6 @@
 <script src="assets/js/site.js" defer></script>
 <script src="assets/js/cart.js" defer></script>
 <script src="assets/js/transitions.js" defer></script>
-<!-- <script src="assets/js/cursor.js" defer></script> -->
 
 <script>
     function toggleMenu() {
@@ -1168,13 +1403,11 @@
     let _lbIdx   = 0;
 
     function _lbBuildList(fromEl) {
-        // Collect all lightbox-able images in document order
         const allEls = Array.from(document.querySelectorAll('[onclick*="openLightbox"]'));
         _lbItems = allEls.map(el => {
             const img = el.tagName === 'IMG' ? el : el.querySelector('img');
             return img ? { src: img.src, alt: img.alt } : null;
         }).filter(Boolean);
-        // Find index of the clicked element
         const clicked = fromEl.tagName === 'IMG' ? fromEl : fromEl.querySelector('img');
         _lbIdx = _lbItems.findIndex(item => item.src === (clicked && clicked.src));
         if (_lbIdx < 0) _lbIdx = 0;
@@ -1191,7 +1424,6 @@
             .replace(' - GOAF 2026', '');
         document.getElementById('lbCounter').textContent =
             (_lbIdx + 1) + ' — ' + _lbItems.length;
-        // Show/hide nav arrows
         document.getElementById('lbPrev')[_lbItems.length < 2 ? 'setAttribute' : 'removeAttribute']('hidden', '');
         document.getElementById('lbNext')[_lbItems.length < 2 ? 'setAttribute' : 'removeAttribute']('hidden', '');
     }
@@ -1230,13 +1462,11 @@
         dots.classList.toggle('visible', visible);
     }
 
-    // Show nav when chapter-1 enters viewport
     const showObs = new IntersectionObserver(entries => {
         entries.forEach(e => setNavVisible(e.isIntersecting));
     }, { rootMargin: '0px 0px -20% 0px', threshold: 0 });
     showObs.observe(document.getElementById('chapter-1'));
 
-    // Hide nav after last station leaves (book section follows stations now)
     const hideObs = new IntersectionObserver(entries => {
         entries.forEach(e => {
             if (!e.isIntersecting) setNavVisible(false);
@@ -1244,7 +1474,6 @@
     }, { threshold: 0 });
     hideObs.observe(document.getElementById('chapter-2'));
 
-    // Update active state on both guide-items and dot-items
     const dotObs = new IntersectionObserver(entries => {
         entries.forEach(e => {
             if (e.isIntersecting) {
@@ -1292,6 +1521,3 @@
 </script>
 </body>
 </html>
-
-
-
