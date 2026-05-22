@@ -684,9 +684,9 @@ if (!prefersReducedMotion) {
     <div class="issue-body">
       <div class="issue-desc">The <code>og:image</code> points to <code>Mohith.webp</code> but the JSON-LD structured data references <code>Mohith.jpg</code>. If both files exist that's fine, but it signals inconsistency to crawlers. Standardize to the same URL everywhere.</div>
       <span class="label-small">Fix — use the same URL in both</span>
-      <div class="code-block code-good">&lt;meta property="og:image" content="https://mohithraisrivastav.com/images/Mohith.webp"&gt;
+      <div class="code-block code-good">&lt;meta property="og:image" content="https://www.mohithraisrivastav.com/images/Mohith.webp"&gt;
 // JSON-LD:
-"image": "https://mohithraisrivastav.com/images/Mohith.webp"</div>
+"image": "https://www.mohithraisrivastav.com/images/Mohith.webp"</div>
     </div>
   </div>
 
@@ -715,11 +715,11 @@ if (!prefersReducedMotion) {
       </div>
     </div>
     <div class="issue-body">
-      <div class="issue-desc">Canonical URLs reference <code>https://mohithraisrivastav.com/Work/eleve-eco-resort.html</code>. Linux servers (which most hosts run) are case-sensitive. If the folder is <code>Work/</code> on the server, URLs with <code>work/</code> will 404. Canonicals should use the exact server path. Best practice is to use all-lowercase folder names.</div>
+      <div class="issue-desc">Canonical URLs reference <code>https://www.mohithraisrivastav.com/Work/eleve-eco-resort.html</code>. Linux servers (which most hosts run) are case-sensitive. If the folder is <code>Work/</code> on the server, URLs with <code>work/</code> will 404. Canonicals should use the exact server path. Best practice is to use all-lowercase folder names.</div>
       <span class="label-small">Fix — rename folder to lowercase and update all references</span>
       <div class="code-block code-good">/* Rename: Work/ → work/ */
 /* Update canonical in eleve-eco-resort.html: */
-&lt;link rel="canonical" href="https://mohithraisrivastav.com/work/eleve-eco-resort.html"&gt;</div>
+&lt;link rel="canonical" href="https://www.mohithraisrivastav.com/work/eleve-eco-resort.html"&gt;</div>
     </div>
   </div>
 

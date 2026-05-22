@@ -14,3 +14,6 @@ Disallow: /assets.html
 Disallow: /ar-generator.html
 
 Sitemap: https://www.mohithraisrivastav.com/sitemap.xml
+
+# AI search agents
+Allow: /llms.txt

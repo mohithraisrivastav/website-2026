@@ -5,6 +5,14 @@
       "maxDuration": 10
     }
   },
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "mohithraisrivastav.com" }],
+      "destination": "https://www.mohithraisrivastav.com/$1",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
   ],
