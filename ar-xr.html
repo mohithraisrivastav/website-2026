@@ -409,12 +409,13 @@ let printModel = null;   // GLB scene
 let reticle    = null;   // Hit-test visualization (a thin gold ring on the wall)
 
 /* ──── WebXR state ──── */
-let xrSession     = null;
-let xrRefSpace    = null;   // local reference space (origin = where session started)
-let viewerSpace   = null;   // viewer space (origin = device)
-let hitTestSource = null;
-let printAnchor   = null;   // XRAnchor for placed print
-let isPlaced      = false;
+let xrSession        = null;
+let xrRefSpace       = null;   // local reference space (origin = where session started)
+let viewerSpace      = null;   // viewer space (origin = device)
+let hitTestSource    = null;
+let printAnchor      = null;   // XRAnchor for placed print
+let isPlaced         = false;
+let sessionStartTime = 0;      // for diagnostic elapsed-time display
 
 /* ──── Hang-height state ────
    Default 57" (gallery standard). Chip clicks update this value;
@@ -587,11 +588,25 @@ async function startXR() {
     }
 
     try {
-        hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+        /* Explicit entityTypes: ['plane'] — some Chrome builds default
+           to no entity types if omitted, which silently produces zero
+           hits. 'plane' is the WebXR-spec name for ARCore's detected
+           planes (both horizontal and vertical when available). */
+        hitTestSource = await xrSession.requestHitTestSource({
+            space: viewerSpace,
+            entityTypes: ['plane']
+        });
     } catch (e) {
-        showLoadingError('Hit-test source failed: ' + e.message);
-        return;
+        /* Some browsers don't accept entityTypes; retry without it. */
+        try {
+            hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+        } catch (e2) {
+            showLoadingError('Hit-test source failed: ' + e2.message);
+            return;
+        }
     }
+
+    sessionStartTime = performance.now();
 
     /* Wire UI handlers */
     wireChips();
@@ -693,12 +708,21 @@ const _axisZ = new THREE.Vector3();
 
 function updateReticle(frame) {
     const results = frame.getHitTestResults(hitTestSource);
+    const elapsedS = ((performance.now() - sessionStartTime) / 1000).toFixed(0);
 
     if (results.length === 0) {
         reticle.visible = false;
         lastHit = null;
         setTrackingState('poor');
-        debugPill.textContent = 'hits: 0';
+        debugPill.textContent = 'hits: 0\nelapsed: ' + elapsedS + 's';
+        /* ARCore needs the user to PHYSICALLY MOVE the device through
+           space to build a 3D map. Standing still and pointing at a
+           wall is not enough — give the user explicit motion cues. */
+        if (!isPlaced) {
+            statusText.textContent = elapsedS < 5
+                ? 'Slowly move your device side-to-side to scan'
+                : 'Walk around · ARCore needs motion to map the room';
+        }
         return;
     }
 
@@ -734,6 +758,7 @@ function updateReticle(frame) {
 
     debugPill.textContent =
         'hits: ' + results.length + '\n' +
+        'elapsed: ' + elapsedS + 's\n' +
         'axisY.y: ' + _axisY.y.toFixed(2) + '\n' +
         'axisZ.y: ' + _axisZ.y.toFixed(2) + '\n' +
         'normal: ' + (useYAsNormal ? 'Y' : 'Z') + '\n' +
