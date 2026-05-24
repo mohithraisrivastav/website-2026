@@ -170,6 +170,33 @@
     color: rgba(247,243,236,0.92);
   }
   #statusPill.placed { opacity: 0; pointer-events: none; }
+  #overlay.placed #statusPill { opacity: 0; pointer-events: none; }
+
+  #frontWallBtn {
+    position: absolute;
+    bottom: max(72px, env(safe-area-inset-bottom, 0px) + 72px);
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+    background: rgba(10,10,10,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(207,162,70,0.48);
+    color: #CFA246;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 2.6px;
+    text-transform: uppercase;
+    padding: 11px 18px;
+    border-radius: 24px;
+    cursor: pointer;
+  }
+  #frontWallBtn.active {
+    background: rgba(207,162,70,0.26);
+    border-color: rgba(207,162,70,0.82);
+  }
+  #overlay.placed #frontWallBtn { display: none; }
 
   /* Chip rows (size + hang-height) and labels — stacked above the
      bottom status pill. Layout from bottom to top:
@@ -220,6 +247,42 @@
   }
   .chip-label.hang { bottom: max(225px, env(safe-area-inset-bottom, 0px) + 225px); }
   .chip-label.size { bottom: max(310px, env(safe-area-inset-bottom, 0px) + 310px); }
+
+  #movePanel {
+    position: absolute;
+    left: 50%;
+    bottom: max(22px, env(safe-area-inset-bottom, 0px) + 22px);
+    transform: translateX(-50%);
+    display: none;
+    grid-template-columns: repeat(3, 44px);
+    gap: 8px;
+    padding: 10px;
+    background: rgba(10,10,10,0.62);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.16);
+    border-radius: 20px;
+    pointer-events: auto;
+  }
+  #overlay.placed #movePanel { display: grid; }
+  .adjust-btn {
+    width: 44px;
+    height: 38px;
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 14px;
+    background: rgba(20,17,13,0.74);
+    color: rgba(247,243,236,0.88);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+  .adjust-btn:active {
+    background: rgba(207,162,70,0.32);
+    border-color: rgba(207,162,70,0.75);
+    color: #CFA246;
+  }
 
   /* Debug pill — top-left, shows live hit-test info during dev */
   #debugPill {
@@ -357,6 +420,8 @@
     </svg>
   </button>
 
+  <button id="frontWallBtn" type="button">Use front wall</button>
+
   <!-- Size label + chips (Small / Medium / Large) -->
   <div class="chip-label size">Size — print dimensions</div>
   <div id="sizeRow">
@@ -384,6 +449,18 @@
 
   <!-- TAP hint (only when reticle locked + not yet placed) -->
   <div id="tapHint">Tap to place</div>
+
+  <div id="movePanel" aria-label="Adjust placed print">
+    <button class="adjust-btn" data-adjust="rot-" type="button" title="Rotate counterclockwise">R-</button>
+    <button class="adjust-btn" data-adjust="y+" type="button" title="Move up">Y+</button>
+    <button class="adjust-btn" data-adjust="rot+" type="button" title="Rotate clockwise">R+</button>
+    <button class="adjust-btn" data-adjust="x-" type="button" title="Move left">X-</button>
+    <button class="adjust-btn" data-adjust="reset" type="button" title="Reset position">0</button>
+    <button class="adjust-btn" data-adjust="x+" type="button" title="Move right">X+</button>
+    <button class="adjust-btn" data-adjust="z-" type="button" title="Move toward wall">Z-</button>
+    <button class="adjust-btn" data-adjust="y-" type="button" title="Move down">Y-</button>
+    <button class="adjust-btn" data-adjust="z+" type="button" title="Move away from wall">Z+</button>
+  </div>
 
   <!-- Loading pill while the GLB downloads after session start -->
   <div id="loadingPill">Preparing the print…</div>
@@ -424,6 +501,7 @@ const statusText   = $('statusText');
 const statusPill   = $('statusPill');
 const loadingPill  = $('loadingPill');
 const closeBtn     = $('closeBtn');
+const frontWallBtn = $('frontWallBtn');
 
 /* ──── Three.js state ──── */
 let renderer, scene, camera;
@@ -439,13 +517,36 @@ let printAnchor      = null;   // XRAnchor for placed print
 let isPlaced         = false;
 let sessionStartTime = 0;      // for diagnostic elapsed-time display
 
-/* ──── Hang-height state ────
-   Default 57" (gallery standard). Chip clicks update this value;
-   when placing, hangOffsetM is applied as a vertical offset along
-   the wall's local up axis. After placement, changing the chip
-   slides the print up/down the wall in real time. */
-let hangHeightIn   = 57;
-let hangOffsetM    = 0;  // metres above the original tap point
+/* ──── Print transform state (post-placement) ────
+   All measurements are in WALL-LOCAL space, i.e. relative to the
+   placement anchor:
+     wallOffsetX  metres along the wall to the right
+     wallOffsetY  metres up the wall (chip clicks AND vertical drag)
+     wallOffsetZ  metres out from / into the wall
+     wallRotZ     radians, rotation around the wall normal
+   Updated by hang-height chips, single-finger drag, and two-finger
+   twist gestures. Applied each frame in updatePrintFromAnchor. */
+const DEFAULT_HANG_HEIGHT_IN = 57;
+let hangHeightIn = DEFAULT_HANG_HEIGHT_IN;
+let wallOffsetX  = 0;
+let wallOffsetY  = 0;
+let wallOffsetZ  = 0;
+let wallRotZ     = 0;
+
+/* Manual front-wall fallback. ARCore often detects floors and side walls
+   before a blank wall viewed straight-on; this mode gives the user a
+   camera-facing virtual wall when hit-test never returns that plane. */
+let manualWallMode = false;
+let manualPlacementReady = false;
+let manualWallDistanceM = 1.8;
+const MOVE_STEP_M = 0.0254;
+const ROT_STEP_RAD = THREE.MathUtils.degToRad(2);
+let adjustRepeatTimer = null;
+let adjustControlsWired = false;
+let frontWallButtonWired = false;
+let hangChipsWired = false;
+let sizeChipsWired = false;
+let closeButtonWired = false;
 
 /* ──── Init: pre-AR support check + load GLB in background ──── */
 async function init() {
@@ -652,7 +753,12 @@ async function startXR() {
     /* Wire UI handlers */
     wireChips();
     wireSizeChips();
-    closeBtn.addEventListener('click', () => { try { xrSession.end(); } catch(e){} });
+    wireAdjustControls();
+    wireFrontWallButton();
+    if (!closeButtonWired) {
+        closeButtonWired = true;
+        closeBtn.addEventListener('click', () => { try { xrSession.end(); } catch(e){} });
+    }
 
     /* Start the render loop. Loading pill is removed on the FIRST frame
        that successfully renders (so the user sees the camera as soon as
@@ -687,7 +793,11 @@ function onXRFrame(time, frame) {
     updateDetectedPlanes(frame);
 
     if (!isPlaced) {
-        updateReticle(frame);
+        if (manualWallMode) {
+            updateManualFrontWall(frame);
+        } else {
+            updateReticle(frame);
+        }
     } else {
         updatePrintFromAnchor(frame);
     }
@@ -827,6 +937,11 @@ const _hitScale      = new THREE.Vector3();
 const _worldUp       = new THREE.Vector3(0, 1, 0);
 const _wallRight     = new THREE.Vector3();
 const _wallUp        = new THREE.Vector3();
+const _viewerMatrix  = new THREE.Matrix4();
+const _viewerPos     = new THREE.Vector3();
+const _viewerQuat    = new THREE.Quaternion();
+const _viewerForward = new THREE.Vector3();
+const _manualMatrix  = new THREE.Matrix4();
 
 /* Build a placement matrix that puts the GLB upright on the wall:
      - origin at the hit point
@@ -856,6 +971,40 @@ function buildWallPlacementMatrixFromNormal(srcMatrix, normalWorld, outMatrix) {
     return outMatrix;
 }
 
+function updateManualFrontWall(frame) {
+    const viewerPose = frame.getViewerPose(xrRefSpace);
+    if (!viewerPose) {
+        reticle.visible = false;
+        manualPlacementReady = false;
+        setTrackingState('poor');
+        return;
+    }
+
+    _viewerMatrix.fromArray(viewerPose.transform.matrix);
+    _viewerMatrix.decompose(_viewerPos, _viewerQuat, _hitScale);
+
+    /* Camera looks down local -Z. The virtual wall sits in front of the
+       camera; its normal points back toward the user. */
+    _viewerForward.set(0, 0, -1).applyQuaternion(_viewerQuat).normalize();
+    _hitPos.copy(_viewerPos).addScaledVector(_viewerForward, manualWallDistanceM);
+    _surfaceNormal.copy(_viewerForward).multiplyScalar(-1);
+
+    _manualMatrix.identity();
+    _manualMatrix.setPosition(_hitPos);
+    buildWallPlacementMatrixFromNormal(_manualMatrix, _surfaceNormal, reticle.matrix);
+    lastPlacementMatrix.copy(reticle.matrix);
+    lastHit = null;
+    manualPlacementReady = true;
+
+    reticle.visible = true;
+    setTrackingState('good');
+    statusText.textContent = 'Front wall mode · tap to place';
+    debugPill.textContent =
+        'manual wall\n' +
+        'distance: ' + manualWallDistanceM.toFixed(2) + 'm\n' +
+        'anchor: no';
+}
+
 const debugPill = document.getElementById('debugPill');
 const _axisY = new THREE.Vector3();
 const _axisZ = new THREE.Vector3();
@@ -878,7 +1027,7 @@ function updateReticle(frame) {
         if (!isPlaced) {
             statusText.textContent = elapsedS < 6
                 ? 'Sweep the phone slowly along the wall'
-                : 'Step sideways · the wall needs parallax to detect';
+                : 'Step sideways · or use front wall';
         }
         return;
     }
@@ -907,10 +1056,10 @@ function updateReticle(frame) {
     _axisY.set(0, 1, 0).applyQuaternion(_quat);
     _axisZ.set(0, 0, 1).applyQuaternion(_quat);
 
-    /* Whichever axis has the LARGEST |y| component in world space is
-       almost certainly the surface normal axis on this device. */
-    const useYAsNormal = Math.abs(_axisY.y) > Math.abs(_axisZ.y);
-    const normalWorld = useYAsNormal ? _axisY : _axisZ;
+    /* Per WebXR hit-test convention, local Y is the surface normal.
+       For walls that normal is mostly horizontal, so its world Y
+       component should stay near zero. */
+    const normalWorld = _axisY;
     const isWall = Math.abs(normalWorld.y) < 0.5;
 
     debugPill.textContent =
@@ -918,7 +1067,7 @@ function updateReticle(frame) {
         'elapsed: ' + elapsedS + 's\n' +
         'axisY.y: ' + _axisY.y.toFixed(2) + '\n' +
         'axisZ.y: ' + _axisZ.y.toFixed(2) + '\n' +
-        'normal: ' + (useYAsNormal ? 'Y' : 'Z') + '\n' +
+        'normal: Y\n' +
         'wall: ' + (isWall ? 'yes' : 'no');
 
     /* Always show the reticle for any hit, but only allow placement
@@ -949,12 +1098,15 @@ let lastHit = null;
 let lastPlacementMatrix = new THREE.Matrix4();
 
 /* Frozen-at-placement values for stable orientation as the user
-   moves around. Position follows the anchor each frame (so the print
-   stays correctly fixed as ARCore refines tracking); orientation is
-   locked from the placement moment to avoid jitter from per-frame
-   normal estimation. */
+   moves around. Position follows the anchor each frame; orientation
+   is locked from the placement moment to avoid jitter.
+   placementWallRight / Up / Normal define the wall's local basis —
+   used by drag/twist gestures to project screen motion onto the
+   wall surface. */
 let placementOrientation = new THREE.Quaternion();
+let placementWallRight   = new THREE.Vector3();
 let placementWallUp      = new THREE.Vector3();
+let placementWallNormal  = new THREE.Vector3();
 let placementAnchorPos   = new THREE.Vector3();
 
 /* ──── Tap-to-place (WebXR 'select' event) ────
@@ -962,7 +1114,7 @@ let placementAnchorPos   = new THREE.Vector3();
    an overlay element. Taps on chips or close button do NOT fire
    this — they fire normal DOM click events instead. */
 async function onSelect() {
-    if (isPlaced || !lastHit) return;
+    if (isPlaced || (!lastHit && !manualPlacementReady)) return;
 
     /* Freeze the orientation + wall-up axis from the moment of placement. */
     const tmpPos = new THREE.Vector3();
@@ -971,24 +1123,29 @@ async function onSelect() {
     placementAnchorPos.copy(tmpPos);
 
     /* Re-derive the wall-up axis from the placement matrix's Y column. */
+    placementWallRight.setFromMatrixColumn(lastPlacementMatrix, 0).normalize();
     placementWallUp.setFromMatrixColumn(lastPlacementMatrix, 1).normalize();
+    placementWallNormal.setFromMatrixColumn(lastPlacementMatrix, 2).normalize();
 
-    try {
-        /* Spatial anchor from the original hit — print will follow ARCore's
-           refined tracking as the user walks around. */
-        printAnchor = await lastHit.createAnchor();
-    } catch (e) {
-        /* Anchor creation can fail on some devices — fall back to the
-           static placement position. */
+    if (lastHit) {
+        try {
+            printAnchor = await lastHit.createAnchor();
+        } catch (e) {
+            printAnchor = null;
+        }
+    } else {
         printAnchor = null;
     }
 
     isPlaced = true;
+    manualWallMode = false;
+    manualPlacementReady = false;
     printModel.visible = true;
     reticle.visible = false;
+    frontWallBtn.classList.remove('active');
 
     overlay.classList.add('placed');
-    statusText.textContent = 'Placed · use the chips to slide it up or down';
+    statusText.textContent = 'Placed · use X/Y/Z/R controls to adjust';
 
     if (navigator.vibrate) navigator.vibrate(60);
 }
@@ -1003,6 +1160,8 @@ async function onSelect() {
 const _anchorPos     = new THREE.Vector3();
 const _finalPos      = new THREE.Vector3();
 const _anchorMatrix4 = new THREE.Matrix4();
+const _localZRot     = new THREE.Quaternion();
+const _localZAxis    = new THREE.Vector3(0, 0, 1);
 
 function updatePrintFromAnchor(frame) {
     if (printAnchor) {
@@ -1017,11 +1176,15 @@ function updatePrintFromAnchor(frame) {
         _anchorPos.copy(placementAnchorPos);
     }
 
-    /* Slide print up/down the wall along the wall-up axis */
-    _finalPos.copy(_anchorPos).addScaledVector(placementWallUp, hangOffsetM);
+    _finalPos.copy(_anchorPos)
+        .addScaledVector(placementWallRight, wallOffsetX)
+        .addScaledVector(placementWallUp, wallOffsetY)
+        .addScaledVector(placementWallNormal, wallOffsetZ);
 
     printModel.position.copy(_finalPos);
-    printModel.quaternion.copy(placementOrientation);
+    printModel.quaternion
+        .copy(placementOrientation)
+        .multiply(_localZRot.setFromAxisAngle(_localZAxis, wallRotZ));
     printModel.scale.set(1, 1, 1);
     printModel.updateMatrix();
 }
@@ -1039,13 +1202,90 @@ function setTrackingState(state) {
     }
 }
 
+/* Fine adjustment controls. */
+function resetWallOffsets() {
+    wallOffsetX = 0;
+    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
+    wallOffsetZ = 0;
+    wallRotZ = 0;
+}
+
+function adjustPrint(action) {
+    switch (action) {
+        case 'x-': wallOffsetX -= MOVE_STEP_M; break;
+        case 'x+': wallOffsetX += MOVE_STEP_M; break;
+        case 'y-': wallOffsetY -= MOVE_STEP_M; break;
+        case 'y+': wallOffsetY += MOVE_STEP_M; break;
+        case 'z-': wallOffsetZ -= MOVE_STEP_M; break;
+        case 'z+': wallOffsetZ += MOVE_STEP_M; break;
+        case 'rot-': wallRotZ -= ROT_STEP_RAD; break;
+        case 'rot+': wallRotZ += ROT_STEP_RAD; break;
+        case 'reset': resetWallOffsets(); break;
+    }
+}
+
+function stopAdjustRepeat() {
+    if (adjustRepeatTimer) {
+        clearInterval(adjustRepeatTimer);
+        adjustRepeatTimer = null;
+    }
+}
+
+function wireAdjustControls() {
+    if (adjustControlsWired) return;
+    adjustControlsWired = true;
+
+    document.querySelectorAll('#movePanel .adjust-btn').forEach((button) => {
+        const action = button.getAttribute('data-adjust');
+        button.addEventListener('click', (e) => e.stopPropagation());
+        button.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustPrint(action);
+            stopAdjustRepeat();
+            if (action !== 'reset') {
+                adjustRepeatTimer = setInterval(() => adjustPrint(action), 90);
+            }
+        });
+        button.addEventListener('pointerup', stopAdjustRepeat);
+        button.addEventListener('pointercancel', stopAdjustRepeat);
+        button.addEventListener('pointerleave', stopAdjustRepeat);
+    });
+}
+
+function wireFrontWallButton() {
+    if (frontWallButtonWired) return;
+    frontWallButtonWired = true;
+
+    frontWallBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isPlaced) return;
+
+        manualWallMode = !manualWallMode;
+        manualPlacementReady = false;
+        lastHit = null;
+        frontWallBtn.classList.toggle('active', manualWallMode);
+        frontWallBtn.textContent = manualWallMode ? 'Scanning front' : 'Use front wall';
+
+        if (!manualWallMode) {
+            reticle.visible = false;
+            setTrackingState('poor');
+        }
+    });
+}
+
 /* ──── Hang-height chips ────
    Updates state pre- and post-placement.
    - Pre-placement: changes the future hang height
    - Post-placement: slides the print up or down the wall in real time
-     by adjusting hangOffsetM. The next frame's updatePrintFromAnchor
+     by adjusting wallOffsetY. The next frame's updatePrintFromAnchor
      will apply the new offset. */
 function wireChips() {
+    if (hangChipsWired) return;
+    hangChipsWired = true;
+
     const chips = document.querySelectorAll('#chipRow .chip');
     chips.forEach((chip) => {
         chip.addEventListener('click', (e) => {
@@ -1055,11 +1295,9 @@ function wireChips() {
 
             const newH = parseInt(chip.getAttribute('data-h'), 10);
 
-            if (isPlaced) {
-                // Convert chip delta to a vertical world offset (inches → metres)
-                const deltaIn = newH - hangHeightIn;
-                hangOffsetM += deltaIn * 0.0254;
-            }
+            // Convert chip delta to a wall-local vertical offset (inches → metres)
+            const deltaIn = newH - hangHeightIn;
+            wallOffsetY += deltaIn * 0.0254;
 
             hangHeightIn = newH;
         });
@@ -1074,6 +1312,9 @@ function wireChips() {
    anchor with the SAME placement orientation + hang offset — visual
    continuity, no need to re-tap. */
 async function wireSizeChips() {
+    if (sizeChipsWired) return;
+    sizeChipsWired = true;
+
     const chips = document.querySelectorAll('#sizeRow .chip');
     for (const chip of chips) {
         chip.addEventListener('click', async (e) => {
@@ -1130,7 +1371,13 @@ function onSessionEnd() {
     viewerSpace = null;
     printAnchor = null;
     isPlaced = false;
-    hangOffsetM = 0;
+    manualWallMode = false;
+    manualPlacementReady = false;
+    wallOffsetX = 0;
+    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
+    wallOffsetZ = 0;
+    wallRotZ = 0;
+    stopAdjustRepeat();
     firstFrameRendered = false;
     /* Drop all detected-plane wireframes — fresh start on next entry */
     for (const [, wireframe] of planeWireframes) {
@@ -1140,6 +1387,8 @@ function onSessionEnd() {
     }
     planeWireframes.clear();
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
+    frontWallBtn.classList.remove('active');
+    frontWallBtn.textContent = 'Use front wall';
     document.body.classList.remove('xr-active');
     loadingPill.classList.remove('show');
     if (renderer) {
