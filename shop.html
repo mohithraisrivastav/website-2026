@@ -479,7 +479,7 @@
     }
     </script>
     <!-- model-viewer: native AR Quick Look (iOS) + Scene Viewer (Android) -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
     <!-- on-demand framed-print 3D builder -->
     <script type="module">
     import * as THREE from 'three';
@@ -2933,7 +2933,7 @@
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
+                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
