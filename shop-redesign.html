@@ -68,10 +68,16 @@
            All JS, modals, AR, Room Viewer untouched.
         ══════════════════════════════════════════════════════════════════ */
 
-        /* 1. Three-column grid, generous breathing room */
+        /* 1. Three-column grid desktop, responsive down to single column */
         .shop-grid {
             grid-template-columns: repeat(3, 1fr) !important;
             gap: 4vw 3vw !important;
+        }
+        @media (max-width: 1100px) {
+            .shop-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 700px) {
+            .shop-grid { grid-template-columns: 1fr !important; }
         }
 
         /* 2. Image: strip radius, border, shadow, badge overlay */
