@@ -171,16 +171,23 @@
   }
   #statusPill.placed { opacity: 0; pointer-events: none; }
 
-  /* Hang-height chips (above wall-finding pill) */
-  #chipRow {
+  /* Chip rows (size + hang-height) and labels — stacked above the
+     bottom status pill. Layout from bottom to top:
+        120px  status pill
+        180px  hang-height chips
+        225px  HANG HEIGHT label
+        265px  size chips
+        310px  SIZE label                                              */
+  #chipRow, #sizeRow {
     position: absolute;
-    bottom: max(180px, env(safe-area-inset-bottom, 0px) + 180px);
     left: 50%;
     transform: translateX(-50%);
     display: flex; gap: 8px;
     white-space: nowrap;
-    pointer-events: none;  /* container; chips themselves opt back in */
+    pointer-events: none;
   }
+  #chipRow { bottom: max(180px, env(safe-area-inset-bottom, 0px) + 180px); }
+  #sizeRow { bottom: max(265px, env(safe-area-inset-bottom, 0px) + 265px); }
   .chip {
     pointer-events: auto;
     background: rgba(10,10,10,0.7);
@@ -200,9 +207,9 @@
     border-color: rgba(207,162,70,0.7);
     color: #CFA246;
   }
+  .chip[disabled] { opacity: 0.4; pointer-events: none; }
   .chip-label {
     position: absolute;
-    bottom: max(225px, env(safe-area-inset-bottom, 0px) + 225px);
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Inter', sans-serif;
@@ -211,6 +218,8 @@
     color: rgba(247,243,236,0.4);
     white-space: nowrap;
   }
+  .chip-label.hang { bottom: max(225px, env(safe-area-inset-bottom, 0px) + 225px); }
+  .chip-label.size { bottom: max(310px, env(safe-area-inset-bottom, 0px) + 310px); }
 
   /* Debug pill — top-left, shows live hit-test info during dev */
   #debugPill {
@@ -348,8 +357,16 @@
     </svg>
   </button>
 
+  <!-- Size label + chips (Small / Medium / Large) -->
+  <div class="chip-label size">Size — print dimensions</div>
+  <div id="sizeRow">
+    <button class="chip" data-size="small">Small</button>
+    <button class="chip" data-size="medium">Medium</button>
+    <button class="chip active" data-size="large">Large</button>
+  </div>
+
   <!-- Hang-height label + chips -->
-  <div class="chip-label">Hang height — gallery standard</div>
+  <div class="chip-label hang">Hang height — gallery standard</div>
   <div id="chipRow">
     <button class="chip active" data-h="57">57"</button>
     <button class="chip" data-h="60">60"</button>
@@ -382,15 +399,20 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 /* ──────────────────────────────────────────────────────────────
-   Phase 1 hardcoded to Cosmic Return. Phase 2 will read ?id=<>
-   from the URL and look up dimensions from a catalog map. */
-const PRODUCT = {
-    id:    'cosmic-return',
-    title: 'Cosmic Return',
-    wIn:   42,
-    hIn:   31.5,
-    glb:   'ar/cosmic-return.glb'
-};
+   Phase 1 hardcoded to Cosmic Return + its three GLB sizes.
+   Phase 2 will read ?id=<> from the URL and use a catalogue map. */
+const PRODUCT_TITLE = 'Cosmic Return';
+const SIZES = [
+    { id: 'small',  label: 'Small',  wIn: 18, hIn: 13.5, glb: 'ar/cosmic-return-small.glb'  },
+    { id: 'medium', label: 'Medium', wIn: 24, hIn: 18,   glb: 'ar/cosmic-return-medium.glb' },
+    { id: 'large',  label: 'Large',  wIn: 42, hIn: 31.5, glb: 'ar/cosmic-return.glb'        }
+];
+/* Default to Large (the catalogue canonical size for this print) */
+let currentSize = SIZES[2];
+
+/* GLB cache — avoids re-downloading when the user toggles between
+   sizes. Stores the raw gltf.scene, callers clone() before adding. */
+const glbCache = new Map();
 
 /* ──── Element handles ──── */
 const $ = (id) => document.getElementById(id);
@@ -445,32 +467,48 @@ async function init() {
         return;
     }
 
-    // Preload the GLB so the session start doesn't block
+    /* Preload the default (Large) GLB so session start doesn't block.
+       Other sizes load lazily when the user taps a size chip. */
     try {
-        const loader = new GLTFLoader();
-        const gltf = await loader.loadAsync(PRODUCT.glb);
-        printModel = gltf.scene;
+        printModel = await loadSizedGLB(currentSize);
         printModel.visible = false;
-
-        // Cast shadows from the print onto detected planes (when supported)
-        printModel.traverse((obj) => {
-            if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; }
-        });
     } catch (e) {
         showError('Could not load the print model: ' + e.message);
         return;
     }
 
-    // Wire start button
+    /* Wire start button */
     startBtn.disabled = false;
     startBtn.textContent = 'Enter AR';
     startBtn.addEventListener('click', startXR);
 
-    // Update HUD with product info (already set in HTML but keep authoritative)
-    const wCm = Math.round(PRODUCT.wIn * 2.54);
-    const hCm = Math.round(PRODUCT.hIn * 2.54);
-    $('hudTitle').textContent = PRODUCT.title;
-    $('hudDims').textContent  = PRODUCT.wIn + '" × ' + PRODUCT.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+    /* HUD initial state */
+    refreshHud();
+}
+
+/* Load (or fetch from cache) the GLB for a given size. Returns a
+   fresh THREE.Object3D each call so the same scene-graph never gets
+   attached to two scenes at once. */
+async function loadSizedGLB(size) {
+    let template = glbCache.get(size.glb);
+    if (!template) {
+        const loader = new GLTFLoader();
+        const gltf = await loader.loadAsync(size.glb);
+        template = gltf.scene;
+        template.traverse((obj) => {
+            if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; }
+        });
+        glbCache.set(size.glb, template);
+    }
+    return template.clone(true);
+}
+
+/* Push the current product title + currentSize into the HUD pill. */
+function refreshHud() {
+    const wCm = Math.round(currentSize.wIn * 2.54);
+    const hCm = Math.round(currentSize.hIn * 2.54);
+    $('hudTitle').textContent = PRODUCT_TITLE;
+    $('hudDims').textContent  = currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
 }
 
 function showError(msg) {
@@ -613,6 +651,7 @@ async function startXR() {
 
     /* Wire UI handlers */
     wireChips();
+    wireSizeChips();
     closeBtn.addEventListener('click', () => { try { xrSession.end(); } catch(e){} });
 
     /* Start the render loop. Loading pill is removed on the FIRST frame
@@ -913,6 +952,63 @@ function wireChips() {
             hangHeightIn = newH;
         });
     });
+}
+
+/* Size chips — swap the GLB live, both before and after placement.
+   Pre-placement: just updates currentSize + HUD; the next reticle
+   tap will place the newly-selected size.
+   Post-placement: loads (or pulls from cache) the new GLB, removes
+   the current model from the scene, attaches the new one to the
+   anchor with the SAME placement orientation + hang offset — visual
+   continuity, no need to re-tap. */
+async function wireSizeChips() {
+    const chips = document.querySelectorAll('#sizeRow .chip');
+    for (const chip of chips) {
+        chip.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const sizeId = chip.getAttribute('data-size');
+            const newSize = SIZES.find((s) => s.id === sizeId);
+            if (!newSize || newSize === currentSize) return;
+
+            /* Visual feedback while loading */
+            chips.forEach((c) => { c.setAttribute('disabled', ''); c.classList.remove('active'); });
+            chip.classList.add('active');
+
+            try {
+                const newModel = await loadSizedGLB(newSize);
+
+                /* Swap into the scene */
+                if (printModel && scene) scene.remove(printModel);
+                printModel = newModel;
+                if (scene) scene.add(printModel);
+
+                /* If we're post-placement, restore the placement transform
+                   so the new size appears at the same anchor + same hang
+                   height without the user re-tapping. */
+                if (isPlaced) {
+                    printModel.visible = true;
+                    printModel.matrixAutoUpdate = false;
+                    /* Position + orientation are reapplied each frame by
+                       updatePrintFromAnchor — nothing else needed here. */
+                } else {
+                    printModel.visible = false;
+                }
+
+                currentSize = newSize;
+                refreshHud();
+            } catch (err) {
+                /* Load failed — revert UI */
+                console.error('[AR-XR] size swap failed', err);
+                chip.classList.remove('active');
+                const prev = document.querySelector(
+                    '#sizeRow .chip[data-size="' + currentSize.id + '"]'
+                );
+                if (prev) prev.classList.add('active');
+            } finally {
+                chips.forEach((c) => c.removeAttribute('disabled'));
+            }
+        });
+    }
 }
 
 /* ──── Session end / cleanup ──── */
