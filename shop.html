@@ -985,6 +985,59 @@
         #arPromptSlot.ar-tracking-poor #arEyeLabel { opacity: 0.3; }
         #arEyeLine, #arEyeLabel { transition: opacity 0.4s ease; }
 
+        /* ── Tap-to-confirm visualisation (item #2) ──
+           Center target ring sits at screen center on top of the eye-level
+           guideline — reads as "the print's centre will land here". Pulses
+           when tracking is solid + reveals a TAP hint, so the user can't
+           miss the moment of "ready to place".
+           Lives on top of model-viewer's native reticle; the two complement
+           each other (native shows surface detection, ours shows the tap
+           target in screen space). */
+        @keyframes ar-tap-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1);
+                       box-shadow: 0 0 14px rgba(207,162,70,0.45); }
+            50%      { transform: translate(-50%, -50%) scale(1.16);
+                       box-shadow: 0 0 22px rgba(207,162,70,0.75); }
+        }
+        #arCenterTarget {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(207,162,70,0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 14px rgba(207,162,70,0.45);
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+        #arCenterTarget::after {
+            /* inner dot — precision crosshair */
+            content: ''; position: absolute; inset: 0; margin: auto;
+            width: 4px; height: 4px;
+            background: #CFA246; border-radius: 50%;
+        }
+        #arTapHint {
+            position: absolute; top: calc(50% + 30px); left: 50%;
+            transform: translateX(-50%);
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 800;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: #CFA246;
+            text-shadow: 0 1px 8px rgba(20,17,13,0.85),
+                         0 0 14px rgba(20,17,13,0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            white-space: nowrap;
+        }
+        /* State-driven appearance — uses the same state machine as #3 */
+        #arPromptSlot.ar-tracking-poor #arCenterTarget { opacity: 0.3; }
+        #arPromptSlot.ar-tracking-good #arCenterTarget {
+            opacity: 1;
+            animation: ar-tap-pulse 1.4s ease-in-out infinite;
+        }
+        #arPromptSlot.ar-tracking-good #arTapHint { opacity: 1; }
+
         /* ── Hang-height presets (architect/gallery standards) ── */
         .ar-hang-row {
             pointer-events: auto;
@@ -3371,7 +3424,7 @@
                             chips.forEach(function(c) { c.classList.remove('ar-hang-on'); });
                             chip.classList.add('ar-hang-on');
                             var h = chip.getAttribute('data-h');
-                            label.textContent = h + '" · Tap where line crosses wall';
+                            label.textContent = h + '" · Print centerline';
                         });
                     });
                 })();
@@ -4811,6 +4864,15 @@
           transform:translateY(-0.5px);
           box-shadow:0 0 14px rgba(207,162,70,0.35);"></div>
 
+      <!-- Center target: pulses when tracking is solid, signals where the
+           print's center will land. Lives at screen center, sits on the
+           eye-level line so the line + ring intersection is the tap target. -->
+      <div id="arCenterTarget"></div>
+
+      <!-- Tap hint: appears beneath the ring only when tracking-good,
+           making the moment of "you can place now" unmistakable. -->
+      <div id="arTapHint">Tap</div>
+
       <!-- Eye-level label: rides just above the guideline, updated when chips change -->
       <div id="arEyeLabel" style="
           position:absolute; top:calc(50% - 40px); left:50%;
@@ -4824,7 +4886,7 @@
           padding:5px 12px; border-radius:30px;
           white-space:nowrap;
           backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);">
-        57" · Tap where line crosses wall
+        57" · Print centerline
       </div>
 
       <!-- Wall-detection guidance pill — original behaviour preserved -->
