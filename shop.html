@@ -985,6 +985,46 @@
         #arPromptSlot.ar-tracking-poor #arEyeLabel { opacity: 0.3; }
         #arEyeLine, #arEyeLabel { transition: opacity 0.4s ease; }
 
+        /* ── Measurement HUD (item #1) ──
+           Pill at the top of the AR view. Two lines:
+             1. Print title in Cormorant italic (brand voice)
+             2. Dimensions in Inter, both inches AND centimetres
+           Updates on AR open AND on every size-chip change so the
+           buyer always sees exactly what's about to be placed on
+           their wall, in the units an architect actually uses. */
+        #arDimHud {
+            position: absolute;
+            top: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.68);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(247,243,236,0.15);
+            border-radius: 24px;
+            padding: 10px 22px;
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+            transition: opacity 0.4s ease;
+        }
+        #arDimHudTitle {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic; font-weight: 300;
+            font-size: 0.95rem; line-height: 1.15;
+            color: rgba(247,243,236,0.94);
+            letter-spacing: 0.02em;
+            display: block; margin-bottom: 3px;
+        }
+        #arDimHudMeasure {
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(207,162,70,0.92);
+            text-transform: uppercase;
+            display: block;
+        }
+
         /* ── Tap-to-confirm visualisation (item #2) ──
            Center target ring sits at screen center on top of the eye-level
            guideline — reads as "the print's centre will land here". Pulses
@@ -2879,6 +2919,18 @@
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
 
+                /* Populate the in-AR measurement HUD (item #1): title + dual-unit dims.
+                   Updated again by buildAt() whenever the user picks a different size. */
+                var hudTitle = document.getElementById('arDimHudTitle');
+                var hudMeasure = document.getElementById('arDimHudMeasure');
+                if (hudTitle) hudTitle.textContent = title;
+                if (hudMeasure) {
+                    var wCm0 = Math.round(wIn * 2.54);
+                    var hCm0 = Math.round(hIn * 2.54);
+                    hudMeasure.textContent =
+                        wIn + '" × ' + hIn + '"  ·  ' + wCm0 + ' × ' + hCm0 + ' cm';
+                }
+
                 /* apply calibrated scale from room viewer (or reset to 1) */
                 arScaleMult = options.scaleMult ? Math.max(0.5, Math.min(2.0, options.scaleMult)) : 1.0;
                 var scaleValEl = document.getElementById('arScaleVal');
@@ -3159,6 +3211,19 @@
                         : ' · true size';
                     document.getElementById('arDimText').textContent =
                         sz.w + ' × ' + sz.h + ' inches' + scaleLabel;
+
+                    /* Keep the in-AR HUD in sync with the active size chip.
+                       Uses the unscaled (true print) dimensions, not bW/bH,
+                       since the buyer wants the print's real catalogue size
+                       — arScaleMult is the room-viewer calibration tweak. */
+                    var hudM = document.getElementById('arDimHudMeasure');
+                    if (hudM) {
+                        var wCmS = Math.round(sz.w * 2.54);
+                        var hCmS = Math.round(sz.h * 2.54);
+                        hudM.textContent =
+                            sz.w + '" × ' + sz.h + '"  ·  ' + wCmS + ' × ' + hCmS + ' cm';
+                    }
+
                     load.classList.remove('ar-gone');
                     load.textContent = 'Building the framed print…';
                     hintEl.textContent = 'Building the framed print…';
@@ -4838,6 +4903,14 @@
            (2) wall-finding pill — updated by the ar-tracking event listener. -->
     <div slot="ar-prompt" id="arPromptSlot" style="
         position:fixed; inset:0; pointer-events:none;">
+
+      <!-- Measurement HUD: title in Cormorant italic, dimensions in Inter
+           with both inches and centimetres. Populated by openArSheet() and
+           buildAt() — always reflects the print + size currently selected. -->
+      <div id="arDimHud">
+        <span id="arDimHudTitle">Print</span>
+        <span id="arDimHudMeasure">— × —</span>
+      </div>
 
       <!-- Edge vignette pulse: soft gold breathing glow while ARCore searches.
            Calmed via .ar-tracking-good class when tracking goes solid. -->
