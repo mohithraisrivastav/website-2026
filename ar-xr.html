@@ -42,6 +42,19 @@
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-tap-highlight-color: transparent;
   }
+  /* During AR session, body background must NOT be visible — the
+     camera feed renders under the Three.js canvas. */
+  body.xr-active { background: transparent; }
+
+  /* WebXR canvas: position-fixed, full-viewport, behind the overlay.
+     Three.js manages width/height internally during XR session, so we
+     only constrain position + z-index here. */
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 1;
+  }
 
   /* ── PRE-AR LAUNCH SCREEN ───────────────────────────────────
      Shown until the user taps "Enter AR" — required because
@@ -468,9 +481,17 @@ function showError(msg) {
 
 /* ──── Three.js renderer setup ──── */
 function initThree() {
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance'
+    });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    /* Critical for WebXR AR: explicit transparent clear so the camera feed
+       composites under the canvas. Without this, every frame clears to
+       opaque black and the camera passthrough is hidden. */
+    renderer.setClearColor(0x000000, 0);
     renderer.xr.enabled = true;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
@@ -532,6 +553,7 @@ async function startXR() {
 
     launchScreen.style.display = 'none';
     overlay.classList.add('active');
+    document.body.classList.add('xr-active');
     loadingPill.classList.add('show');
 
     xrSession.addEventListener('end', onSessionEnd);
@@ -740,6 +762,7 @@ function onSessionEnd() {
     isPlaced = false;
     hangOffsetM = 0;
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
+    document.body.classList.remove('xr-active');
     if (renderer) {
         renderer.setAnimationLoop(null);
         renderer.domElement.remove();
