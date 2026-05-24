@@ -955,13 +955,15 @@
             50%      { opacity: 1;   transform: scale(1.06); }
         }
         #arEdgeScan {
-            position: absolute; inset: 0; pointer-events: none;
+            position: fixed; inset: 0; pointer-events: none;
             box-shadow: inset 0 0 140px 30px rgba(207,162,70,0.22);
             animation: ar-edge-pulse 2.6s ease-in-out infinite;
             transition: opacity 0.5s ease;
+            z-index: 5;
         }
         #arCornerMarks {
-            position: absolute; inset: 30px; pointer-events: none;
+            position: fixed; inset: 30px; pointer-events: none;
+            z-index: 6;
         }
         .ar-corner {
             position: absolute; width: 22px; height: 22px;
@@ -985,15 +987,19 @@
         #arPromptSlot.ar-tracking-poor #arEyeLabel { opacity: 0.3; }
         #arEyeLine, #arEyeLabel { transition: opacity 0.4s ease; }
 
+        /* ── ar-prompt slot wrapper ──
+           All overlays inside use position:fixed (relative to viewport)
+           rather than position:absolute (which would require this wrapper
+           to be a positioning context — that nesting fails reliably inside
+           model-viewer's WebXR overlay container). */
+        #arPromptSlot { display: contents; }
+
         /* ── Measurement HUD (item #1) ──
            Pill at the top of the AR view. Two lines:
              1. Print title in Cormorant italic (brand voice)
-             2. Dimensions in Inter, both inches AND centimetres
-           Updates on AR open AND on every size-chip change so the
-           buyer always sees exactly what's about to be placed on
-           their wall, in the units an architect actually uses. */
+             2. Dimensions in Inter, both inches AND centimetres */
         #arDimHud {
-            position: absolute;
+            position: fixed;
             top: 56px;
             left: 50%;
             transform: translateX(-50%);
@@ -1007,6 +1013,7 @@
             white-space: nowrap;
             text-align: center;
             transition: opacity 0.4s ease;
+            z-index: 10;
         }
         #arDimHudTitle {
             font-family: 'Cormorant Garamond', Georgia, serif;
@@ -1040,7 +1047,7 @@
                        box-shadow: 0 0 22px rgba(207,162,70,0.75); }
         }
         #arCenterTarget {
-            position: absolute; top: 50%; left: 50%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             width: 36px; height: 36px;
             border: 1.5px solid rgba(207,162,70,0.9);
@@ -1049,6 +1056,7 @@
             pointer-events: none;
             opacity: 1;
             transition: opacity 0.4s ease;
+            z-index: 8;
         }
         #arCenterTarget::after {
             /* inner dot — precision crosshair */
@@ -1057,7 +1065,7 @@
             background: #CFA246; border-radius: 50%;
         }
         #arTapHint {
-            position: absolute; top: calc(50% + 30px); left: 50%;
+            position: fixed; top: calc(50% + 30px); left: 50%;
             transform: translateX(-50%);
             font-family: Inter, sans-serif;
             font-size: 0.62rem; font-weight: 800;
@@ -1069,6 +1077,7 @@
             opacity: 0;
             transition: opacity 0.4s ease;
             white-space: nowrap;
+            z-index: 9;
         }
         /* State-driven appearance — uses the same state machine as #3 */
         #arPromptSlot.ar-tracking-poor #arCenterTarget { opacity: 0.3; }
@@ -1077,6 +1086,76 @@
             animation: ar-tap-pulse 1.4s ease-in-out infinite;
         }
         #arPromptSlot.ar-tracking-good #arTapHint { opacity: 1; }
+
+        /* ── Eye-level guideline + label (item #4b) ──
+           Horizontal gold rule across the AR view at vertical center +
+           a gold pill label just above it. */
+        #arEyeLine {
+            position: fixed; top: 50%; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg,
+                transparent 5%,
+                rgba(207,162,70,0.55) 30%,
+                rgba(207,162,70,0.95) 50%,
+                rgba(207,162,70,0.55) 70%,
+                transparent 95%);
+            transform: translateY(-0.5px);
+            box-shadow: 0 0 14px rgba(207,162,70,0.35);
+            pointer-events: none;
+            z-index: 7;
+        }
+        #arEyeLabel {
+            position: fixed; top: calc(50% - 40px); left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20,17,13,0.78);
+            border: 1px solid rgba(207,162,70,0.45);
+            color: #CFA246;
+            font-family: Inter, sans-serif;
+            font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            padding: 5px 12px; border-radius: 30px;
+            white-space: nowrap;
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            pointer-events: none;
+            z-index: 9;
+        }
+
+        /* ── Wall-detection pill (original element, restyled in CSS) ── */
+        #arWallPrompt {
+            position: fixed;
+            bottom: 128px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.68);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(247,243,236,0.15);
+            border-radius: 24px;
+            padding: 11px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #arWallPromptText {
+            font-family: Inter, sans-serif;
+            font-size: 0.87rem;
+            color: rgba(247,243,236,0.92);
+            letter-spacing: 0.01em;
+        }
+
+        /* ── Hang-height chip row (in-AR, tappable) ── */
+        #arHangChipsAR {
+            position: fixed;
+            bottom: 190px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 6px; flex-wrap: nowrap;
+            pointer-events: auto;
+            white-space: nowrap;
+            z-index: 11;
+        }
 
         /* ── Hang-height chips (lives INSIDE the WebXR AR session) ──
            Compact pills above the wall-finding prompt. Tappable in AR;
@@ -4900,23 +4979,23 @@
                will land when they tap. Aligned with the natural eye-level line
                when the phone is held vertically at a normal reading height.
            (2) wall-finding pill — updated by the ar-tracking event listener. -->
-    <div slot="ar-prompt" id="arPromptSlot" style="
-        position:fixed; inset:0; pointer-events:none;">
+    <div slot="ar-prompt" id="arPromptSlot">
 
-      <!-- Measurement HUD: title in Cormorant italic, dimensions in Inter
-           with both inches and centimetres. Populated by openArSheet() and
-           buildAt() — always reflects the print + size currently selected. -->
+      <!-- Every overlay below is position:fixed directly to the viewport.
+           This matches the structure of the original (working) wall-prompt
+           pill so model-viewer's WebXR overlay renders all of them
+           reliably during the placement phase. -->
+
+      <!-- Measurement HUD: title + dimensions, top of screen -->
       <div id="arDimHud">
         <span id="arDimHudTitle">Print</span>
         <span id="arDimHudMeasure">— × —</span>
       </div>
 
-      <!-- Edge vignette pulse: soft gold breathing glow while ARCore searches.
-           Calmed via .ar-tracking-good class when tracking goes solid. -->
+      <!-- Edge vignette pulse: soft gold glow while searching -->
       <div id="arEdgeScan"></div>
 
-      <!-- Corner viewfinder marks: precision instrument feel. Pulse while
-           searching, sit static when tracking is good. -->
+      <!-- Corner viewfinder marks: pulse while searching, calm when locked -->
       <div id="arCornerMarks">
         <div class="ar-corner ar-corner-tl"></div>
         <div class="ar-corner ar-corner-tr"></div>
@@ -4924,85 +5003,32 @@
         <div class="ar-corner ar-corner-br"></div>
       </div>
 
-      <!-- Eye-level guideline: thin gold rule across the AR view, fades at edges -->
-      <div id="arEyeLine" style="
-          position:absolute; top:50%; left:0; right:0; height:1px;
-          background:linear-gradient(90deg,
-              transparent 5%,
-              rgba(207,162,70,0.55) 30%,
-              rgba(207,162,70,0.95) 50%,
-              rgba(207,162,70,0.55) 70%,
-              transparent 95%);
-          transform:translateY(-0.5px);
-          box-shadow:0 0 14px rgba(207,162,70,0.35);"></div>
+      <!-- Eye-level guideline: horizontal gold rule at screen center -->
+      <div id="arEyeLine"></div>
 
-      <!-- Center target: pulses when tracking is solid, signals where the
-           print's center will land. Lives at screen center, sits on the
-           eye-level line so the line + ring intersection is the tap target. -->
+      <!-- Eye-level label: above the guideline -->
+      <div id="arEyeLabel">57" · Print centerline</div>
+
+      <!-- Center target: pulses when tracking is solid -->
       <div id="arCenterTarget"></div>
 
-      <!-- Tap hint: appears beneath the ring only when tracking-good,
-           making the moment of "you can place now" unmistakable. -->
+      <!-- Tap hint: appears beneath the ring when tracking-good -->
       <div id="arTapHint">Tap</div>
 
-      <!-- Eye-level label: rides just above the guideline, updated when chips change -->
-      <div id="arEyeLabel" style="
-          position:absolute; top:calc(50% - 40px); left:50%;
-          transform:translateX(-50%);
-          background:rgba(20,17,13,0.78);
-          border:1px solid rgba(207,162,70,0.45);
-          color:#CFA246;
-          font-family:Inter,sans-serif;
-          font-size:0.65rem; font-weight:700;
-          letter-spacing:2px; text-transform:uppercase;
-          padding:5px 12px; border-radius:30px;
-          white-space:nowrap;
-          backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);">
-        57" · Print centerline
-      </div>
-
-      <!-- Hang-height chips — INSIDE the WebXR session only. pointer-events
-           is auto so taps land on the chip and don't trigger wall placement.
-           Default selection is 57" (gallery standard); chosen value updates
-           the eye-level label in real time, inside AR. -->
-      <div id="arHangChipsAR" style="
-          position:absolute;
-          bottom:190px;
-          left:50%;
-          transform:translateX(-50%);
-          display:flex; gap:6px; flex-wrap:nowrap;
-          pointer-events:auto;
-          white-space:nowrap;">
+      <!-- Hang-height chips: in-AR, tappable -->
+      <div id="arHangChipsAR">
         <button class="ar-hang-chip-ar ar-hang-on" data-h="57">57"</button>
         <button class="ar-hang-chip-ar" data-h="60">60"</button>
         <button class="ar-hang-chip-ar" data-h="63">63"</button>
       </div>
 
-      <!-- Wall-detection guidance pill — original behaviour preserved -->
-      <div id="arWallPrompt" style="
-          position:absolute;
-          bottom:128px;
-          left:50%;
-          transform:translateX(-50%);
-          background:rgba(10,10,10,0.68);
-          backdrop-filter:blur(10px);
-          -webkit-backdrop-filter:blur(10px);
-          border:1px solid rgba(247,243,236,0.15);
-          border-radius:24px;
-          padding:11px 20px;
-          display:flex;
-          align-items:center;
-          gap:10px;
-          white-space:nowrap;">
+      <!-- Wall-detection pill: bottom of screen -->
+      <div id="arWallPrompt">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
           <rect x="7" y="7" width="10" height="10" rx="1"/>
         </svg>
-        <span id="arWallPromptText" style="
-            font-family:Inter,sans-serif;
-            font-size:0.87rem;
-            color:rgba(247,243,236,0.92);
-            letter-spacing:0.01em;">Point camera at a wall · move slowly</span>
+        <span id="arWallPromptText">Point camera at a wall · move slowly</span>
       </div>
     </div>
   </model-viewer>
