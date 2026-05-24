@@ -1078,32 +1078,26 @@
         }
         #arPromptSlot.ar-tracking-good #arTapHint { opacity: 1; }
 
-        /* ── Hang-height presets (architect/gallery standards) ── */
-        .ar-hang-row {
-            pointer-events: auto;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-        }
-        .ar-hang-label {
-            font-size: 0.6rem; font-weight: 700; letter-spacing: 3px;
-            text-transform: uppercase; color: rgba(247,243,236,0.35);
-        }
-        .ar-hang-chips {
-            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-        }
-        .ar-hang-chip {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.18);
-            color: rgba(247,243,236,0.7);
-            font-size: 0.62rem; font-weight: 700; letter-spacing: 2px;
-            text-transform: uppercase; padding: 8px 15px; border-radius: 40px;
-            cursor: pointer; backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+        /* ── Hang-height chips (lives INSIDE the WebXR AR session) ──
+           Compact pills above the wall-finding prompt. Tappable in AR;
+           selection updates the eye-level guideline label in real time.
+           Do NOT appear in the pre-AR sheet — the ar-prompt slot is only
+           rendered while a WebXR session is active. */
+        .ar-hang-chip-ar {
+            background: rgba(10,10,10,0.65);
+            border: 1px solid rgba(247,243,236,0.18);
+            color: rgba(247,243,236,0.78);
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px;
+            padding: 7px 13px; border-radius: 40px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-        .ar-hang-chip:hover { background: rgba(255,255,255,0.14); }
-        .ar-hang-chip.ar-hang-on {
-            background: rgba(207,162,70,0.26);
-            border-color: rgba(207,162,70,0.6);
+        .ar-hang-chip-ar.ar-hang-on {
+            background: rgba(207,162,70,0.28);
+            border-color: rgba(207,162,70,0.65);
             color: #CFA246;
         }
 
@@ -3481,11 +3475,16 @@
                    gives them a visual reference so the tap lands at the
                    chosen height when the phone is held naturally. */
                 (function wireHangHeightChips() {
-                    var chips = document.querySelectorAll('#arHangChips .ar-hang-chip');
+                    var chips = document.querySelectorAll('#arHangChipsAR .ar-hang-chip-ar');
                     var label = document.getElementById('arEyeLabel');
                     if (!chips.length || !label) return;
                     chips.forEach(function(chip) {
-                        chip.addEventListener('click', function() {
+                        chip.addEventListener('click', function(e) {
+                            /* Stop the tap from propagating up to model-viewer's
+                               WebXR placement hit-test — otherwise tapping a chip
+                               would also place the print on whatever wall point
+                               sits behind it. */
+                            e.stopPropagation();
                             chips.forEach(function(c) { c.classList.remove('ar-hang-on'); });
                             chip.classList.add('ar-hang-on');
                             var h = chip.getAttribute('data-h');
@@ -4962,6 +4961,23 @@
         57" · Print centerline
       </div>
 
+      <!-- Hang-height chips — INSIDE the WebXR session only. pointer-events
+           is auto so taps land on the chip and don't trigger wall placement.
+           Default selection is 57" (gallery standard); chosen value updates
+           the eye-level label in real time, inside AR. -->
+      <div id="arHangChipsAR" style="
+          position:absolute;
+          bottom:190px;
+          left:50%;
+          transform:translateX(-50%);
+          display:flex; gap:6px; flex-wrap:nowrap;
+          pointer-events:auto;
+          white-space:nowrap;">
+        <button class="ar-hang-chip-ar ar-hang-on" data-h="57">57"</button>
+        <button class="ar-hang-chip-ar" data-h="60">60"</button>
+        <button class="ar-hang-chip-ar" data-h="63">63"</button>
+      </div>
+
       <!-- Wall-detection guidance pill — original behaviour preserved -->
       <div id="arWallPrompt" style="
           position:absolute;
@@ -4997,19 +5013,6 @@
     <div class="ar-size-label">Choose a size</div>
     <div class="ar-size-chips" id="arSizeChips"></div>
     <div class="ar-dim" id="arDimText"></div>
-
-    <!-- Hang-height presets (gallery/architect standard hanging heights).
-         The selected value drives the in-AR eye-level guideline label.
-         57" is the museum/gallery standard (center of artwork at average eye level). -->
-    <div class="ar-hang-row">
-      <div class="ar-hang-label">Hang Height — Gallery Standard</div>
-      <div class="ar-hang-chips" id="arHangChips">
-        <button class="ar-hang-chip ar-hang-on" data-h="57">Eye level · 57"</button>
-        <button class="ar-hang-chip" data-h="60">Above sofa · 60"</button>
-        <button class="ar-hang-chip" data-h="63">Standing · 63"</button>
-      </div>
-    </div>
-
     <div class="ar-scale-row">
       <button class="ar-scale-btn" id="arScaleDown">Smaller</button>
       <span class="ar-scale-val" id="arScaleVal">100%</span>
