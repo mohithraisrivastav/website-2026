@@ -940,6 +940,35 @@
             transition: background 0.2s, color 0.2s;
         }
         .ar-cal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+        /* ── Hang-height presets (architect/gallery standards) ── */
+        .ar-hang-row {
+            pointer-events: auto;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .ar-hang-label {
+            font-size: 0.6rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(247,243,236,0.35);
+        }
+        .ar-hang-chips {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+        }
+        .ar-hang-chip {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(247,243,236,0.7);
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; padding: 8px 15px; border-radius: 40px;
+            cursor: pointer; backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .ar-hang-chip:hover { background: rgba(255,255,255,0.14); }
+        .ar-hang-chip.ar-hang-on {
+            background: rgba(207,162,70,0.26);
+            border-color: rgba(207,162,70,0.6);
+            color: #CFA246;
+        }
+
         /* model-viewer's own AR button (Android Scene Viewer entry) — hidden, we use ours */
         #arViewer::part(default-ar-button) { display: none; }
 
@@ -3269,6 +3298,28 @@
                     }
                 });
 
+                /* ── Hang-height chips: update the in-AR eye-level label ──
+                   Gallery/museum standard centers art at 57" from the floor.
+                   Users with a sofa typically prefer 60". A 63" line matches
+                   a standing adult's natural eye level.
+                   The chips control the LABEL only — the actual placement
+                   happens wherever the user taps on the wall. The guideline
+                   gives them a visual reference so the tap lands at the
+                   chosen height when the phone is held naturally. */
+                (function wireHangHeightChips() {
+                    var chips = document.querySelectorAll('#arHangChips .ar-hang-chip');
+                    var label = document.getElementById('arEyeLabel');
+                    if (!chips.length || !label) return;
+                    chips.forEach(function(chip) {
+                        chip.addEventListener('click', function() {
+                            chips.forEach(function(c) { c.classList.remove('ar-hang-on'); });
+                            chip.classList.add('ar-hang-on');
+                            var h = chip.getAttribute('data-h');
+                            label.textContent = h + '" · Tap where line crosses wall';
+                        });
+                    });
+                })();
+
                 /* track when native AR session actually starts/ends */
                 viewer.addEventListener('ar-status', function(e) {
                     if (!arSession) return;
@@ -4670,32 +4721,69 @@
     environment-image="neutral"
     interaction-prompt="none">
     <!-- ar-prompt slot: shown inside the WebXR session as an overlay before
-         the model is placed. Updated by the ar-tracking event listener. -->
-    <div slot="ar-prompt" id="arWallPrompt" style="
-        position:fixed;
-        bottom:128px;
-        left:50%;
-        transform:translateX(-50%);
-        background:rgba(10,10,10,0.68);
-        backdrop-filter:blur(10px);
-        -webkit-backdrop-filter:blur(10px);
-        border:1px solid rgba(247,243,236,0.15);
-        border-radius:24px;
-        padding:11px 20px;
-        display:flex;
-        align-items:center;
-        gap:10px;
-        pointer-events:none;
-        white-space:nowrap;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
-        <rect x="7" y="7" width="10" height="10" rx="1"/>
-      </svg>
-      <span id="arWallPromptText" style="
+         the model is placed. Two pieces of guidance:
+           (1) horizontal eye-level guideline + hang-height label — gives the
+               architect/buyer a visual reference for where the print's center
+               will land when they tap. Aligned with the natural eye-level line
+               when the phone is held vertically at a normal reading height.
+           (2) wall-finding pill — updated by the ar-tracking event listener. -->
+    <div slot="ar-prompt" id="arPromptSlot" style="
+        position:fixed; inset:0; pointer-events:none;">
+
+      <!-- Eye-level guideline: thin gold rule across the AR view, fades at edges -->
+      <div id="arEyeLine" style="
+          position:absolute; top:50%; left:0; right:0; height:1px;
+          background:linear-gradient(90deg,
+              transparent 5%,
+              rgba(207,162,70,0.55) 30%,
+              rgba(207,162,70,0.95) 50%,
+              rgba(207,162,70,0.55) 70%,
+              transparent 95%);
+          transform:translateY(-0.5px);
+          box-shadow:0 0 14px rgba(207,162,70,0.35);"></div>
+
+      <!-- Eye-level label: rides just above the guideline, updated when chips change -->
+      <div id="arEyeLabel" style="
+          position:absolute; top:calc(50% - 40px); left:50%;
+          transform:translateX(-50%);
+          background:rgba(20,17,13,0.78);
+          border:1px solid rgba(207,162,70,0.45);
+          color:#CFA246;
           font-family:Inter,sans-serif;
-          font-size:0.87rem;
-          color:rgba(247,243,236,0.92);
-          letter-spacing:0.01em;">Point camera at a wall · move slowly</span>
+          font-size:0.65rem; font-weight:700;
+          letter-spacing:2px; text-transform:uppercase;
+          padding:5px 12px; border-radius:30px;
+          white-space:nowrap;
+          backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);">
+        57" · Tap where line crosses wall
+      </div>
+
+      <!-- Wall-detection guidance pill — original behaviour preserved -->
+      <div id="arWallPrompt" style="
+          position:absolute;
+          bottom:128px;
+          left:50%;
+          transform:translateX(-50%);
+          background:rgba(10,10,10,0.68);
+          backdrop-filter:blur(10px);
+          -webkit-backdrop-filter:blur(10px);
+          border:1px solid rgba(247,243,236,0.15);
+          border-radius:24px;
+          padding:11px 20px;
+          display:flex;
+          align-items:center;
+          gap:10px;
+          white-space:nowrap;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+          <rect x="7" y="7" width="10" height="10" rx="1"/>
+        </svg>
+        <span id="arWallPromptText" style="
+            font-family:Inter,sans-serif;
+            font-size:0.87rem;
+            color:rgba(247,243,236,0.92);
+            letter-spacing:0.01em;">Point camera at a wall · move slowly</span>
+      </div>
     </div>
   </model-viewer>
 
@@ -4705,6 +4793,19 @@
     <div class="ar-size-label">Choose a size</div>
     <div class="ar-size-chips" id="arSizeChips"></div>
     <div class="ar-dim" id="arDimText"></div>
+
+    <!-- Hang-height presets (gallery/architect standard hanging heights).
+         The selected value drives the in-AR eye-level guideline label.
+         57" is the museum/gallery standard (center of artwork at average eye level). -->
+    <div class="ar-hang-row">
+      <div class="ar-hang-label">Hang Height — Gallery Standard</div>
+      <div class="ar-hang-chips" id="arHangChips">
+        <button class="ar-hang-chip ar-hang-on" data-h="57">Eye level · 57"</button>
+        <button class="ar-hang-chip" data-h="60">Above sofa · 60"</button>
+        <button class="ar-hang-chip" data-h="63">Standing · 63"</button>
+      </div>
+    </div>
+
     <div class="ar-scale-row">
       <button class="ar-scale-btn" id="arScaleDown">Smaller</button>
       <span class="ar-scale-val" id="arScaleVal">100%</span>
