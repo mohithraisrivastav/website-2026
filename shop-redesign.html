@@ -208,6 +208,12 @@
 
         /* ══ MODAL: strip boxiness ══════════════════════════════════════ */
 
+        /* 0. Fix: onerror sets inline opacity:0 on empty-src load —
+              !important overrides the inline style so loaded images show */
+        .gallery-main img.loaded {
+            opacity: 1 !important;
+        }
+
         /* 1. Edition registry — prose only, no slot visualisation */
         .registry-slots {
             display: none !important;
