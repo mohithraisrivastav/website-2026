@@ -63,7 +63,10 @@
     <link rel="stylesheet" href="assets/css/pages/shop.css">
 
     <style>
-        /* ══ SHOP REDESIGN OVERRIDES ══════════════════════════════════════ */
+        /* ══ SHOP REDESIGN OVERRIDES ══════════════════════════════════════
+           Minimal, editorial — no boxiness, no decorative borders.
+           All JS, modals, AR, Room Viewer untouched.
+        ══════════════════════════════════════════════════════════════════ */
 
         /* 1. Three-column grid, generous breathing room */
         .shop-grid {
@@ -81,6 +84,7 @@
             background: #E8E2DA !important;
             margin-bottom: 22px !important;
         }
+        /* Remove "Limited Edition" / "Book" / "Tool" pseudo-element badges */
         .product-card[data-shop-category="prints"] .product-image::before,
         .product-card[data-shop-category="books"]  .product-image::before,
         .product-card[data-shop-category="tools"]  .product-image::before {
@@ -280,6 +284,32 @@
             padding: 0 !important;
         }
 
+        /* 6. Detail accordions — remove top/bottom borders, use spacing only */
+        .md-accordion {
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding-bottom: 0 !important;
+        }
+        .md-accordion:first-child {
+            border-top: none !important;
+        }
+        .md-acc-trigger {
+            padding: 14px 0 !important;
+        }
+        .md-acc-title {
+            color: rgba(26, 22, 18, 0.55) !important;
+            font-weight: 600 !important;
+            letter-spacing: 3px !important;
+        }
+        .md-accordion.open .md-acc-title {
+            color: #1A1612 !important;
+        }
+        .md-accordion.open .md-acc-icon {
+            color: rgba(26, 22, 18, 0.4) !important;
+        }
+
         /* 5b. Back bar — strip the band */
         .modal-back-bar {
             background: transparent !important;
@@ -307,32 +337,6 @@
             color: rgba(26, 22, 18, 0.38) !important;
             border: none !important;
             background: none !important;
-        }
-
-        /* 6. Detail accordions — remove top/bottom borders, use spacing only */
-        .md-accordion {
-            border-top: none !important;
-            border-bottom: none !important;
-            border-left: none !important;
-            border-right: none !important;
-            padding-bottom: 0 !important;
-        }
-        .md-accordion:first-child {
-            border-top: none !important;
-        }
-        .md-acc-trigger {
-            padding: 14px 0 !important;
-        }
-        .md-acc-title {
-            color: rgba(26, 22, 18, 0.55) !important;
-            font-weight: 600 !important;
-            letter-spacing: 3px !important;
-        }
-        .md-accordion.open .md-acc-title {
-            color: #1A1612 !important;
-        }
-        .md-accordion.open .md-acc-icon {
-            color: rgba(26, 22, 18, 0.4) !important;
         }
 
         /* 7. Size selector — underline only, no boxy border */
