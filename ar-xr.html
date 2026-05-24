@@ -262,36 +262,8 @@
     50%      { opacity: 0.95; }
   }
 
-  /* "Move device" prompt — first second of session before any
-     hit-test results have come in, to set expectations. */
-  #initHint {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-  #initHint .ring {
-    width: 64px; height: 64px;
-    margin: 0 auto 14px;
-    border: 2px solid rgba(207,162,70,0.85);
-    border-radius: 50%;
-    animation: init-pulse 1.6s ease-in-out infinite;
-  }
-  #initHint .label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.66rem; font-weight: 800;
-    letter-spacing: 3px; text-transform: uppercase;
-    color: rgba(247,243,236,0.85);
-    text-shadow: 0 1px 8px rgba(20,17,13,0.9);
-  }
-  #overlay.tracking-good #initHint,
-  #overlay.placed #initHint { opacity: 0; }
-  @keyframes init-pulse {
-    0%, 100% { transform: scale(1);    opacity: 0.7; }
-    50%      { transform: scale(1.15); opacity: 1;   }
-  }
+  /* (Old centered init pulse hint removed — was conflicting with the
+     bottom status pill. Status messaging now lives in one place.) */
 
   /* Loading state for the GLB */
   #loadingPill {
@@ -338,11 +310,9 @@
   <!-- Edge vignette: pulses while searching, fades when locked -->
   <div id="edgeScan"></div>
 
-  <!-- Initial "move your device" hint -->
-  <div id="initHint">
-    <div class="ring"></div>
-    <div class="label">Move device · scanning</div>
-  </div>
+  <!-- (Old centered "Move device" pulse removed — was contradicting
+       the bottom status pill. Status messaging now consolidated into
+       the single pill below.) -->
 
   <!-- Measurement HUD -->
   <div id="hud">
@@ -372,7 +342,7 @@
       <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
       <rect x="7" y="7" width="10" height="10" rx="1"/>
     </svg>
-    <span id="statusText">Looking for a wall…</span>
+    <span id="statusText">Slowly point your camera at a wall</span>
   </div>
 
   <!-- TAP hint (only when reticle locked + not yet placed) -->
@@ -418,9 +388,7 @@ let xrSession     = null;
 let xrRefSpace    = null;   // local reference space (origin = where session started)
 let viewerSpace   = null;   // viewer space (origin = device)
 let hitTestSource = null;
-let lastHitMatrix = null;   // most recent hit-test result (for tap-to-place)
 let printAnchor   = null;   // XRAnchor for placed print
-let anchorMatrix  = new THREE.Matrix4(); // pose of anchor in xrRefSpace, per frame
 let isPlaced      = false;
 
 /* ──── Hang-height state ────
@@ -650,13 +618,44 @@ function onXRFrame(time, frame) {
 }
 
 /* ──── Hit-test → reticle (placement phase) ────
-   Filters for vertical planes only. ARCore plane poses have local
-   Y as the plane's up axis and local Z as the surface normal. For a
-   wall, the normal is roughly horizontal — we filter out floor /
-   ceiling by rejecting hits whose normal Y component is > 0.4. */
-const _normalVec = new THREE.Vector3();
-const _quat      = new THREE.Quaternion();
-const _hitMatrix = new THREE.Matrix4();
+   WebXR hit-test pose convention (per spec):
+     local Y axis = surface normal (perpendicular to detected plane)
+     local X, Z  = lie ON the surface, oriented arbitrarily
+   So for a wall: pose's Y axis is roughly horizontal in world space.
+   For a floor:   pose's Y axis is roughly vertical   in world space.
+   Wall filter: world-space Y component of the pose's Y axis is small. */
+const _surfaceNormal = new THREE.Vector3();
+const _quat          = new THREE.Quaternion();
+const _hitMatrix     = new THREE.Matrix4();
+const _hitPos        = new THREE.Vector3();
+const _hitQuat       = new THREE.Quaternion();
+const _hitScale      = new THREE.Vector3();
+const _worldUp       = new THREE.Vector3(0, 1, 0);
+const _wallRight     = new THREE.Vector3();
+const _wallUp        = new THREE.Vector3();
+
+/* Build a placement matrix that puts the GLB upright on the wall:
+     - origin at the hit point
+     - model's +Z (front face / print) points along the wall normal
+       (i.e. into the room, away from the wall)
+     - model's +Y (height axis) is the wall's local up — world up
+       projected onto the wall surface
+     - model's +X (width axis) is the horizontal-along-wall direction
+   GLB was authored with print on +Z face, back of frame at z=0, so
+   the back face lands flush against the wall and the print faces the
+   viewer. */
+function buildWallPlacementMatrix(srcMatrix, outMatrix) {
+    srcMatrix.decompose(_hitPos, _hitQuat, _hitScale);
+    /* Wall normal = pose's local Y in world space (WebXR convention) */
+    const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(_hitQuat).normalize();
+    /* Horizontal-along-wall = worldUp × normal */
+    _wallRight.crossVectors(_worldUp, normal).normalize();
+    /* Wall up = normal × right  (re-orthogonalises against worldUp) */
+    _wallUp.crossVectors(normal, _wallRight).normalize();
+    outMatrix.makeBasis(_wallRight, _wallUp, normal);
+    outMatrix.setPosition(_hitPos);
+    return outMatrix;
+}
 
 function updateReticle(frame) {
     const results = frame.getHitTestResults(hitTestSource);
@@ -666,27 +665,27 @@ function updateReticle(frame) {
         const pose = hit.getPose(xrRefSpace);
         if (!pose) continue;
 
-        // Extract the surface normal from the pose orientation.
-        // For ARCore hit-test on a vertical plane, the pose's Z axis
-        // is the plane normal (pointing away from the wall toward the
-        // viewer).
+        /* Pose's local Y = surface normal in world space */
         _quat.set(
             pose.transform.orientation.x,
             pose.transform.orientation.y,
             pose.transform.orientation.z,
             pose.transform.orientation.w
         );
-        _normalVec.set(0, 0, 1).applyQuaternion(_quat);
+        _surfaceNormal.set(0, 1, 0).applyQuaternion(_quat);
 
-        // Vertical plane filter: normal should be nearly horizontal
-        if (Math.abs(_normalVec.y) < 0.4) {
+        /* Wall filter: surface normal must be (nearly) horizontal.
+           normal.y near 0   → wall
+           normal.y near ±1  → floor or ceiling (reject)              */
+        if (Math.abs(_surfaceNormal.y) < 0.4) {
             _hitMatrix.fromArray(pose.transform.matrix);
-            reticle.matrix.copy(_hitMatrix);
+            buildWallPlacementMatrix(_hitMatrix, reticle.matrix);
             reticle.visible = true;
 
-            // Remember for tap-to-place; also remember the hit object
-            // so we can create an anchor from it.
-            lastHitMatrix = _hitMatrix.clone();
+            /* Snapshot for tap-to-place. Save both the corrected
+               placement matrix AND the raw hit (anchor creation needs
+               the original hit object). */
+            lastPlacementMatrix = reticle.matrix.clone();
             lastHit = hit;
 
             setTrackingState('good');
@@ -703,6 +702,16 @@ function updateReticle(frame) {
 }
 
 let lastHit = null;
+let lastPlacementMatrix = new THREE.Matrix4();
+
+/* Frozen-at-placement values for stable orientation as the user
+   moves around. Position follows the anchor each frame (so the print
+   stays correctly fixed as ARCore refines tracking); orientation is
+   locked from the placement moment to avoid jitter from per-frame
+   normal estimation. */
+let placementOrientation = new THREE.Quaternion();
+let placementWallUp      = new THREE.Vector3();
+let placementAnchorPos   = new THREE.Vector3();
 
 /* ──── Tap-to-place (WebXR 'select' event) ────
    Fires when the user taps the screen in an AR area not covered by
@@ -711,16 +720,23 @@ let lastHit = null;
 async function onSelect() {
     if (isPlaced || !lastHit) return;
 
+    /* Freeze the orientation + wall-up axis from the moment of placement. */
+    const tmpPos = new THREE.Vector3();
+    const tmpScale = new THREE.Vector3();
+    lastPlacementMatrix.decompose(tmpPos, placementOrientation, tmpScale);
+    placementAnchorPos.copy(tmpPos);
+
+    /* Re-derive the wall-up axis from the placement matrix's Y column. */
+    placementWallUp.setFromMatrixColumn(lastPlacementMatrix, 1).normalize();
+
     try {
-        // Create a spatial anchor from the hit result. The print will be
-        // pinned to this anchor for the lifetime of the session, so it
-        // stays put as the user walks around the room.
+        /* Spatial anchor from the original hit — print will follow ARCore's
+           refined tracking as the user walks around. */
         printAnchor = await lastHit.createAnchor();
     } catch (e) {
-        // Anchor creation can fail on some devices; fall back to using
-        // the raw hit pose as a static placement.
+        /* Anchor creation can fail on some devices — fall back to the
+           static placement position. */
         printAnchor = null;
-        anchorMatrix.copy(lastHitMatrix);
     }
 
     isPlaced = true;
@@ -730,36 +746,40 @@ async function onSelect() {
     overlay.classList.add('placed');
     statusText.textContent = 'Placed · use the chips to slide it up or down';
 
-    // Short haptic confirmation
     if (navigator.vibrate) navigator.vibrate(60);
 }
 
-/* ──── Post-placement: keep print attached to anchor every frame ────
-   If we have an XRAnchor, we read its current pose each frame (it can
-   shift slightly as ARCore refines its tracking — that's GOOD, it
-   means the print stays correctly fixed in the real world even as the
-   user moves). If anchor creation failed, fall back to the static
-   hit pose stored at placement time. */
-const _printMatrix = new THREE.Matrix4();
-const _hangOffsetMatrix = new THREE.Matrix4();
+/* ──── Post-placement: keep print on the wall every frame ────
+   Position comes from the XRAnchor (follows ARCore refinement, so
+   the print doesn't drift as the user moves). Orientation is locked
+   from placement time for visual stability.
+   Hang-height offset is applied along the wall's local up axis (not
+   world Y) so it stays parallel to the wall surface even if the wall
+   is slightly off-vertical. */
+const _anchorPos     = new THREE.Vector3();
+const _finalPos      = new THREE.Vector3();
+const _anchorMatrix4 = new THREE.Matrix4();
 
 function updatePrintFromAnchor(frame) {
     if (printAnchor) {
         const pose = frame.getPose(printAnchor.anchorSpace, xrRefSpace);
         if (pose) {
-            anchorMatrix.fromArray(pose.transform.matrix);
+            _anchorMatrix4.fromArray(pose.transform.matrix);
+            _anchorPos.setFromMatrixPosition(_anchorMatrix4);
+        } else {
+            _anchorPos.copy(placementAnchorPos);
         }
+    } else {
+        _anchorPos.copy(placementAnchorPos);
     }
-    // else: anchorMatrix was set at placement and stays fixed
 
-    // Apply hang-height offset: shift print UP along the wall's local Y axis
-    // The wall plane's Y axis (in the anchor pose) is "up" along the wall.
-    _hangOffsetMatrix.makeTranslation(0, hangOffsetM, 0);
-    _printMatrix.copy(anchorMatrix).multiply(_hangOffsetMatrix);
+    /* Slide print up/down the wall along the wall-up axis */
+    _finalPos.copy(_anchorPos).addScaledVector(placementWallUp, hangOffsetM);
 
-    printModel.matrix.copy(_printMatrix);
-    printModel.matrix.decompose(printModel.position, printModel.quaternion, printModel.scale);
-    printModel.matrixAutoUpdate = false;
+    printModel.position.copy(_finalPos);
+    printModel.quaternion.copy(placementOrientation);
+    printModel.scale.set(1, 1, 1);
+    printModel.updateMatrix();
 }
 
 /* ──── Tracking state → overlay class toggle ──── */
@@ -767,11 +787,11 @@ function setTrackingState(state) {
     if (state === 'good') {
         overlay.classList.add('tracking-good');
         overlay.classList.remove('tracking-poor');
-        if (!isPlaced) statusText.textContent = 'Wall found · tap on the reticle to place';
+        if (!isPlaced) statusText.textContent = 'Wall found · tap the gold ring to place';
     } else {
         overlay.classList.remove('tracking-good');
         overlay.classList.add('tracking-poor');
-        if (!isPlaced) statusText.textContent = 'Hold steady · scanning the room';
+        if (!isPlaced) statusText.textContent = 'Slowly point your camera at a wall';
     }
 }
 
