@@ -212,6 +212,26 @@
     white-space: nowrap;
   }
 
+  /* Debug pill — top-left, shows live hit-test info during dev */
+  #debugPill {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top, 20px));
+    left: 20px;
+    background: rgba(10,10,10,0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 14px;
+    padding: 8px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.62rem;
+    color: rgba(247,243,236,0.85);
+    line-height: 1.45;
+    white-space: pre;
+    pointer-events: none;
+    z-index: 60;
+  }
+
   /* TAP hint (only visible when reticle locks; placement only) */
   #tapHint {
     position: absolute;
@@ -350,6 +370,11 @@
 
   <!-- Loading pill while the GLB downloads after session start -->
   <div id="loadingPill">Preparing the print…</div>
+
+  <!-- Diagnostic: real-time hit-test info so we can see what ARCore
+       is actually returning on the user's device. Remove once the
+       wall path is confirmed working. -->
+  <div id="debugPill">init</div>
 </div>
 
 <script type="module">
@@ -644,12 +669,17 @@ const _wallUp        = new THREE.Vector3();
    GLB was authored with print on +Z face, back of frame at z=0, so
    the back face lands flush against the wall and the print faces the
    viewer. */
-function buildWallPlacementMatrix(srcMatrix, outMatrix) {
+function buildWallPlacementMatrixFromNormal(srcMatrix, normalWorld, outMatrix) {
     srcMatrix.decompose(_hitPos, _hitQuat, _hitScale);
-    /* Wall normal = pose's local Y in world space (WebXR convention) */
-    const normal = new THREE.Vector3(0, 1, 0).applyQuaternion(_hitQuat).normalize();
+    const normal = normalWorld.clone().normalize();
     /* Horizontal-along-wall = worldUp × normal */
-    _wallRight.crossVectors(_worldUp, normal).normalize();
+    _wallRight.crossVectors(_worldUp, normal);
+    if (_wallRight.lengthSq() < 1e-6) {
+        /* Degenerate: normal is parallel to worldUp (shouldn't happen
+           for walls, but guard against NaN). Use world X as fallback. */
+        _wallRight.set(1, 0, 0);
+    }
+    _wallRight.normalize();
     /* Wall up = normal × right  (re-orthogonalises against worldUp) */
     _wallUp.crossVectors(normal, _wallRight).normalize();
     outMatrix.makeBasis(_wallRight, _wallUp, normal);
@@ -657,48 +687,80 @@ function buildWallPlacementMatrix(srcMatrix, outMatrix) {
     return outMatrix;
 }
 
+const debugPill = document.getElementById('debugPill');
+const _axisY = new THREE.Vector3();
+const _axisZ = new THREE.Vector3();
+
 function updateReticle(frame) {
     const results = frame.getHitTestResults(hitTestSource);
-    let foundWall = false;
 
-    for (const hit of results) {
-        const pose = hit.getPose(xrRefSpace);
-        if (!pose) continue;
-
-        /* Pose's local Y = surface normal in world space */
-        _quat.set(
-            pose.transform.orientation.x,
-            pose.transform.orientation.y,
-            pose.transform.orientation.z,
-            pose.transform.orientation.w
-        );
-        _surfaceNormal.set(0, 1, 0).applyQuaternion(_quat);
-
-        /* Wall filter: surface normal must be (nearly) horizontal.
-           normal.y near 0   → wall
-           normal.y near ±1  → floor or ceiling (reject)              */
-        if (Math.abs(_surfaceNormal.y) < 0.4) {
-            _hitMatrix.fromArray(pose.transform.matrix);
-            buildWallPlacementMatrix(_hitMatrix, reticle.matrix);
-            reticle.visible = true;
-
-            /* Snapshot for tap-to-place. Save both the corrected
-               placement matrix AND the raw hit (anchor creation needs
-               the original hit object). */
-            lastPlacementMatrix = reticle.matrix.clone();
-            lastHit = hit;
-
-            setTrackingState('good');
-            foundWall = true;
-            break;
-        }
-    }
-
-    if (!foundWall) {
+    if (results.length === 0) {
         reticle.visible = false;
         lastHit = null;
         setTrackingState('poor');
+        debugPill.textContent = 'hits: 0';
+        return;
     }
+
+    /* Inspect the first hit's orientation. WebXR spec says local Y is
+       the surface normal but the orientation is technically
+       implementation-defined — show both Y and Z axes' world Y
+       component so we can see which one is the actual normal axis on
+       this device. */
+    const hit = results[0];
+    const pose = hit.getPose(xrRefSpace);
+    if (!pose) {
+        reticle.visible = false;
+        lastHit = null;
+        setTrackingState('poor');
+        debugPill.textContent = 'hits: ' + results.length + '\nno pose';
+        return;
+    }
+
+    _quat.set(
+        pose.transform.orientation.x,
+        pose.transform.orientation.y,
+        pose.transform.orientation.z,
+        pose.transform.orientation.w
+    );
+    _axisY.set(0, 1, 0).applyQuaternion(_quat);
+    _axisZ.set(0, 0, 1).applyQuaternion(_quat);
+
+    /* Whichever axis has the LARGEST |y| component in world space is
+       almost certainly the surface normal axis on this device. */
+    const useYAsNormal = Math.abs(_axisY.y) > Math.abs(_axisZ.y);
+    const normalWorld = useYAsNormal ? _axisY : _axisZ;
+    const isWall = Math.abs(normalWorld.y) < 0.5;
+
+    debugPill.textContent =
+        'hits: ' + results.length + '\n' +
+        'axisY.y: ' + _axisY.y.toFixed(2) + '\n' +
+        'axisZ.y: ' + _axisZ.y.toFixed(2) + '\n' +
+        'normal: ' + (useYAsNormal ? 'Y' : 'Z') + '\n' +
+        'wall: ' + (isWall ? 'yes' : 'no');
+
+    /* Always show the reticle for any hit, but only allow placement
+       when it's on a wall. Reticle uses the raw hit matrix for now
+       so it sits flush with whatever surface is detected. */
+    _hitMatrix.fromArray(pose.transform.matrix);
+
+    if (isWall) {
+        /* Build proper wall placement orientation (print stands upright,
+           back to wall, face to viewer). */
+        _surfaceNormal.copy(normalWorld);
+        buildWallPlacementMatrixFromNormal(_hitMatrix, _surfaceNormal, reticle.matrix);
+        lastPlacementMatrix.copy(reticle.matrix);
+        lastHit = hit;
+        setTrackingState('good');
+    } else {
+        /* Just visualise the hit so we know detection is working,
+           but don't allow placement here. */
+        reticle.matrix.copy(_hitMatrix);
+        lastHit = null;
+        setTrackingState('poor');
+        if (!isPlaced) statusText.textContent = 'Aim at a wall, not the floor';
+    }
+    reticle.visible = true;
 }
 
 let lastHit = null;
