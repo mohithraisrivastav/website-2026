@@ -61,6 +61,395 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/pages/shop.css">
+
+    <style>
+        /* ══ SHOP REDESIGN OVERRIDES ══════════════════════════════════════ */
+
+        /* 1. Three-column grid, generous breathing room */
+        .shop-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 4vw 3vw !important;
+        }
+
+        /* 2. Image: strip radius, border, shadow, badge overlay */
+        .product-image {
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: #E8E2DA !important;
+            margin-bottom: 22px !important;
+        }
+        .product-card[data-shop-category="prints"] .product-image::before,
+        .product-card[data-shop-category="books"]  .product-image::before,
+        .product-card[data-shop-category="tools"]  .product-image::before {
+            display: none !important;
+        }
+
+        /* 3. Title: Cormorant italic, not uppercase */
+        .product-title {
+            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-style: italic !important;
+            font-weight: 300 !important;
+            font-size: clamp(1.5rem, 2vw, 2.2rem) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            color: #1A1612 !important;
+            margin-bottom: 4px !important;
+            line-height: 1.15 !important;
+        }
+
+        /* 4. Price: clean, quieter */
+        .product-price {
+            font-size: 0.9rem !important;
+            font-weight: 400 !important;
+            color: #4A3A33 !important;
+            margin-top: 8px !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        /* 5. Hide spec chips on listing — all detail lives in the modal */
+        .product-specs {
+            display: none !important;
+        }
+
+        /* 6. Hide Add to Cart / Buy Now buttons on card listing */
+        .product-actions {
+            display: none !important;
+        }
+
+        /* 6b. Hide newer card elements: COA badge, availability, size dropdown */
+        .coa-badge,
+        .card-availability,
+        .size-select-wrap {
+            display: none !important;
+        }
+
+        /* 6c. Hide in-image overlays: social toolbar, gallery nav arrows, counter */
+        .product-social,
+        .gallery-nav,
+        .gallery-counter {
+            display: none !important;
+        }
+
+        /* 7. Tab nav: remove gold border, lighten inactive tabs */
+        .tab-nav {
+            border-bottom: none !important;
+            margin-top: 0 !important;
+            gap: 3rem !important;
+        }
+        .tab-btn {
+            font-size: 0.78rem !important;
+            letter-spacing: 2px !important;
+            color: rgba(26, 22, 18, 0.35) !important;
+            padding: 14px 0 !important;
+        }
+        .tab-btn.active {
+            color: #1A1612 !important;
+        }
+        .tab-btn.active::after {
+            background: #1A1612 !important;
+        }
+
+        /* 8. Hide filter summary */
+        .shop-filter-summary {
+            display: none !important;
+        }
+
+        /* 9. Hide saved-actions buttons */
+        .saved-actions {
+            display: none !important;
+        }
+
+        /* 10. Category header: faded Cormorant label + clean prose */
+        .category-header {
+            margin-bottom: 56px !important;
+        }
+        .category-header h2 {
+            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-style: italic !important;
+            font-weight: 300 !important;
+            font-size: clamp(1.3rem, 1.8vw, 2rem) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            color: rgba(26, 22, 18, 0.32) !important;
+            margin-bottom: 20px !important;
+        }
+        .category-header p {
+            font-size: 1.05rem !important;
+            color: #1A1612 !important;
+            line-height: 1.88 !important;
+            max-width: 640px !important;
+            font-weight: 300 !important;
+        }
+
+        /* 11. Section padding */
+        .shop-section {
+            padding: 5vh 5vw 8vh !important;
+        }
+        #prints {
+            padding: 2vh 5vw 8vh !important;
+        }
+
+        /* 12. Remove border between consecutive visible sections */
+        .shop-section + .shop-section:not(.shop-section--hidden) {
+            border-top: none !important;
+        }
+
+        /* 13. Hover: keep subtle scale, just reduce intensity */
+        .product-card:hover .product-image img {
+            transform: scale(1.03) !important;
+        }
+
+        /* ══ MODAL: strip boxiness ══════════════════════════════════════ */
+
+        /* 1. Edition registry — prose only, no slot visualisation */
+        .registry-slots {
+            display: none !important;
+        }
+        .registry-note {
+            font-size: 1rem !important;
+            font-weight: 300 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            line-height: 1.75 !important;
+            margin: 8px 0 0 !important;
+            padding: 0 !important;
+            max-width: 480px !important;
+        }
+
+        /* 2. COA chips — plain prose, no bordered tags */
+        .coa-security {
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 0 !important;
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        .coa-feature {
+            border: none !important;
+            background: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            font-size: 0.875rem !important;
+            font-weight: 400 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            letter-spacing: 0 !important;
+            text-transform: none !important;
+        }
+        .coa-feature + .coa-feature::before {
+            content: ' · ' !important;
+            color: rgba(26, 22, 18, 0.28) !important;
+        }
+        .coa-security-label {
+            font-size: 0.875rem !important;
+            font-weight: 400 !important;
+            color: rgba(26, 22, 18, 0.38) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            margin-right: 8px !important;
+        }
+        .coa-security-label::after {
+            content: ':' !important;
+        }
+
+        /* 3. Favourite / Add to Collection / Share — no border, icon-opacity only */
+        .psoc-btn {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 6px !important;
+            opacity: 0.45 !important;
+            transition: opacity 0.2s !important;
+        }
+        .psoc-btn:hover,
+        .psoc-btn.active {
+            opacity: 1 !important;
+            background: none !important;
+        }
+
+        /* 4. Reassurance row — strip any pill/chip wrapper */
+        .ra-item {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 5b. Back bar — strip the band */
+        .modal-back-bar {
+            background: transparent !important;
+            border-bottom: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* 5c. Close (×) — no circle border */
+        .modal-close {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .modal-close:hover {
+            background: none !important;
+            border: none !important;
+            color: #1A1612 !important;
+        }
+
+        /* 5. Modal category label — keep small caps but quieter */
+        .modal-category {
+            font-size: 0.7rem !important;
+            letter-spacing: 3px !important;
+            color: rgba(26, 22, 18, 0.38) !important;
+            border: none !important;
+            background: none !important;
+        }
+
+        /* 6. Detail accordions — remove top/bottom borders, use spacing only */
+        .md-accordion {
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding-bottom: 0 !important;
+        }
+        .md-accordion:first-child {
+            border-top: none !important;
+        }
+        .md-acc-trigger {
+            padding: 14px 0 !important;
+        }
+        .md-acc-title {
+            color: rgba(26, 22, 18, 0.55) !important;
+            font-weight: 600 !important;
+            letter-spacing: 3px !important;
+        }
+        .md-accordion.open .md-acc-title {
+            color: #1A1612 !important;
+        }
+        .md-accordion.open .md-acc-icon {
+            color: rgba(26, 22, 18, 0.4) !important;
+        }
+
+        /* 7. Size selector — underline only, no boxy border */
+        #modalSizeWrap select,
+        .modal-size-select,
+        #modalSizeWrap .size-select {
+            border: none !important;
+            border-bottom: 1px solid rgba(26, 22, 18, 0.18) !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            padding: 10px 0 !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 2px !important;
+            text-transform: uppercase !important;
+            color: #1A1612 !important;
+            width: 100% !important;
+            box-shadow: none !important;
+            outline: none !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            cursor: pointer !important;
+        }
+        .modal-size-label,
+        #modalSizeWrap label,
+        .size-select-label {
+            font-size: 0.65rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 3px !important;
+            color: rgba(26, 22, 18, 0.35) !important;
+            margin-bottom: 6px !important;
+        }
+
+        /* 8. ADD TO CART — strip border, plain uppercase text */
+        #modalAddBtn {
+            background: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: #1A1612 !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 3px !important;
+            text-transform: uppercase !important;
+            padding: 18px 0 !important;
+            text-decoration: underline !important;
+            text-underline-offset: 5px !important;
+            text-decoration-color: rgba(26, 22, 18, 0.25) !important;
+            width: 100% !important;
+            text-align: center !important;
+            transition: text-decoration-color 0.2s !important;
+        }
+        #modalAddBtn:hover {
+            text-decoration-color: #1A1612 !important;
+            background: none !important;
+        }
+
+        /* 9. BUY NOW — flat rectangle, original terracotta */
+        #modalBuyBtn {
+            border-radius: 0 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 3px !important;
+        }
+
+        /* 9b. ADD TO CART — strip cart icon, secondary weight */
+        #modalAddBtn svg,
+        #modalAddBtn i { display: none !important; }
+        #modalAddBtn {
+            font-size: 0.7rem !important;
+            padding: 12px 0 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            text-decoration-color: rgba(26, 22, 18, 0.18) !important;
+        }
+        #modalAddBtn:hover { color: #1A1612 !important; }
+
+        /* 9c. FAVOURITE row — flush, no air, deeply quiet */
+        .modal-social {
+            border-top: none !important;
+            border-bottom: none !important;
+            padding: 2px 0 !important;
+            margin: 0 !important;
+            opacity: 0.3 !important;
+            gap: 16px !important;
+        }
+
+        /* 9d. Tighten purchase section vertical rhythm */
+        #modalSizeWrap { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+        .modal-actions { margin-top: 10px !important; gap: 6px !important; flex-direction: column !important; }
+
+        /* 10. SEE IT ON YOUR WALL — clear, present, not a footnote */
+        #modalRoomBtn,
+        .rv-trigger-btn {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            color: #1A1612 !important;
+            font-size: 0.72rem !important;
+            letter-spacing: 2.5px !important;
+            padding: 10px 0 !important;
+            justify-content: flex-start !important;
+            text-decoration: underline !important;
+            text-underline-offset: 4px !important;
+            text-decoration-color: rgba(26, 22, 18, 0.3) !important;
+            margin-top: 6px !important;
+            opacity: 1 !important;
+        }
+        #modalRoomBtn:hover,
+        .rv-trigger-btn:hover {
+            color: #1A1612 !important;
+            text-decoration-color: #1A1612 !important;
+            border: none !important;
+        }
+
+        /* ── END REDESIGN ─────────────────────────────────────────────── */
+    </style>
+
     <script src="assets/js/translate.js" defer></script>
     <!-- import map for the on-demand 3D builder (must precede module scripts) -->
     <script type="importmap">
