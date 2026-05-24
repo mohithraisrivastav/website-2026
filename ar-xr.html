@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     ar-xr.html — CUSTOM WEBXR AR (Phase 1 proof-of-concept)
+
+     Standalone WebXR Immersive AR experience for a single framed
+     print (Cosmic Return). Replaces model-viewer entirely with
+     direct Three.js + WebXR API access.
+
+     What this delivers vs. model-viewer:
+       - Persistent UI during the ENTIRE AR session (HUD, chips,
+         close button) — model-viewer's ar-prompt slot hides on
+         placement, this doesn't
+       - Vertical-plane (wall) hit-test with normal filtering
+       - XRAnchor-based placement (print stays put as you walk
+         around the room, no drift)
+       - Post-placement hang-height adjustment (chips slide the
+         print up/down the wall in real time)
+       - Architect-grade real-world scale from the existing GLB
+
+     iOS path: untouched. iOS uses Quick Look in shop.html.
+     This file is Android Chrome only.
+
+     URL: /ar-xr.html  (Phase 2 will accept ?id=<product> param)
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#14110d">
+<title>AR — Cosmic Return — GOAF Fine Art</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; touch-action: none; }
+  body {
+    background: #14110d; color: #f7f3ec;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── PRE-AR LAUNCH SCREEN ───────────────────────────────────
+     Shown until the user taps "Enter AR" — required because
+     WebXR session start needs a user gesture. */
+  #launchScreen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px;
+    background: radial-gradient(circle at 50% 30%,
+                rgba(207,162,70,0.08) 0%, transparent 60%), #14110d;
+    z-index: 100;
+  }
+  #launchScreen h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic; font-weight: 300;
+    font-size: 2.4rem; letter-spacing: 0.5px;
+    color: #f7f3ec; margin-bottom: 8px;
+  }
+  #launchScreen .dims {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: #CFA246; margin-bottom: 56px;
+  }
+  #startBtn {
+    background: #CFA246; color: #14110d;
+    border: none; padding: 18px 42px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem; font-weight: 800;
+    letter-spacing: 4px; text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 14px 40px rgba(207,162,70,0.3);
+    transition: background 0.2s, transform 0.2s;
+  }
+  #startBtn:active { transform: scale(0.97); }
+  #startBtn:disabled { opacity: 0.4; cursor: default; }
+  #errorMsg {
+    margin-top: 32px; max-width: 320px; text-align: center;
+    font-size: 0.82rem; line-height: 1.7;
+    color: rgba(247,243,236,0.6);
+  }
+  #errorMsg.show { color: #e88c8c; }
+
+  /* ── WEBXR DOM OVERLAY ─────────────────────────────────────
+     Renders OVER the AR camera feed during the session. Persists
+     for the lifetime of the session — no hiding on placement.
+     Element passed to WebXR via session options.domOverlay.root. */
+  #overlay {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    display: none;
+  }
+  #overlay.active { display: block; }
+  #overlay button { pointer-events: auto; }
+
+  /* Measurement HUD (top) */
+  #hud {
+    position: absolute;
+    top: max(56px, env(safe-area-inset-top, 56px));
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 26px;
+    padding: 11px 24px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  #hudTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic; font-weight: 300;
+    font-size: 1rem; line-height: 1.15;
+    color: rgba(247,243,236,0.95);
+    margin-bottom: 4px;
+  }
+  #hudDims {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: #CFA246;
+  }
+
+  /* Wall-finding prompt + status (bottom-centre) */
+  #statusPill {
+    position: absolute;
+    bottom: max(120px, env(safe-area-inset-bottom, 0px) + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 24px;
+    padding: 11px 22px;
+    display: flex; align-items: center; gap: 10px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+  }
+  #statusPill svg { flex-shrink: 0; }
+  #statusText {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem; font-weight: 400;
+    color: rgba(247,243,236,0.92);
+  }
+  #statusPill.placed { opacity: 0; pointer-events: none; }
+
+  /* Hang-height chips (above wall-finding pill) */
+  #chipRow {
+    position: absolute;
+    bottom: max(180px, env(safe-area-inset-bottom, 0px) + 180px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 8px;
+    white-space: nowrap;
+    pointer-events: none;  /* container; chips themselves opt back in */
+  }
+  .chip {
+    pointer-events: auto;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(247,243,236,0.2);
+    color: rgba(247,243,236,0.78);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem; font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 9px 16px; border-radius: 40px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .chip.active {
+    background: rgba(207,162,70,0.3);
+    border-color: rgba(207,162,70,0.7);
+    color: #CFA246;
+  }
+  .chip-label {
+    position: absolute;
+    bottom: max(225px, env(safe-area-inset-bottom, 0px) + 225px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.56rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(247,243,236,0.4);
+    white-space: nowrap;
+  }
+
+  /* TAP hint (only visible when reticle locks; placement only) */
+  #tapHint {
+    position: absolute;
+    top: calc(50% + 36px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem; font-weight: 800;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: #CFA246;
+    text-shadow: 0 1px 8px rgba(20,17,13,0.9),
+                 0 0 16px rgba(20,17,13,0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #overlay.tracking-good:not(.placed) #tapHint { opacity: 1; }
+
+  /* Close button (top-right) */
+  #closeBtn {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top, 20px));
+    right: 20px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #f7f3ec;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #closeBtn:active { background: rgba(207,162,70,0.4); }
+
+  /* Edge vignette (search feedback — fades when tracking solid) */
+  #edgeScan {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 140px 30px rgba(207,162,70,0.22);
+    animation: edge-pulse 2.6s ease-in-out infinite;
+    transition: opacity 0.5s ease;
+  }
+  #overlay.tracking-good #edgeScan,
+  #overlay.placed #edgeScan { opacity: 0; }
+  @keyframes edge-pulse {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 0.95; }
+  }
+
+  /* "Move device" prompt — first second of session before any
+     hit-test results have come in, to set expectations. */
+  #initHint {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  #initHint .ring {
+    width: 64px; height: 64px;
+    margin: 0 auto 14px;
+    border: 2px solid rgba(207,162,70,0.85);
+    border-radius: 50%;
+    animation: init-pulse 1.6s ease-in-out infinite;
+  }
+  #initHint .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem; font-weight: 800;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(247,243,236,0.85);
+    text-shadow: 0 1px 8px rgba(20,17,13,0.9);
+  }
+  #overlay.tracking-good #initHint,
+  #overlay.placed #initHint { opacity: 0; }
+  @keyframes init-pulse {
+    0%, 100% { transform: scale(1);    opacity: 0.7; }
+    50%      { transform: scale(1.15); opacity: 1;   }
+  }
+
+  /* Loading state for the GLB */
+  #loadingPill {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 24px;
+    padding: 14px 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: rgba(247,243,236,0.85);
+    z-index: 200;
+    display: none;
+  }
+  #loadingPill.show { display: block; }
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- Pre-AR launch screen — required user gesture for WebXR session start -->
+<div id="launchScreen">
+  <h1>Cosmic Return</h1>
+  <div class="dims">42" × 31.5" · 107 × 80 cm</div>
+  <button id="startBtn" disabled>Loading…</button>
+  <div id="errorMsg"></div>
+</div>
+
+<!-- WebXR DOM overlay — visible throughout the AR session -->
+<div id="overlay">
+
+  <!-- Edge vignette: pulses while searching, fades when locked -->
+  <div id="edgeScan"></div>
+
+  <!-- Initial "move your device" hint -->
+  <div id="initHint">
+    <div class="ring"></div>
+    <div class="label">Move device · scanning</div>
+  </div>
+
+  <!-- Measurement HUD -->
+  <div id="hud">
+    <div id="hudTitle">Cosmic Return</div>
+    <div id="hudDims">42" × 31.5" · 107 × 80 cm</div>
+  </div>
+
+  <!-- Close button -->
+  <button id="closeBtn" aria-label="Exit AR">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Hang-height label + chips -->
+  <div class="chip-label">Hang height — gallery standard</div>
+  <div id="chipRow">
+    <button class="chip active" data-h="57">57"</button>
+    <button class="chip" data-h="60">60"</button>
+    <button class="chip" data-h="63">63"</button>
+  </div>
+
+  <!-- Status pill (wall-finding / placed feedback) -->
+  <div id="statusPill">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+      <rect x="7" y="7" width="10" height="10" rx="1"/>
+    </svg>
+    <span id="statusText">Looking for a wall…</span>
+  </div>
+
+  <!-- TAP hint (only when reticle locked + not yet placed) -->
+  <div id="tapHint">Tap to place</div>
+
+  <!-- Loading pill while the GLB downloads after session start -->
+  <div id="loadingPill">Preparing the print…</div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+/* ──────────────────────────────────────────────────────────────
+   Phase 1 hardcoded to Cosmic Return. Phase 2 will read ?id=<>
+   from the URL and look up dimensions from a catalog map. */
+const PRODUCT = {
+    id:    'cosmic-return',
+    title: 'Cosmic Return',
+    wIn:   42,
+    hIn:   31.5,
+    glb:   'ar/cosmic-return.glb'
+};
+
+/* ──── Element handles ──── */
+const $ = (id) => document.getElementById(id);
+const launchScreen = $('launchScreen');
+const startBtn     = $('startBtn');
+const errorMsg     = $('errorMsg');
+const overlay      = $('overlay');
+const statusText   = $('statusText');
+const statusPill   = $('statusPill');
+const loadingPill  = $('loadingPill');
+const closeBtn     = $('closeBtn');
+
+/* ──── Three.js state ──── */
+let renderer, scene, camera;
+let printModel = null;   // GLB scene
+let reticle    = null;   // Hit-test visualization (a thin gold ring on the wall)
+
+/* ──── WebXR state ──── */
+let xrSession     = null;
+let xrRefSpace    = null;   // local reference space (origin = where session started)
+let viewerSpace   = null;   // viewer space (origin = device)
+let hitTestSource = null;
+let lastHitMatrix = null;   // most recent hit-test result (for tap-to-place)
+let printAnchor   = null;   // XRAnchor for placed print
+let anchorMatrix  = new THREE.Matrix4(); // pose of anchor in xrRefSpace, per frame
+let isPlaced      = false;
+
+/* ──── Hang-height state ────
+   Default 57" (gallery standard). Chip clicks update this value;
+   when placing, hangOffsetM is applied as a vertical offset along
+   the wall's local up axis. After placement, changing the chip
+   slides the print up/down the wall in real time. */
+let hangHeightIn   = 57;
+let hangOffsetM    = 0;  // metres above the original tap point
+
+/* ──── Init: pre-AR support check + load GLB in background ──── */
+async function init() {
+    // Check WebXR support first so we can show a helpful error
+    if (!navigator.xr) {
+        showError('WebXR is not available in this browser. Open this page in Chrome on an Android device with ARCore.');
+        return;
+    }
+
+    let supported = false;
+    try {
+        supported = await navigator.xr.isSessionSupported('immersive-ar');
+    } catch (e) {
+        showError('Could not check AR support: ' + e.message);
+        return;
+    }
+    if (!supported) {
+        showError('Immersive AR is not supported on this device. ARCore + Chrome required.');
+        return;
+    }
+
+    // Preload the GLB so the session start doesn't block
+    try {
+        const loader = new GLTFLoader();
+        const gltf = await loader.loadAsync(PRODUCT.glb);
+        printModel = gltf.scene;
+        printModel.visible = false;
+
+        // Cast shadows from the print onto detected planes (when supported)
+        printModel.traverse((obj) => {
+            if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; }
+        });
+    } catch (e) {
+        showError('Could not load the print model: ' + e.message);
+        return;
+    }
+
+    // Wire start button
+    startBtn.disabled = false;
+    startBtn.textContent = 'Enter AR';
+    startBtn.addEventListener('click', startXR);
+
+    // Update HUD with product info (already set in HTML but keep authoritative)
+    const wCm = Math.round(PRODUCT.wIn * 2.54);
+    const hCm = Math.round(PRODUCT.hIn * 2.54);
+    $('hudTitle').textContent = PRODUCT.title;
+    $('hudDims').textContent  = PRODUCT.wIn + '" × ' + PRODUCT.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+}
+
+function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('show');
+    startBtn.disabled = true;
+    startBtn.textContent = 'AR Unavailable';
+}
+
+/* ──── Three.js renderer setup ──── */
+function initThree() {
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.xr.enabled = true;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.NoToneMapping;
+    document.body.appendChild(renderer.domElement);
+
+    scene  = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera();
+
+    // Lighting — WebXR light-estimation will dynamically adjust intensity
+    // when supported. These are baseline values for devices that don't
+    // expose light estimation.
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+    dir.position.set(0.5, 1, 0.3);
+    scene.add(dir);
+
+    // Hit-test reticle — a thin gold ring + center dot drawn on the wall.
+    // Always sits flush against whatever vertical plane is hit.
+    const reticleGroup = new THREE.Group();
+    const ringGeo = new THREE.RingGeometry(0.07, 0.082, 48);
+    const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xCFA246, side: THREE.DoubleSide,
+        transparent: true, opacity: 0.92
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    reticleGroup.add(ring);
+    const dotGeo = new THREE.CircleGeometry(0.008, 24);
+    const dotMat = new THREE.MeshBasicMaterial({ color: 0xCFA246 });
+    const dot = new THREE.Mesh(dotGeo, dotMat);
+    reticleGroup.add(dot);
+
+    reticle = reticleGroup;
+    reticle.visible = false;
+    reticle.matrixAutoUpdate = false;
+    scene.add(reticle);
+
+    // Add the print to the scene (initially hidden)
+    if (printModel) scene.add(printModel);
+}
+
+/* ──── Start WebXR session ──── */
+async function startXR() {
+    initThree();
+
+    // Required: hit-test (walls), anchors (stable placement), dom-overlay (UI)
+    // Optional: light-estimation (better realism), depth-sensing (occlusion)
+    const sessionInit = {
+        requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
+        optionalFeatures: ['light-estimation', 'depth-sensing'],
+        domOverlay: { root: overlay }
+    };
+
+    try {
+        xrSession = await navigator.xr.requestSession('immersive-ar', sessionInit);
+    } catch (e) {
+        showError('Could not start AR session: ' + e.message);
+        return;
+    }
+
+    launchScreen.style.display = 'none';
+    overlay.classList.add('active');
+    loadingPill.classList.add('show');
+
+    xrSession.addEventListener('end', onSessionEnd);
+    xrSession.addEventListener('select', onSelect); // tap-to-place trigger
+
+    await renderer.xr.setSession(xrSession);
+
+    // Reference spaces: 'local' for stable origin, 'viewer' for hit-test ray source
+    xrRefSpace  = await xrSession.requestReferenceSpace('local');
+    viewerSpace = await xrSession.requestReferenceSpace('viewer');
+
+    // Hit-test fires a ray forward from the viewer (device) — wherever the
+    // camera centerline intersects a detected plane, we get a result.
+    hitTestSource = await xrSession.requestHitTestSource({
+        space: viewerSpace
+    });
+
+    // Loading pill stays until the first hit-test result OR a few seconds
+    setTimeout(() => loadingPill.classList.remove('show'), 1500);
+
+    // Wire chips (work both pre- and post-placement)
+    wireChips();
+
+    // Wire close button
+    closeBtn.addEventListener('click', () => xrSession.end());
+
+    // Kick the render loop
+    renderer.setAnimationLoop(onXRFrame);
+}
+
+/* ──── Render loop ──── */
+function onXRFrame(time, frame) {
+    if (!frame || !xrRefSpace) {
+        renderer.render(scene, camera);
+        return;
+    }
+
+    if (!isPlaced) {
+        updateReticle(frame);
+    } else {
+        updatePrintFromAnchor(frame);
+    }
+
+    renderer.render(scene, camera);
+}
+
+/* ──── Hit-test → reticle (placement phase) ────
+   Filters for vertical planes only. ARCore plane poses have local
+   Y as the plane's up axis and local Z as the surface normal. For a
+   wall, the normal is roughly horizontal — we filter out floor /
+   ceiling by rejecting hits whose normal Y component is > 0.4. */
+const _normalVec = new THREE.Vector3();
+const _quat      = new THREE.Quaternion();
+const _hitMatrix = new THREE.Matrix4();
+
+function updateReticle(frame) {
+    const results = frame.getHitTestResults(hitTestSource);
+    let foundWall = false;
+
+    for (const hit of results) {
+        const pose = hit.getPose(xrRefSpace);
+        if (!pose) continue;
+
+        // Extract the surface normal from the pose orientation.
+        // For ARCore hit-test on a vertical plane, the pose's Z axis
+        // is the plane normal (pointing away from the wall toward the
+        // viewer).
+        _quat.set(
+            pose.transform.orientation.x,
+            pose.transform.orientation.y,
+            pose.transform.orientation.z,
+            pose.transform.orientation.w
+        );
+        _normalVec.set(0, 0, 1).applyQuaternion(_quat);
+
+        // Vertical plane filter: normal should be nearly horizontal
+        if (Math.abs(_normalVec.y) < 0.4) {
+            _hitMatrix.fromArray(pose.transform.matrix);
+            reticle.matrix.copy(_hitMatrix);
+            reticle.visible = true;
+
+            // Remember for tap-to-place; also remember the hit object
+            // so we can create an anchor from it.
+            lastHitMatrix = _hitMatrix.clone();
+            lastHit = hit;
+
+            setTrackingState('good');
+            foundWall = true;
+            break;
+        }
+    }
+
+    if (!foundWall) {
+        reticle.visible = false;
+        lastHit = null;
+        setTrackingState('poor');
+    }
+}
+
+let lastHit = null;
+
+/* ──── Tap-to-place (WebXR 'select' event) ────
+   Fires when the user taps the screen in an AR area not covered by
+   an overlay element. Taps on chips or close button do NOT fire
+   this — they fire normal DOM click events instead. */
+async function onSelect() {
+    if (isPlaced || !lastHit) return;
+
+    try {
+        // Create a spatial anchor from the hit result. The print will be
+        // pinned to this anchor for the lifetime of the session, so it
+        // stays put as the user walks around the room.
+        printAnchor = await lastHit.createAnchor();
+    } catch (e) {
+        // Anchor creation can fail on some devices; fall back to using
+        // the raw hit pose as a static placement.
+        printAnchor = null;
+        anchorMatrix.copy(lastHitMatrix);
+    }
+
+    isPlaced = true;
+    printModel.visible = true;
+    reticle.visible = false;
+
+    overlay.classList.add('placed');
+    statusText.textContent = 'Placed · use the chips to slide it up or down';
+
+    // Short haptic confirmation
+    if (navigator.vibrate) navigator.vibrate(60);
+}
+
+/* ──── Post-placement: keep print attached to anchor every frame ────
+   If we have an XRAnchor, we read its current pose each frame (it can
+   shift slightly as ARCore refines its tracking — that's GOOD, it
+   means the print stays correctly fixed in the real world even as the
+   user moves). If anchor creation failed, fall back to the static
+   hit pose stored at placement time. */
+const _printMatrix = new THREE.Matrix4();
+const _hangOffsetMatrix = new THREE.Matrix4();
+
+function updatePrintFromAnchor(frame) {
+    if (printAnchor) {
+        const pose = frame.getPose(printAnchor.anchorSpace, xrRefSpace);
+        if (pose) {
+            anchorMatrix.fromArray(pose.transform.matrix);
+        }
+    }
+    // else: anchorMatrix was set at placement and stays fixed
+
+    // Apply hang-height offset: shift print UP along the wall's local Y axis
+    // The wall plane's Y axis (in the anchor pose) is "up" along the wall.
+    _hangOffsetMatrix.makeTranslation(0, hangOffsetM, 0);
+    _printMatrix.copy(anchorMatrix).multiply(_hangOffsetMatrix);
+
+    printModel.matrix.copy(_printMatrix);
+    printModel.matrix.decompose(printModel.position, printModel.quaternion, printModel.scale);
+    printModel.matrixAutoUpdate = false;
+}
+
+/* ──── Tracking state → overlay class toggle ──── */
+function setTrackingState(state) {
+    if (state === 'good') {
+        overlay.classList.add('tracking-good');
+        overlay.classList.remove('tracking-poor');
+        if (!isPlaced) statusText.textContent = 'Wall found · tap on the reticle to place';
+    } else {
+        overlay.classList.remove('tracking-good');
+        overlay.classList.add('tracking-poor');
+        if (!isPlaced) statusText.textContent = 'Hold steady · scanning the room';
+    }
+}
+
+/* ──── Hang-height chips ────
+   Updates state pre- and post-placement.
+   - Pre-placement: changes the future hang height
+   - Post-placement: slides the print up or down the wall in real time
+     by adjusting hangOffsetM. The next frame's updatePrintFromAnchor
+     will apply the new offset. */
+function wireChips() {
+    const chips = document.querySelectorAll('#chipRow .chip');
+    chips.forEach((chip) => {
+        chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chips.forEach((c) => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const newH = parseInt(chip.getAttribute('data-h'), 10);
+
+            if (isPlaced) {
+                // Convert chip delta to a vertical world offset (inches → metres)
+                const deltaIn = newH - hangHeightIn;
+                hangOffsetM += deltaIn * 0.0254;
+            }
+
+            hangHeightIn = newH;
+        });
+    });
+}
+
+/* ──── Session end / cleanup ──── */
+function onSessionEnd() {
+    if (hitTestSource) { hitTestSource.cancel(); hitTestSource = null; }
+    xrRefSpace = null;
+    viewerSpace = null;
+    printAnchor = null;
+    isPlaced = false;
+    hangOffsetM = 0;
+    overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
+    if (renderer) {
+        renderer.setAnimationLoop(null);
+        renderer.domElement.remove();
+        renderer = null;
+    }
+    launchScreen.style.display = 'flex';
+}
+
+/* ──── Resize handling (rare in WebXR but safe to have) ──── */
+window.addEventListener('resize', () => {
+    if (renderer) renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ──── Go ──── */
+init();
+</script>
+
+</body>
+</html>
