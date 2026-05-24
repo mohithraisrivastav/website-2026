@@ -2915,19 +2915,21 @@
 
                     function use(glb, usdz) {
                         /* Hosted URL available — set ar-modes for this platform.
-                           Android: scene-viewer FIRST — it is the most reliable AR path
-                                    on Android and respects ar-placement="wall" via the
-                                    ar_placement=wall deep-link param (Play Services for AR
-                                    v1.26+, broadly available on modern devices).
-                                    WebXR is kept as a fallback for devices that support
-                                    ARCore WebXR but whose Scene Viewer install is stale.
-                                    (Previously webxr was first, but WebXR initialization
-                                    failures are silent and leave canActivateAR=false with
-                                    no automatic fall-through to scene-viewer.)
+                           Android: webxr FIRST — recent Google Play Services for AR
+                                    updates regressed Scene Viewer's ar_placement=wall
+                                    handling: the app launches and immediately exits
+                                    back to the page (model-viewer issue #2303,
+                                    reproduced on Samsung Galaxy S24 Ultra).
+                                    WebXR runs the AR session in-browser via Chrome's
+                                    ARCore integration and handles vertical-plane
+                                    (wall) placement natively, sidestepping the
+                                    Scene Viewer crash.
+                                    scene-viewer is retained as a fallback for
+                                    devices without WebXR session support.
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
