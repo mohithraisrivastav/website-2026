@@ -546,11 +546,14 @@ async function startXR() {
     launchScreen.style.display = 'none';
     loadingPill.classList.add('show');
 
-    /* Stripped down to the bare minimum required features for now.
-       Optional features (light-estimation, depth-sensing) can be added
-       back once the core path is confirmed working. */
+    /* hit-test + anchors + dom-overlay are required; plane-detection
+       is requested as optional. plane-detection asks ARCore to track
+       full XRPlane geometries (not just hit points), which on some
+       builds nudges Chrome to enable more aggressive plane scanning
+       — useful for hard-to-detect surfaces like featureless walls. */
     const sessionInit = {
         requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
+        optionalFeatures: ['plane-detection'],
         domOverlay: { root: overlay }
     };
 
@@ -715,13 +718,16 @@ function updateReticle(frame) {
         lastHit = null;
         setTrackingState('poor');
         debugPill.textContent = 'hits: 0\nelapsed: ' + elapsedS + 's';
-        /* ARCore needs the user to PHYSICALLY MOVE the device through
-           space to build a 3D map. Standing still and pointing at a
-           wall is not enough — give the user explicit motion cues. */
+        /* ARCore detects vertical planes via PARALLAX — features on
+           the wall must visibly shift between frames. Pointing straight
+           at a wall and standing still produces almost no parallax, so
+           the wall never gets detected as a plane. The trick is to
+           SWEEP the phone in a slow arc PARALLEL to the wall surface,
+           or take a step sideways while keeping the wall in frame. */
         if (!isPlaced) {
-            statusText.textContent = elapsedS < 5
-                ? 'Slowly move your device side-to-side to scan'
-                : 'Walk around · ARCore needs motion to map the room';
+            statusText.textContent = elapsedS < 6
+                ? 'Sweep the phone slowly along the wall'
+                : 'Step sideways · the wall needs parallax to detect';
         }
         return;
     }
