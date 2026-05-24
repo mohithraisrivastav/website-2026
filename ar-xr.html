@@ -684,6 +684,8 @@ function onXRFrame(time, frame) {
         return;
     }
 
+    updateDetectedPlanes(frame);
+
     if (!isPlaced) {
         updateReticle(frame);
     } else {
@@ -696,6 +698,116 @@ function onXRFrame(time, frame) {
     if (!firstFrameRendered) {
         firstFrameRendered = true;
         loadingPill.classList.remove('show');
+    }
+}
+
+/* ──── Plane-detection wireframes ────
+   Requires the optional 'plane-detection' WebXR feature (requested at
+   session start). If the runtime didn't grant it, frame.detectedPlanes
+   is undefined and we just skip rendering — no error.
+
+   Each XRPlane carries a polygon of points lying in its local X-Z
+   plane (y = 0 per spec), with the planeSpace's local Y axis as the
+   surface normal. We build a closed LineLoop for each plane, position
+   it via the plane's pose, and update only when ARCore marks the
+   plane as changed (lastChangedTime) — this keeps GC churn low.
+
+   Wall planes (orientation === 'vertical') render in brand gold so
+   the user can SEE which walls ARCore has locked. Floor / ceiling
+   render in subtle grey — useful confirmation that detection is
+   alive, without competing with the wall outlines visually.
+
+   After placement we fade wireframes to ~25% opacity so they don't
+   compete with the placed print, but stay visible enough to confirm
+   the print is on a detected surface. */
+const planeWireframes = new Map();           // XRPlane → THREE.LineLoop
+const planeLastChanged = new WeakMap();      // XRPlane → DOMHighResTimeStamp
+const _planePoints = [];
+
+const WALL_LINE_COLOR  = 0xCFA246;
+const FLOOR_LINE_COLOR = 0x9c9388;
+const WALL_OPACITY_SEARCH = 0.85;
+const WALL_OPACITY_PLACED = 0.25;
+const FLOOR_OPACITY_SEARCH = 0.32;
+const FLOOR_OPACITY_PLACED = 0.10;
+
+function buildPlaneGeometry(polygon) {
+    /* polygon entries are DOMPointReadOnly { x, y, z, w } with y == 0.
+       Build a closed loop by repeating the first vertex at the end. */
+    _planePoints.length = 0;
+    for (const pt of polygon) {
+        _planePoints.push(new THREE.Vector3(pt.x, 0, pt.z));
+    }
+    if (_planePoints.length > 0) {
+        _planePoints.push(_planePoints[0].clone());
+    }
+    return new THREE.BufferGeometry().setFromPoints(_planePoints);
+}
+
+function makePlaneWireframe(plane) {
+    const isVertical = plane.orientation === 'vertical';
+    const mat = new THREE.LineBasicMaterial({
+        color: isVertical ? WALL_LINE_COLOR : FLOOR_LINE_COLOR,
+        transparent: true,
+        opacity: isVertical ? WALL_OPACITY_SEARCH : FLOOR_OPACITY_SEARCH,
+        depthTest: true,
+        depthWrite: false
+    });
+    const line = new THREE.LineLoop(buildPlaneGeometry(plane.polygon), mat);
+    line.matrixAutoUpdate = false;
+    line.userData.isVertical = isVertical;
+    return line;
+}
+
+function updateDetectedPlanes(frame) {
+    /* Feature may not be granted on this device / runtime */
+    if (!frame.detectedPlanes) return;
+
+    const seen = new Set();
+
+    for (const plane of frame.detectedPlanes) {
+        seen.add(plane);
+
+        let wireframe = planeWireframes.get(plane);
+        if (!wireframe) {
+            wireframe = makePlaneWireframe(plane);
+            planeWireframes.set(plane, wireframe);
+            scene.add(wireframe);
+            planeLastChanged.set(plane, plane.lastChangedTime);
+        } else if (planeLastChanged.get(plane) !== plane.lastChangedTime) {
+            /* Geometry changed — rebuild the polygon outline */
+            wireframe.geometry.dispose();
+            wireframe.geometry = buildPlaneGeometry(plane.polygon);
+            planeLastChanged.set(plane, plane.lastChangedTime);
+        }
+
+        const pose = frame.getPose(plane.planeSpace, xrRefSpace);
+        if (pose) {
+            wireframe.matrix.fromArray(pose.transform.matrix);
+            wireframe.visible = true;
+
+            /* Fade after placement so wireframes confirm without
+               dominating the view */
+            const targetOp = wireframe.userData.isVertical
+                ? (isPlaced ? WALL_OPACITY_PLACED  : WALL_OPACITY_SEARCH)
+                : (isPlaced ? FLOOR_OPACITY_PLACED : FLOOR_OPACITY_SEARCH);
+            if (wireframe.material.opacity !== targetOp) {
+                wireframe.material.opacity = targetOp;
+            }
+        } else {
+            wireframe.visible = false;
+        }
+    }
+
+    /* Garbage-collect planes that no longer exist (ARCore can drop a
+       plane if it merges or loses tracking) */
+    for (const [plane, wireframe] of planeWireframes) {
+        if (!seen.has(plane)) {
+            scene.remove(wireframe);
+            wireframe.geometry.dispose();
+            wireframe.material.dispose();
+            planeWireframes.delete(plane);
+        }
     }
 }
 
@@ -1020,6 +1132,13 @@ function onSessionEnd() {
     isPlaced = false;
     hangOffsetM = 0;
     firstFrameRendered = false;
+    /* Drop all detected-plane wireframes — fresh start on next entry */
+    for (const [, wireframe] of planeWireframes) {
+        if (scene) scene.remove(wireframe);
+        wireframe.geometry.dispose();
+        wireframe.material.dispose();
+    }
+    planeWireframes.clear();
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
     document.body.classList.remove('xr-active');
     loadingPill.classList.remove('show');
