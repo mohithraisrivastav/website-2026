@@ -2933,7 +2933,7 @@
                            iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
                                     are fallbacks — keep current order. */
                         if (isAndroid) {
-                            viewer.setAttribute('ar-modes', 'scene-viewer webxr');
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
                         } else {
                             viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
                         }
