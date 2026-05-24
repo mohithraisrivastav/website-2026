@@ -46,13 +46,13 @@
      camera feed renders under the Three.js canvas. */
   body.xr-active { background: transparent; }
 
-  /* WebXR canvas: position-fixed, full-viewport, behind the overlay.
-     Three.js manages width/height internally during XR session, so we
-     only constrain position + z-index here. */
+  /* WebXR canvas: full-viewport, behind the overlay. */
   canvas {
     display: block;
     position: fixed;
     top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
     z-index: 1;
   }
 
@@ -102,13 +102,20 @@
   /* ── WEBXR DOM OVERLAY ─────────────────────────────────────
      Renders OVER the AR camera feed during the session. Persists
      for the lifetime of the session — no hiding on placement.
-     Element passed to WebXR via session options.domOverlay.root. */
+     Element passed to WebXR via session options.domOverlay.root.
+
+     CRITICAL: must be display:block (not display:none) at the
+     moment requestSession() is called — the dom-overlay feature
+     requires the root element to be VISIBLE in the document when
+     the session starts. We hide via opacity/visibility instead. */
   #overlay {
     position: fixed; inset: 0;
     pointer-events: none;
-    display: none;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 50;
   }
-  #overlay.active { display: block; }
+  #overlay.active { opacity: 1; visibility: visible; }
   #overlay button { pointer-events: auto; }
 
   /* Measurement HUD (top) */
@@ -536,55 +543,83 @@ function initThree() {
 async function startXR() {
     initThree();
 
-    // Required: hit-test (walls), anchors (stable placement), dom-overlay (UI)
-    // Optional: light-estimation (better realism), depth-sensing (occlusion)
+    /* The overlay element MUST be in the document AND visible (not
+       display:none) BEFORE requestSession is called — otherwise Chrome
+       silently fails the dom-overlay feature handshake. So we activate
+       the overlay first, request the session second. */
+    overlay.classList.add('active');
+    document.body.classList.add('xr-active');
+    launchScreen.style.display = 'none';
+    loadingPill.classList.add('show');
+
+    /* Stripped down to the bare minimum required features for now.
+       Optional features (light-estimation, depth-sensing) can be added
+       back once the core path is confirmed working. */
     const sessionInit = {
         requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
-        optionalFeatures: ['light-estimation', 'depth-sensing'],
         domOverlay: { root: overlay }
     };
 
     try {
         xrSession = await navigator.xr.requestSession('immersive-ar', sessionInit);
     } catch (e) {
-        showError('Could not start AR session: ' + e.message);
+        showLoadingError('Session start failed: ' + e.message);
         return;
     }
 
-    launchScreen.style.display = 'none';
-    overlay.classList.add('active');
-    document.body.classList.add('xr-active');
-    loadingPill.classList.add('show');
-
     xrSession.addEventListener('end', onSessionEnd);
-    xrSession.addEventListener('select', onSelect); // tap-to-place trigger
+    xrSession.addEventListener('select', onSelect);
 
-    await renderer.xr.setSession(xrSession);
+    try {
+        await renderer.xr.setSession(xrSession);
+    } catch (e) {
+        showLoadingError('Renderer XR setup failed: ' + e.message);
+        return;
+    }
 
-    // Reference spaces: 'local' for stable origin, 'viewer' for hit-test ray source
-    xrRefSpace  = await xrSession.requestReferenceSpace('local');
-    viewerSpace = await xrSession.requestReferenceSpace('viewer');
+    try {
+        xrRefSpace  = await xrSession.requestReferenceSpace('local');
+        viewerSpace = await xrSession.requestReferenceSpace('viewer');
+    } catch (e) {
+        showLoadingError('Reference space failed: ' + e.message);
+        return;
+    }
 
-    // Hit-test fires a ray forward from the viewer (device) — wherever the
-    // camera centerline intersects a detected plane, we get a result.
-    hitTestSource = await xrSession.requestHitTestSource({
-        space: viewerSpace
-    });
+    try {
+        hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+    } catch (e) {
+        showLoadingError('Hit-test source failed: ' + e.message);
+        return;
+    }
 
-    // Loading pill stays until the first hit-test result OR a few seconds
-    setTimeout(() => loadingPill.classList.remove('show'), 1500);
-
-    // Wire chips (work both pre- and post-placement)
+    /* Wire UI handlers */
     wireChips();
+    closeBtn.addEventListener('click', () => { try { xrSession.end(); } catch(e){} });
 
-    // Wire close button
-    closeBtn.addEventListener('click', () => xrSession.end());
-
-    // Kick the render loop
+    /* Start the render loop. Loading pill is removed on the FIRST frame
+       that successfully renders (so the user sees the camera as soon as
+       it's available, not on an arbitrary timer). */
     renderer.setAnimationLoop(onXRFrame);
 }
 
+/* Visible failure surface inside the AR overlay so we never silently
+   leave the user staring at a stuck loading state. */
+function showLoadingError(msg) {
+    loadingPill.classList.add('show');
+    loadingPill.style.color = '#e88c8c';
+    loadingPill.style.maxWidth = '320px';
+    loadingPill.style.fontFamily = 'Inter, sans-serif';
+    loadingPill.style.fontStyle = 'normal';
+    loadingPill.style.fontSize = '0.78rem';
+    loadingPill.style.lineHeight = '1.5';
+    loadingPill.style.textAlign = 'center';
+    loadingPill.textContent = msg;
+    console.error('[AR-XR]', msg);
+}
+
 /* ──── Render loop ──── */
+let firstFrameRendered = false;
+
 function onXRFrame(time, frame) {
     if (!frame || !xrRefSpace) {
         renderer.render(scene, camera);
@@ -598,6 +633,12 @@ function onXRFrame(time, frame) {
     }
 
     renderer.render(scene, camera);
+
+    /* First successful frame → camera passthrough is live, hide loading */
+    if (!firstFrameRendered) {
+        firstFrameRendered = true;
+        loadingPill.classList.remove('show');
+    }
 }
 
 /* ──── Hit-test → reticle (placement phase) ────
@@ -761,8 +802,10 @@ function onSessionEnd() {
     printAnchor = null;
     isPlaced = false;
     hangOffsetM = 0;
+    firstFrameRendered = false;
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
     document.body.classList.remove('xr-active');
+    loadingPill.classList.remove('show');
     if (renderer) {
         renderer.setAnimationLoop(null);
         renderer.domElement.remove();
