@@ -940,6 +940,51 @@
             transition: background 0.2s, color 0.2s;
         }
         .ar-cal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+        /* ── In-AR scan feedback (item #3) ──
+           Edge vignette pulse + corner viewfinder marks visualise that ARCore
+           is actively searching for a wall. State classes on #arPromptSlot
+           switch between 'searching' (active scan UI) and 'tracking-good'
+           (calm UI, guideline at full opacity). Tracking state is driven by
+           the model-viewer 'ar-tracking' event. */
+        @keyframes ar-edge-pulse {
+            0%, 100% { opacity: 0.55; }
+            50%      { opacity: 0.95; }
+        }
+        @keyframes ar-corner-pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.06); }
+        }
+        #arEdgeScan {
+            position: absolute; inset: 0; pointer-events: none;
+            box-shadow: inset 0 0 140px 30px rgba(207,162,70,0.22);
+            animation: ar-edge-pulse 2.6s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+        #arCornerMarks {
+            position: absolute; inset: 30px; pointer-events: none;
+        }
+        .ar-corner {
+            position: absolute; width: 22px; height: 22px;
+            border-color: rgba(207,162,70,0.85); border-style: solid;
+            animation: ar-corner-pulse 2.6s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+        .ar-corner-tl { top: 0;    left: 0;    border-width: 2px 0 0 2px; }
+        .ar-corner-tr { top: 0;    right: 0;   border-width: 2px 2px 0 0; }
+        .ar-corner-bl { bottom: 0; left: 0;    border-width: 0 0 2px 2px; }
+        .ar-corner-br { bottom: 0; right: 0;   border-width: 0 2px 2px 0; }
+
+        /* tracking-good: calm the scan UI, brighten the guideline */
+        #arPromptSlot.ar-tracking-good #arEdgeScan { opacity: 0; }
+        #arPromptSlot.ar-tracking-good .ar-corner  { opacity: 0.35; animation: none; }
+        #arPromptSlot.ar-tracking-good #arEyeLine,
+        #arPromptSlot.ar-tracking-good #arEyeLabel { opacity: 1; }
+
+        /* tracking-poor: dim the guideline so user focuses on fixing tracking */
+        #arPromptSlot.ar-tracking-poor #arEyeLine,
+        #arPromptSlot.ar-tracking-poor #arEyeLabel { opacity: 0.3; }
+        #arEyeLine, #arEyeLabel { transition: opacity 0.4s ease; }
+
         /* ── Hang-height presets (architect/gallery standards) ── */
         .ar-hang-row {
             pointer-events: auto;
@@ -3287,14 +3332,25 @@
                     }
                 });
 
-                /* Update wall-detection guidance text based on ARCore tracking quality */
+                /* Update wall-detection guidance text + scan-UI state based
+                   on ARCore tracking quality.
+                   Two state classes on #arPromptSlot drive the scan feedback CSS:
+                     .ar-tracking-poor — edge vignette + corner marks pulse,
+                                         guideline dimmed (focus on fixing tracking)
+                     .ar-tracking-good — vignette fades, corners go static,
+                                         guideline at full opacity (ready to tap) */
                 viewer.addEventListener('ar-tracking', function(e) {
+                    var slot       = document.getElementById('arPromptSlot');
                     var promptText = document.getElementById('arWallPromptText');
-                    if (!promptText) return;
+                    if (!slot || !promptText) return;
                     if (e.detail.status === 'not-tracking') {
-                        promptText.textContent = 'Slow down · looking for a flat wall surface';
+                        slot.classList.remove('ar-tracking-good');
+                        slot.classList.add('ar-tracking-poor');
+                        promptText.textContent = 'Hold steady · scanning the room';
                     } else {
-                        promptText.textContent = 'Point camera at a wall · move slowly';
+                        slot.classList.remove('ar-tracking-poor');
+                        slot.classList.add('ar-tracking-good');
+                        promptText.textContent = 'Wall found · tap on the line to place';
                     }
                 });
 
@@ -4729,6 +4785,19 @@
            (2) wall-finding pill — updated by the ar-tracking event listener. -->
     <div slot="ar-prompt" id="arPromptSlot" style="
         position:fixed; inset:0; pointer-events:none;">
+
+      <!-- Edge vignette pulse: soft gold breathing glow while ARCore searches.
+           Calmed via .ar-tracking-good class when tracking goes solid. -->
+      <div id="arEdgeScan"></div>
+
+      <!-- Corner viewfinder marks: precision instrument feel. Pulse while
+           searching, sit static when tracking is good. -->
+      <div id="arCornerMarks">
+        <div class="ar-corner ar-corner-tl"></div>
+        <div class="ar-corner ar-corner-tr"></div>
+        <div class="ar-corner ar-corner-bl"></div>
+        <div class="ar-corner ar-corner-br"></div>
+      </div>
 
       <!-- Eye-level guideline: thin gold rule across the AR view, fades at edges -->
       <div id="arEyeLine" style="
