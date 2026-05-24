@@ -570,6 +570,14 @@ async function startXR() {
     xrSession.addEventListener('end', onSessionEnd);
     xrSession.addEventListener('select', onSelect);
 
+    /* Three.js's renderer.xr.setSession() internally calls
+       requestReferenceSpace with a default type. On most Android Chrome
+       devices that default is 'local-floor', which requires the AR
+       runtime to estimate the floor — not all devices support it
+       (Samsung S24 Ultra refuses it). Force the type to 'local' BEFORE
+       setSession so Three.js asks for the always-supported one. */
+    renderer.xr.setReferenceSpaceType('local');
+
     try {
         await renderer.xr.setSession(xrSession);
     } catch (e) {
