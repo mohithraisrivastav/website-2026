@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     ar-xr.html — CUSTOM WEBXR AR (Phase 1 proof-of-concept)
+     ar-xr.html — CUSTOM WEBXR AR
 
-     Standalone WebXR Immersive AR experience for a single framed
-     print (Cosmic Return). Replaces model-viewer entirely with
-     direct Three.js + WebXR API access.
+     Standalone WebXR Immersive AR experience for any of the nine
+     framed prints in the GOAF catalogue. Replaces model-viewer
+     entirely with direct Three.js + WebXR API access.
+
+     URL:  /ar-xr.html?id=<product-id>&size=small|medium|large
+           id   defaults to cosmic-return if absent / unknown
+           size defaults to large
+     See PRODUCT_CATALOG below for valid product IDs.
 
      What this delivers vs. model-viewer:
        - Persistent UI during the ENTIRE AR session (HUD, chips,
@@ -27,7 +32,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#14110d">
-<title>AR — Cosmic Return — GOAF Fine Art</title>
+<title>AR — GOAF Fine Art</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -391,10 +396,11 @@
 
 <body>
 
-<!-- Pre-AR launch screen — required user gesture for WebXR session start -->
+<!-- Pre-AR launch screen — required user gesture for WebXR session start.
+     H1 + dims are populated dynamically from PRODUCT_TITLE / currentSize. -->
 <div id="launchScreen">
-  <h1>Cosmic Return</h1>
-  <div class="dims">42" × 31.5" · 107 × 80 cm</div>
+  <h1 id="launchTitle">Loading…</h1>
+  <div class="dims" id="launchDims">&nbsp;</div>
   <button id="startBtn" disabled>Loading…</button>
   <div id="errorMsg"></div>
 </div>
@@ -481,16 +487,76 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { XREstimatedLight } from 'three/addons/webxr/XREstimatedLight.js';
 
 /* ──────────────────────────────────────────────────────────────
-   Phase 1 hardcoded to Cosmic Return + its three GLB sizes.
-   Phase 2 will read ?id=<> from the URL and use a catalogue map. */
-const PRODUCT_TITLE = 'Cosmic Return';
-const SIZES = [
-    { id: 'small',  label: 'Small',  wIn: 18, hIn: 13.5, glb: 'ar/cosmic-return-small.glb'  },
-    { id: 'medium', label: 'Medium', wIn: 24, hIn: 18,   glb: 'ar/cosmic-return-medium.glb' },
-    { id: 'large',  label: 'Large',  wIn: 42, hIn: 31.5, glb: 'ar/cosmic-return.glb'        }
+   Product catalogue + URL-driven selection.
+   Open with /ar-xr.html?id=<product>&size=small|medium|large
+   to launch a specific print at a specific size. Falls back to
+   cosmic-return at Large if the id is missing or unknown. */
+const PRODUCT_CATALOG = {
+    'cosmic-return'    : { title: 'Cosmic Return',    origW: 42, origH: 31.5 },
+    'burnt-earth'      : { title: 'Burnt Earth',      origW: 32, origH: 24   },
+    'chromatic-rupture': { title: 'Chromatic Rupture',origW: 32, origH: 24   },
+    'after-the-fall'   : { title: 'After The Fall',   origW: 32, origH: 25.5 },
+    'cracked-spectrum' : { title: 'Cracked Spectrum', origW: 32, origH: 21.3 },
+    'still-organism'   : { title: 'Still Organism',   origW: 24, origH: 32   },
+    'forgotten-skin'   : { title: 'Forgotten Skin',   origW: 24, origH: 32   },
+    'erosion'          : { title: 'Erosion',          origW: 24, origH: 32   },
+    'imprint'          : { title: 'Imprint',          origW: 24, origH: 32   }
+};
+
+/* The three size chip presets — longest dimension in inches. The
+   actual width/height of each size depends on the product's aspect
+   ratio (see buildSizes below). The per-size GLB files generated
+   by ar-build.html follow the same convention:
+       ar/<product-id>-small.glb     (longest = 18")
+       ar/<product-id>-medium.glb    (longest = 24")
+       ar/<product-id>-large.glb     (longest = 42")
+   All three exist for every product. */
+const SIZE_PRESETS = [
+    { id: 'small',  label: 'Small',  longest: 18 },
+    { id: 'medium', label: 'Medium', longest: 24 },
+    { id: 'large',  label: 'Large',  longest: 42 }
 ];
-/* Default to Large (the catalogue canonical size for this print) */
-let currentSize = SIZES[2];
+
+/* Compute the (width, height) in inches for a given preset applied
+   to a product's aspect ratio. Mirrors ar-build.html's calcDims. */
+function dimsForSize(origW, origH, longest) {
+    if (origW >= origH) {
+        return { w: longest, h: +(longest / origW * origH).toFixed(2) };
+    }
+    return { h: longest, w: +(longest / origH * origW).toFixed(2) };
+}
+
+/* Build the SIZES array consumed by the rest of the file for a
+   given product ID. Returns three entries (small / medium / large)
+   each with the dimensions in inches AND the per-size GLB URL. */
+function buildSizes(productId) {
+    const product = PRODUCT_CATALOG[productId];
+    return SIZE_PRESETS.map((preset) => {
+        const dims = dimsForSize(product.origW, product.origH, preset.longest);
+        return {
+            id: preset.id,
+            label: preset.label,
+            wIn: dims.w,
+            hIn: dims.h,
+            glb: 'ar/' + productId + '-' + preset.id + '.glb'
+        };
+    });
+}
+
+/* Parse the URL once at script load. Validates against the catalog —
+   unknown ids silently fall back to cosmic-return. */
+const PRODUCT_ID = (function() {
+    const id = new URLSearchParams(location.search).get('id');
+    return (id && PRODUCT_CATALOG[id]) ? id : 'cosmic-return';
+})();
+const INITIAL_SIZE_ID = (function() {
+    const s = new URLSearchParams(location.search).get('size');
+    return ['small', 'medium', 'large'].includes(s) ? s : 'large';
+})();
+
+const PRODUCT_TITLE = PRODUCT_CATALOG[PRODUCT_ID].title;
+const SIZES = buildSizes(PRODUCT_ID);
+let currentSize = SIZES.find(s => s.id === INITIAL_SIZE_ID) || SIZES[2];
 
 /* GLB cache — avoids re-downloading when the user toggles between
    sizes. Stores the raw gltf.scene, callers clone() before adding. */
@@ -577,6 +643,24 @@ let closeButtonWired = false;
 
 /* ──── Init: pre-AR support check + load GLB in background ──── */
 async function init() {
+    /* Apply product info to launch screen + document title BEFORE the
+       support check, so even the 'AR unavailable' fallback message
+       shows the correct print name. Active size chip in the SIZES
+       array drives the dimensions readout. */
+    document.title = 'AR — ' + PRODUCT_TITLE + ' — GOAF Fine Art';
+    $('launchTitle').textContent = PRODUCT_TITLE;
+    {
+        const wCm = Math.round(currentSize.wIn * 2.54);
+        const hCm = Math.round(currentSize.hIn * 2.54);
+        $('launchDims').textContent =
+            currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+    }
+    /* Also drive the active-state of the size chips inside the AR
+       overlay so a ?size=medium URL boots with Medium highlighted. */
+    document.querySelectorAll('#sizeRow .chip').forEach((c) => {
+        c.classList.toggle('active', c.getAttribute('data-size') === currentSize.id);
+    });
+
     // Check WebXR support first so we can show a helpful error
     if (!navigator.xr) {
         showError('WebXR is not available in this browser. Open this page in Chrome on an Android device with ARCore.');
