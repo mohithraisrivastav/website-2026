@@ -179,19 +179,19 @@
         gsap.ticker.lagSmoothing(0);
 
         const projects = [
-            { num:'01', slug:'eleve-eco-resort',  title:'Elevé Eco Resort',   loc:'Assagao, Goa',          year:'2026', cluster:'Hospitality', cover:'Work/Projects/Eleve/_DSC2593-HDR-Edit.webp' },
-            { num:'02', slug:'seven-doors',         title:'Seven Doors',  loc:'Pilerne Marra, Bardez',          year:'2024', cluster:'Restoration', cover:'Work/Projects/Seven Doors/_DSC3972-HDR-2.webp' },
-            { num:'03', slug:'solo-house',         title:'Solo House',     loc:'Goa',           year:'2024', cluster:'Residence', cover:'Work/Projects/Solo House/_DSC4373-HDR.webp' },
-            { num:'04', slug:'casa-kosha',         title:'Casa Kosha',      loc:'Siridao, Goa',         year:'2025', cluster:'Residence', cover:'Work/Projects/Casa Kosha/_DSC8122.webp' },
-            { num:'05', slug:'rio-estillo',         title:'Rio Estillo',      loc:'Anjuna, Goa',         year:'2025', cluster:'Hospitality', cover:'Work/Projects/RIO Luxury Homes/DJI_20250425080741_0131_D.webp' },
-            { num:'06', slug:'sawantwadi-palace',         title:'Sawantwadi Palace', loc:'Sawantwadi, Maharashtra',     year:'2022', cluster:'Heritage', cover:'Work/Projects/Sawantwadi Palace/_DSC4402-Pano.webp' },
-            { num:'07', slug:'villa-lluvia',         title:'Villa Lluvia',  loc:'Siolim, Goa',      year:'2024', cluster:'Hospitality', cover:'Work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp' },
-            { num:'08', slug:'vaivi-space-designs',         title:'Vaivi Space Designs',    loc:'Jubilee Hills, Hyderabad',          year:'2024', cluster:'Residence', cover:'Work/Projects/Vaivi Space Designs/_DSC0092-HDR.webp' },
-            { num:'09', slug:'secure-meters',         title:'Secure Meters',      loc:'Sanand, Gujarat',    year:'2022', cluster:'Industrial', cover:'Work/Projects/Secure Meters/DSC3334b.webp' },
-            { num:'10', slug:'iim-bangalore',         title:'IIM Bangalore',        loc:'Bengaluru, Karnataka',        year:'2024', cluster:'Documentation', cover:'Work/Projects/IIMB/Final/To Post/20240823_162157-Edit.webp' },
-            { num:'11', slug:'anokhi',         title:'Anokhi',        loc:'Vasco da Gama, Goa',        year:'2026', cluster:'Residence', cover:'Work/Projects/Anokhi/_DSC5348-HDR-Edit.webp' },
-            { num:'12', slug:'baithak',         title:'Baithak',      loc:'Goa',    year:'2024', cluster:'Restoration', cover:'Work/Projects/Baithak/_DSC8534-HDR-Pano-Edit.webp' },
-            { num:'13', slug:'2010-design-house',         title:'2010 Design House',      loc:'Hyderabad, Telangana',    year:'2021', cluster:'Renovation', cover:'Work/Projects/2010 Design House/_DSC4732-Edit.webp' },
+            { num:'01', slug:'eleve-eco-resort',  title:'Elevé Eco Resort',   loc:'Assagao, Goa',          year:'2026', cluster:'Hospitality', cover:'work/Projects/Eleve/_DSC2593-HDR-Edit.webp' },
+            { num:'02', slug:'seven-doors',         title:'Seven Doors',  loc:'Pilerne Marra, Bardez',          year:'2024', cluster:'Restoration', cover:'work/Projects/Seven Doors/_DSC3972-HDR-2.webp' },
+            { num:'03', slug:'solo-house',         title:'Solo House',     loc:'Goa',           year:'2024', cluster:'Residence', cover:'work/Projects/Solo House/_DSC4373-HDR.webp' },
+            { num:'04', slug:'casa-kosha',         title:'Casa Kosha',      loc:'Siridao, Goa',         year:'2025', cluster:'Residence', cover:'work/Projects/Casa Kosha/_DSC8122.webp' },
+            { num:'05', slug:'rio-estillo',         title:'Rio Estillo',      loc:'Anjuna, Goa',         year:'2025', cluster:'Hospitality', cover:'work/Projects/RIO Luxury Homes/DJI_20250425080741_0131_D.webp' },
+            { num:'06', slug:'sawantwadi-palace',         title:'Sawantwadi Palace', loc:'Sawantwadi, Maharashtra',     year:'2022', cluster:'Heritage', cover:'work/Projects/Sawantwadi Palace/_DSC4402-Pano.webp' },
+            { num:'07', slug:'villa-lluvia',         title:'Villa Lluvia',  loc:'Siolim, Goa',      year:'2024', cluster:'Hospitality', cover:'work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp' },
+            { num:'08', slug:'vaivi-space-designs',         title:'Vaivi Space Designs',    loc:'Jubilee Hills, Hyderabad',          year:'2024', cluster:'Residence', cover:'work/Projects/Vaivi Space Designs/_DSC0092-HDR.webp' },
+            { num:'09', slug:'secure-meters',         title:'Secure Meters',      loc:'Sanand, Gujarat',    year:'2022', cluster:'Industrial', cover:'work/Projects/Secure Meters/DSC3334b.webp' },
+            { num:'10', slug:'iim-bangalore',         title:'IIM Bangalore',        loc:'Bengaluru, Karnataka',        year:'2024', cluster:'Documentation', cover:'work/Projects/IIMB/Final/To Post/20240823_162157-Edit.webp' },
+            { num:'11', slug:'anokhi',         title:'Anokhi',        loc:'Vasco da Gama, Goa',        year:'2026', cluster:'Residence', cover:'work/Projects/Anokhi/_DSC5348-HDR-Edit.webp' },
+            { num:'12', slug:'baithak',         title:'Baithak',      loc:'Goa',    year:'2024', cluster:'Restoration', cover:'work/Projects/Baithak/_DSC8534-HDR-Pano-Edit.webp' },
+            { num:'13', slug:'2010-design-house',         title:'2010 Design House',      loc:'Hyderabad, Telangana',    year:'2021', cluster:'Renovation', cover:'work/Projects/2010 Design House/_DSC4732-Edit.webp' },
         ];
 
         /* -- Aspect ratios per project (natural photographic proportions) -- */
@@ -225,7 +225,7 @@
         projects.forEach((p, i) => {
             const layout = layoutMap[i];
             const card   = document.createElement('a');
-            card.href         = `Work/${p.slug}.html`;
+            card.href         = `work/${p.slug}.html`;
             card.className    = 'wi-card';
             card.dataset.cat    = p.cluster;
             card.dataset.col    = i % 3;

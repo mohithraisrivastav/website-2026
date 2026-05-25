@@ -656,7 +656,7 @@ if (!prefersReducedMotion) {
       <span class="severity-badge sev-info">Info</span>
       <div>
         <div class="issue-title">Work page hero images missing width/height attributes</div>
-        <div class="issue-where">Work/*.html — hero images</div>
+        <div class="issue-where">work/*.html — hero images</div>
       </div>
     </div>
     <div class="issue-body">
@@ -711,13 +711,13 @@ if (!prefersReducedMotion) {
       <span class="severity-badge sev-moderate">Moderate</span>
       <div>
         <div class="issue-title">Work subdirectory canonical URLs use capital "W" — case sensitivity risk</div>
-        <div class="issue-where">Work/*.html — all project pages</div>
+        <div class="issue-where">work/*.html — all project pages</div>
       </div>
     </div>
     <div class="issue-body">
-      <div class="issue-desc">Canonical URLs reference <code>https://www.mohithraisrivastav.com/Work/eleve-eco-resort.html</code>. Linux servers (which most hosts run) are case-sensitive. If the folder is <code>Work/</code> on the server, URLs with <code>work/</code> will 404. Canonicals should use the exact server path. Best practice is to use all-lowercase folder names.</div>
+      <div class="issue-desc">Canonical URLs reference <code>https://www.mohithraisrivastav.com/work/eleve-eco-resort.html</code>. Linux servers (which most hosts run) are case-sensitive. If the folder is <code>work/</code> on the server, URLs with <code>work/</code> will 404. Canonicals should use the exact server path. Best practice is to use all-lowercase folder names.</div>
       <span class="label-small">Fix — rename folder to lowercase and update all references</span>
-      <div class="code-block code-good">/* Rename: Work/ → work/ */
+      <div class="code-block code-good">/* Rename: work/ → work/ */
 /* Update canonical in eleve-eco-resort.html: */
 &lt;link rel="canonical" href="https://www.mohithraisrivastav.com/work/eleve-eco-resort.html"&gt;</div>
     </div>
@@ -966,7 +966,7 @@ padding-inline: 5vw;
 
 <div class="footer-note">
   <strong>How to use this report:</strong> Fix Critical items first — these directly block users or break structure. Major items affect accessibility and performance significantly. Moderate items are cleanup and quality improvements. Info items are best-practice suggestions.<br><br>
-  <strong>Files reviewed:</strong> index.html, about.html, contact.html, shop.html, checkout.html, Work/eleve-eco-resort.html, assets/css/global.css, assets/css/typo.css, assets/css/pages/about.css, assets/css/pages/shop.css, and the full folder structure of 70+ additional files.<br><br>
+  <strong>Files reviewed:</strong> index.html, about.html, contact.html, shop.html, checkout.html, work/eleve-eco-resort.html, assets/css/global.css, assets/css/typo.css, assets/css/pages/about.css, assets/css/pages/shop.css, and the full folder structure of 70+ additional files.<br><br>
   Generated: May 2026
 </div>
 
