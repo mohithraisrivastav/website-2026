@@ -218,8 +218,12 @@
     white-space: nowrap;
     pointer-events: none;
   }
-  #chipRow { bottom: max(180px, env(safe-area-inset-bottom, 0px) + 180px); }
-  #sizeRow { bottom: max(265px, env(safe-area-inset-bottom, 0px) + 265px); }
+  /* Bottom layout (panels hidden, labels removed):
+       status pill        bottom: 60px
+       hang chips         bottom: 110px
+       size chips         bottom: 160px                                */
+  #chipRow { bottom: max(110px, env(safe-area-inset-bottom, 0px) + 110px); }
+  #sizeRow { bottom: max(160px, env(safe-area-inset-bottom, 0px) + 160px); }
   .chip {
     pointer-events: auto;
     background: rgba(10,10,10,0.7);
@@ -486,17 +490,14 @@
 
   <button id="frontWallBtn" type="button">Use front wall</button>
 
-  <!-- Size label + chips (Small / Medium / Large) -->
-  <div class="chip-label size">Size — print dimensions</div>
-  <div id="sizeRow">
-    <!-- Size chips rendered dynamically by renderSizeChips() in init() —
-         3 or 4 entries depending on whether the product has a Standard
-         (32"-longest) GLB. See buildSizes() for the rule. -->
-  </div>
+  <!-- Size chips (rendered dynamically by renderSizeChips() in init).
+       Labels removed — chips are self-evident at a glance. -->
+  <div id="sizeRow"></div>
 
-  <!-- Hang-height label + chips. Label text is updated dynamically
-       to reflect floor-detection state — see updateHangLabel(). -->
-  <div class="chip-label hang" id="hangLabel">Hang height — gallery standard</div>
+  <!-- Hang-height chips. Labels removed for the same reason; the
+       floor-detection feedback that used to live in the label now
+       surfaces only via the '~' prefix on the tape measure label
+       and the 0"/±N" floor-offset readout. -->
   <div id="chipRow">
     <button class="chip active" data-h="57">57"</button>
     <button class="chip" data-h="60">60"</button>
