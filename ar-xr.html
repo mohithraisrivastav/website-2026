@@ -821,6 +821,7 @@ function onXRFrame(time, frame) {
             updateReticle(frame);
         }
     } else {
+        updateTwist(frame);
         updateDrag(frame);
         updatePrintFromAnchor(frame);
     }
@@ -1151,23 +1152,29 @@ let placementAnchorPos   = new THREE.Vector3();
 const _selectTmpPos      = new THREE.Vector3();
 const _selectTmpScale    = new THREE.Vector3();
 
-/* ──── One-finger drag state (post-placement) ────
-   selectstart captures the active XRInputSource; per-frame the
-   target-ray pose is intersected with the wall plane and the
-   resulting world-space delta is projected onto placementWallRight
-   / placementWallUp to drive wallOffsetX / wallOffsetY. selectend
-   clears the source. Pre-placement selectstart is ignored — the
-   onSelect 'select' handler still owns the placement gesture. */
+/* ──── Multi-touch gesture state (post-placement) ────
+   activeSources tracks all currently-active XRInputSources.
+     size === 1  → one-finger drag (slide print along wall)
+     size === 2  → two-finger twist (rotate around wall normal)
+     size === 0 or 3+ → idle / suspended
+   onSelectStart / onSelectEnd call applySourceState() to transition
+   cleanly between modes. Pre-placement selectstart is ignored — the
+   onSelect 'select' handler still owns placement. */
+const activeSources      = new Set();
 let activeDragSource     = null;
 let dragInitialized      = false;
 let dragStartWallX       = 0;
 let dragStartWallY       = 0;
+let lastTwistAngle       = null;     // null = not yet captured for this twist gesture
 const _dragRay           = new THREE.Ray();
 const _dragQuat          = new THREE.Quaternion();
 const _dragIntersect     = new THREE.Vector3();
 const _dragStartIntersect = new THREE.Vector3();
 const _dragDelta         = new THREE.Vector3();
 const _wallPlane         = new THREE.Plane();
+const _twistA            = new THREE.Vector3();
+const _twistB            = new THREE.Vector3();
+const _twistAB           = new THREE.Vector3();
 
 /* ──── Tap-to-place (WebXR 'select' event) ────
    Fires when the user taps the screen in an AR area not covered by
@@ -1211,35 +1218,41 @@ async function onSelect() {
     if (navigator.vibrate) navigator.vibrate(60);
 }
 
-/* ──── One-finger drag (post-placement) ────
-   selectstart captures the input source if the print is already
-   placed. Pre-placement selectstart is ignored — onSelect
-   ('select') still owns the placement gesture.
-   Per-frame updateDrag intersects the input source's target ray
-   with the wall plane and projects the world-space delta onto the
-   wall axes to drive wallOffsetX / wallOffsetY directly.
-   selectend clears the source. */
+/* ──── Drag + twist gestures (post-placement) ────
+   selectstart adds an input source; selectend removes it. Mode
+   follows count: 1 → drag, 2 → twist, anything else → suspended.
+   Both modes re-initialise on every transition (intersect origins
+   for drag, last angle for twist) so handing off between fingers
+   never produces a jump. */
+function applySourceState() {
+    /* Always reset; specific mode rebuilds its origin on next frame */
+    activeDragSource = null;
+    dragInitialized  = false;
+    lastTwistAngle   = null;
+
+    if (activeSources.size === 1) {
+        activeDragSource = activeSources.values().next().value;
+    }
+    /* size === 2 → updateTwist will pick the first two sources */
+    /* size === 0 or >2 → both drag and twist are no-ops */
+}
+
 function onSelectStart(e) {
     if (!isPlaced) return;
-    activeDragSource = e.inputSource;
-    dragInitialized = false;
+    activeSources.add(e.inputSource);
+    applySourceState();
 }
 
 function onSelectEnd(e) {
-    if (e.inputSource === activeDragSource) {
-        activeDragSource = null;
-        dragInitialized = false;
-    }
+    activeSources.delete(e.inputSource);
+    applySourceState();
 }
 
-function updateDrag(frame) {
-    if (!activeDragSource || !isPlaced) return;
-
-    const tPose = frame.getPose(activeDragSource.targetRaySpace, xrRefSpace);
-    if (!tPose) return;
-
-    /* Build ray from input source: origin at touch projection, direction
-       = local -Z of the orientation (WebXR target-ray convention). */
+/* Helper: intersect a given XRInputSource's target-ray with the
+   current wall plane, write into `out`. Returns true on success. */
+function intersectSourceWithWall(source, frame, out) {
+    const tPose = frame.getPose(source.targetRaySpace, xrRefSpace);
+    if (!tPose) return false;
     _dragRay.origin.set(
         tPose.transform.position.x,
         tPose.transform.position.y,
@@ -1252,13 +1265,53 @@ function updateDrag(frame) {
         tPose.transform.orientation.w
     );
     _dragRay.direction.set(0, 0, -1).applyQuaternion(_dragQuat);
+    return !!_dragRay.intersectPlane(_wallPlane, out);
+}
 
-    /* Wall plane = print's current wall surface (anchor + normal). */
+/* Two-finger twist: project both input rays onto the wall, compute
+   the angle of the line between them in wall-local 2D coords, and
+   apply the incremental delta to wallRotZ each frame. Incremental
+   delta with ±π wrap handling means continuous twist past 180°
+   accumulates cleanly. */
+function updateTwist(frame) {
+    if (!isPlaced || activeSources.size !== 2) {
+        lastTwistAngle = null;
+        return;
+    }
+
     _wallPlane.setFromNormalAndCoplanarPoint(placementWallNormal, placementAnchorPos);
 
-    /* Intersect; if the ray misses the wall plane (rare edge case)
-       leave offsets unchanged. */
-    if (!_dragRay.intersectPlane(_wallPlane, _dragIntersect)) return;
+    const iter = activeSources.values();
+    const sourceA = iter.next().value;
+    const sourceB = iter.next().value;
+
+    if (!intersectSourceWithWall(sourceA, frame, _twistA)) return;
+    if (!intersectSourceWithWall(sourceB, frame, _twistB)) return;
+
+    _twistAB.copy(_twistB).sub(_twistA);
+    const angle = Math.atan2(
+        _twistAB.dot(placementWallUp),
+        _twistAB.dot(placementWallRight)
+    );
+
+    if (lastTwistAngle === null) {
+        lastTwistAngle = angle;
+        return;
+    }
+
+    let delta = angle - lastTwistAngle;
+    if (delta >  Math.PI) delta -= 2 * Math.PI;
+    if (delta < -Math.PI) delta += 2 * Math.PI;
+
+    wallRotZ += delta;
+    lastTwistAngle = angle;
+}
+
+function updateDrag(frame) {
+    if (!activeDragSource || !isPlaced) return;
+
+    _wallPlane.setFromNormalAndCoplanarPoint(placementWallNormal, placementAnchorPos);
+    if (!intersectSourceWithWall(activeDragSource, frame, _dragIntersect)) return;
 
     if (!dragInitialized) {
         _dragStartIntersect.copy(_dragIntersect);
@@ -1751,8 +1804,10 @@ function onSessionEnd() {
     floorSeenAt = 0;
     manualWallMode = false;
     manualPlacementReady = false;
+    activeSources.clear();
     activeDragSource = null;
     dragInitialized = false;
+    lastTwistAngle = null;
     wallOffsetX = 0;
     wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
     wallOffsetZ = 0;
