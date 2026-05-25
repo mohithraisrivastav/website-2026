@@ -269,7 +269,11 @@
     border-radius: 20px;
     pointer-events: auto;
   }
-  #overlay.placed #movePanel { display: grid; }
+  /* #movePanel hidden — gestures handle X/Y (1-finger drag),
+     Z (2-finger pinch), rotation (2-finger twist) directly.
+     Element kept in DOM so the click handlers stay valid if we
+     ever want to surface it again. */
+  #overlay.placed #movePanel { display: none; }
   .adjust-btn {
     width: 44px;
     height: 38px;
@@ -308,7 +312,9 @@
     border-radius: 20px;
     pointer-events: auto;
   }
-  #overlay.placed #floorPanel { display: flex; }
+  /* #floorPanel hidden — 3-finger vertical drag calibrates floor
+     directly. Element kept in DOM for the same reason as #movePanel. */
+  #overlay.placed #floorPanel { display: none; }
   .floor-btn {
     background: rgba(20,17,13,0.74);
     border: 1px solid rgba(247,243,236,0.18);
@@ -1058,6 +1064,7 @@ function onXRFrame(time, frame) {
     } else {
         updateTwist(frame);
         updateDrag(frame);
+        updateFloorDrag(frame);
         updatePrintFromAnchor(frame);
     }
 
@@ -1392,6 +1399,8 @@ let dragInitialized      = false;
 let dragStartWallX       = 0;
 let dragStartWallY       = 0;
 let lastTwistAngle       = null;     // null = not yet captured for this twist gesture
+let lastPinchDistance    = null;     // pairs with twist on 2-finger gestures
+let lastFloorDragRayY    = null;     // 3-finger floor calibration: last frame's mean ray-Y
 const _dragRay           = new THREE.Ray();
 const _dragQuat          = new THREE.Quaternion();
 const _dragIntersect     = new THREE.Vector3();
@@ -1439,7 +1448,7 @@ async function onSelect() {
     frontWallBtn.classList.remove('active');
 
     overlay.classList.add('placed');
-    statusText.textContent = 'Placed · drag to move, or use X/Y/Z/R controls';
+    statusText.textContent = 'Placed · 1 finger to move · 2 to rotate / pinch · 3 to set floor';
 
     if (navigator.vibrate) navigator.vibrate(60);
 }
@@ -1451,16 +1460,20 @@ async function onSelect() {
    for drag, last angle for twist) so handing off between fingers
    never produces a jump. */
 function applySourceState() {
-    /* Always reset; specific mode rebuilds its origin on next frame */
-    activeDragSource = null;
-    dragInitialized  = false;
-    lastTwistAngle   = null;
+    /* Always reset every gesture's running origin so each new mode
+       captures fresh baselines on its first frame. */
+    activeDragSource  = null;
+    dragInitialized   = false;
+    lastTwistAngle    = null;
+    lastPinchDistance = null;
+    lastFloorDragRayY = null;
 
     if (activeSources.size === 1) {
         activeDragSource = activeSources.values().next().value;
     }
-    /* size === 2 → updateTwist will pick the first two sources */
-    /* size === 0 or >2 → both drag and twist are no-ops */
+    /* size === 2 → updateTwist handles both rotation + Z pinch
+       size === 3 → updateFloorDrag calibrates floor
+       size === 0 or > 3 → all gestures no-op                       */
 }
 
 function onSelectStart(e) {
@@ -1494,14 +1507,20 @@ function intersectSourceWithWall(source, frame, out) {
     return !!_dragRay.intersectPlane(_wallPlane, out);
 }
 
-/* Two-finger twist: project both input rays onto the wall, compute
-   the angle of the line between them in wall-local 2D coords, and
-   apply the incremental delta to wallRotZ each frame. Incremental
-   delta with ±π wrap handling means continuous twist past 180°
-   accumulates cleanly. */
+/* Two-finger gesture: handles BOTH rotation (twist) AND depth-from-
+   wall (pinch) in a single pass over the input sources. Projects
+   both rays onto the wall plane once, then derives:
+     - angle of the A→B vector in wall-local 2D → rotation (wallRotZ)
+     - distance between A and B in wall metres → Z (wallOffsetZ)
+   Pinch metaphor: bringing fingers together pulls the print toward
+   the viewer (positive wallOffsetZ, print stands further out from
+   the wall). Spreading fingers pushes it back toward the wall. */
+const PINCH_SENSITIVITY = 1.0;   // 1 metre of pinch delta → 1 metre of Z
+
 function updateTwist(frame) {
     if (!isPlaced || activeSources.size !== 2) {
-        lastTwistAngle = null;
+        lastTwistAngle    = null;
+        lastPinchDistance = null;
         return;
     }
 
@@ -1515,22 +1534,69 @@ function updateTwist(frame) {
     if (!intersectSourceWithWall(sourceB, frame, _twistB)) return;
 
     _twistAB.copy(_twistB).sub(_twistA);
+
+    /* Rotation */
     const angle = Math.atan2(
         _twistAB.dot(placementWallUp),
         _twistAB.dot(placementWallRight)
     );
+    if (lastTwistAngle !== null) {
+        let dAngle = angle - lastTwistAngle;
+        if (dAngle >  Math.PI) dAngle -= 2 * Math.PI;
+        if (dAngle < -Math.PI) dAngle += 2 * Math.PI;
+        wallRotZ += dAngle;
+    }
+    lastTwistAngle = angle;
 
-    if (lastTwistAngle === null) {
-        lastTwistAngle = angle;
+    /* Pinch → Z */
+    const distance = _twistAB.length();
+    if (lastPinchDistance !== null) {
+        const dDist = lastPinchDistance - distance;   // pinch (closer) → +Z
+        wallOffsetZ += dDist * PINCH_SENSITIVITY;
+    }
+    lastPinchDistance = distance;
+}
+
+/* Three-finger drag: vertical calibration of the floor reference.
+   Uses the mean of the input sources' target-ray pitch (Y component
+   of ray direction in world space) as the gesture's running value.
+   As the user drags three fingers up the screen, each ray pivots
+   upward, mean rayY increases, floorAdjustOffsetM increases too —
+   the recorded floor moves up to match. Drives the same
+   alignCenterToHangHeight re-snap the button path used. */
+const FLOOR_DRAG_SENSITIVITY = 0.5; // metres of floor offset per unit rayY change
+const _floorDragDir = new THREE.Vector3();
+
+function updateFloorDrag(frame) {
+    if (!isPlaced || activeSources.size !== 3) {
+        lastFloorDragRayY = null;
         return;
     }
 
-    let delta = angle - lastTwistAngle;
-    if (delta >  Math.PI) delta -= 2 * Math.PI;
-    if (delta < -Math.PI) delta += 2 * Math.PI;
+    let sumY = 0, count = 0;
+    activeSources.forEach((source) => {
+        const tPose = frame.getPose(source.targetRaySpace, xrRefSpace);
+        if (!tPose) return;
+        _dragQuat.set(
+            tPose.transform.orientation.x,
+            tPose.transform.orientation.y,
+            tPose.transform.orientation.z,
+            tPose.transform.orientation.w
+        );
+        _floorDragDir.set(0, 0, -1).applyQuaternion(_dragQuat);
+        sumY += _floorDragDir.y;
+        count++;
+    });
+    if (count === 0) return;
+    const meanRayY = sumY / count;
 
-    wallRotZ += delta;
-    lastTwistAngle = angle;
+    if (lastFloorDragRayY !== null) {
+        const dY = meanRayY - lastFloorDragRayY;
+        floorAdjustOffsetM += dY * FLOOR_DRAG_SENSITIVITY;
+        refreshFloorOffsetLabel();
+        alignCenterToHangHeight();
+    }
+    lastFloorDragRayY = meanRayY;
 }
 
 function updateDrag(frame) {
@@ -2090,6 +2156,8 @@ function onSessionEnd() {
     activeDragSource = null;
     dragInitialized = false;
     lastTwistAngle = null;
+    lastPinchDistance = null;
+    lastFloorDragRayY = null;
     wallOffsetX = 0;
     wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
     wallOffsetZ = 0;
