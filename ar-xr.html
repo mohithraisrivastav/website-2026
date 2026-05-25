@@ -1758,15 +1758,42 @@ let tapeLabelCanvas      = null;
 let tapeLabelContext     = null;
 let lastTapeLabel        = '';
 
-function hasFreshFloor() {
+/* True only when ARCore has actually returned a horizontal-plane
+   detection within the freshness window. Drives the '~' prefix on
+   the tape label (estimated vs. measured) — but does NOT gate
+   alignment math anymore. */
+function isFloorMeasured() {
     return detectedFloorY !== null && (performance.now() - floorSeenAt) < FLOOR_MAX_AGE_MS;
 }
 
-/* Effective floor Y = ARCore's detected floor + user's manual
-   calibration offset. ARCore can keep refining detectedFloorY in
-   the background; the user's offset is preserved on top. */
+/* Effective floor Y = best floor reference we have, plus the user's
+   manual calibration offset. Resolution order:
+     1. ARCore's detected floor (most accurate when available)
+     2. Bootstrap from placement: assume the chip-selected hang
+        height matched the anchor when the user tapped. This is the
+        wrong floor by construction (it just makes the tape's
+        labelled value match the chip exactly), BUT it gives the
+        manual +/- pill a real reference to adjust from. The user
+        nudges until the tape's bottom tick visually aligns with the
+        actual floor — then the calibration is accurate.
+   Manual offset always applies on top, so the calibration buttons
+   are never no-ops once a print is placed. */
 function getEffectiveFloorY() {
-    return detectedFloorY !== null ? detectedFloorY + floorAdjustOffsetM : null;
+    if (detectedFloorY !== null) {
+        return detectedFloorY + floorAdjustOffsetM;
+    }
+    if (isPlaced) {
+        return placementAnchorPos.y
+             - hangHeightIn * 0.0254
+             + floorAdjustOffsetM;
+    }
+    return null;
+}
+
+/* hasFreshFloor() retained for code that wants 'do we have ANY
+   floor reference to use'. Always true post-placement now. */
+function hasFreshFloor() {
+    return getEffectiveFloorY() !== null;
 }
 
 /* PlaneGeometry-based tape strip: a flat quad in 3D space with
@@ -1923,12 +1950,14 @@ function updateTapeMeasure() {
         return;
     }
 
-    const measured = hasFreshFloor();
+    /* effFloor is always a real number post-placement — bootstrap
+       handles the case where ARCore hasn't detected a floor.
+       'measured' only governs the ~ prefix on the label so the user
+       knows whether they're seeing ARCore data or an estimate. */
     const effFloor = getEffectiveFloorY();
-    const heightM = measured
-        ? Math.max(0, _finalPos.y - effFloor)
-        : hangHeightIn * 0.0254;
-    const floorY = measured ? effFloor : _finalPos.y - heightM;
+    const measured = isFloorMeasured();
+    const heightM = Math.max(0, _finalPos.y - effFloor);
+    const floorY  = effFloor;
     const normalLift = 0.018 + Math.max(0, wallOffsetZ);
     const tickHalf = 0.09;
 
