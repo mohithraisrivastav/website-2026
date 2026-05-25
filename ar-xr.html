@@ -1201,6 +1201,14 @@ const HALO_STRIP_HALF_WIDTH = 0.0045;  // 9 mm halo strip (2 mm dark margin)
 const HALO_COLOR            = 0x1a1612;
 const HALO_OPACITY          = 0.78;
 
+/* Label positioning constants. Label is a camera-facing Sprite at
+   0.52 m × 0.16 m world scale (set in initTapeMeasure). Offset from
+   the tape line scales with the current print width so it always
+   sits just past the right edge of the print with a consistent
+   gap, regardless of Small / Medium / Large selection. */
+const LABEL_GAP_M           = 0.05;    // 5 cm clear space between print and label
+const LABEL_HALF_WIDTH_M    = 0.26;    // matches sprite scale 0.52 set in initTapeMeasure
+
 let tapeLine             = null;
 let tapeLineHalo         = null;
 let tapeBottomTick       = null;
@@ -1382,8 +1390,17 @@ function updateTapeMeasure() {
         _tapeTickA, _tapeTickB, placementWallUp);
 
     drawTapeLabel(formatTapeLabel(heightM, measured));
+
+    /* Label centre offset = print half-width + 5 cm gap + label
+       half-width. Result: label's LEFT edge sits 5 cm past the
+       print's right edge regardless of size selected. Without
+       scaling, the fixed 0.32 m offset overlapped the print
+       footprint on Large and floated awkwardly far from Small. */
+    const printHalfWidthM = (currentSize.wIn * 0.0254) / 2;
+    const labelOffsetRight = printHalfWidthM + LABEL_GAP_M + LABEL_HALF_WIDTH_M;
+
     _tapeLabelPos.copy(_tapeBottom).lerp(_tapeTop, 0.5)
-        .addScaledVector(placementWallRight, 0.32)
+        .addScaledVector(placementWallRight, labelOffsetRight)
         .addScaledVector(placementWallNormal, 0.02);
     tapeLabelSprite.position.copy(_tapeLabelPos);
     tapeGroup.visible = true;
