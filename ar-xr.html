@@ -724,6 +724,8 @@ async function startXR() {
 
     xrSession.addEventListener('end', onSessionEnd);
     xrSession.addEventListener('select', onSelect);
+    xrSession.addEventListener('selectstart', onSelectStart);
+    xrSession.addEventListener('selectend', onSelectEnd);
 
     /* Three.js's renderer.xr.setSession() internally calls
        requestReferenceSpace with a default type. On most Android Chrome
@@ -819,6 +821,7 @@ function onXRFrame(time, frame) {
             updateReticle(frame);
         }
     } else {
+        updateDrag(frame);
         updatePrintFromAnchor(frame);
     }
 
@@ -1148,6 +1151,24 @@ let placementAnchorPos   = new THREE.Vector3();
 const _selectTmpPos      = new THREE.Vector3();
 const _selectTmpScale    = new THREE.Vector3();
 
+/* ──── One-finger drag state (post-placement) ────
+   selectstart captures the active XRInputSource; per-frame the
+   target-ray pose is intersected with the wall plane and the
+   resulting world-space delta is projected onto placementWallRight
+   / placementWallUp to drive wallOffsetX / wallOffsetY. selectend
+   clears the source. Pre-placement selectstart is ignored — the
+   onSelect 'select' handler still owns the placement gesture. */
+let activeDragSource     = null;
+let dragInitialized      = false;
+let dragStartWallX       = 0;
+let dragStartWallY       = 0;
+const _dragRay           = new THREE.Ray();
+const _dragQuat          = new THREE.Quaternion();
+const _dragIntersect     = new THREE.Vector3();
+const _dragStartIntersect = new THREE.Vector3();
+const _dragDelta         = new THREE.Vector3();
+const _wallPlane         = new THREE.Plane();
+
 /* ──── Tap-to-place (WebXR 'select' event) ────
    Fires when the user taps the screen in an AR area not covered by
    an overlay element. Taps on chips or close button do NOT fire
@@ -1185,9 +1206,72 @@ async function onSelect() {
     frontWallBtn.classList.remove('active');
 
     overlay.classList.add('placed');
-    statusText.textContent = 'Placed · use X/Y/Z/R controls to adjust';
+    statusText.textContent = 'Placed · drag to move, or use X/Y/Z/R controls';
 
     if (navigator.vibrate) navigator.vibrate(60);
+}
+
+/* ──── One-finger drag (post-placement) ────
+   selectstart captures the input source if the print is already
+   placed. Pre-placement selectstart is ignored — onSelect
+   ('select') still owns the placement gesture.
+   Per-frame updateDrag intersects the input source's target ray
+   with the wall plane and projects the world-space delta onto the
+   wall axes to drive wallOffsetX / wallOffsetY directly.
+   selectend clears the source. */
+function onSelectStart(e) {
+    if (!isPlaced) return;
+    activeDragSource = e.inputSource;
+    dragInitialized = false;
+}
+
+function onSelectEnd(e) {
+    if (e.inputSource === activeDragSource) {
+        activeDragSource = null;
+        dragInitialized = false;
+    }
+}
+
+function updateDrag(frame) {
+    if (!activeDragSource || !isPlaced) return;
+
+    const tPose = frame.getPose(activeDragSource.targetRaySpace, xrRefSpace);
+    if (!tPose) return;
+
+    /* Build ray from input source: origin at touch projection, direction
+       = local -Z of the orientation (WebXR target-ray convention). */
+    _dragRay.origin.set(
+        tPose.transform.position.x,
+        tPose.transform.position.y,
+        tPose.transform.position.z
+    );
+    _dragQuat.set(
+        tPose.transform.orientation.x,
+        tPose.transform.orientation.y,
+        tPose.transform.orientation.z,
+        tPose.transform.orientation.w
+    );
+    _dragRay.direction.set(0, 0, -1).applyQuaternion(_dragQuat);
+
+    /* Wall plane = print's current wall surface (anchor + normal). */
+    _wallPlane.setFromNormalAndCoplanarPoint(placementWallNormal, placementAnchorPos);
+
+    /* Intersect; if the ray misses the wall plane (rare edge case)
+       leave offsets unchanged. */
+    if (!_dragRay.intersectPlane(_wallPlane, _dragIntersect)) return;
+
+    if (!dragInitialized) {
+        _dragStartIntersect.copy(_dragIntersect);
+        dragStartWallX = wallOffsetX;
+        dragStartWallY = wallOffsetY;
+        dragInitialized = true;
+        return;
+    }
+
+    /* World-space delta projected onto wall-local axes */
+    _dragDelta.copy(_dragIntersect).sub(_dragStartIntersect);
+    wallOffsetX = dragStartWallX + _dragDelta.dot(placementWallRight);
+    wallOffsetY = dragStartWallY + _dragDelta.dot(placementWallUp);
 }
 
 /* ──── Post-placement: keep print on the wall every frame ────
@@ -1667,6 +1751,8 @@ function onSessionEnd() {
     floorSeenAt = 0;
     manualWallMode = false;
     manualPlacementReady = false;
+    activeDragSource = null;
+    dragInitialized = false;
     wallOffsetX = 0;
     wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
     wallOffsetZ = 0;
