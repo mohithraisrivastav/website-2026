@@ -1049,6 +1049,7 @@ async function startXR() {
     wireSizeChips();
     wireAdjustControls();
     wireFloorControls();
+    wireFloorGestures();
     wireFrontWallButton();
     if (!closeButtonWired) {
         closeButtonWired = true;
@@ -1481,7 +1482,7 @@ async function onSelect() {
     frontWallBtn.classList.remove('active');
 
     overlay.classList.add('placed');
-    statusText.textContent = 'Placed · drag to move · 2-finger to rotate / pinch · ± to set floor';
+    statusText.textContent = 'Placed · 1-finger move · 2-finger pinch+rotate · drag floor pill or 3-finger drag for floor';
 
     if (navigator.vibrate) navigator.vibrate(60);
 }
@@ -1590,46 +1591,101 @@ function updateTwist(frame) {
     lastPinchDistance = distance;
 }
 
-/* Three-finger drag: vertical calibration of the floor reference.
-   Uses the mean of the input sources' target-ray pitch (Y component
-   of ray direction in world space) as the gesture's running value.
-   As the user drags three fingers up the screen, each ray pivots
-   upward, mean rayY increases, floorAdjustOffsetM increases too —
-   the recorded floor moves up to match. Drives the same
-   alignCenterToHangHeight re-snap the button path used. */
-const FLOOR_DRAG_SENSITIVITY = 0.5; // metres of floor offset per unit rayY change
-const _floorDragDir = new THREE.Vector3();
+/* Floor calibration via DOM touch events (not WebXR input sources).
+   Chrome's WebXR dom-overlay implementation routes some multi-finger
+   touches through DOM rather than as XRInputSources, so the previous
+   activeSources.size === 3 check never fired on real hardware. DOM
+   touch events fire reliably for all simultaneous touches.
 
-function updateFloorDrag(frame) {
-    if (!isPlaced || activeSources.size !== 3) {
-        lastFloorDragRayY = null;
-        return;
-    }
+   Two gestures wired below in wireFloorGestures():
 
-    let sumY = 0, count = 0;
-    activeSources.forEach((source) => {
-        const tPose = frame.getPose(source.targetRaySpace, xrRefSpace);
-        if (!tPose) return;
-        _dragQuat.set(
-            tPose.transform.orientation.x,
-            tPose.transform.orientation.y,
-            tPose.transform.orientation.z,
-            tPose.transform.orientation.w
-        );
-        _floorDragDir.set(0, 0, -1).applyQuaternion(_dragQuat);
-        sumY += _floorDragDir.y;
-        count++;
-    });
-    if (count === 0) return;
-    const meanRayY = sumY / count;
+   A) 3-finger drag anywhere in the AR view (NOT on chips/buttons):
+      Drag up → floor moves up · Drag down → floor moves down
+      One screen-height of drag = 1 metre of floor offset.
 
-    if (lastFloorDragRayY !== null) {
-        const dY = meanRayY - lastFloorDragRayY;
-        floorAdjustOffsetM += dY * FLOOR_DRAG_SENSITIVITY;
+   B) 1-finger drag on the FLOOR PILL itself:
+      Tap the '0"' readout area and drag up/down to scrub the floor
+      offset. Half a screen-height of drag = 0.5 m of floor offset.
+      Faster than tap-and-hold the +/- buttons for big corrections.
+
+   updateFloorDrag is now a no-op kept for backward compatibility
+   with the render-loop call site. */
+function updateFloorDrag() { /* DOM-based now, no per-frame work */ }
+
+let touchFloorDragActive   = false;
+let touchFloorDragStartY   = 0;
+let touchFloorDragStartOff = 0;
+const TOUCH_FLOOR_SENSITIVITY_3F = 1.0;  // 1 screen-height = 1 m
+const TOUCH_FLOOR_SENSITIVITY_1F = 0.5;  // pill drag is finer
+
+function isTouchOnInteractive(touch) {
+    const t = touch.target;
+    return t && t.closest && t.closest('button, .chip, #floorOffsetLabel, #floorPanel');
+}
+
+let floorGesturesWired = false;
+function wireFloorGestures() {
+    if (floorGesturesWired) return;
+    floorGesturesWired = true;
+    /* Three-finger drag anywhere on the overlay (excluding UI). */
+    overlay.addEventListener('touchstart', (e) => {
+        if (!isPlaced) return;
+        if (e.touches.length !== 3) { touchFloorDragActive = false; return; }
+        for (let i = 0; i < e.touches.length; i++) {
+            if (isTouchOnInteractive(e.touches[i])) {
+                touchFloorDragActive = false;
+                return;
+            }
+        }
+        touchFloorDragActive   = true;
+        touchFloorDragStartY   = e.touches[0].clientY;
+        touchFloorDragStartOff = floorAdjustOffsetM;
+    }, { passive: true });
+
+    overlay.addEventListener('touchmove', (e) => {
+        if (!touchFloorDragActive) return;
+        if (e.touches.length !== 3) { touchFloorDragActive = false; return; }
+        const dy = e.touches[0].clientY - touchFloorDragStartY;
+        /* dy negative → finger moves UP on screen → floor moves UP */
+        const screenFrac = -dy / window.innerHeight;
+        floorAdjustOffsetM = touchFloorDragStartOff + screenFrac * TOUCH_FLOOR_SENSITIVITY_3F;
         refreshFloorOffsetLabel();
         alignCenterToHangHeight();
+    }, { passive: true });
+
+    overlay.addEventListener('touchend', (e) => {
+        if (e.touches.length < 3) touchFloorDragActive = false;
+    }, { passive: true });
+
+    /* Drag the floor pill itself for fast calibration. Anywhere on
+       the panel except the +/- buttons (which have their own
+       press-and-hold handlers). */
+    const panel = document.getElementById('floorPanel');
+    if (panel) {
+        let panelDragActive = false;
+        let panelDragStartY = 0;
+        let panelDragStartOff = 0;
+        panel.addEventListener('touchstart', (e) => {
+            if (!isPlaced) return;
+            if (e.touches.length !== 1) return;
+            if (e.touches[0].target.closest('.floor-btn')) return;  // let +/- handle it
+            e.stopPropagation();
+            panelDragActive = true;
+            panelDragStartY = e.touches[0].clientY;
+            panelDragStartOff = floorAdjustOffsetM;
+        }, { passive: true });
+        panel.addEventListener('touchmove', (e) => {
+            if (!panelDragActive) return;
+            e.stopPropagation();
+            const dy = e.touches[0].clientY - panelDragStartY;
+            const screenFrac = -dy / window.innerHeight;
+            floorAdjustOffsetM = panelDragStartOff + screenFrac * TOUCH_FLOOR_SENSITIVITY_1F;
+            refreshFloorOffsetLabel();
+            alignCenterToHangHeight();
+        }, { passive: true });
+        panel.addEventListener('touchend',   () => { panelDragActive = false; }, { passive: true });
+        panel.addEventListener('touchcancel',() => { panelDragActive = false; }, { passive: true });
     }
-    lastFloorDragRayY = meanRayY;
 }
 
 function updateDrag(frame) {
