@@ -507,6 +507,7 @@ const frontWallBtn = $('frontWallBtn');
 let renderer, scene, camera;
 let printModel = null;   // GLB scene
 let reticle    = null;   // Hit-test visualization (a thin gold ring on the wall)
+let tapeGroup  = null;   // Floor-to-centre measurement overlay
 
 /* ──── WebXR state ──── */
 let xrSession        = null;
@@ -516,6 +517,8 @@ let hitTestSource    = null;
 let printAnchor      = null;   // XRAnchor for placed print
 let isPlaced         = false;
 let sessionStartTime = 0;      // for diagnostic elapsed-time display
+let detectedFloorY   = null;   // world/local-space Y for the lowest detected horizontal plane
+let floorSeenAt      = 0;
 
 /* ──── Print transform state (post-placement) ────
    All measurements are in WALL-LOCAL space, i.e. relative to the
@@ -667,6 +670,8 @@ function initThree() {
     reticle.visible = false;
     reticle.matrixAutoUpdate = false;
     scene.add(reticle);
+
+    initTapeMeasure();
 
     // Add the print to the scene (initially hidden)
     if (printModel) scene.add(printModel);
@@ -840,6 +845,7 @@ const WALL_OPACITY_SEARCH = 0.85;
 const WALL_OPACITY_PLACED = 0.25;
 const FLOOR_OPACITY_SEARCH = 0.32;
 const FLOOR_OPACITY_PLACED = 0.10;
+const FLOOR_MAX_AGE_MS = 7000;
 
 function buildPlaneGeometry(polygon) {
     /* polygon entries are DOMPointReadOnly { x, y, z, w } with y == 0.
@@ -874,6 +880,7 @@ function updateDetectedPlanes(frame) {
     if (!frame.detectedPlanes) return;
 
     const seen = new Set();
+    let frameFloorY = Infinity;
 
     for (const plane of frame.detectedPlanes) {
         seen.add(plane);
@@ -895,6 +902,10 @@ function updateDetectedPlanes(frame) {
         if (pose) {
             wireframe.matrix.fromArray(pose.transform.matrix);
             wireframe.visible = true;
+
+            if (plane.orientation === 'horizontal') {
+                frameFloorY = Math.min(frameFloorY, pose.transform.position.y);
+            }
 
             /* Fade after placement so wireframes confirm without
                dominating the view */
@@ -918,6 +929,11 @@ function updateDetectedPlanes(frame) {
             wireframe.material.dispose();
             planeWireframes.delete(plane);
         }
+    }
+
+    if (Number.isFinite(frameFloorY)) {
+        detectedFloorY = frameFloorY;
+        floorSeenAt = performance.now();
     }
 }
 
@@ -1084,6 +1100,10 @@ function updateReticle(frame) {
         lastHit = hit;
         setTrackingState('good');
     } else {
+        if (Math.abs(normalWorld.y) > 0.75) {
+            detectedFloorY = pose.transform.position.y;
+            floorSeenAt = performance.now();
+        }
         /* Just visualise the hit so we know detection is working,
            but don't allow placement here. */
         reticle.matrix.copy(_hitMatrix);
@@ -1126,6 +1146,7 @@ async function onSelect() {
     placementWallRight.setFromMatrixColumn(lastPlacementMatrix, 0).normalize();
     placementWallUp.setFromMatrixColumn(lastPlacementMatrix, 1).normalize();
     placementWallNormal.setFromMatrixColumn(lastPlacementMatrix, 2).normalize();
+    alignCenterToHangHeight();
 
     if (lastHit) {
         try {
@@ -1162,6 +1183,207 @@ const _finalPos      = new THREE.Vector3();
 const _anchorMatrix4 = new THREE.Matrix4();
 const _localZRot     = new THREE.Quaternion();
 const _localZAxis    = new THREE.Vector3(0, 0, 1);
+const _tapeBottom    = new THREE.Vector3();
+const _tapeTop       = new THREE.Vector3();
+const _tapeTickA     = new THREE.Vector3();
+const _tapeTickB     = new THREE.Vector3();
+const _tapeLabelPos  = new THREE.Vector3();
+const _haloA         = new THREE.Vector3();
+const _haloB         = new THREE.Vector3();
+
+/* Halo / outline behind every tape line so the gold rule stays
+   readable on bright walls (sunlit white, daylit warm-white). WebGL
+   line width is forced to 1px regardless of THREE.js settings, so
+   we fake a thicker line by stacking two dark parallel lines (one
+   on each perpendicular side) underneath each gold line. */
+const HALO_OFFSET_M = 0.003;
+const HALO_COLOR    = 0x1a1612;
+const HALO_OPACITY  = 0.6;
+
+let tapeLine          = null;
+let tapeLineHaloA     = null;
+let tapeLineHaloB     = null;
+let tapeBottomTick    = null;
+let tapeBottomTickHaloA = null;
+let tapeBottomTickHaloB = null;
+let tapeTopTick       = null;
+let tapeTopTickHaloA  = null;
+let tapeTopTickHaloB  = null;
+let tapeLabelSprite   = null;
+let tapeLabelTexture  = null;
+let tapeLabelCanvas   = null;
+let tapeLabelContext  = null;
+let lastTapeLabel     = '';
+
+function hasFreshFloor() {
+    return detectedFloorY !== null && (performance.now() - floorSeenAt) < FLOOR_MAX_AGE_MS;
+}
+
+function makeTapeLine(color, opacity) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
+    const material = new THREE.LineBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        depthTest: false,
+        depthWrite: false
+    });
+    const line = new THREE.Line(geometry, material);
+    line.frustumCulled = false;
+    line.renderOrder = 100;
+    return line;
+}
+
+function setTapeLine(line, a, b) {
+    const pos = line.geometry.attributes.position.array;
+    pos[0] = a.x; pos[1] = a.y; pos[2] = a.z;
+    pos[3] = b.x; pos[4] = b.y; pos[5] = b.z;
+    line.geometry.attributes.position.needsUpdate = true;
+}
+
+/* Updates the gold line and both halo lines (offset ±HALO_OFFSET_M
+   along perpAxis) in one call. perpAxis is the wall-local direction
+   perpendicular to the line's run — placementWallRight for the
+   vertical rule, placementWallUp for horizontal ticks. */
+function setTapeLineWithHalo(gold, haloA, haloB, a, b, perpAxis) {
+    setTapeLine(gold, a, b);
+
+    _haloA.copy(a).addScaledVector(perpAxis, -HALO_OFFSET_M);
+    _haloB.copy(b).addScaledVector(perpAxis, -HALO_OFFSET_M);
+    setTapeLine(haloA, _haloA, _haloB);
+
+    _haloA.copy(a).addScaledVector(perpAxis, HALO_OFFSET_M);
+    _haloB.copy(b).addScaledVector(perpAxis, HALO_OFFSET_M);
+    setTapeLine(haloB, _haloA, _haloB);
+}
+
+function initTapeMeasure() {
+    tapeGroup = new THREE.Group();
+    tapeGroup.visible = false;
+    tapeGroup.renderOrder = 100;
+
+    /* Halos first — added to the group before the gold lines so they
+       render behind. Lower renderOrder also enforces the stacking. */
+    tapeLineHaloA       = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeLineHaloA.renderOrder = 99;
+    tapeLineHaloB       = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeLineHaloB.renderOrder = 99;
+    tapeBottomTickHaloA = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeBottomTickHaloA.renderOrder = 99;
+    tapeBottomTickHaloB = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeBottomTickHaloB.renderOrder = 99;
+    tapeTopTickHaloA    = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeTopTickHaloA.renderOrder = 99;
+    tapeTopTickHaloB    = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeTopTickHaloB.renderOrder = 99;
+    tapeGroup.add(
+        tapeLineHaloA, tapeLineHaloB,
+        tapeBottomTickHaloA, tapeBottomTickHaloB,
+        tapeTopTickHaloA, tapeTopTickHaloB
+    );
+
+    /* Gold lines on top */
+    tapeLine = makeTapeLine(0xCFA246, 0.95);
+    tapeBottomTick = makeTapeLine(0xf7f3ec, 0.82);
+    tapeTopTick = makeTapeLine(0xf7f3ec, 0.82);
+    tapeGroup.add(tapeLine, tapeBottomTick, tapeTopTick);
+
+    tapeLabelCanvas = document.createElement('canvas');
+    tapeLabelCanvas.width = 512;
+    tapeLabelCanvas.height = 160;
+    tapeLabelContext = tapeLabelCanvas.getContext('2d');
+    tapeLabelTexture = new THREE.CanvasTexture(tapeLabelCanvas);
+    tapeLabelTexture.colorSpace = THREE.SRGBColorSpace;
+    tapeLabelSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: tapeLabelTexture,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false
+    }));
+    tapeLabelSprite.renderOrder = 101;
+    tapeLabelSprite.scale.set(0.52, 0.16, 1);
+    tapeGroup.add(tapeLabelSprite);
+
+    scene.add(tapeGroup);
+}
+
+function formatTapeLabel(heightM, isMeasured) {
+    const inches = Math.round(heightM / 0.0254);
+    const cm = Math.round(heightM * 100);
+    return (isMeasured ? '' : '~') + inches + '" / ' + cm + ' cm to centre';
+}
+
+function drawTapeLabel(text) {
+    if (text === lastTapeLabel) return;
+    lastTapeLabel = text;
+
+    const ctx = tapeLabelContext;
+    ctx.clearRect(0, 0, tapeLabelCanvas.width, tapeLabelCanvas.height);
+    ctx.fillStyle = 'rgba(10,10,10,0.78)';
+    ctx.fillRect(0, 20, tapeLabelCanvas.width, 104);
+    ctx.strokeStyle = 'rgba(207,162,70,0.82)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 22, tapeLabelCanvas.width - 4, 100);
+    ctx.fillStyle = '#CFA246';
+    ctx.font = '700 34px Inter, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, tapeLabelCanvas.width / 2, 74);
+    tapeLabelTexture.needsUpdate = true;
+}
+
+function alignCenterToHangHeight() {
+    if (!hasFreshFloor() || Math.abs(placementWallUp.y) < 0.2) return false;
+
+    const desiredY = detectedFloorY + hangHeightIn * 0.0254;
+    const currentY = placementAnchorPos.y
+        + placementWallRight.y * wallOffsetX
+        + placementWallUp.y * wallOffsetY
+        + placementWallNormal.y * wallOffsetZ;
+    wallOffsetY += (desiredY - currentY) / placementWallUp.y;
+    return true;
+}
+
+function updateTapeMeasure() {
+    if (!tapeGroup || !isPlaced) return;
+
+    const measured = hasFreshFloor();
+    const heightM = measured
+        ? Math.max(0, _finalPos.y - detectedFloorY)
+        : hangHeightIn * 0.0254;
+    const floorY = measured ? detectedFloorY : _finalPos.y - heightM;
+    const normalLift = 0.018 + Math.max(0, wallOffsetZ);
+    const tickHalf = 0.09;
+
+    _tapeBottom.copy(_finalPos);
+    _tapeBottom.y = floorY;
+    _tapeBottom.addScaledVector(placementWallNormal, normalLift);
+
+    _tapeTop.copy(_finalPos).addScaledVector(placementWallNormal, normalLift);
+
+    /* Vertical rule — halo lines sit ±3mm along placementWallRight */
+    setTapeLineWithHalo(
+        tapeLine, tapeLineHaloA, tapeLineHaloB,
+        _tapeBottom, _tapeTop, placementWallRight
+    );
+
+    _tapeTickA.copy(_tapeBottom).addScaledVector(placementWallRight, -tickHalf);
+    _tapeTickB.copy(_tapeBottom).addScaledVector(placementWallRight, tickHalf);
+    /* Horizontal tick — halos sit ±3mm along placementWallUp */
+    setTapeLineWithHalo(
+        tapeBottomTick, tapeBottomTickHaloA, tapeBottomTickHaloB,
+        _tapeTickA, _tapeTickB, placementWallUp
+    );
+
+    _tapeTickA.copy(_tapeTop).addScaledVector(placementWallRight, -tickHalf);
+    _tapeTickB.copy(_tapeTop).addScaledVector(placementWallRight, tickHalf);
+    setTapeLineWithHalo(
+        tapeTopTick, tapeTopTickHaloA, tapeTopTickHaloB,
+        _tapeTickA, _tapeTickB, placementWallUp
+    );
+
+    drawTapeLabel(formatTapeLabel(heightM, measured));
+    _tapeLabelPos.copy(_tapeBottom).lerp(_tapeTop, 0.5)
+        .addScaledVector(placementWallRight, 0.32)
+        .addScaledVector(placementWallNormal, 0.02);
+    tapeLabelSprite.position.copy(_tapeLabelPos);
+    tapeGroup.visible = true;
+}
 
 function updatePrintFromAnchor(frame) {
     if (printAnchor) {
@@ -1187,6 +1409,8 @@ function updatePrintFromAnchor(frame) {
         .multiply(_localZRot.setFromAxisAngle(_localZAxis, wallRotZ));
     printModel.scale.set(1, 1, 1);
     printModel.updateMatrix();
+
+    updateTapeMeasure();
 }
 
 /* ──── Tracking state → overlay class toggle ──── */
@@ -1205,9 +1429,10 @@ function setTrackingState(state) {
 /* Fine adjustment controls. */
 function resetWallOffsets() {
     wallOffsetX = 0;
-    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
     wallOffsetZ = 0;
     wallRotZ = 0;
+    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
+    if (isPlaced) alignCenterToHangHeight();
 }
 
 function adjustPrint(action) {
@@ -1296,10 +1521,15 @@ function wireChips() {
             const newH = parseInt(chip.getAttribute('data-h'), 10);
 
             // Convert chip delta to a wall-local vertical offset (inches → metres)
-            const deltaIn = newH - hangHeightIn;
-            wallOffsetY += deltaIn * 0.0254;
-
+            const previousH = hangHeightIn;
+            const deltaIn = newH - previousH;
             hangHeightIn = newH;
+            if (isPlaced && hasFreshFloor() && Math.abs(placementWallUp.y) >= 0.2) {
+                const desiredY = detectedFloorY + newH * 0.0254;
+                wallOffsetY += (desiredY - _finalPos.y) / placementWallUp.y;
+            } else {
+                wallOffsetY += deltaIn * 0.0254;
+            }
         });
     });
 }
@@ -1371,6 +1601,8 @@ function onSessionEnd() {
     viewerSpace = null;
     printAnchor = null;
     isPlaced = false;
+    detectedFloorY = null;
+    floorSeenAt = 0;
     manualWallMode = false;
     manualPlacementReady = false;
     wallOffsetX = 0;
@@ -1386,6 +1618,8 @@ function onSessionEnd() {
         wireframe.material.dispose();
     }
     planeWireframes.clear();
+    if (tapeGroup) tapeGroup.visible = false;
+    lastTapeLabel = '';
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
     frontWallBtn.classList.remove('active');
     frontWallBtn.textContent = 'Use front wall';
