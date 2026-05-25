@@ -738,14 +738,25 @@ async function startXR() {
     launchScreen.style.display = 'none';
     loadingPill.classList.add('show');
 
-    /* hit-test + anchors + dom-overlay are required; plane-detection
-       is requested as optional. plane-detection asks ARCore to track
-       full XRPlane geometries (not just hit points), which on some
-       builds nudges Chrome to enable more aggressive plane scanning
-       — useful for hard-to-detect surfaces like featureless walls. */
+    /* hit-test + anchors + dom-overlay are required.
+       Optional features:
+         plane-detection   — XRPlane polygons for the wireframes
+         light-estimation  — real-room lighting via XREstimatedLight
+         depth-sensing     — real-world geometry occlusion. Requires
+                             a depthSensing config object specifying
+                             usage + data format. 'gpu-optimized' +
+                             'luminance-alpha' is the standard
+                             ARCore-friendly pair that Three.js
+                             can bind as a depth texture and use to
+                             automatically occlude depth-tested
+                             scene objects against the real world. */
     const sessionInit = {
         requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
-        optionalFeatures: ['plane-detection', 'light-estimation'],
+        optionalFeatures: ['plane-detection', 'light-estimation', 'depth-sensing'],
+        depthSensing: {
+            usagePreference:      ['gpu-optimized', 'cpu-optimized'],
+            dataFormatPreference: ['luminance-alpha', 'float32']
+        },
         domOverlay: { root: overlay }
     };
 
