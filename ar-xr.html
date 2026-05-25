@@ -1086,8 +1086,9 @@ function updateManualFrontWall(frame) {
 }
 
 const debugPill = document.getElementById('debugPill');
+/* Reusable scratch for the hit-test pose's local Y axis (surface
+   normal per WebXR Hit Test spec). */
 const _axisY = new THREE.Vector3();
-const _axisZ = new THREE.Vector3();
 
 function updateReticle(frame) {
     const results = frame.getHitTestResults(hitTestSource);
@@ -1112,11 +1113,6 @@ function updateReticle(frame) {
         return;
     }
 
-    /* Inspect the first hit's orientation. WebXR spec says local Y is
-       the surface normal but the orientation is technically
-       implementation-defined — show both Y and Z axes' world Y
-       component so we can see which one is the actual normal axis on
-       this device. */
     const hit = results[0];
     const pose = hit.getPose(xrRefSpace);
     if (!pose) {
@@ -1127,6 +1123,9 @@ function updateReticle(frame) {
         return;
     }
 
+    /* WebXR Hit Test spec: pose's local Y axis IS the surface normal
+       in world space. For walls the normal is roughly horizontal, so
+       its world-Y component stays near zero. */
     _quat.set(
         pose.transform.orientation.x,
         pose.transform.orientation.y,
@@ -1134,20 +1133,12 @@ function updateReticle(frame) {
         pose.transform.orientation.w
     );
     _axisY.set(0, 1, 0).applyQuaternion(_quat);
-    _axisZ.set(0, 0, 1).applyQuaternion(_quat);
-
-    /* Per WebXR hit-test convention, local Y is the surface normal.
-       For walls that normal is mostly horizontal, so its world Y
-       component should stay near zero. */
-    const normalWorld = _axisY;
-    const isWall = Math.abs(normalWorld.y) < 0.5;
+    const isWall = Math.abs(_axisY.y) < 0.5;
 
     debugPill.textContent =
         'hits: ' + results.length + '\n' +
         'elapsed: ' + elapsedS + 's\n' +
-        'axisY.y: ' + _axisY.y.toFixed(2) + '\n' +
-        'axisZ.y: ' + _axisZ.y.toFixed(2) + '\n' +
-        'normal: Y\n' +
+        'normal.y: ' + _axisY.y.toFixed(2) + '\n' +
         'wall: ' + (isWall ? 'yes' : 'no');
 
     /* Always show the reticle for any hit, but only allow placement
@@ -1157,14 +1148,14 @@ function updateReticle(frame) {
 
     if (isWall) {
         /* Build proper wall placement orientation (print stands upright,
-           back to wall, face to viewer). */
-        _surfaceNormal.copy(normalWorld);
-        buildWallPlacementMatrixFromNormal(_hitMatrix, _surfaceNormal, reticle.matrix);
+           back to wall, face to viewer). The matrix builder clones the
+           normal internally so passing _axisY directly is safe. */
+        buildWallPlacementMatrixFromNormal(_hitMatrix, _axisY, reticle.matrix);
         lastPlacementMatrix.copy(reticle.matrix);
         lastHit = hit;
         setTrackingState('good');
     } else {
-        if (Math.abs(normalWorld.y) > 0.75) {
+        if (Math.abs(_axisY.y) > 0.75) {
             detectedFloorY = pose.transform.position.y;
             floorSeenAt = performance.now();
         }
