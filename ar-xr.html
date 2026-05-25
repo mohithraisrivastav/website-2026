@@ -297,56 +297,74 @@
     color: #CFA246;
   }
 
-  /* Floor-height calibration panel — manual override for when
-     ARCore's detected floor is off. Sits just above #movePanel
-     when the print is placed. */
+  /* Compact floor calibration pill — bottom-right corner, always
+     visible post-placement. Sized small enough not to clutter the
+     view but large enough for thumb-tap. ARCore's detected floor
+     can be off on rugs / featureless tile / low light, and the
+     3-finger gesture is hardware-fragile on most phones, so a
+     visible button affordance is the reliable path. */
   #floorPanel {
     position: absolute;
-    left: 50%;
-    bottom: max(74px, env(safe-area-inset-bottom, 0px) + 74px);
-    transform: translateX(-50%);
+    right: max(16px, env(safe-area-inset-right, 0px) + 16px);
+    bottom: max(70px, env(safe-area-inset-bottom, 0px) + 70px);
     display: none;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: rgba(10,10,10,0.62);
+    gap: 4px;
+    padding: 6px 8px;
+    background: rgba(10,10,10,0.72);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(247,243,236,0.16);
-    border-radius: 20px;
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 16px;
     pointer-events: auto;
   }
-  /* #floorPanel hidden — 3-finger vertical drag calibrates floor
-     directly. Element kept in DOM for the same reason as #movePanel. */
-  #overlay.placed #floorPanel { display: none; }
+  #overlay.placed #floorPanel { display: flex; }
   .floor-btn {
-    background: rgba(20,17,13,0.74);
-    border: 1px solid rgba(247,243,236,0.18);
-    color: rgba(247,243,236,0.88);
+    background: transparent;
+    border: none;
+    color: rgba(247,243,236,0.85);
     font-family: 'Inter', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.62rem;
     font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 7px 12px;
-    border-radius: 12px;
+    letter-spacing: 0.5px;
+    padding: 6px 10px;
+    border-radius: 10px;
     cursor: pointer;
+    min-width: 32px;
   }
   .floor-btn:active {
     background: rgba(207,162,70,0.32);
-    border-color: rgba(207,162,70,0.75);
     color: #CFA246;
   }
+  /* Sandwich the offset readout between the +/- buttons */
   #floorOffsetLabel {
     font-family: 'Inter', sans-serif;
-    font-size: 0.62rem;
+    font-size: 0.58rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    color: rgba(247,243,236,0.55);
-    min-width: 46px;
+    letter-spacing: 0.5px;
+    color: rgba(247,243,236,0.5);
+    min-width: 28px;
     text-align: center;
+    white-space: nowrap;
   }
   #floorOffsetLabel.active { color: #CFA246; }
+  /* Floor-panel label above the pill — explains what the buttons do.
+     Subtle, easy to spot once the user looks for it. */
+  #floorPanelLabel {
+    position: absolute;
+    right: max(16px, env(safe-area-inset-right, 0px) + 16px);
+    bottom: max(106px, env(safe-area-inset-bottom, 0px) + 106px);
+    display: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: rgba(247,243,236,0.4);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  #overlay.placed #floorPanelLabel { display: block; }
 
   /* Debug pill — top-left diagnostic readout. Hidden in production.
      Enable by loading the page with ?debug=1 in the URL. */
@@ -516,11 +534,14 @@
   <!-- TAP hint (only when reticle locked + not yet placed) -->
   <div id="tapHint">Tap to place</div>
 
+  <!-- Floor calibration pill (bottom-right). Manual override for
+       when ARCore's auto-detected floor is off, or didn't detect
+       at all. Always visible post-placement. -->
+  <div id="floorPanelLabel">Floor</div>
   <div id="floorPanel" aria-label="Calibrate detected floor height">
-    <button class="floor-btn" data-floor="-1" type="button" aria-label="Floor reference down 1 inch">Floor &minus;</button>
+    <button class="floor-btn" data-floor="-1" type="button" aria-label="Floor reference down 1 inch">−</button>
     <span id="floorOffsetLabel">0&quot;</span>
-    <button class="floor-btn" data-floor="+1" type="button" aria-label="Floor reference up 1 inch">Floor +</button>
-    <button class="floor-btn" data-floor="0"  type="button" aria-label="Reset floor offset" title="Reset floor offset">⟲</button>
+    <button class="floor-btn" data-floor="+1" type="button" aria-label="Floor reference up 1 inch">+</button>
   </div>
 
   <div id="movePanel" aria-label="Adjust placed print">
@@ -1460,7 +1481,7 @@ async function onSelect() {
     frontWallBtn.classList.remove('active');
 
     overlay.classList.add('placed');
-    statusText.textContent = 'Placed · 1 finger to move · 2 to rotate / pinch · 3 to set floor';
+    statusText.textContent = 'Placed · drag to move · 2-finger to rotate / pinch · ± to set floor';
 
     if (navigator.vibrate) navigator.vibrate(60);
 }
@@ -2014,6 +2035,7 @@ function wireFloorControls() {
     if (floorControlsWired) return;
     floorControlsWired = true;
 
+    /* +/- buttons with press-and-hold repeat */
     document.querySelectorAll('#floorPanel .floor-btn').forEach((button) => {
         const action = button.getAttribute('data-floor');
         button.addEventListener('click', (e) => e.stopPropagation());
@@ -2023,14 +2045,23 @@ function wireFloorControls() {
             if (!isPlaced) return;
             adjustFloor(action);
             stopAdjustRepeat();
-            if (action !== '0') {
-                adjustRepeatTimer = setInterval(() => adjustFloor(action), 90);
-            }
+            adjustRepeatTimer = setInterval(() => adjustFloor(action), 90);
         });
         button.addEventListener('pointerup', stopAdjustRepeat);
         button.addEventListener('pointercancel', stopAdjustRepeat);
         button.addEventListener('pointerleave', stopAdjustRepeat);
     });
+
+    /* Tap the offset readout (e.g. '+3"') to reset floor to 0. */
+    const lbl = document.getElementById('floorOffsetLabel');
+    if (lbl) {
+        lbl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustFloor('0');
+        });
+        lbl.style.cursor = 'pointer';
+    }
 }
 
 function wireFrontWallButton() {
