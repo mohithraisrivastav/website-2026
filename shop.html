@@ -31,22 +31,245 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ItemList",
-      "url": "https://www.mohithraisrivastav.com/shop.html",
-      "name": "Shop — Mohith Rai Srivastav",
-      "description": "Limited-edition archival fine art prints by Mohith Rai Srivastav.",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Cosmic Return", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 2, "name": "Burnt Earth", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 3, "name": "Chromatic Rupture", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 4, "name": "After The Fall", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 5, "name": "Cracked Spectrum", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 6, "name": "Still Organism", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 7, "name": "Forgotten Skin", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 8, "name": "Erosion", "url": "https://www.mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 9, "name": "Imprint", "url": "https://www.mohithraisrivastav.com/shop.html" }
-      ],
-      "author": { "@type": "Person", "name": "Mohith Rai Srivastav", "url": "https://www.mohithraisrivastav.com/" }
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://www.mohithraisrivastav.com/#person",
+          "name": "Mohith Rai Srivastav",
+          "url": "https://www.mohithraisrivastav.com/",
+          "jobTitle": "Architectural Photographer",
+          "sameAs": [
+            "https://www.instagram.com/mohithraisrivastav/",
+            "https://www.linkedin.com/in/mohithraisrivastav/"
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://www.mohithraisrivastav.com/shop.html#catalog",
+          "url": "https://www.mohithraisrivastav.com/shop.html",
+          "name": "Fine Art Prints — Mohith Rai Srivastav",
+          "description": "Limited-edition archival pigment fine art prints from the Resurface series. Signed, numbered, accompanied by a certificate of authenticity. Each work is offered in Small, Medium, Standard, and Large editions.",
+          "numberOfItems": 9,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#cosmic-return",
+                "name": "Cosmic Return",
+                "description": "The largest edition in the Resurface series — a meditation on cyclical transformation, where weathered surfaces carry the residue of countless monsoons. Printed at museum scale to preserve the full tonal depth of the archival pigment.",
+                "image": "https://www.mohithraisrivastav.com/images/Cosmic%20Return.webp",
+                "sku": "MRS-COSMIC-RETURN",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#burnt-earth",
+                "name": "Burnt Earth",
+                "description": "Pigment archaeology: rust, clay, and oxidation read as palimpsest on the built skin of Goa. A close reading of how earth-tones return to the surfaces that first borrowed them.",
+                "image": "https://www.mohithraisrivastav.com/images/Burnt%20Earth.webp",
+                "sku": "MRS-BURNT-EARTH",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#chromatic-rupture",
+                "name": "Chromatic Rupture",
+                "description": "Where paint abandons its architecture. A study of color as a living organism in retreat — documenting the moment pigment separates from the wall it once defined.",
+                "image": "https://www.mohithraisrivastav.com/images/Chromatic%20Rupture.webp",
+                "sku": "MRS-CHROMATIC-RUPTURE",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#after-the-fall",
+                "name": "After The Fall",
+                "description": "Captured in the aftermath of monsoon — surfaces holding the memory of water that has already moved on. Stillness as residue, silence as record.",
+                "image": "https://www.mohithraisrivastav.com/images/After%20The%20Fall.webp",
+                "sku": "MRS-AFTER-THE-FALL",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#cracked-spectrum",
+                "name": "Cracked Spectrum",
+                "description": "Fissures as spectrum. The geometry of structural fatigue rendered as abstract field — reading a wall the way one reads a seismograph.",
+                "image": "https://www.mohithraisrivastav.com/images/Cracked%20Spectrum.webp",
+                "sku": "MRS-CRACKED-SPECTRUM",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#still-organism",
+                "name": "Still Organism",
+                "description": "Architecture considered not as object but as slow body — breathing, absorbing, decaying in place. A portrait of a building at rest within its own transformation.",
+                "image": "https://www.mohithraisrivastav.com/images/The%20Still%20Organism.webp",
+                "sku": "MRS-STILL-ORGANISM",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#forgotten-skin",
+                "name": "Forgotten Skin",
+                "description": "The exterior wall as memory surface. What the building has witnessed, recorded in pigment, spore, and slow stain.",
+                "image": "https://www.mohithraisrivastav.com/images/The%20Forgotten%20Skin.webp",
+                "sku": "MRS-FORGOTTEN-SKIN",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#erosion",
+                "name": "Erosion",
+                "description": "Time's deliberate subtraction. A portrait of material yielding to weather across seasons — the wall's quiet negotiation with its own disappearance.",
+                "image": "https://www.mohithraisrivastav.com/images/Erosion.webp",
+                "sku": "MRS-EROSION",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#imprint",
+                "name": "Imprint",
+                "description": "A trace left by the absence of something that once touched this surface. Architecture as archive of the things it no longer holds.",
+                "image": "https://www.mohithraisrivastav.com/images/Imprint.webp",
+                "sku": "MRS-IMPRINT",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
