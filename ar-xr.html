@@ -478,6 +478,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { XREstimatedLight } from 'three/addons/webxr/XREstimatedLight.js';
 
 /* ──────────────────────────────────────────────────────────────
    Phase 1 hardcoded to Cosmic Return + its three GLB sizes.
@@ -519,9 +520,18 @@ if (new URLSearchParams(location.search).has('debug')) {
 
 /* ──── Three.js state ──── */
 let renderer, scene, camera;
-let printModel = null;   // GLB scene
-let reticle    = null;   // Hit-test visualization (a thin gold ring on the wall)
-let tapeGroup  = null;   // Floor-to-centre measurement overlay
+let printModel       = null;   // GLB scene
+let reticle          = null;   // Hit-test visualization (a thin gold ring on the wall)
+let tapeGroup        = null;   // Floor-to-centre measurement overlay
+let ambientLight     = null;   // fallback ambient when XR estimation not granted
+let directionalLight = null;   // fallback key light
+let xrEstimatedLight = null;   // XREstimatedLight from WebXR light-estimation feature
+
+/* Baseline intensities used when light-estimation is NOT available.
+   When estimation kicks in, both fade to 0 (the XREstimatedLight
+   handles the scene) and are restored if estimation ends. */
+const BASE_AMBIENT_INTENSITY     = 0.7;
+const BASE_DIRECTIONAL_INTENSITY = 1.1;
 
 /* ──── WebXR state ──── */
 let xrSession        = null;
@@ -657,13 +667,37 @@ function initThree() {
     scene  = new THREE.Scene();
     camera = new THREE.PerspectiveCamera();
 
-    // Lighting — WebXR light-estimation will dynamically adjust intensity
-    // when supported. These are baseline values for devices that don't
-    // expose light estimation.
-    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-    const dir = new THREE.DirectionalLight(0xffffff, 1.1);
-    dir.position.set(0.5, 1, 0.3);
-    scene.add(dir);
+    /* Fallback lighting — used when WebXR light-estimation isn't
+       granted by the runtime. These are baseline values that look
+       reasonable on typical indoor walls without any environment
+       information. References kept at module scope so the XR
+       estimation hooks can fade them out when real-room lighting
+       takes over. */
+    ambientLight = new THREE.AmbientLight(0xffffff, BASE_AMBIENT_INTENSITY);
+    directionalLight = new THREE.DirectionalLight(0xffffff, BASE_DIRECTIONAL_INTENSITY);
+    directionalLight.position.set(0.5, 1, 0.3);
+    scene.add(ambientLight, directionalLight);
+
+    /* WebXR light estimation — uses the device's ARCore light
+       probe to drive a dynamic THREE.Light + environment cubemap
+       that match the actual room lighting in real time.
+       Fires 'estimationstart' the first frame data is available;
+       'estimationend' if/when the session loses it or ends. We
+       fade the fallback lights to zero while estimation is active
+       so the print isn't double-lit. */
+    xrEstimatedLight = new XREstimatedLight(renderer);
+    xrEstimatedLight.addEventListener('estimationstart', () => {
+        scene.add(xrEstimatedLight);
+        if (xrEstimatedLight.environment) scene.environment = xrEstimatedLight.environment;
+        ambientLight.intensity = 0;
+        directionalLight.intensity = 0;
+    });
+    xrEstimatedLight.addEventListener('estimationend', () => {
+        scene.remove(xrEstimatedLight);
+        scene.environment = null;
+        ambientLight.intensity = BASE_AMBIENT_INTENSITY;
+        directionalLight.intensity = BASE_DIRECTIONAL_INTENSITY;
+    });
 
     // Hit-test reticle — a thin gold ring + center dot drawn on the wall.
     // Always sits flush against whatever vertical plane is hit.
@@ -711,7 +745,7 @@ async function startXR() {
        — useful for hard-to-detect surfaces like featureless walls. */
     const sessionInit = {
         requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
-        optionalFeatures: ['plane-detection'],
+        optionalFeatures: ['plane-detection', 'light-estimation'],
         domOverlay: { root: overlay }
     };
 
