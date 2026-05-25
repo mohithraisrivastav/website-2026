@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Mockups 2 — Options C, D, E</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #F7F3ED;
+    --bg-surface: #EDE8DF;
+    --bg-card: #E2D8C6;
+    --text: #1A1612;
+    --text-secondary: #4A3A33;
+    --text-relief: #6B5E4F;
+    --gold: #CFA246;
+    --gold-text: #7F5F10;
+    --terracotta: #B85C38;
+    --terracotta-hover: #A34E2E;
+    --depth: #2C1F1A;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+.mockup-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 5%;
+}
+.section-divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid rgba(207,162,70,0.2);
+}
+.mockup-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--text);
+    padding: 6px 14px;
+    margin-bottom: 50px;
+}
+
+
+/* ================================================================
+   OPTION C — LEFT-ANCHORED EDITORIAL
+   Strong left alignment. Asymmetric. Content hugs the left edge
+   with generous right-side breathing room.
+   ================================================================ */
+
+/* --- Info Row (C) --- */
+.c-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 700px;
+}
+.c-info-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 32px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(26,22,18,0.06);
+    align-items: baseline;
+}
+.c-info-item:first-child { padding-top: 0; }
+.c-info-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+}
+.c-info-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+}
+
+/* --- Who This Is For (C) --- */
+.c-audience-section {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 80px;
+}
+.c-audience-left {}
+.c-audience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+.c-audience-intro {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+.c-audience-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.c-audience-item {
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(26,22,18,0.06);
+}
+.c-audience-item:first-child { padding-top: 0; }
+.c-audience-item:last-child { border-bottom: none; }
+.c-audience-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--gold-text);
+    margin-bottom: 6px;
+}
+.c-audience-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+}
+
+/* --- Takeaways (C) --- */
+.c-takeaway-section {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 80px;
+}
+.c-takeaway-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.15;
+}
+.c-takeaway-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    counter-reset: takeaway;
+}
+.c-takeaway-item {
+    counter-increment: takeaway;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(26,22,18,0.06);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    padding-left: 48px;
+    position: relative;
+}
+.c-takeaway-item:first-child { padding-top: 0; }
+.c-takeaway-item::before {
+    content: "0" counter(takeaway);
+    position: absolute;
+    left: 0;
+    top: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 1px;
+}
+.c-takeaway-item:first-child::before { top: 0; }
+
+/* --- Format Card (C) --- */
+.c-format {
+    max-width: 700px;
+}
+.c-format-eyebrow {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--text-relief);
+    margin-bottom: 10px;
+}
+.c-format-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.08;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+.c-format-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+.c-format-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 36px;
+}
+.c-format-cell {
+    padding: 16px 24px 16px 0;
+}
+.c-format-cell-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-relief);
+    margin-bottom: 6px;
+}
+.c-format-cell-value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+}
+.c-format-includes {
+    list-style: none;
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+}
+.c-format-includes li {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 10px 24px 10px 0;
+    position: relative;
+}
+.c-format-includes li:not(:last-child)::after {
+    content: '/';
+    position: absolute;
+    right: 10px;
+    color: rgba(26,22,18,0.2);
+}
+.c-format-actions {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+.c-btn-apply {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    border: none;
+    padding: 15px 36px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.c-btn-apply:hover { background: var(--text-secondary); }
+.c-format-counter {
+    font-size: 0.75rem;
+    color: var(--text-relief);
+    letter-spacing: 1px;
+}
+.c-format-nav-arrows {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+.c-nav-arrow {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(26,22,18,0.12);
+    background: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+.c-nav-arrow:hover { border-color: var(--gold); color: var(--gold-text); }
+.c-nav-arrow.disabled { opacity: 0.25; pointer-events: none; }
+
+/* --- Product (C) --- */
+.c-product {
+    max-width: 420px;
+}
+.c-product-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+.c-product-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(26,22,18,0.05);
+    font-size: 0.78rem;
+}
+.c-product-detail-label { color: var(--text-relief); }
+.c-product-detail-value { color: var(--text); font-weight: 500; }
+.c-product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--text);
+    margin: 24px 0;
+}
+.c-product-size {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(26,22,18,0.1);
+    appearance: none;
+    cursor: pointer;
+    margin-bottom: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+}
+.c-product-actions {
+    display: flex;
+    gap: 0;
+}
+.c-product-actions button {
+    flex: 1;
+    padding: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.c-btn-cart2 {
+    color: var(--text);
+    background: var(--bg-surface);
+}
+.c-btn-cart2:hover { background: var(--bg-card); }
+.c-btn-buy2 {
+    color: var(--bg);
+    background: var(--text);
+}
+.c-btn-buy2:hover { background: var(--text-secondary); }
+
+
+/* ================================================================
+   OPTION D — NUMBERED SECTIONS
+   Each section has a left-side number creating a strong
+   vertical anchor. Clean and architectural.
+   ================================================================ */
+
+.d-section {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+}
+.d-section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gold);
+    padding-top: 2px;
+    text-align: right;
+}
+
+/* --- Info (D) --- */
+.d-info-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+}
+.d-info-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+}
+.d-info-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+/* --- Audience (D) --- */
+.d-audience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 12px;
+}
+.d-audience-intro {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 40px;
+}
+.d-audience-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+.d-audience-card {
+    padding: 28px 0;
+    border-top: 1px solid rgba(26,22,18,0.08);
+}
+.d-audience-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.d-audience-desc {
+    font-size: 0.85rem;
+    color: var(--text-relief);
+    line-height: 1.75;
+}
+
+/* --- Takeaways (D) --- */
+.d-takeaway-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 36px;
+}
+.d-takeaway-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+.d-takeaway-card {
+    padding-top: 16px;
+    border-top: 2px solid var(--gold);
+}
+.d-takeaway-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+.d-takeaway-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+}
+
+/* --- Format (D) --- */
+.d-format-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-text);
+    margin-bottom: 8px;
+}
+.d-format-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+.d-format-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 36px;
+}
+.d-format-strip {
+    display: flex;
+    gap: 0;
+    background: var(--bg-surface);
+    margin-bottom: 32px;
+}
+.d-format-strip-item {
+    flex: 1;
+    padding: 20px 24px;
+}
+.d-format-strip-item:not(:last-child) {
+    border-right: 1px solid rgba(26,22,18,0.06);
+}
+.d-strip-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-relief);
+    margin-bottom: 4px;
+}
+.d-strip-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+}
+.d-format-list {
+    list-style: none;
+    margin-bottom: 36px;
+    columns: 2;
+    column-gap: 40px;
+}
+.d-format-list li {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding: 6px 0 6px 16px;
+    position: relative;
+}
+.d-format-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 6px;
+    height: 1px;
+    background: var(--gold);
+}
+.d-btn-apply {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--terracotta);
+    border: none;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.d-btn-apply:hover { background: var(--terracotta-hover); }
+
+/* --- Product (D) --- */
+.d-product {
+    max-width: 440px;
+}
+.d-product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+.d-product-edition {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--text-relief);
+    margin-bottom: 20px;
+}
+.d-product-strip {
+    display: flex;
+    gap: 0;
+    background: var(--bg-surface);
+    margin-bottom: 20px;
+}
+.d-product-strip-cell {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+.d-product-strip-cell:not(:last-child) {
+    border-right: 1px solid rgba(26,22,18,0.06);
+}
+.d-product-strip-cell strong {
+    display: block;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+    font-size: 0.68rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+.d-product-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.d-product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+.d-product-avail {
+    font-size: 0.72rem;
+    color: var(--gold-text);
+}
+.d-product-size {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg-surface);
+    border: none;
+    appearance: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+.d-product-actions {
+    display: flex;
+    gap: 10px;
+}
+.d-product-actions button {
+    flex: 1;
+    padding: 14px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.d-btn-cart3 {
+    color: var(--text);
+    background: none;
+    border: 1px solid rgba(26,22,18,0.15) !important;
+}
+.d-btn-cart3:hover { border-color: var(--gold) !important; color: var(--gold-text); }
+.d-btn-buy3 {
+    color: var(--bg);
+    background: var(--terracotta);
+}
+.d-btn-buy3:hover { background: var(--terracotta-hover); }
+
+
+/* ================================================================
+   OPTION E — STACKED CARDS
+   Sections float on subtle surface-color cards with no borders.
+   Soft elevation through background contrast, not lines.
+   ================================================================ */
+
+.e-card {
+    background: var(--bg-surface);
+    padding: 48px;
+    margin-bottom: 40px;
+}
+
+/* --- Info (E) --- */
+.e-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(26,22,18,0.06);
+}
+.e-info-cell {
+    background: var(--bg-surface);
+    padding: 28px 32px;
+}
+.e-info-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-text);
+    margin-bottom: 12px;
+}
+.e-info-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+}
+
+/* --- Audience (E) --- */
+.e-audience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+}
+.e-audience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-style: italic;
+}
+.e-audience-intro {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-width: 400px;
+    text-align: right;
+    line-height: 1.7;
+}
+.e-audience-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(26,22,18,0.06);
+}
+.e-audience-cell {
+    background: var(--bg-surface);
+    padding: 32px 28px;
+}
+.e-audience-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+.e-audience-desc {
+    font-size: 0.82rem;
+    color: var(--text-relief);
+    line-height: 1.75;
+}
+
+/* --- Takeaways (E) --- */
+.e-takeaway-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 36px;
+}
+.e-takeaway-scroll {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.e-takeaway-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    position: relative;
+}
+.e-takeaway-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: rgba(207,162,70,0.15);
+    line-height: 1;
+    margin-bottom: 16px;
+}
+.e-takeaway-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+}
+
+/* --- Format (E) --- */
+.e-format {
+    background: var(--depth);
+    color: var(--bg);
+    padding: 56px;
+    margin-bottom: 40px;
+}
+.e-format-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+.e-format-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.08;
+    margin-bottom: 16px;
+}
+.e-format-desc {
+    font-size: 0.92rem;
+    color: rgba(247,243,237,0.7);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 40px;
+}
+.e-format-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(207,162,70,0.2);
+    border-bottom: 1px solid rgba(207,162,70,0.2);
+    margin-bottom: 32px;
+}
+.e-meta-cell {
+    padding: 20px 20px 20px 0;
+}
+.e-meta-cell:not(:last-child) {
+    border-right: 1px solid rgba(207,162,70,0.12);
+    padding-right: 20px;
+}
+.e-meta-cell:not(:first-child) {
+    padding-left: 20px;
+}
+.e-meta-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+}
+.e-meta-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--bg);
+}
+.e-format-list {
+    list-style: none;
+    margin-bottom: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.e-format-list li {
+    font-size: 0.75rem;
+    color: rgba(247,243,237,0.6);
+    padding: 8px 16px;
+    border: 1px solid rgba(207,162,70,0.15);
+}
+.e-btn-apply2 {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--depth);
+    background: var(--gold);
+    border: none;
+    padding: 15px 36px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.e-btn-apply2:hover { background: #ddb356; }
+.e-format-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(207,162,70,0.12);
+}
+.e-format-counter {
+    font-size: 0.75rem;
+    color: rgba(247,243,237,0.4);
+}
+.e-format-arrows {
+    display: flex;
+    gap: 6px;
+}
+.e-format-arrows button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid rgba(207,162,70,0.2);
+    color: var(--gold);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+.e-format-arrows button:hover {
+    border-color: var(--gold);
+    background: rgba(207,162,70,0.1);
+}
+.e-format-arrows button.disabled { opacity: 0.3; pointer-events: none; }
+
+/* --- Product (E) --- */
+.e-product {
+    max-width: 440px;
+    background: var(--bg-surface);
+    padding: 36px;
+}
+.e-product-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.e-product-sub {
+    font-size: 0.72rem;
+    color: var(--gold-text);
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+}
+.e-product-details {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.e-product-tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 5px 12px;
+    background: var(--bg);
+}
+.e-product-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(26,22,18,0.06);
+}
+.e-product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+.e-product-avail {
+    font-size: 0.72rem;
+    color: var(--text-relief);
+}
+.e-product-size {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--bg);
+    border: none;
+    appearance: none;
+    cursor: pointer;
+    margin-bottom: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+.e-product-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.e-product-actions button {
+    padding: 14px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.e-btn-cart3 {
+    color: var(--text);
+    background: var(--bg);
+}
+.e-btn-cart3:hover { background: #e8e0d2; }
+.e-btn-buy4 {
+    color: var(--bg);
+    background: var(--text);
+}
+.e-btn-buy4:hover { background: var(--text-secondary); }
+
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .c-audience-section, .c-takeaway-section { grid-template-columns: 1fr; gap: 32px; }
+    .c-format-grid { grid-template-columns: 1fr 1fr; }
+    .d-section { grid-template-columns: 40px 1fr; gap: 20px; }
+    .d-takeaway-grid { grid-template-columns: 1fr 1fr; }
+    .d-format-strip, .d-format-list { flex-direction: column; columns: 1; }
+    .e-info-grid, .e-audience-grid { grid-template-columns: 1fr; }
+    .e-takeaway-scroll { grid-template-columns: 1fr 1fr; }
+    .e-format-meta { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+    .c-info-item { grid-template-columns: 1fr; gap: 8px; }
+    .d-info-cols { grid-template-columns: 1fr; }
+    .d-audience-grid { grid-template-columns: 1fr; }
+    .d-takeaway-grid { grid-template-columns: 1fr; }
+    .e-card { padding: 28px; }
+    .e-format { padding: 32px; }
+    .e-takeaway-scroll { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================ OPTION C ============================================ -->
+<div class="mockup-section">
+<span class="mockup-label">Option C — Left-Anchored Editorial</span>
+
+<div class="c-info-row" style="margin-bottom:80px;">
+    <div class="c-info-item">
+        <div class="c-info-label">Included</div>
+        <p class="c-info-text">All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.</p>
+    </div>
+    <div class="c-info-item">
+        <div class="c-info-label">Not Included</div>
+        <p class="c-info-text">Travel. Accommodation. Meals. Personal equipment or materials for your medium.</p>
+    </div>
+    <div class="c-info-item">
+        <div class="c-info-label">What to Bring</div>
+        <p class="c-info-text">Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.</p>
+    </div>
+</div>
+
+<div class="c-audience-section" style="margin-bottom:80px;">
+    <div class="c-audience-left">
+        <h2 class="c-audience-title">Who This Is For</h2>
+        <p class="c-audience-intro">Open to professionals and enthusiasts across all creative fields. If you want to observe more carefully, this is for you.</p>
+    </div>
+    <div class="c-audience-right">
+        <div class="c-audience-item"><div class="c-audience-name">Designers & Architects</div><p class="c-audience-desc">For those who want to understand a space, the people in it, and how it is used before responding to it.</p></div>
+        <div class="c-audience-item"><div class="c-audience-name">Photographers & Filmmakers</div><p class="c-audience-desc">For those who want a practice of observing people, behaviour and environments before they pick up the camera.</p></div>
+        <div class="c-audience-item"><div class="c-audience-name">Writers</div><p class="c-audience-desc">For those who write about place, people, emotion, and routine. You observe before you describe.</p></div>
+        <div class="c-audience-item"><div class="c-audience-name">Musicians & Sound Artists</div><p class="c-audience-desc">For those who work with sound in environments. You listen to the space and the people in it before you record.</p></div>
+    </div>
+</div>
+
+<div class="c-takeaway-section" style="margin-bottom:80px;">
+    <h2 class="c-takeaway-title">What You Leave With</h2>
+    <div class="c-takeaway-list">
+        <div class="c-takeaway-item">One constraint card you drew. Keep it. Use it again in a different place or different time of day. The practice continues.</div>
+        <div class="c-takeaway-item">Your workbook and journal. Space to continue observing. To return to places and notice how your eye sharpens.</div>
+        <div class="c-takeaway-item">Your work from the day. Photographs, recordings, writing, sketches, video — whatever you made during the session.</div>
+        <div class="c-takeaway-item">A practice you can repeat anywhere. Same three steps. Any space. Any day.</div>
+    </div>
+</div>
+
+<div class="c-format" style="margin-bottom:80px;">
+    <div class="c-format-eyebrow">Format · 1 Day · Monthly</div>
+    <h3 class="c-format-name">The One-Day Immersion</h3>
+    <p class="c-format-desc">A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.</p>
+    <div class="c-format-grid">
+        <div class="c-format-cell"><div class="c-format-cell-label">Practice</div><div class="c-format-cell-value">Observation, constraint card, output</div></div>
+        <div class="c-format-cell"><div class="c-format-cell-label">Output</div><div class="c-format-cell-value">One completed work in your medium</div></div>
+        <div class="c-format-cell"><div class="c-format-cell-label">Cost</div><div class="c-format-cell-value">₹3,600 per person</div></div>
+        <div class="c-format-cell"><div class="c-format-cell-label">Next Date</div><div class="c-format-cell-value">7 June 2026 · Goa</div></div>
+    </div>
+    <ul class="c-format-includes">
+        <li>6–8 hours in one space</li>
+        <li>Explorer's Deck</li>
+        <li>Field journal to keep</li>
+        <li>Capped at 12</li>
+    </ul>
+    <div class="c-format-actions">
+        <button class="c-btn-apply">Apply Now →</button>
+        <span class="c-format-counter">01 / 03</span>
+        <div class="c-format-nav-arrows">
+            <button class="c-nav-arrow disabled">←</button>
+            <button class="c-nav-arrow">→</button>
+        </div>
+    </div>
+</div>
+
+<div class="c-product">
+    <div class="c-product-title">COSMIC RETURN</div>
+    <div class="c-product-detail-row"><span class="c-product-detail-label">Edition</span><span class="c-product-detail-value">5 + 1 AP</span></div>
+    <div class="c-product-detail-row"><span class="c-product-detail-label">Paper</span><span class="c-product-detail-value">310 GSM Etching Rag</span></div>
+    <div class="c-product-detail-row"><span class="c-product-detail-label">Certificate</span><span class="c-product-detail-value">Authenticity included</span></div>
+    <div class="c-product-detail-row"><span class="c-product-detail-label">Available</span><span class="c-product-detail-value">5 of 5 remaining</span></div>
+    <div class="c-product-price">₹85,000</div>
+    <select class="c-product-size"><option>Standard — 32 × 24 in</option></select>
+    <div class="c-product-actions">
+        <button class="c-btn-cart2">Add to Cart</button>
+        <button class="c-btn-buy2">Buy Now →</button>
+    </div>
+</div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================ OPTION D ============================================ -->
+<div class="mockup-section">
+<span class="mockup-label">Option D — Numbered Sections</span>
+
+<div class="d-section">
+    <div class="d-section-num">01</div>
+    <div class="d-info-cols">
+        <div><div class="d-info-label">Included</div><p class="d-info-text">All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.</p></div>
+        <div><div class="d-info-label">Not Included</div><p class="d-info-text">Travel. Accommodation. Meals. Personal equipment or materials for your medium.</p></div>
+        <div><div class="d-info-label">What to Bring</div><p class="d-info-text">Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.</p></div>
+    </div>
+</div>
+
+<div class="d-section">
+    <div class="d-section-num">02</div>
+    <div>
+        <h2 class="d-audience-title">Who This Is For</h2>
+        <p class="d-audience-intro">Open to professionals and enthusiasts across all creative fields.</p>
+        <div class="d-audience-grid">
+            <div class="d-audience-card"><div class="d-audience-name">Designers & Architects</div><p class="d-audience-desc">Understand a space, the people in it, and how it is used before responding to it.</p></div>
+            <div class="d-audience-card"><div class="d-audience-name">Photographers & Filmmakers</div><p class="d-audience-desc">A practice of observing people, behaviour and environments before picking up the camera.</p></div>
+            <div class="d-audience-card"><div class="d-audience-name">Writers</div><p class="d-audience-desc">Write about place, people, emotion, and routine. You observe before you describe.</p></div>
+            <div class="d-audience-card"><div class="d-audience-name">Musicians & Sound Artists</div><p class="d-audience-desc">Work with sound in environments. Listen to the space and the people in it before you record.</p></div>
+        </div>
+    </div>
+</div>
+
+<div class="d-section">
+    <div class="d-section-num">03</div>
+    <div>
+        <h2 class="d-takeaway-title">What You Leave With</h2>
+        <div class="d-takeaway-grid">
+            <div class="d-takeaway-card"><div class="d-takeaway-num">01</div><p class="d-takeaway-text">One constraint card you drew. Keep it. The practice continues.</p></div>
+            <div class="d-takeaway-card"><div class="d-takeaway-num">02</div><p class="d-takeaway-text">Your workbook and journal. Space to continue observing.</p></div>
+            <div class="d-takeaway-card"><div class="d-takeaway-num">03</div><p class="d-takeaway-text">Your work from the day. Whatever you made during the session.</p></div>
+            <div class="d-takeaway-card"><div class="d-takeaway-num">04</div><p class="d-takeaway-text">A practice you can repeat anywhere. Same three steps. Any space.</p></div>
+        </div>
+    </div>
+</div>
+
+<div class="d-section">
+    <div class="d-section-num">04</div>
+    <div>
+        <div class="d-format-eyebrow">Format · 1 Day · Monthly</div>
+        <h3 class="d-format-name">The One-Day Immersion</h3>
+        <p class="d-format-desc">A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.</p>
+        <div class="d-format-strip">
+            <div class="d-format-strip-item"><div class="d-strip-label">Practice</div><div class="d-strip-value">Observation, constraint card, output</div></div>
+            <div class="d-format-strip-item"><div class="d-strip-label">Output</div><div class="d-strip-value">One completed work</div></div>
+            <div class="d-format-strip-item"><div class="d-strip-label">Cost</div><div class="d-strip-value">₹3,600 per person</div></div>
+            <div class="d-format-strip-item"><div class="d-strip-label">Next Date</div><div class="d-strip-value">7 June 2026 · Goa</div></div>
+        </div>
+        <ul class="d-format-list">
+            <li>Six to eight hours in one space in Goa</li>
+            <li>Explorer's Deck used in session</li>
+            <li>Field journal to keep</li>
+            <li>Capped at 12 people</li>
+        </ul>
+        <button class="d-btn-apply">Apply Now →</button>
+    </div>
+</div>
+
+<div class="d-product" style="margin-left: 100px;">
+    <div class="d-product-name">Cosmic Return</div>
+    <div class="d-product-edition">Limited Edition · Ed. 5 + 1 AP · Certificate of Authenticity</div>
+    <div class="d-product-strip">
+        <div class="d-product-strip-cell"><strong>Paper</strong>310 GSM Etching Rag</div>
+        <div class="d-product-strip-cell"><strong>Signed</strong>Yes</div>
+        <div class="d-product-strip-cell"><strong>Available</strong>5 of 5</div>
+    </div>
+    <div class="d-product-price-row">
+        <span class="d-product-price">₹85,000</span>
+        <span class="d-product-avail">All editions available</span>
+    </div>
+    <select class="d-product-size"><option>Standard — 32 × 24 in</option></select>
+    <div class="d-product-actions">
+        <button class="d-btn-cart3">Add to Cart</button>
+        <button class="d-btn-buy3">Buy Now →</button>
+    </div>
+</div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ============================================ OPTION E ============================================ -->
+<div class="mockup-section">
+<span class="mockup-label">Option E — Elevated Cards</span>
+
+<div class="e-info-grid" style="margin-bottom:40px;">
+    <div class="e-info-cell"><div class="e-info-label">Included</div><p class="e-info-text">All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.</p></div>
+    <div class="e-info-cell"><div class="e-info-label">Not Included</div><p class="e-info-text">Travel. Accommodation. Meals. Personal equipment or materials for your medium.</p></div>
+    <div class="e-info-cell"><div class="e-info-label">What to Bring</div><p class="e-info-text">Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.</p></div>
+</div>
+
+<div class="e-card" style="margin-bottom:40px;">
+    <div class="e-audience-header">
+        <h2 class="e-audience-title">Who This Is For</h2>
+        <p class="e-audience-intro">Open to professionals and enthusiasts across all creative fields.</p>
+    </div>
+    <div class="e-audience-grid">
+        <div class="e-audience-cell"><div class="e-audience-name">Designers & Architects</div><p class="e-audience-desc">Understand a space, the people in it, and how it is used before responding to it.</p></div>
+        <div class="e-audience-cell"><div class="e-audience-name">Photographers & Filmmakers</div><p class="e-audience-desc">Observing people, behaviour and environments before picking up the camera.</p></div>
+        <div class="e-audience-cell"><div class="e-audience-name">Writers</div><p class="e-audience-desc">Write about place, people, emotion, and routine. Observe before you describe.</p></div>
+        <div class="e-audience-cell"><div class="e-audience-name">Musicians & Sound Artists</div><p class="e-audience-desc">Listen to the space and the people in it before you record.</p></div>
+    </div>
+</div>
+
+<div class="e-card" style="margin-bottom:40px;">
+    <h2 class="e-takeaway-title">What You Leave With</h2>
+    <div class="e-takeaway-scroll">
+        <div class="e-takeaway-card"><div class="e-takeaway-num">01</div><p class="e-takeaway-text">One constraint card you drew. Keep it. Use it again in a different place.</p></div>
+        <div class="e-takeaway-card"><div class="e-takeaway-num">02</div><p class="e-takeaway-text">Your workbook and journal. Space to continue observing.</p></div>
+        <div class="e-takeaway-card"><div class="e-takeaway-num">03</div><p class="e-takeaway-text">Your work from the day. Whatever you made during the session.</p></div>
+        <div class="e-takeaway-card"><div class="e-takeaway-num">04</div><p class="e-takeaway-text">A practice you can repeat anywhere. Same three steps. Any space.</p></div>
+    </div>
+</div>
+
+<div class="e-format">
+    <div class="e-format-eyebrow">Format · 1 Day · Monthly</div>
+    <h3 class="e-format-name">The One-Day Immersion</h3>
+    <p class="e-format-desc">A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.</p>
+    <div class="e-format-meta">
+        <div class="e-meta-cell"><div class="e-meta-label">Practice</div><div class="e-meta-value">Observation, constraint card, output</div></div>
+        <div class="e-meta-cell"><div class="e-meta-label">Output</div><div class="e-meta-value">One completed work</div></div>
+        <div class="e-meta-cell"><div class="e-meta-label">Cost</div><div class="e-meta-value">₹3,600 per person</div></div>
+        <div class="e-meta-cell"><div class="e-meta-label">Next Date</div><div class="e-meta-value">7 June 2026 · Goa</div></div>
+    </div>
+    <ul class="e-format-list">
+        <li>6–8 hours in one space</li>
+        <li>Explorer's Deck</li>
+        <li>Field journal</li>
+        <li>Capped at 12</li>
+    </ul>
+    <button class="e-btn-apply2">Apply Now →</button>
+    <div class="e-format-footer">
+        <span class="e-format-counter">01 / 03</span>
+        <div class="e-format-arrows">
+            <button class="disabled">←</button>
+            <button>→</button>
+        </div>
+    </div>
+</div>
+
+<div class="e-product">
+    <div class="e-product-title">Cosmic Return</div>
+    <div class="e-product-sub">Certificate of Authenticity · Signed</div>
+    <div class="e-product-details">
+        <span class="e-product-tag">Ed. 5 + 1 AP</span>
+        <span class="e-product-tag">310 GSM Etching Rag</span>
+        <span class="e-product-tag">Framed</span>
+    </div>
+    <div class="e-product-price-row">
+        <span class="e-product-price">₹85,000</span>
+        <span class="e-product-avail">5 of 5 editions remaining</span>
+    </div>
+    <select class="e-product-size"><option>Standard — 32 × 24 in</option></select>
+    <div class="e-product-actions">
+        <button class="e-btn-cart3">Add to Cart</button>
+        <button class="e-btn-buy4">Buy Now →</button>
+    </div>
+</div>
+</div>
+
+<div style="height:80px;"></div>
+</body>
+</html>

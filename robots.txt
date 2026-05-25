@@ -13,6 +13,26 @@ Disallow: /audit-report.html
 Disallow: /assets.html
 Disallow: /ar-generator.html
 
+# Block draft / mockup / internal-tool pages so Google doesn't pad
+# 'Discovered – currently not indexed' with junk URLs
+Disallow: /ui-mockups.html
+Disallow: /ui-mockups-2.html
+Disallow: /ui-mockups-3.html
+Disallow: /ui-mockups-4.html
+Disallow: /ui-mockups-5.html
+Disallow: /ui-mockups-6.html
+Disallow: /design-options-gallery.html
+Disallow: /design-options-gallery-v2.html
+Disallow: /shop-redesign.html
+Disallow: /workshops-redesign.html
+Disallow: /cursor-demo.html
+Disallow: /cursor-arrows.html
+Disallow: /ar-build.html
+Disallow: /shop-books.html
+Disallow: /shop-digital.html
+Disallow: /shop-guides.html
+Disallow: /shop-tools.html
+
 Sitemap: https://www.mohithraisrivastav.com/sitemap.xml
 
 # AI search agents

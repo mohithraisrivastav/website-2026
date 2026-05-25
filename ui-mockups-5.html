@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockups — I / J / K</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #F7F3ED;
+  --paper: #FBF8F2;
+  --text: #1A1612;
+  --text-mid: #4A3A33;
+  --text-quiet: #6B5E4F;
+  --gold: #CFA246;
+  --gold-deep: #7F5F10;
+  --terracotta: #B85C38;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  cursor: none;
+}
+a, button { cursor: none; }
+
+/* ─── Cursor system ─── */
+.c-dot { position: fixed; width: 5px; height: 5px; background: var(--text); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); top: 0; left: 0; mix-blend-mode: multiply;}
+.c-ring { position: fixed; width: 42px; height: 42px; border: 1px solid rgba(26,22,18,0.25); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); top: 0; left: 0; transition: width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1), border-color .3s, background .3s; }
+.c-ring.on-link { width: 70px; height: 70px; background: rgba(207,162,70,.08); border-color: var(--gold); }
+.c-light { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(207,162,70,0.07) 0%, transparent 60%); border-radius: 50%; pointer-events: none; z-index: 0; transform: translate(-50%,-50%); top: 0; left: 0; }
+
+/* ─── Top nav ─── */
+.tn { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: center; gap: 40px; padding: 22px 0; background: rgba(247,243,237,.92); backdrop-filter: blur(20px); z-index: 100; border-bottom: 1px solid rgba(207,162,70,.1); }
+.tn a { font-size: .7rem; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; text-decoration: none; color: var(--text-quiet); padding: 6px 0; position: relative; transition: color .3s; }
+.tn a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1.5px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .4s cubic-bezier(.16,1,.3,1); }
+.tn a:hover, .tn a.on { color: var(--text); }
+.tn a:hover::after, .tn a.on::after { transform: scaleX(1); }
+
+/* ─── Option label ─── */
+.ol { text-align: center; padding: 130px 32px 60px; }
+.ol span { display: inline-block; font-size: .65rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #fff; background: var(--text); padding: 8px 24px; }
+.ol p { margin-top: 14px; font-size: .82rem; color: var(--text-quiet); font-style: italic; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+
+/* ═══════════════════════════════════════════════════
+   I — LIVING TYPE
+   Massive concrete poetry. Each letter is alive.
+   Cursor proximity = font weight + scale per character.
+   ═══════════════════════════════════════════════════ */
+.opt-i { padding: 60px 0 200px; position: relative; z-index: 2; }
+
+.i-stack { padding: 0 5vw; }
+
+.i-word-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(4rem, 14vw, 13rem);
+  line-height: .95;
+  letter-spacing: -.02em;
+  color: var(--text);
+  margin-bottom: 0;
+  position: relative;
+}
+.i-word-line .ltr {
+  display: inline-block;
+  transition: font-weight .25s ease, transform .25s ease, color .25s ease;
+  will-change: font-weight, transform;
+}
+
+.i-quiet {
+  font-size: .78rem;
+  color: var(--text-quiet);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 12px;
+  margin-bottom: 80px;
+}
+
+.i-reveal-list {
+  margin: 100px 5vw;
+  max-width: 720px;
+}
+.i-reveal-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.25;
+  padding: 8px 0;
+  cursor: none;
+  position: relative;
+}
+.i-reveal-item .who {
+  font-style: italic;
+}
+.i-reveal-item .what {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem;
+  font-weight: 400;
+  color: var(--text-quiet);
+  letter-spacing: .2px;
+  line-height: 1.7;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 0;
+  transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .35s ease, margin-top .5s cubic-bezier(.16,1,.3,1);
+}
+.i-reveal-item:hover .what { max-height: 60px; opacity: 1; margin-top: 8px; }
+.i-reveal-item:hover .who { color: var(--gold-deep); }
+
+.i-massive-numbers { padding: 80px 5vw 0; }
+.i-num-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(207,162,70,.1);
+}
+.i-num-row:first-of-type { border-top: 1px solid rgba(207,162,70,.1); }
+.i-mn {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--gold);
+  line-height: 1;
+  width: clamp(70px, 10vw, 140px);
+}
+.i-mn-text {
+  font-size: .92rem;
+  line-height: 1.85;
+  color: var(--text-mid);
+  max-width: 580px;
+}
+
+.i-format-block { padding: 140px 5vw 0; }
+.i-format-eyebrow {
+  font-size: .72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-quiet);
+  margin-bottom: 18px;
+}
+.i-format-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: .95;
+  margin-bottom: 40px;
+  letter-spacing: -.02em;
+}
+.i-format-grid { display: flex; flex-wrap: wrap; gap: 30px 64px; margin: 50px 0; max-width: 740px; }
+.i-fg-l { font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-quiet); margin-bottom: 6px; }
+.i-fg-v { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; }
+
+.i-product { padding: 160px 5vw 0; }
+.i-product-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: .95;
+  letter-spacing: -.02em;
+  margin-bottom: 20px;
+}
+.i-product-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  margin-bottom: 36px;
+}
+.i-prod-line {
+  font-size: .82rem;
+  color: var(--text-quiet);
+  letter-spacing: .3px;
+  line-height: 1.85;
+  margin-bottom: 50px;
+}
+
+
+/* ═══════════════════════════════════════════════════
+   J — THE PAPER
+   A single floating sheet. Cursor casts light + shadow on it.
+   Content reads like a precious printed document.
+   ═══════════════════════════════════════════════════ */
+.opt-j {
+  padding: 60px 24px 200px;
+  position: relative;
+  background:
+    radial-gradient(ellipse at top, rgba(207,162,70,.08), transparent 50%),
+    var(--bg);
+  z-index: 2;
+}
+
+.j-paper {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--paper);
+  position: relative;
+  padding: 100px 80px 120px;
+  box-shadow:
+    0 1px 2px rgba(26,22,18,.04),
+    0 8px 24px rgba(26,22,18,.06),
+    0 32px 64px rgba(26,22,18,.05);
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+/* paper texture */
+.j-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(207,162,70,.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(184,92,56,.02) 0%, transparent 50%);
+  background-size: 400px 400px;
+  pointer-events: none;
+  opacity: .7;
+}
+
+/* cursor-driven light spot on paper */
+.j-paper-glow {
+  position: absolute;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(255,250,235,.7) 0%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity .4s;
+  filter: blur(8px);
+}
+.j-paper:hover .j-paper-glow { opacity: 1; }
+
+.j-paper-content { position: relative; z-index: 1; }
+
+.j-eyebrow {
+  font-size: .68rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 8px;
+}
+
+.j-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  margin-bottom: 56px;
+}
+
+.j-paragraph {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-mid);
+  margin-bottom: 28px;
+  max-width: 580px;
+}
+.j-paragraph strong { font-weight: 600; color: var(--text); }
+
+.j-divider {
+  width: 60px; height: 1px;
+  background: var(--gold);
+  margin: 64px 0;
+}
+
+.j-subhead {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 1.15;
+  margin-bottom: 28px;
+}
+
+/* margin notes — actual marginalia */
+.j-margin-note {
+  position: absolute;
+  right: -180px;
+  width: 160px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: var(--text-quiet);
+  line-height: 1.6;
+  padding-left: 12px;
+  border-left: 1px solid var(--gold);
+}
+@media (max-width: 1140px) {
+  .j-margin-note { position: static; width: auto; margin: 20px 0; }
+}
+
+.j-numbered-line {
+  display: flex;
+  gap: 24px;
+  align-items: baseline;
+  padding: 18px 0;
+  font-size: 1.05rem;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+.j-nl-num {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--gold-deep);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.j-kv {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px dotted rgba(207,162,70,.3);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+}
+.j-kv-l { color: var(--text-quiet); font-style: italic; }
+.j-kv-v { font-weight: 500; }
+
+.j-apply {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 50px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--text);
+  padding-bottom: 4px;
+  position: relative;
+}
+.j-apply::after {
+  content: '→';
+  font-style: normal;
+  transition: transform .4s cubic-bezier(.16,1,.3,1);
+}
+.j-apply:hover::after { transform: translateX(8px); }
+
+.j-product-block {
+  margin-top: 100px;
+  padding-top: 70px;
+  border-top: 1px solid rgba(207,162,70,.2);
+}
+.j-prod-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+.j-prod-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+}
+.j-prod-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--gold-deep);
+}
+.j-prod-caption {
+  font-size: .85rem;
+  color: var(--text-quiet);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 520px;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+}
+.j-sizes { display: flex; gap: 6px; margin-bottom: 36px; }
+.j-sz {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 8px 18px;
+  border: none;
+  background: transparent;
+  color: var(--text-quiet);
+  position: relative;
+}
+.j-sz::after { content: ''; position: absolute; bottom: 4px; left: 18px; right: 18px; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform .3s cubic-bezier(.16,1,.3,1); }
+.j-sz:hover, .j-sz.on { color: var(--text); }
+.j-sz:hover::after, .j-sz.on::after { transform: scaleX(1); }
+
+.j-btn-row { display: flex; gap: 28px; align-items: baseline; }
+
+
+/* ═══════════════════════════════════════════════════
+   K — THE CONVEYOR
+   Information moves horizontally. Multiple speeds, multiple directions.
+   Vertical scroll changes pace. Hover slows a line.
+   ═══════════════════════════════════════════════════ */
+.opt-k { padding: 60px 0 200px; position: relative; z-index: 2; }
+
+.k-marquee {
+  display: flex;
+  overflow: hidden;
+  padding: 18px 0;
+  border-top: 1px solid rgba(207,162,70,.12);
+  border-bottom: 1px solid rgba(207,162,70,.12);
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+.k-marquee.k-fast { animation: kscroll 28s linear infinite; }
+.k-marquee.k-slow { animation: kscroll 52s linear infinite reverse; }
+.k-marquee.k-med { animation: kscroll 38s linear infinite; }
+.k-marquee:hover { animation-play-state: paused; }
+
+@keyframes kscroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.k-marquee .k-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 0 40px;
+  flex-shrink: 0;
+}
+.k-marquee.k-headline .k-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--text);
+  letter-spacing: -.02em;
+}
+.k-marquee.k-meta .k-item {
+  font-size: .82rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.k-marquee.k-aud .k-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--gold-deep);
+}
+.k-bullet {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: inline-block;
+}
+
+.k-static-block {
+  max-width: 680px;
+  margin: 100px auto;
+  padding: 0 32px;
+}
+
+.k-eyebrow {
+  font-size: .7rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-quiet);
+  margin-bottom: 16px;
+}
+.k-headline-static {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  margin-bottom: 36px;
+  letter-spacing: -.015em;
+}
+.k-body {
+  font-size: .95rem;
+  line-height: 2;
+  color: var(--text-mid);
+  margin-bottom: 32px;
+  max-width: 560px;
+}
+
+.k-aud-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 60px;
+  margin: 48px 0;
+}
+.k-aud-item {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(207,162,70,.1);
+}
+.k-aud-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.k-aud-desc {
+  font-size: .78rem;
+  color: var(--text-quiet);
+  line-height: 1.6;
+}
+
+.k-takeaway-line {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 14px 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(207,162,70,.08);
+}
+.k-take-num {
+  font-style: italic;
+  color: var(--gold);
+  width: 24px;
+  flex-shrink: 0;
+  font-size: .9rem;
+}
+
+.k-format-meta {
+  display: flex; flex-wrap: wrap; gap: 28px 64px;
+  margin: 40px 0;
+}
+.k-fm-l { font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-quiet); margin-bottom: 4px; }
+.k-fm-v { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.3rem; }
+
+.k-link-btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--text);
+  text-decoration: none;
+  margin-top: 32px;
+  position: relative;
+}
+.k-link-btn::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 30px; bottom: -4px; height: 1px;
+  background: var(--gold);
+  transform: scaleX(.4); transform-origin: left;
+  transition: transform .5s cubic-bezier(.16,1,.3,1);
+}
+.k-link-btn:hover::after { transform: scaleX(1); }
+.k-link-btn span.arrow { transition: transform .4s cubic-bezier(.16,1,.3,1); }
+.k-link-btn:hover span.arrow { transform: translateX(8px); }
+
+.k-product {
+  margin: 120px auto;
+  max-width: 920px;
+  padding: 0 32px;
+}
+.k-product-marquee {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 0;
+}
+.k-prod-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 60px;
+}
+@media (max-width: 720px) { .k-prod-content { grid-template-columns: 1fr; } }
+.k-prod-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+.k-prod-caption {
+  font-size: .82rem;
+  color: var(--text-quiet);
+  line-height: 1.85;
+  margin-bottom: 32px;
+}
+.k-prod-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold-deep);
+  margin-bottom: 40px;
+  line-height: 1;
+}
+.k-sizes { display: flex; flex-direction: column; gap: 2px; margin-bottom: 36px; }
+.k-sz-row {
+  display: flex; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(207,162,70,.1);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  color: var(--text-quiet);
+  background: none; border-top: none; border-left: none; border-right: none;
+  cursor: none;
+  font-style: italic;
+  transition: color .3s, padding-left .3s cubic-bezier(.16,1,.3,1);
+}
+.k-sz-row.on { color: var(--text); padding-left: 14px; border-bottom-color: var(--gold); }
+.k-sz-row:hover { color: var(--text); padding-left: 8px; }
+.k-sz-row .k-sz-l { font-style: normal; font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; }
+.k-prod-actions { display: flex; gap: 24px; align-items: baseline; }
+
+
+/* shared scroll reveal */
+.sr { opacity: 0; transform: translateY(28px); }
+
+
+/* ─── shared mag-btn (used in F-style spots) ─── */
+.mag-btn {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+  padding: 14px 40px;
+  background: var(--text); color: var(--bg);
+  font-family: 'Inter', sans-serif;
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  text-decoration: none; border: none; overflow: hidden;
+}
+.mag-btn .btn-text { position: relative; z-index: 1; transition: transform .15s ease; }
+.mag-btn::before { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateY(101%); transition: transform .45s cubic-bezier(.16,1,.3,1); }
+.mag-btn:hover::before { transform: translateY(0); }
+
+.line-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: .76rem; font-weight: 500;
+  letter-spacing: .5px;
+  color: var(--text); background: none; border: none;
+  padding: 6px 0; position: relative;
+  text-decoration: none;
+}
+.line-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--gold); opacity: .5; }
+
+</style>
+</head>
+<body>
+
+<div class="c-dot"></div>
+<div class="c-ring"></div>
+<div class="c-light"></div>
+
+<nav class="tn">
+  <a href="#opt-i" class="on">I — Living Type</a>
+  <a href="#opt-j">J — The Paper</a>
+  <a href="#opt-k">K — The Conveyor</a>
+</nav>
+
+
+<!-- ═══════════ OPTION I — LIVING TYPE ═══════════ -->
+<div class="ol" id="opt-i">
+  <span>Option I — Living Type</span>
+  <p>Typography is the experience. Every letter responds to your cursor with weight and scale shifts. The page reads like concrete poetry.</p>
+</div>
+
+<section class="opt-i">
+
+  <!-- ROOM-SIZED HEADLINE -->
+  <div class="i-stack">
+    <div class="i-quiet">A workshop in observation</div>
+    <h1 class="i-word-line i-live">Observe</h1>
+    <h1 class="i-word-line i-live">before</h1>
+    <h1 class="i-word-line i-live">you make.</h1>
+  </div>
+
+  <!-- AUDIENCE AS HOVERABLE LINES -->
+  <div class="i-reveal-list">
+    <div class="i-quiet">Made for —</div>
+    <div class="i-reveal-item">
+      <span class="who">Designers</span>
+      <span class="what">Observe a space, the people in it, and how it is used before responding to the brief.</span>
+    </div>
+    <div class="i-reveal-item">
+      <span class="who">Photographers</span>
+      <span class="what">Watch people, behaviour and environments before they pick up the camera.</span>
+    </div>
+    <div class="i-reveal-item">
+      <span class="who">Writers</span>
+      <span class="what">Notice place, people, emotion and routine before they describe.</span>
+    </div>
+    <div class="i-reveal-item">
+      <span class="who">Sound artists</span>
+      <span class="what">Listen to the space and the people in it before they record.</span>
+    </div>
+    <div class="i-reveal-item">
+      <span class="who">Anyone who watches.</span>
+    </div>
+  </div>
+
+  <!-- TAKEAWAYS WITH MASSIVE NUMBERS -->
+  <div class="i-massive-numbers">
+    <div class="i-quiet" style="margin-bottom: 30px;">What you leave with</div>
+    <div class="i-num-row">
+      <div class="i-mn">01</div>
+      <div class="i-mn-text">One constraint card you drew. Keep it. Use it again in a different place or different time of day. The practice continues.</div>
+    </div>
+    <div class="i-num-row">
+      <div class="i-mn">02</div>
+      <div class="i-mn-text">Your workbook and journal. Space to continue observing. To return to places and notice how your eye sharpens.</div>
+    </div>
+    <div class="i-num-row">
+      <div class="i-mn">03</div>
+      <div class="i-mn-text">Your work from the day — photographs, recordings, writing, sketches, video.</div>
+    </div>
+    <div class="i-num-row">
+      <div class="i-mn">04</div>
+      <div class="i-mn-text">A practice you can repeat anywhere. Same three steps. Any space. Any day.</div>
+    </div>
+  </div>
+
+  <!-- FORMAT AS MASSIVE TITLE -->
+  <div class="i-format-block">
+    <div class="i-format-eyebrow">The Format</div>
+    <h2 class="i-format-title i-live">One day.<br>One space.<br>One work.</h2>
+    <div class="i-format-grid">
+      <div><div class="i-fg-l">Practice</div><div class="i-fg-v">Observation, constraint, output</div></div>
+      <div><div class="i-fg-l">Cost</div><div class="i-fg-v">₹3,600 per person</div></div>
+      <div><div class="i-fg-l">Next date</div><div class="i-fg-v">7 June 2026 · Goa</div></div>
+      <div><div class="i-fg-l">Capacity</div><div class="i-fg-v">12 people</div></div>
+    </div>
+    <a href="#" class="mag-btn" onclick="return false"><span class="btn-text">Apply</span></a>
+  </div>
+
+  <!-- PRODUCT AS MASSIVE NAME -->
+  <div class="i-product">
+    <div class="i-format-eyebrow">From the studio</div>
+    <h2 class="i-product-name i-live">Cosmic Return</h2>
+    <div class="i-product-price">₹85,000</div>
+    <p class="i-prod-line">Edition 5 + 1 AP · 310 GSM Etching Rag · Signed · Certificate of Authenticity · 5 of 5 editions remaining</p>
+    <div style="display:flex; gap:24px; align-items:baseline;">
+      <button class="line-btn">Add to cart</button>
+      <a href="#" class="mag-btn" onclick="return false"><span class="btn-text">Buy now</span></a>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════ OPTION J — THE PAPER ═══════════ -->
+<div class="ol" id="opt-j">
+  <span>Option J — The Paper</span>
+  <p>A single floating sheet of paper. Cursor casts a soft light on the surface. Content reads like a precious printed document with marginalia.</p>
+</div>
+
+<section class="opt-j">
+
+  <div class="j-paper">
+    <div class="j-paper-glow"></div>
+
+    <div class="j-paper-content">
+      <div class="j-eyebrow">A field workshop · Goa</div>
+      <h2 class="j-title">A practice in<br>looking before<br>making.</h2>
+
+      <p class="j-paragraph">
+        <strong>This workshop is open</strong> to professionals and enthusiasts across creative fields. It is for anyone whose work begins with seeing — designers and architects who study a space before responding, photographers who watch before they shoot, writers who notice before they describe, sound artists who listen before they record.
+      </p>
+
+      <div class="j-margin-note" style="top: 100px;">
+        Goa, India. One day. Twelve people. Held monthly.
+      </div>
+
+      <p class="j-paragraph">
+        Sessions include the Explorer's Deck, field guidance during observation, and group review. <em>Travel, accommodation and meals are not included.</em> Bring your medium, comfortable clothing for outdoors, and a willingness to observe before you make.
+      </p>
+
+      <div class="j-divider"></div>
+
+      <h3 class="j-subhead">What you leave with</h3>
+      <div class="j-numbered-line"><span class="j-nl-num">i</span><span>The constraint card you drew. Use it again, anywhere.</span></div>
+      <div class="j-numbered-line"><span class="j-nl-num">ii</span><span>Your workbook and journal. A space to continue observing.</span></div>
+      <div class="j-numbered-line"><span class="j-nl-num">iii</span><span>The work you made — photographs, recordings, writing, sketches, video.</span></div>
+      <div class="j-numbered-line"><span class="j-nl-num">iv</span><span>A practice you can repeat. Same three steps. Any space. Any day.</span></div>
+
+      <div class="j-divider"></div>
+
+      <h3 class="j-subhead">The One-Day Immersion</h3>
+      <p class="j-paragraph">
+        A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.
+      </p>
+
+      <div style="max-width: 480px; margin-top: 36px;">
+        <div class="j-kv"><span class="j-kv-l">Format</span><span class="j-kv-v">1 Day · Monthly</span></div>
+        <div class="j-kv"><span class="j-kv-l">Cost</span><span class="j-kv-v">₹3,600 per person</span></div>
+        <div class="j-kv"><span class="j-kv-l">Next session</span><span class="j-kv-v">7 June 2026 · Goa</span></div>
+        <div class="j-kv"><span class="j-kv-l">Capacity</span><span class="j-kv-v">12 people</span></div>
+      </div>
+
+      <a href="#" class="j-apply" onclick="return false">Apply to join</a>
+
+      <!-- PRODUCT -->
+      <div class="j-product-block">
+        <div class="j-eyebrow">From the studio</div>
+        <div class="j-prod-row">
+          <div class="j-prod-name">Cosmic Return</div>
+          <div class="j-prod-price">₹85,000</div>
+        </div>
+        <p class="j-prod-caption">A signed edition of five, printed on 310 GSM etching rag, with a certificate of authenticity. Five of five editions remaining.</p>
+        <div class="j-sizes">
+          <button class="j-sz on">Standard · 32 × 24 in</button>
+          <button class="j-sz">Large · 40 × 30 in</button>
+          <button class="j-sz">Museum · 56 × 42 in</button>
+        </div>
+        <div class="j-btn-row">
+          <button class="line-btn">Add to cart</button>
+          <a href="#" class="j-apply" onclick="return false">Acquire this print</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════ OPTION K — THE CONVEYOR ═══════════ -->
+<div class="ol" id="opt-k">
+  <span>Option K — The Conveyor</span>
+  <p>Information moves horizontally at different speeds. Static center holds the core. Hover any line to slow it down and read. A kinetic newspaper.</p>
+</div>
+
+<section class="opt-k">
+
+  <!-- Top marquee — large italic headline -->
+  <div class="k-marquee k-headline k-slow">
+    <span class="k-item">Observe before you make.</span>
+    <span class="k-item">·</span>
+    <span class="k-item">A workshop in seeing.</span>
+    <span class="k-item">·</span>
+    <span class="k-item">Goa · Monthly.</span>
+    <span class="k-item">·</span>
+    <span class="k-item">Observe before you make.</span>
+    <span class="k-item">·</span>
+    <span class="k-item">A workshop in seeing.</span>
+    <span class="k-item">·</span>
+    <span class="k-item">Goa · Monthly.</span>
+    <span class="k-item">·</span>
+  </div>
+
+  <!-- Meta strip -->
+  <div class="k-marquee k-meta k-fast">
+    <span class="k-item">7 June 2026 · Goa</span><span class="k-bullet"></span>
+    <span class="k-item">Capacity 12</span><span class="k-bullet"></span>
+    <span class="k-item">₹3,600 per person</span><span class="k-bullet"></span>
+    <span class="k-item">Travel not included</span><span class="k-bullet"></span>
+    <span class="k-item">Bring your medium</span><span class="k-bullet"></span>
+    <span class="k-item">Explorer's Deck provided</span><span class="k-bullet"></span>
+    <span class="k-item">Field guidance during observation</span><span class="k-bullet"></span>
+    <span class="k-item">Group review after every session</span><span class="k-bullet"></span>
+    <span class="k-item">7 June 2026 · Goa</span><span class="k-bullet"></span>
+    <span class="k-item">Capacity 12</span><span class="k-bullet"></span>
+    <span class="k-item">₹3,600 per person</span><span class="k-bullet"></span>
+    <span class="k-item">Travel not included</span><span class="k-bullet"></span>
+    <span class="k-item">Bring your medium</span><span class="k-bullet"></span>
+    <span class="k-item">Explorer's Deck provided</span><span class="k-bullet"></span>
+    <span class="k-item">Field guidance during observation</span><span class="k-bullet"></span>
+    <span class="k-item">Group review after every session</span><span class="k-bullet"></span>
+  </div>
+
+  <!-- Audience marquee, slower -->
+  <div class="k-marquee k-aud k-med">
+    <span class="k-item">For designers</span>
+    <span class="k-item">— for architects</span>
+    <span class="k-item">— for photographers</span>
+    <span class="k-item">— for filmmakers</span>
+    <span class="k-item">— for writers</span>
+    <span class="k-item">— for sound artists</span>
+    <span class="k-item">— for anyone who watches</span>
+    <span class="k-item">For designers</span>
+    <span class="k-item">— for architects</span>
+    <span class="k-item">— for photographers</span>
+    <span class="k-item">— for filmmakers</span>
+    <span class="k-item">— for writers</span>
+    <span class="k-item">— for sound artists</span>
+    <span class="k-item">— for anyone who watches</span>
+  </div>
+
+  <!-- Static center: the substance -->
+  <div class="k-static-block">
+    <div class="k-eyebrow">The Workshop</div>
+    <h2 class="k-headline-static">A practice in looking before making.</h2>
+    <p class="k-body">
+      Six to eight hours in a single space. You will move through three steps — observation, constraint, output — and leave with one finished piece in your own medium.
+    </p>
+
+    <div class="k-eyebrow" style="margin-top: 80px;">Who this is for</div>
+    <div class="k-aud-grid">
+      <div class="k-aud-item">
+        <div class="k-aud-name">Designers & Architects</div>
+        <div class="k-aud-desc">Observe a space before responding to the brief</div>
+      </div>
+      <div class="k-aud-item">
+        <div class="k-aud-name">Photographers & Filmmakers</div>
+        <div class="k-aud-desc">Watch before they pick up the camera</div>
+      </div>
+      <div class="k-aud-item">
+        <div class="k-aud-name">Writers</div>
+        <div class="k-aud-desc">Notice before they describe</div>
+      </div>
+      <div class="k-aud-item">
+        <div class="k-aud-name">Sound artists</div>
+        <div class="k-aud-desc">Listen before they record</div>
+      </div>
+    </div>
+
+    <div class="k-eyebrow" style="margin-top: 60px;">What you leave with</div>
+    <div style="margin-top: 16px;">
+      <div class="k-takeaway-line"><span class="k-take-num">01</span><span>The constraint card you drew. The practice continues.</span></div>
+      <div class="k-takeaway-line"><span class="k-take-num">02</span><span>Your workbook and journal.</span></div>
+      <div class="k-takeaway-line"><span class="k-take-num">03</span><span>Your work from the day.</span></div>
+      <div class="k-takeaway-line"><span class="k-take-num">04</span><span>A practice you can repeat anywhere.</span></div>
+    </div>
+
+    <div class="k-eyebrow" style="margin-top: 60px;">The One-Day Immersion</div>
+    <div class="k-format-meta">
+      <div><div class="k-fm-l">Format</div><div class="k-fm-v">1 Day · Monthly</div></div>
+      <div><div class="k-fm-l">Cost</div><div class="k-fm-v">₹3,600</div></div>
+      <div><div class="k-fm-l">Next</div><div class="k-fm-v">7 June 2026 · Goa</div></div>
+      <div><div class="k-fm-l">Capacity</div><div class="k-fm-v">12 people</div></div>
+    </div>
+
+    <a href="#" class="k-link-btn" onclick="return false">Apply to join <span class="arrow">→</span></a>
+  </div>
+
+  <!-- Product as conveyor + grid -->
+  <div class="k-product">
+    <div class="k-marquee k-slow" style="background: rgba(207,162,70,.04);">
+      <span class="k-item k-product-marquee">Cosmic Return</span>
+      <span class="k-item k-product-marquee">·</span>
+      <span class="k-item k-product-marquee">Edition 5 + 1 AP</span>
+      <span class="k-item k-product-marquee">·</span>
+      <span class="k-item k-product-marquee">5 of 5 remaining</span>
+      <span class="k-item k-product-marquee">·</span>
+      <span class="k-item k-product-marquee">Cosmic Return</span>
+      <span class="k-item k-product-marquee">·</span>
+      <span class="k-item k-product-marquee">Edition 5 + 1 AP</span>
+      <span class="k-item k-product-marquee">·</span>
+      <span class="k-item k-product-marquee">5 of 5 remaining</span>
+      <span class="k-item k-product-marquee">·</span>
+    </div>
+
+    <div class="k-prod-content">
+      <div>
+        <div class="k-eyebrow">From the studio</div>
+        <div class="k-prod-name">Cosmic Return</div>
+        <p class="k-prod-caption">A signed edition of five, printed on 310 GSM etching rag, with a certificate of authenticity.</p>
+        <div class="k-prod-price">₹85,000</div>
+      </div>
+      <div>
+        <div class="k-eyebrow">Choose a size</div>
+        <div class="k-sizes">
+          <button class="k-sz-row on"><span>Standard</span><span class="k-sz-l">32 × 24 in</span></button>
+          <button class="k-sz-row"><span>Large</span><span class="k-sz-l">40 × 30 in</span></button>
+          <button class="k-sz-row"><span>Museum</span><span class="k-sz-l">56 × 42 in</span></button>
+        </div>
+        <div class="k-prod-actions">
+          <button class="line-btn">Add to cart</button>
+          <a href="#" class="k-link-btn" onclick="return false">Acquire <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div style="height: 200px;"></div>
+
+
+<script>
+/* ─── CURSOR ─── */
+const dot = document.querySelector('.c-dot');
+const ring = document.querySelector('.c-ring');
+const lite = document.querySelector('.c-light');
+let mx=0,my=0,rx=0,ry=0,lx=0,ly=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*.14; ry+=(my-ry)*.14;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  lx+=(mx-lx)*.06; ly+=(my-ly)*.06;
+  lite.style.left=lx+'px'; lite.style.top=ly+'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a, button, .i-reveal-item').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('on-link'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('on-link'));
+});
+
+
+/* ─── MAGNETIC BUTTON TEXT ─── */
+document.querySelectorAll('.mag-btn').forEach(btn => {
+  const txt = btn.querySelector('.btn-text');
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top - r.height/2;
+    gsap.to(txt, { x: x*.35, y: y*.4, duration: .25, ease: 'power2.out' });
+  });
+  btn.addEventListener('mouseleave', () => {
+    gsap.to(txt, { x:0, y:0, duration: .6, ease: 'elastic.out(1, .4)' });
+  });
+});
+
+
+/* ═══════════════════════════════════════
+   OPTION I — LIVING TYPE
+   Each letter responds to cursor proximity:
+   font weight + scale + color
+   ═══════════════════════════════════════ */
+function splitChars(el) {
+  const raw = el.textContent;
+  el.innerHTML = '';
+  for (const c of raw) {
+    if (c === '\n') { el.appendChild(document.createElement('br')); continue; }
+    const s = document.createElement('span');
+    s.className = 'ltr';
+    s.textContent = c === ' ' ? ' ' : c;
+    el.appendChild(s);
+  }
+}
+document.querySelectorAll('.i-live').forEach(splitChars);
+
+const liveChars = document.querySelectorAll('.i-live .ltr');
+const charData = [];
+
+function computeCharData() {
+  charData.length = 0;
+  liveChars.forEach(ch => {
+    const r = ch.getBoundingClientRect();
+    charData.push({
+      el: ch,
+      cx: r.left + r.width/2,
+      cy: r.top + r.height/2
+    });
+  });
+}
+
+// Recompute on scroll + resize
+let rafScheduled = false;
+function schedule() {
+  if (rafScheduled) return;
+  rafScheduled = true;
+  requestAnimationFrame(() => {
+    computeCharData();
+    rafScheduled = false;
+  });
+}
+window.addEventListener('scroll', schedule);
+window.addEventListener('resize', schedule);
+computeCharData();
+
+const MAX_DIST = 220;
+document.addEventListener('mousemove', e => {
+  charData.forEach(({el, cx, cy}) => {
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const d = Math.sqrt(dx*dx + dy*dy);
+    if (d < MAX_DIST) {
+      const t = 1 - d/MAX_DIST;
+      const weight = 300 + t * 400;
+      const scale = 1 + t * 0.15;
+      el.style.fontWeight = Math.round(weight);
+      el.style.transform = `scale(${scale.toFixed(3)})`;
+    } else {
+      el.style.fontWeight = 300;
+      el.style.transform = 'scale(1)';
+    }
+  });
+});
+
+
+/* ═══════════════════════════════════════
+   OPTION J — PAPER GLOW
+   Cursor casts a soft light circle on the paper
+   ═══════════════════════════════════════ */
+const paper = document.querySelector('.j-paper');
+const glow = document.querySelector('.j-paper-glow');
+if (paper && glow) {
+  paper.addEventListener('mousemove', e => {
+    const r = paper.getBoundingClientRect();
+    glow.style.left = (e.clientX - r.left - 190) + 'px';
+    glow.style.top  = (e.clientY - r.top - 190) + 'px';
+  });
+}
+
+
+/* ═══════════════════════════════════════
+   OPTION K — CONVEYOR
+   Marquees pause on hover (CSS). JS: scroll velocity controls speed.
+   ═══════════════════════════════════════ */
+const marquees = document.querySelectorAll('.k-marquee');
+let lastY = window.scrollY;
+let speedFactor = 1;
+let targetFactor = 1;
+
+window.addEventListener('scroll', () => {
+  const dy = Math.abs(window.scrollY - lastY);
+  lastY = window.scrollY;
+  targetFactor = Math.max(0.4, 1 - dy * 0.04);
+});
+
+(function k(){
+  speedFactor += (targetFactor - speedFactor) * 0.08;
+  targetFactor += (1 - targetFactor) * 0.05;
+  marquees.forEach(m => {
+    m.style.animationDuration = '';  // let CSS define base
+  });
+  requestAnimationFrame(k);
+})();
+
+
+/* ─── DUPLICATE marquee content for seamless loop ─── */
+marquees.forEach(m => {
+  m.innerHTML = m.innerHTML + m.innerHTML;
+});
+
+
+/* ─── NAV ACTIVE ─── */
+const navL = document.querySelectorAll('.tn a');
+const sec = [document.getElementById('opt-i'), document.getElementById('opt-j'), document.getElementById('opt-k')];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 200;
+  sec.forEach((s, i) => {
+    if (s && y >= s.offsetTop) {
+      navL.forEach(l => l.classList.remove('on'));
+      navL[i].classList.add('on');
+    }
+  });
+});
+
+/* size toggles */
+document.querySelectorAll('.j-sz, .k-sz-row').forEach(b => {
+  b.addEventListener('click', () => {
+    const parent = b.parentElement;
+    parent.querySelectorAll('.j-sz, .k-sz-row').forEach(s => s.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Mockup — Refined</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #F7F3ED;
+    --text: #1A1612;
+    --text-mid: #4A3A33;
+    --text-quiet: #6B5E4F;
+    --gold: #CFA246;
+    --gold-text: #7F5F10;
+    --terracotta: #B85C38;
+    --surface: #EDE8DF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 32px 120px;
+}
+
+/* ── Section spacing — just whitespace, nothing else ── */
+.section { margin-bottom: 100px; }
+.section:last-child { margin-bottom: 0; }
+
+
+/* ================================================================
+   WHAT'S INCLUDED / NOT INCLUDED / WHAT TO BRING
+   Three quiet columns. No labels screaming. Just text.
+   ================================================================ */
+
+.info-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px;
+}
+.info-col-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-quiet);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+.info-col-body {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    font-weight: 400;
+}
+
+
+/* ================================================================
+   WHO THIS IS FOR
+   ================================================================ */
+
+.audience-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.15;
+}
+.audience-intro {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 520px;
+    margin-bottom: 48px;
+}
+.audience-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 64px;
+}
+.audience-item {}
+.audience-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+}
+.audience-desc {
+    font-size: 0.88rem;
+    color: var(--text-quiet);
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+
+/* ================================================================
+   WHAT YOU LEAVE WITH
+   ================================================================ */
+
+.takeaway-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 40px;
+    line-height: 1.15;
+}
+.takeaway-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+.takeaway-item {
+    display: flex;
+    gap: 24px;
+    align-items: baseline;
+}
+.takeaway-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--gold);
+    flex-shrink: 0;
+    min-width: 28px;
+}
+.takeaway-text {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.8;
+}
+
+
+/* ================================================================
+   FORMAT CARD
+   No border. No background. Just clear typographic hierarchy.
+   ================================================================ */
+
+.format-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    color: var(--text-quiet);
+    margin-bottom: 10px;
+}
+.format-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.06;
+    margin-bottom: 18px;
+}
+.format-desc {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    max-width: 540px;
+    margin-bottom: 44px;
+}
+
+/* Meta: two rows of two, just label + value stacked */
+.format-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 64px;
+    margin-bottom: 40px;
+    max-width: 540px;
+}
+.meta-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-quiet);
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+.meta-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+}
+
+/* Includes: simple flowing text, not a bulleted list */
+.format-includes {
+    font-size: 0.85rem;
+    color: var(--text-quiet);
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 540px;
+}
+
+/* CTA: solid dark, no outline, clean */
+.format-cta {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    padding: 16px 40px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+.format-cta:hover { background: var(--text-mid); }
+
+/* Navigation: just text, no buttons */
+.format-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 48px;
+}
+.format-nav-link {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-quiet);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.format-nav-link:hover { color: var(--text); }
+.format-nav-link.inactive { opacity: 0.3; pointer-events: none; }
+.format-counter {
+    font-size: 0.78rem;
+    color: var(--text-quiet);
+    margin-left: auto;
+}
+
+
+/* ================================================================
+   PRODUCT DETAILS
+   No card. No border. Just information flowing down.
+   ================================================================ */
+
+.product {}
+.product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+.product-specs {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-quiet);
+    line-height: 1.8;
+    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+}
+.product-auth {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--gold-text);
+    margin-bottom: 4px;
+}
+.product-avail {
+    font-size: 0.8rem;
+    color: var(--text-quiet);
+    margin-bottom: 28px;
+}
+.product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 28px;
+}
+
+/* Size selector: no border, just a quiet bottom line */
+.product-size-wrap {
+    margin-bottom: 28px;
+    max-width: 380px;
+}
+.product-size-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-quiet);
+    margin-bottom: 8px;
+}
+.product-size {
+    width: 100%;
+    padding: 12px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(26,22,18,0.12);
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+}
+.product-size:focus {
+    outline: none;
+    border-bottom-color: var(--gold);
+}
+
+/* Buttons: one text-style, one solid. No outlines. */
+.product-actions {
+    display: flex;
+    gap: 16px;
+    max-width: 380px;
+}
+.btn-add {
+    flex: 1;
+    padding: 15px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--surface);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.btn-add:hover { background: #e2d8c6; }
+.btn-buy {
+    flex: 1;
+    padding: 15px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.btn-buy:hover { background: var(--text-mid); }
+
+
+/* ================================================================
+   A SECOND VARIATION — SAME PRINCIPLES, TIGHTER
+   ================================================================ */
+
+.v2-label {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    padding: 5px 12px;
+    margin-bottom: 48px;
+}
+
+/* V2 Info: horizontal flow, separated by middots */
+.v2-info {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 2.2;
+    max-width: 720px;
+}
+.v2-info strong {
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* V2 Audience: vertical list, name is inline with description */
+.v2-audience-list {
+    max-width: 640px;
+}
+.v2-audience-item {
+    padding: 20px 0;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+}
+.v2-audience-item:not(:last-child) {
+    border-bottom: 1px solid rgba(26,22,18,0.05);
+}
+.v2-audience-item strong {
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* V2 Takeaways: horizontal, minimal */
+.v2-takeaway-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 56px;
+}
+.v2-takeaway-item {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    padding: 16px 0;
+}
+
+/* V2 Format: everything stacked, nothing side by side */
+.v2-format-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.04;
+    margin-bottom: 12px;
+}
+.v2-format-sub {
+    font-size: 0.82rem;
+    color: var(--text-quiet);
+    margin-bottom: 24px;
+    letter-spacing: 0.3px;
+}
+.v2-format-desc {
+    font-size: 1rem;
+    color: var(--text-mid);
+    line-height: 1.9;
+    max-width: 560px;
+    margin-bottom: 36px;
+}
+.v2-format-details {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 2.4;
+    margin-bottom: 36px;
+    max-width: 400px;
+}
+.v2-format-details span {
+    display: flex;
+    justify-content: space-between;
+}
+.v2-format-details span em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--text);
+}
+.v2-cta {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    padding: 16px 44px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.v2-cta:hover { background: var(--text-mid); }
+
+/* V2 Product: inline specs, not rows */
+.v2-product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.v2-product-info {
+    font-size: 0.82rem;
+    color: var(--text-quiet);
+    line-height: 2;
+    margin-bottom: 24px;
+}
+.v2-product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 32px;
+}
+.v2-product-size {
+    width: 100%;
+    max-width: 360px;
+    padding: 12px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(26,22,18,0.1);
+    appearance: none;
+    cursor: pointer;
+    margin-bottom: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+}
+.v2-product-actions {
+    display: flex;
+    gap: 12px;
+    max-width: 360px;
+}
+
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+    .info-columns { grid-template-columns: 1fr; gap: 32px; }
+    .audience-list { grid-template-columns: 1fr; gap: 28px; }
+    .format-meta { grid-template-columns: 1fr; gap: 20px; }
+    .v2-takeaway-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- ── Label ── -->
+    <div style="margin-bottom: 60px;">
+        <span class="v2-label">Variation 1</span>
+    </div>
+
+    <!-- ── What's Included ── -->
+    <div class="section">
+        <div class="info-columns">
+            <div>
+                <div class="info-col-label">What's included</div>
+                <p class="info-col-body">All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.</p>
+            </div>
+            <div>
+                <div class="info-col-label">What's not included</div>
+                <p class="info-col-body">Travel. Accommodation. Meals. Personal equipment or materials for your medium.</p>
+            </div>
+            <div>
+                <div class="info-col-label">What to bring</div>
+                <p class="info-col-body">Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Who This Is For ── -->
+    <div class="section">
+        <h2 class="audience-title">Who This Is For</h2>
+        <p class="audience-intro">Open to professionals and enthusiasts across all creative fields. If you want to observe more carefully, across spaces, people and everyday situations, this is for you.</p>
+        <div class="audience-list">
+            <div class="audience-item">
+                <div class="audience-name">Designers & Architects</div>
+                <p class="audience-desc">For those who want to understand a space, the people in it, and how it is used before responding to it. Observation before the brief.</p>
+            </div>
+            <div class="audience-item">
+                <div class="audience-name">Photographers & Filmmakers</div>
+                <p class="audience-desc">For those who want a practice of observing people, behaviour and environments before they pick up the camera. The camera comes later.</p>
+            </div>
+            <div class="audience-item">
+                <div class="audience-name">Writers</div>
+                <p class="audience-desc">For those who write about place, people, emotion, and routine. You observe before you describe.</p>
+            </div>
+            <div class="audience-item">
+                <div class="audience-name">Musicians & Sound Artists</div>
+                <p class="audience-desc">For those who work with sound in environments. You listen to the space and the people in it before you record.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── What You Leave With ── -->
+    <div class="section">
+        <h2 class="takeaway-title">What You Leave With</h2>
+        <div class="takeaway-list">
+            <div class="takeaway-item">
+                <span class="takeaway-num">01</span>
+                <p class="takeaway-text">One constraint card you drew. Keep it. Use it again in a different place or different time of day. The practice continues.</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="takeaway-num">02</span>
+                <p class="takeaway-text">Your workbook and journal. Space to continue observing. To return to places and notice how your eye sharpens.</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="takeaway-num">03</span>
+                <p class="takeaway-text">Your work from the day. Photographs, recordings, writing, sketches, video — whatever you made during the session.</p>
+            </div>
+            <div class="takeaway-item">
+                <span class="takeaway-num">04</span>
+                <p class="takeaway-text">A practice you can repeat anywhere. Same three steps. Any space. Any day.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Format ── -->
+    <div class="section">
+        <div class="format-eyebrow">Format · 1 Day · Monthly</div>
+        <h3 class="format-name">The One-Day Immersion</h3>
+        <p class="format-desc">A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.</p>
+        <div class="format-meta">
+            <div><div class="meta-label">Practice</div><div class="meta-value">Observation, constraint card, output</div></div>
+            <div><div class="meta-label">Output</div><div class="meta-value">One completed work in your medium</div></div>
+            <div><div class="meta-label">Cost</div><div class="meta-value">₹3,600 per person</div></div>
+            <div><div class="meta-label">Next date</div><div class="meta-value">7 June 2026 · Goa</div></div>
+        </div>
+        <p class="format-includes">Six to eight hours in one space in Goa. Explorer's Deck used in session. Field journal to keep. Capped at 12 people.</p>
+        <a href="#" class="format-cta">Apply Now</a>
+        <div class="format-nav">
+            <button class="format-nav-link inactive">← Previous</button>
+            <button class="format-nav-link">Next →</button>
+            <span class="format-counter">01 / 03</span>
+        </div>
+    </div>
+
+    <!-- ── Product ── -->
+    <div class="section">
+        <div class="product">
+            <h3 class="product-name">Cosmic Return</h3>
+            <p class="product-specs">Edition 5 + 1 AP · 310 GSM Etching Rag · Signed</p>
+            <p class="product-auth">Certificate of Authenticity</p>
+            <p class="product-avail">5 of 5 editions remaining</p>
+            <div class="product-price">₹85,000</div>
+            <div class="product-size-wrap">
+                <div class="product-size-label">Size</div>
+                <select class="product-size">
+                    <option>Standard — 32 × 24 in</option>
+                    <option>Large — 42 × 31.5 in</option>
+                </select>
+            </div>
+            <div class="product-actions">
+                <button class="btn-add">Add to Cart</button>
+                <button class="btn-buy">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     VARIATION 2 — Even quieter. Prose-style information.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<div style="height: 1px; background: rgba(207,162,70,0.15); max-width: 960px; margin: 0 auto;"></div>
+
+<div class="page">
+
+    <div style="margin-bottom: 60px;">
+        <span class="v2-label">Variation 2</span>
+    </div>
+
+    <!-- ── Info as prose ── -->
+    <div class="section">
+        <div class="v2-info">
+            <strong>Included:</strong> All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.<br><br>
+            <strong>Not included:</strong> Travel. Accommodation. Meals. Personal equipment or materials for your medium.<br><br>
+            <strong>Bring:</strong> Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.
+        </div>
+    </div>
+
+    <!-- ── Audience as flowing list ── -->
+    <div class="section">
+        <h2 class="audience-title">Who This Is For</h2>
+        <p class="audience-intro">Open to professionals and enthusiasts across all creative fields.</p>
+        <div class="v2-audience-list">
+            <div class="v2-audience-item"><strong>Designers & Architects</strong> — For those who want to understand a space, the people in it, and how it is used before responding to it. Observation before the brief.</div>
+            <div class="v2-audience-item"><strong>Photographers & Filmmakers</strong> — For those who want a practice of observing people, behaviour and environments before they pick up the camera.</div>
+            <div class="v2-audience-item"><strong>Writers</strong> — For those who write about place, people, emotion, and routine. You observe before you describe.</div>
+            <div class="v2-audience-item"><strong>Musicians & Sound Artists</strong> — For those who work with sound in environments. You listen to the space and the people in it before you record.</div>
+        </div>
+    </div>
+
+    <!-- ── Takeaways ── -->
+    <div class="section">
+        <h2 class="takeaway-title">What You Leave With</h2>
+        <div class="v2-takeaway-row">
+            <div class="v2-takeaway-item">One constraint card you drew. Keep it. Use it again in a different place or different time of day.</div>
+            <div class="v2-takeaway-item">Your workbook and journal. Space to continue observing. To return to places and notice how your eye sharpens.</div>
+            <div class="v2-takeaway-item">Your work from the day. Photographs, recordings, writing, sketches, video — whatever you made during the session.</div>
+            <div class="v2-takeaway-item">A practice you can repeat anywhere. Same three steps. Any space. Any day.</div>
+        </div>
+    </div>
+
+    <!-- ── Format ── -->
+    <div class="section">
+        <h3 class="v2-format-name">The One-Day<br>Immersion</h3>
+        <div class="v2-format-sub">Format · 1 Day · Monthly · Goa</div>
+        <p class="v2-format-desc">A single space, six to eight hours. You will move through all three steps and leave with one finished piece in your own medium.</p>
+        <div class="v2-format-details">
+            <span>Practice <em>Observation, constraint card, output</em></span>
+            <span>Output <em>One completed work</em></span>
+            <span>Cost <em>₹3,600 per person</em></span>
+            <span>Next date <em>7 June 2026</em></span>
+            <span>Capacity <em>12 people</em></span>
+        </div>
+        <button class="v2-cta">Apply Now</button>
+        <div class="format-nav">
+            <button class="format-nav-link inactive">← Previous</button>
+            <button class="format-nav-link">Next →</button>
+            <span class="format-counter">01 / 03</span>
+        </div>
+    </div>
+
+    <!-- ── Product ── -->
+    <div class="section">
+        <h3 class="v2-product-name">Cosmic Return</h3>
+        <div class="v2-product-info">
+            Edition 5 + 1 AP · 310 GSM Etching Rag · Signed<br>
+            Certificate of Authenticity · 5 of 5 editions remaining
+        </div>
+        <div class="v2-product-price">₹85,000</div>
+        <select class="v2-product-size">
+            <option>Standard — 32 × 24 in</option>
+            <option>Large — 42 × 31.5 in</option>
+        </select>
+        <div class="v2-product-actions">
+            <button class="btn-add">Add to Cart</button>
+            <button class="btn-buy">Buy Now</button>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

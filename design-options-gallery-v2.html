@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Options Gallery — Round 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #F7F3ED;
+    --text: #1A1612;
+    --text-mid: #4A3A33;
+    --text-quiet: #6B5E4F;
+    --gold: #CFA246;
+    --gold-text: #7F5F10;
+    --terracotta: #B85C38;
+    --depth: #2C1F1A;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ── Gallery chrome ── */
+.g2-top {
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    background: rgba(247,243,237,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(26,22,18,0.06);
+    padding: 14px 20px;
+}
+.g2-top h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 6px;
+}
+.g2-top .sub {
+    font-size: 0.72rem;
+    color: var(--text-quiet);
+    margin-bottom: 12px;
+    max-width: 640px;
+    line-height: 1.5;
+}
+.g2-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.g2-nav a {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-mid);
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: rgba(26,22,18,0.05);
+    transition: background 0.2s, color 0.2s;
+}
+.g2-nav a:hover { background: var(--text); color: var(--bg); }
+.g2-nav a.back { background: rgba(207,162,70,0.18); color: var(--gold-text); }
+
+.r2-section {
+    border-bottom: 1px solid rgba(26,22,18,0.08);
+}
+.r2-header {
+    padding: 48px 5% 24px;
+    max-width: 900px;
+}
+.r2-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--terracotta);
+    padding: 5px 11px;
+    margin-bottom: 10px;
+}
+.r2-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 8px;
+}
+.r2-desc {
+    font-size: 0.88rem;
+    color: var(--text-quiet);
+    line-height: 1.65;
+    max-width: 560px;
+}
+.r2-demo { position: relative; }
+
+/* ═══════════════════════════════════════
+   R2-1 CINEMA STRIP
+   ═══════════════════════════════════════ */
+.cinema-wrap {
+    padding: 0 0 64px;
+    overflow: hidden;
+}
+.cinema-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 5% 28px;
+    flex-wrap: wrap;
+}
+.cinema-btn {
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: var(--text-quiet);
+    cursor: pointer;
+    transition: color 0.25s;
+}
+.cinema-btn.active { color: var(--text); }
+.cinema-btn span {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+}
+.cinema-strip {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 24px);
+    padding: 24px 5%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+.cinema-frame {
+    flex: 0 0 clamp(200px, 28vw, 320px);
+    aspect-ratio: 3/4;
+    scroll-snap-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: flex-basis 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.55s ease,
+                filter 0.55s ease;
+    opacity: 0.45;
+    filter: brightness(0.55) saturate(0.85);
+}
+.cinema-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.cinema-frame.lit {
+    flex: 0 0 clamp(260px, 38vw, 420px);
+    opacity: 1;
+    filter: brightness(1) saturate(1);
+}
+.cinema-caption {
+    text-align: center;
+    padding: 20px 5% 0;
+    max-width: 480px;
+    margin: 0 auto;
+}
+.cinema-caption h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 6px;
+}
+.cinema-caption p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; }
+
+/* ═══════════════════════════════════════
+   R2-2 MAGAZINE SPREAD
+   ═══════════════════════════════════════ */
+.mag-spread {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    min-height: 72vh;
+    margin: 0 0 64px;
+}
+.mag-img {
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+}
+.mag-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.mag-headline {
+    position: absolute;
+    bottom: 8%;
+    left: -2%;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.92;
+    color: #F7F3ED;
+    text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+    max-width: 90%;
+    pointer-events: none;
+}
+.mag-notes {
+    padding: clamp(32px, 6vw, 72px) clamp(24px, 4vw, 48px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--bg);
+}
+.mag-notes .eyebrow {
+    font-size: 0.72rem;
+    color: var(--gold-text);
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+.mag-notes p {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 16px;
+}
+.mag-notes .pull {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.4;
+    margin: 24px 0;
+}
+
+/* ═══════════════════════════════════════
+   R2-3 SCRIM STACK
+   ═══════════════════════════════════════ */
+.scrim-stack {
+    scroll-snap-type: y proximity;
+}
+.scrim-band {
+    position: relative;
+    min-height: 85vh;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+.scrim-band img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.scrim-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,22,18,0.82) 0%, rgba(26,22,18,0.2) 45%, transparent 70%);
+}
+.scrim-copy {
+    position: relative;
+    z-index: 1;
+    padding: 48px 8% 64px;
+    max-width: 640px;
+    color: #F7F3ED;
+}
+.scrim-copy h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.05;
+    margin-bottom: 14px;
+}
+.scrim-copy p {
+    font-size: 0.92rem;
+    line-height: 1.8;
+    opacity: 0.88;
+}
+
+/* ═══════════════════════════════════════
+   R2-4 THREAD LINE
+   ═══════════════════════════════════════ */
+.thread-wrap {
+    padding: 48px 5% 80px;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+.thread-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold) 8%, var(--gold) 92%, transparent);
+    transform: translateX(-50%);
+}
+.thread-node {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 72px;
+    align-items: start;
+}
+.thread-node:last-child { margin-bottom: 0; }
+.thread-node:nth-child(even) .thread-content { grid-column: 2; text-align: left; }
+.thread-node:nth-child(even) .thread-spacer { grid-column: 1; }
+.thread-dot {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 6px rgba(207,162,70,0.2);
+}
+.thread-content h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+.thread-content p {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════
+   R2-5 PRINT ROOM
+   ═══════════════════════════════════════ */
+.print-room {
+    position: relative;
+    min-height: 75vh;
+    margin: 0 0 64px;
+    background: #1a1612;
+}
+.print-room-img {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+.print-room-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    padding: 5%;
+}
+.print-room-img.fade { opacity: 0; }
+.print-overlay {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    z-index: 2;
+    color: #F7F3ED;
+    max-width: 280px;
+}
+.print-overlay h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 6px;
+}
+.print-overlay .meta {
+    font-size: 0.78rem;
+    opacity: 0.75;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+.print-overlay .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+}
+.print-sizes {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+.print-size-btn {
+    font-family: inherit;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(247,243,237,0.5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: color 0.25s;
+}
+.print-size-btn.active { color: #F7F3ED; }
+.print-buy {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--depth);
+    background: var(--gold);
+    padding: 12px 28px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+/* ═══════════════════════════════════════
+   R2-6 DECK AS OBJECT
+   ═══════════════════════════════════════ */
+.deck-object-wrap {
+    padding: 24px 5% 80px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+    justify-content: center;
+}
+.deck-object-stage {
+    position: relative;
+    width: 220px;
+    height: 300px;
+}
+.deck-obj-under {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(26,22,18,0.2);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.deck-obj-under img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.deck-obj-under:nth-child(1) {
+    transform: translate(14px, 12px) scale(0.96);
+    opacity: 0.5;
+    z-index: 1;
+}
+.deck-obj-under:nth-child(2) {
+    transform: translate(7px, 6px) scale(0.98);
+    opacity: 0.75;
+    z-index: 2;
+}
+.deck-obj-under.spread:nth-child(1) { transform: translate(22px, 16px) scale(0.94); }
+.deck-obj-under.spread:nth-child(2) { transform: translate(10px, 8px) scale(0.97); }
+.deck-obj-top {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 5;
+    box-shadow: 0 20px 50px rgba(26,22,18,0.35);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+}
+.deck-obj-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.deck-obj-top::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,22,18,0.75) 0%, transparent 50%);
+}
+.deck-obj-top.slide-out {
+    transform: translateX(120%) rotate(0deg);
+    opacity: 0;
+}
+.deck-obj-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 2;
+    color: #F7F3ED;
+}
+.deck-obj-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.45;
+}
+.deck-obj-side {
+    max-width: 320px;
+}
+.deck-obj-side h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 12px;
+}
+.deck-obj-side p {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.75;
+    margin-bottom: 20px;
+}
+.deck-obj-pick {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--text);
+    border: none;
+    padding: 14px 24px;
+    cursor: pointer;
+}
+
+.g2-footer {
+    padding: 40px 5%;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-quiet);
+    line-height: 1.6;
+}
+.g2-footer a { color: var(--gold-text); }
+
+@media (max-width: 768px) {
+    .mag-spread { grid-template-columns: 1fr; }
+    .mag-headline { left: 4%; bottom: 12%; font-size: 2.4rem; }
+    .thread-node { grid-template-columns: 1fr; gap: 16px; padding-left: 24px; }
+    .thread-line { left: 8px; transform: none; }
+    .thread-dot { left: 8px; }
+    .thread-node:nth-child(even) .thread-content { grid-column: 1; }
+    .print-sizes { top: 16px; right: 16px; }
+    .print-overlay { left: 16px; bottom: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="g2-top">
+    <h1>Design options — Round 2</h1>
+    <p class="sub">Photography-led, borderless, motion on images not buttons. Palette V5 · Cormorant + Inter · Preview only.</p>
+    <nav class="g2-nav" aria-label="Round 2 options">
+        <a href="design-options-gallery.html" class="back">Round 1</a>
+        <a href="ui-mockups-3.html" class="back">Refined</a>
+        <a href="#r2-1">R2-1 Cinema</a>
+        <a href="#r2-2">R2-2 Magazine</a>
+        <a href="#r2-3">R2-3 Scrim</a>
+        <a href="#r2-4">R2-4 Thread</a>
+        <a href="#r2-5">R2-5 Print room</a>
+        <a href="#r2-6">R2-6 Deck</a>
+    </nav>
+</header>
+
+<!-- R2-1 -->
+<section class="r2-section" id="r2-1">
+    <div class="r2-header">
+        <span class="r2-badge">R2-1</span>
+        <h2 class="r2-title">Cinema strip</h2>
+        <p class="r2-desc">Full-bleed filmstrip — formats change which frame is center-lit (scale + brightness, no 3D tilt). Click a format below.</p>
+    </div>
+    <div class="r2-demo cinema-wrap">
+        <div class="cinema-controls" role="tablist">
+            <button type="button" class="cinema-btn active" data-i="0" role="tab" aria-selected="true"><span>1 Day</span>The One-Day Immersion</button>
+            <button type="button" class="cinema-btn" data-i="1" role="tab" aria-selected="false"><span>3 Days</span>Three-Day Intensive</button>
+            <button type="button" class="cinema-btn" data-i="2" role="tab" aria-selected="false"><span>7 Days</span>Seven-Day Residency</button>
+        </div>
+        <div class="cinema-strip" id="cinemaStrip">
+            <div class="cinema-frame" data-i="0"><img src="GOAF-For Catalog/images/Cosmic Return.webp" alt=""></div>
+            <div class="cinema-frame lit" data-i="1"><img src="GOAF-For Catalog/images/Burnt Earth.webp" alt=""></div>
+            <div class="cinema-frame" data-i="2"><img src="GOAF-For Catalog/images/Chromatic Rupture.webp" alt=""></div>
+            <div class="cinema-frame" data-i="3"><img src="GOAF-For Catalog/images/After The Fall.webp" alt=""></div>
+            <div class="cinema-frame" data-i="4"><img src="GOAF-For Catalog/images/Erosion.webp" alt=""></div>
+        </div>
+        <div class="cinema-caption">
+            <h3 id="cinemaTitle">The One-Day Immersion</h3>
+            <p id="cinemaDesc">Six to eight hours in one space. One finished work in your medium. ₹3,600.</p>
+        </div>
+    </div>
+</section>
+
+<!-- R2-2 -->
+<section class="r2-section" id="r2-2">
+    <div class="r2-header">
+        <span class="r2-badge">R2-2</span>
+        <h2 class="r2-title">Magazine spread</h2>
+        <p class="r2-desc">Asymmetric spread — headline overlaps the image edge. Editorial, not card-based.</p>
+    </div>
+    <div class="r2-demo mag-spread">
+        <div class="mag-img">
+            <img src="GOAF-For Catalog/images/The Still Organism.webp" alt="">
+            <h2 class="mag-headline">Lived<br>Space</h2>
+        </div>
+        <div class="mag-notes">
+            <p class="eyebrow">Workshop · Goa</p>
+            <p class="pull">Observe before you make.</p>
+            <p>Open to photographers, architects, writers, filmmakers, and musicians. A hands-on creative observation workshop based in Goa.</p>
+            <p>Three repeatable steps — observe, constrain, make — applied in any creative medium.</p>
+        </div>
+    </div>
+</section>
+
+<!-- R2-3 -->
+<section class="r2-section" id="r2-3">
+    <div class="r2-header">
+        <span class="r2-badge">R2-3</span>
+        <h2 class="r2-title">Scrim stack</h2>
+        <p class="r2-desc">Full-viewport photo bands with gradient scrim and type. Scroll through — optional snap.</p>
+    </div>
+    <div class="r2-demo scrim-stack">
+        <div class="scrim-band">
+            <img src="GOAF-For Catalog/images/Imprint.webp" alt="">
+            <div class="scrim-copy">
+                <h3>What's included</h3>
+                <p>All workshop sessions. Explorer's Deck. Field guidance. Group review after every session.</p>
+            </div>
+        </div>
+        <div class="scrim-band">
+            <img src="GOAF-For Catalog/images/The Forgotten Skin.webp" alt="">
+            <div class="scrim-copy">
+                <h3>Who this is for</h3>
+                <p>Professionals and enthusiasts who want to observe more carefully — across spaces, people, and everyday situations.</p>
+            </div>
+        </div>
+        <div class="scrim-band">
+            <img src="GOAF-For Catalog/images/Cracked Spectrum.webp" alt="">
+            <div class="scrim-copy">
+                <h3>What you leave with</h3>
+                <p>A constraint card, your journal, work from the day, and a practice you can repeat anywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- R2-4 -->
+<section class="r2-section" id="r2-4">
+    <div class="r2-header">
+        <span class="r2-badge">R2-4</span>
+        <h2 class="r2-title">Thread line</h2>
+        <p class="r2-desc">One vertical gold thread connects sections — dots, not boxed headers.</p>
+    </div>
+    <div class="r2-demo thread-wrap">
+        <div class="thread-line" aria-hidden="true"></div>
+        <article class="thread-node">
+            <span class="thread-dot" aria-hidden="true"></span>
+            <div class="thread-spacer"></div>
+            <div class="thread-content">
+                <h4>What's included</h4>
+                <p>All workshop sessions. Explorer's Deck. Field guidance during observation. Group review after every session.</p>
+            </div>
+        </article>
+        <article class="thread-node">
+            <span class="thread-dot" aria-hidden="true"></span>
+            <div class="thread-content">
+                <h4>What's not included</h4>
+                <p>Travel. Accommodation. Meals. Personal equipment or materials for your medium.</p>
+            </div>
+            <div class="thread-spacer"></div>
+        </article>
+        <article class="thread-node">
+            <span class="thread-dot" aria-hidden="true"></span>
+            <div class="thread-spacer"></div>
+            <div class="thread-content">
+                <h4>What to bring</h4>
+                <p>Your medium. Comfortable clothing for extended time outdoors. A willingness to observe before you make.</p>
+            </div>
+        </article>
+        <article class="thread-node">
+            <span class="thread-dot" aria-hidden="true"></span>
+            <div class="thread-content">
+                <h4>Formats</h4>
+                <p>One-day monthly immersion, three-day intensive, seven-day quarterly residency. Capped at twelve people.</p>
+            </div>
+            <div class="thread-spacer"></div>
+        </article>
+    </div>
+</section>
+
+<!-- R2-5 -->
+<section class="r2-section" id="r2-5">
+    <div class="r2-header">
+        <span class="r2-badge">R2-5</span>
+        <h2 class="r2-title">Print room</h2>
+        <p class="r2-desc">Print dominates the wall — specs as corner overlay. Switch size to crossfade crop.</p>
+    </div>
+    <div class="r2-demo print-room" id="printRoom">
+        <div class="print-room-img active" id="printImgA">
+            <img src="GOAF-For Catalog/images/Cosmic Return.webp" alt="Cosmic Return">
+        </div>
+        <div class="print-room-img" id="printImgB" aria-hidden="true">
+            <img src="GOAF-For Catalog/images/Cosmic Return.webp" alt="" style="object-fit: cover; object-position: center 30%;">
+        </div>
+        <div class="print-sizes">
+            <button type="button" class="print-size-btn active" data-size="std">32 × 24 in</button>
+            <button type="button" class="print-size-btn" data-size="lg">42 × 31.5 in</button>
+        </div>
+        <div class="print-overlay">
+            <h3>Cosmic Return</h3>
+            <p class="meta">Edition 5 + 1 AP · 310 GSM Etching Rag · Signed<br>5 of 5 remaining</p>
+            <p class="price" id="printPrice">₹85,000</p>
+            <button type="button" class="print-buy">Add to Cart</button>
+        </div>
+    </div>
+</section>
+
+<!-- R2-6 -->
+<section class="r2-section" id="r2-6">
+    <div class="r2-header">
+        <span class="r2-badge">R2-6</span>
+        <h2 class="r2-title">Deck as object</h2>
+        <p class="r2-desc">Photo-backed cards — draw slides the top card off the stack (no gold rectangle, no rotate).</p>
+    </div>
+    <div class="r2-demo deck-object-wrap">
+        <div class="deck-object-stage" id="deckObjStage">
+            <div class="deck-obj-under" id="deckUnder1"><img src="GOAF-For Catalog/images/Burnt Earth.webp" alt=""></div>
+            <div class="deck-obj-under" id="deckUnder2"><img src="GOAF-For Catalog/images/Erosion.webp" alt=""></div>
+            <div class="deck-obj-top" id="deckTop" role="button" tabindex="0" aria-label="Draw card">
+                <img src="GOAF-For Catalog/images/Chromatic Rupture.webp" alt="">
+                <div class="deck-obj-text">
+                    <p id="deckObjText">Observe one surface for ten minutes without photographing it.</p>
+                </div>
+            </div>
+        </div>
+        <div class="deck-obj-side">
+            <h4>Explorer's Deck</h4>
+            <p>57 constraint cards. Pick one — the top card slides away and reveals the stack beneath. Physical, playful, minimal chrome.</p>
+            <button type="button" class="deck-obj-pick" id="deckObjPick">Pick a Card →</button>
+        </div>
+    </div>
+</section>
+
+<footer class="g2-footer">
+    Preview only — not applied to production.<br>
+  See <a href="UI-R2-PAGE-MAPPING.md">UI-R2-PAGE-MAPPING.md</a> for which site pages each direction maps to.<br>
+    Round 1: <a href="design-options-gallery.html">design-options-gallery.html</a>
+</footer>
+
+<script>
+(function () {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // R2-1 Cinema
+    const cinemaData = [
+        { title: 'The One-Day Immersion', desc: 'Six to eight hours in one space. One finished work. ₹3,600.', lit: 1 },
+        { title: 'The Three-Day Intensive', desc: 'Multiple spaces. Group critique. ₹11,400.', lit: 2 },
+        { title: 'The Seven-Day Residency', desc: 'Full week. Deep returns. ₹24,000.', lit: 3 }
+    ];
+    const frames = document.querySelectorAll('.cinema-frame');
+    const cinemaBtns = document.querySelectorAll('.cinema-btn');
+    const cinemaTitle = document.getElementById('cinemaTitle');
+    const cinemaDesc = document.getElementById('cinemaDesc');
+    const cinemaStrip = document.getElementById('cinemaStrip');
+
+    function setCinema(idx) {
+        const d = cinemaData[idx];
+        if (!d) return;
+        cinemaBtns.forEach((b, i) => {
+            b.classList.toggle('active', i === idx);
+            b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+        });
+        frames.forEach(f => {
+            const fi = parseInt(f.getAttribute('data-i'), 10);
+            f.classList.toggle('lit', fi === d.lit);
+        });
+        if (cinemaTitle) cinemaTitle.textContent = d.title;
+        if (cinemaDesc) cinemaDesc.textContent = d.desc;
+        const litFrame = document.querySelector('.cinema-frame.lit');
+        if (litFrame && cinemaStrip && !reduced) {
+            litFrame.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+    cinemaBtns.forEach(btn => {
+        btn.addEventListener('click', () => setCinema(parseInt(btn.getAttribute('data-i'), 10)));
+    });
+
+    // R2-5 Print room
+    const sizeBtns = document.querySelectorAll('.print-size-btn');
+    const printPrice = document.getElementById('printPrice');
+    const imgB = document.getElementById('printImgB');
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sizeBtns.forEach(b => b.classList.toggle('active', b === btn));
+            if (printPrice) printPrice.textContent = btn.getAttribute('data-size') === 'lg' ? '₹1,25,000' : '₹85,000';
+            if (imgB && !reduced) {
+                imgB.classList.add('fade');
+                imgB.style.opacity = '1';
+                imgB.removeAttribute('aria-hidden');
+                setTimeout(() => imgB.classList.remove('fade'), 600);
+            }
+        });
+    });
+
+    // R2-6 Deck
+    const deckTop = document.getElementById('deckTop');
+    const deckPick = document.getElementById('deckObjPick');
+    const deckText = document.getElementById('deckObjText');
+    const deckU1 = document.getElementById('deckUnder1');
+    const deckU2 = document.getElementById('deckUnder2');
+    const cardLines = [
+        'Observe one surface for ten minutes without photographing it.',
+        'Follow one person through a space without speaking to them.',
+        'Record only sound for fifteen minutes in one location.',
+        'Write three sentences about a door you have never opened.',
+        'Map the light in one room at three different hours.'
+    ];
+    let cardIdx = 0;
+    let drawing = false;
+
+    function drawDeckCard() {
+        if (drawing || !deckTop) return;
+        drawing = true;
+        deckTop.classList.add('slide-out');
+        if (deckU1) deckU1.classList.add('spread');
+        if (deckU2) deckU2.classList.add('spread');
+        setTimeout(() => {
+            cardIdx = (cardIdx + 1) % cardLines.length;
+            if (deckText) deckText.textContent = cardLines[cardIdx];
+            deckTop.classList.remove('slide-out');
+            if (deckU1) deckU1.classList.remove('spread');
+            if (deckU2) deckU2.classList.remove('spread');
+            drawing = false;
+        }, reduced ? 50 : 520);
+    }
+    if (deckPick) deckPick.addEventListener('click', drawDeckCard);
+    if (deckTop) {
+        deckTop.addEventListener('click', drawDeckCard);
+        deckTop.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); drawDeckCard(); }
+        });
+    }
+})();
+</script>
+</body>
+</html>
