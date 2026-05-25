@@ -1541,15 +1541,18 @@ function wireChips() {
 
             const newH = parseInt(chip.getAttribute('data-h'), 10);
 
-            // Convert chip delta to a wall-local vertical offset (inches → metres)
+            /* Single source of truth for the absolute floor-anchored
+               alignment: alignCenterToHangHeight(). It internally
+               guards on hasFreshFloor() + wall-up tilt. If it can't
+               run (no detected floor or tilted wall), fall back to a
+               relative delta from the previous hang height. */
             const previousH = hangHeightIn;
-            const deltaIn = newH - previousH;
             hangHeightIn = newH;
-            if (isPlaced && hasFreshFloor() && Math.abs(placementWallUp.y) >= 0.2) {
-                const desiredY = detectedFloorY + newH * 0.0254;
-                wallOffsetY += (desiredY - _finalPos.y) / placementWallUp.y;
-            } else {
-                wallOffsetY += deltaIn * 0.0254;
+
+            if (isPlaced) {
+                if (!alignCenterToHangHeight()) {
+                    wallOffsetY += (newH - previousH) * 0.0254;
+                }
             }
         });
     });
