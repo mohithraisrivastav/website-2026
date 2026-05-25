@@ -1188,74 +1188,79 @@ const _tapeTop       = new THREE.Vector3();
 const _tapeTickA     = new THREE.Vector3();
 const _tapeTickB     = new THREE.Vector3();
 const _tapeLabelPos  = new THREE.Vector3();
-const _haloA         = new THREE.Vector3();
-const _haloB         = new THREE.Vector3();
 
-/* Halo / outline behind every tape line so the gold rule stays
-   readable on bright walls (sunlit white, daylit warm-white). WebGL
-   line width is forced to 1px regardless of THREE.js settings, so
-   we fake a thicker line by stacking two dark parallel lines (one
-   on each perpendicular side) underneath each gold line. */
-const HALO_OFFSET_M = 0.003;
-const HALO_COLOR    = 0x1a1612;
-const HALO_OPACITY  = 0.6;
+/* Tape segments are now real PlaneGeometry strips rather than
+   THREE.Line — WebGL forces lines to 1 device pixel regardless of
+   settings, so we get proper world-space thickness this way.
+   Each segment is a 5 mm gold strip on top of a 9 mm dark halo
+   strip, giving ~2 mm of dark margin around the gold on every
+   side. Reads on bright/sunlit walls without changing brand
+   colours. */
+const GOLD_STRIP_HALF_WIDTH = 0.0025;  // 5 mm gold strip
+const HALO_STRIP_HALF_WIDTH = 0.0045;  // 9 mm halo strip (2 mm dark margin)
+const HALO_COLOR            = 0x1a1612;
+const HALO_OPACITY          = 0.78;
 
-let tapeLine          = null;
-let tapeLineHaloA     = null;
-let tapeLineHaloB     = null;
-let tapeBottomTick    = null;
-let tapeBottomTickHaloA = null;
-let tapeBottomTickHaloB = null;
-let tapeTopTick       = null;
-let tapeTopTickHaloA  = null;
-let tapeTopTickHaloB  = null;
-let tapeLabelSprite   = null;
-let tapeLabelTexture  = null;
-let tapeLabelCanvas   = null;
-let tapeLabelContext  = null;
-let lastTapeLabel     = '';
+let tapeLine             = null;
+let tapeLineHalo         = null;
+let tapeBottomTick       = null;
+let tapeBottomTickHalo   = null;
+let tapeTopTick          = null;
+let tapeTopTickHalo      = null;
+let tapeLabelSprite      = null;
+let tapeLabelTexture     = null;
+let tapeLabelCanvas      = null;
+let tapeLabelContext     = null;
+let lastTapeLabel        = '';
 
 function hasFreshFloor() {
     return detectedFloorY !== null && (performance.now() - floorSeenAt) < FLOOR_MAX_AGE_MS;
 }
 
-function makeTapeLine(color, opacity) {
+/* PlaneGeometry-based tape strip: a flat quad in 3D space with
+   thickness controlled by halfWidth. Four vertices (two triangles)
+   updated per frame from endpoints + a perpendicular axis. Bypasses
+   the WebGL 1-pixel line-width limitation entirely. */
+function makeTapeStrip(color, opacity) {
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3));
-    const material = new THREE.LineBasicMaterial({
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(12), 3));
+    geometry.setIndex([0, 1, 2, 0, 2, 3]);
+    const material = new THREE.MeshBasicMaterial({
         color,
         transparent: true,
         opacity,
         depthTest: false,
-        depthWrite: false
+        depthWrite: false,
+        side: THREE.DoubleSide
     });
-    const line = new THREE.Line(geometry, material);
-    line.frustumCulled = false;
-    line.renderOrder = 100;
-    return line;
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.frustumCulled = false;
+    mesh.renderOrder = 100;
+    return mesh;
 }
 
-function setTapeLine(line, a, b) {
-    const pos = line.geometry.attributes.position.array;
-    pos[0] = a.x; pos[1] = a.y; pos[2] = a.z;
-    pos[3] = b.x; pos[4] = b.y; pos[5] = b.z;
-    line.geometry.attributes.position.needsUpdate = true;
+/* Position the four vertices of a strip mesh as a quad spanning a→b
+   with thickness halfWidth*2 along perpAxis. */
+function setTapeStrip(mesh, a, b, perpAxis, halfWidth) {
+    const pos = mesh.geometry.attributes.position.array;
+    const px = perpAxis.x * halfWidth;
+    const py = perpAxis.y * halfWidth;
+    const pz = perpAxis.z * halfWidth;
+
+    pos[0]  = a.x - px; pos[1]  = a.y - py; pos[2]  = a.z - pz;
+    pos[3]  = a.x + px; pos[4]  = a.y + py; pos[5]  = a.z + pz;
+    pos[6]  = b.x + px; pos[7]  = b.y + py; pos[8]  = b.z + pz;
+    pos[9]  = b.x - px; pos[10] = b.y - py; pos[11] = b.z - pz;
+
+    mesh.geometry.attributes.position.needsUpdate = true;
 }
 
-/* Updates the gold line and both halo lines (offset ±HALO_OFFSET_M
-   along perpAxis) in one call. perpAxis is the wall-local direction
-   perpendicular to the line's run — placementWallRight for the
-   vertical rule, placementWallUp for horizontal ticks. */
-function setTapeLineWithHalo(gold, haloA, haloB, a, b, perpAxis) {
-    setTapeLine(gold, a, b);
-
-    _haloA.copy(a).addScaledVector(perpAxis, -HALO_OFFSET_M);
-    _haloB.copy(b).addScaledVector(perpAxis, -HALO_OFFSET_M);
-    setTapeLine(haloA, _haloA, _haloB);
-
-    _haloA.copy(a).addScaledVector(perpAxis, HALO_OFFSET_M);
-    _haloB.copy(b).addScaledVector(perpAxis, HALO_OFFSET_M);
-    setTapeLine(haloB, _haloA, _haloB);
+/* Updates a gold strip + its dark halo strip in one call. halo is
+   wider (HALO_STRIP_HALF_WIDTH > GOLD_STRIP_HALF_WIDTH) and sits
+   below the gold via renderOrder, so it reads as an outline. */
+function setTapeStripWithHalo(gold, halo, a, b, perpAxis) {
+    setTapeStrip(halo, a, b, perpAxis, HALO_STRIP_HALF_WIDTH);
+    setTapeStrip(gold, a, b, perpAxis, GOLD_STRIP_HALF_WIDTH);
 }
 
 function initTapeMeasure() {
@@ -1263,24 +1268,18 @@ function initTapeMeasure() {
     tapeGroup.visible = false;
     tapeGroup.renderOrder = 100;
 
-    /* Halos first — added to the group before the gold lines so they
-       render behind. Lower renderOrder also enforces the stacking. */
-    tapeLineHaloA       = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeLineHaloA.renderOrder = 99;
-    tapeLineHaloB       = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeLineHaloB.renderOrder = 99;
-    tapeBottomTickHaloA = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeBottomTickHaloA.renderOrder = 99;
-    tapeBottomTickHaloB = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeBottomTickHaloB.renderOrder = 99;
-    tapeTopTickHaloA    = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeTopTickHaloA.renderOrder = 99;
-    tapeTopTickHaloB    = makeTapeLine(HALO_COLOR, HALO_OPACITY); tapeTopTickHaloB.renderOrder = 99;
-    tapeGroup.add(
-        tapeLineHaloA, tapeLineHaloB,
-        tapeBottomTickHaloA, tapeBottomTickHaloB,
-        tapeTopTickHaloA, tapeTopTickHaloB
-    );
+    /* Halos first — wider dark strips, added to the group before
+       the gold strips and at renderOrder 99 so they reliably render
+       behind. */
+    tapeLineHalo       = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeLineHalo.renderOrder = 99;
+    tapeBottomTickHalo = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeBottomTickHalo.renderOrder = 99;
+    tapeTopTickHalo    = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeTopTickHalo.renderOrder = 99;
+    tapeGroup.add(tapeLineHalo, tapeBottomTickHalo, tapeTopTickHalo);
 
-    /* Gold lines on top */
-    tapeLine = makeTapeLine(0xCFA246, 0.95);
-    tapeBottomTick = makeTapeLine(0xf7f3ec, 0.82);
-    tapeTopTick = makeTapeLine(0xf7f3ec, 0.82);
+    /* Gold strips on top */
+    tapeLine       = makeTapeStrip(0xCFA246, 0.95);
+    tapeBottomTick = makeTapeStrip(0xf7f3ec, 0.85);
+    tapeTopTick    = makeTapeStrip(0xf7f3ec, 0.85);
     tapeGroup.add(tapeLine, tapeBottomTick, tapeTopTick);
 
     tapeLabelCanvas = document.createElement('canvas');
@@ -1356,26 +1355,20 @@ function updateTapeMeasure() {
 
     _tapeTop.copy(_finalPos).addScaledVector(placementWallNormal, normalLift);
 
-    /* Vertical rule — halo lines sit ±3mm along placementWallRight */
-    setTapeLineWithHalo(
-        tapeLine, tapeLineHaloA, tapeLineHaloB,
-        _tapeBottom, _tapeTop, placementWallRight
-    );
+    /* Vertical rule — strip width extends along placementWallRight */
+    setTapeStripWithHalo(tapeLine, tapeLineHalo,
+        _tapeBottom, _tapeTop, placementWallRight);
 
     _tapeTickA.copy(_tapeBottom).addScaledVector(placementWallRight, -tickHalf);
     _tapeTickB.copy(_tapeBottom).addScaledVector(placementWallRight, tickHalf);
-    /* Horizontal tick — halos sit ±3mm along placementWallUp */
-    setTapeLineWithHalo(
-        tapeBottomTick, tapeBottomTickHaloA, tapeBottomTickHaloB,
-        _tapeTickA, _tapeTickB, placementWallUp
-    );
+    /* Horizontal tick — strip width extends along placementWallUp */
+    setTapeStripWithHalo(tapeBottomTick, tapeBottomTickHalo,
+        _tapeTickA, _tapeTickB, placementWallUp);
 
     _tapeTickA.copy(_tapeTop).addScaledVector(placementWallRight, -tickHalf);
     _tapeTickB.copy(_tapeTop).addScaledVector(placementWallRight, tickHalf);
-    setTapeLineWithHalo(
-        tapeTopTick, tapeTopTickHaloA, tapeTopTickHaloB,
-        _tapeTickA, _tapeTickB, placementWallUp
-    );
+    setTapeStripWithHalo(tapeTopTick, tapeTopTickHalo,
+        _tapeTickA, _tapeTickB, placementWallUp);
 
     drawTapeLabel(formatTapeLabel(heightM, measured));
     _tapeLabelPos.copy(_tapeBottom).lerp(_tapeTop, 0.5)
