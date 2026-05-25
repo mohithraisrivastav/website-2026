@@ -284,8 +284,10 @@
     color: #CFA246;
   }
 
-  /* Debug pill — top-left, shows live hit-test info during dev */
+  /* Debug pill — top-left diagnostic readout. Hidden in production.
+     Enable by loading the page with ?debug=1 in the URL. */
   #debugPill {
+    display: none;
     position: absolute;
     top: max(20px, env(safe-area-inset-top, 20px));
     left: 20px;
@@ -303,6 +305,7 @@
     pointer-events: none;
     z-index: 60;
   }
+  #debugPill.show { display: block; }
 
   /* TAP hint (only visible when reticle locks; placement only) */
   #tapHint {
@@ -504,6 +507,15 @@ const loadingPill  = $('loadingPill');
 const closeBtn     = $('closeBtn');
 const frontWallBtn = $('frontWallBtn');
 const hangLabel    = $('hangLabel');
+
+/* Debug pill stays in the DOM but is hidden by default. Append
+   ?debug=1 to the URL to reveal it during testing. textContent
+   assignments throughout the file remain — they're cheap no-ops on
+   a hidden element and let us enable diagnostics live by reloading
+   with the query flag. */
+if (new URLSearchParams(location.search).has('debug')) {
+    $('debugPill').classList.add('show');
+}
 
 /* ──── Three.js state ──── */
 let renderer, scene, camera;
