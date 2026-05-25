@@ -2811,6 +2811,29 @@
                     var selSize = rvSizeList.filter(function(s) {
                         return s.label === selectedLabel;
                     })[0] || rvSizeList[0];
+
+                    /* Android + WebXR fast-path: go straight to the custom
+                       ar-xr.html experience. Skips the model-viewer-based AR
+                       sheet entirely — ar-xr has its own size + hang chips,
+                       working occlusion, light estimation, and gesture
+                       controls. One click from product modal to live AR. */
+                    var isAndroid = /Android/i.test(navigator.userAgent);
+                    var isInApp   = /Instagram|FBAN|FBAV|Line\//.test(navigator.userAgent);
+                    if (isAndroid && navigator.xr && !isInApp) {
+                        var sizeMap = { 'Small':'small', 'Medium':'medium',
+                                        'Standard':'large', 'Large':'large' };
+                        var sizeParam = sizeMap[selSize.label] || 'large';
+                        if (typeof track === 'function') {
+                            track('ar_xr_redirect', {
+                                item_id: rvId, item_name: rvTitle, size: sizeParam,
+                                origin: 'modal_room_btn'
+                            });
+                        }
+                        location.href = 'ar-xr.html?id=' + encodeURIComponent(rvId)
+                                      + '&size=' + sizeParam;
+                        return;
+                    }
+
                     window.openArSheet(rvId, rvTitle, rvImg, selSize.w, selSize.h, rvSizeList);
                 };
             } else {
