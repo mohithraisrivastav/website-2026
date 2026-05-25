@@ -1131,6 +1131,10 @@ let placementWallRight   = new THREE.Vector3();
 let placementWallUp      = new THREE.Vector3();
 let placementWallNormal  = new THREE.Vector3();
 let placementAnchorPos   = new THREE.Vector3();
+/* Scratch for the Matrix4.decompose inside onSelect — module-level
+   so each tap-to-place doesn't allocate two fresh Vector3s. */
+const _selectTmpPos      = new THREE.Vector3();
+const _selectTmpScale    = new THREE.Vector3();
 
 /* ──── Tap-to-place (WebXR 'select' event) ────
    Fires when the user taps the screen in an AR area not covered by
@@ -1139,11 +1143,11 @@ let placementAnchorPos   = new THREE.Vector3();
 async function onSelect() {
     if (isPlaced || (!lastHit && !manualPlacementReady)) return;
 
-    /* Freeze the orientation + wall-up axis from the moment of placement. */
-    const tmpPos = new THREE.Vector3();
-    const tmpScale = new THREE.Vector3();
-    lastPlacementMatrix.decompose(tmpPos, placementOrientation, tmpScale);
-    placementAnchorPos.copy(tmpPos);
+    /* Freeze the orientation + wall-up axis from the moment of placement.
+       Uses module-level scratch vars (see _selectTmpPos / _selectTmpScale)
+       to keep tap-to-place allocation-free. */
+    lastPlacementMatrix.decompose(_selectTmpPos, placementOrientation, _selectTmpScale);
+    placementAnchorPos.copy(_selectTmpPos);
 
     /* Re-derive the wall-up axis from the placement matrix's Y column. */
     placementWallRight.setFromMatrixColumn(lastPlacementMatrix, 0).normalize();
