@@ -582,7 +582,7 @@ const PRODUCT_CATALOG = {
 const SIZE_PRESETS = [
     { id: 'small',    label: 'Small',    longest: 18, suffix: '-small'    },
     { id: 'medium',   label: 'Medium',   longest: 24, suffix: '-medium'   },
-    { id: 'standard', label: 'Standard', longest: 32, suffix: ''          },
+    { id: 'standard', label: 'Standard', longest: 32, suffix: '-standard' },
     { id: 'large',    label: 'Large',    longest: 42, suffix: '-large'    }
 ];
 
@@ -596,32 +596,43 @@ function dimsForSize(origW, origH, longest) {
 }
 
 /* Returns the canonical-file longest dimension for a product —
-   determined by whichever dimension is greater in PRODUCT_CATALOG.
-   For Cosmic Return that's 42; for everyone else, 32. Drives the
-   "is Standard available for this product?" check. */
+   the value whichever dimension is greater in PRODUCT_CATALOG.
+   For Cosmic Return that's 42; for everyone else, 32. Determines
+   which GLB file the Standard chip should load (canonical .glb when
+   it IS Standard, dedicated -standard.glb when canonical is Large). */
 function canonicalLongestFor(productId) {
     const p = PRODUCT_CATALOG[productId];
     return Math.max(p.origW, p.origH);
 }
 
+/* GLB filename resolver — handles the Cosmic Return Standard case
+   without affecting any other product:
+     - Standard chip: if canonical IS 32" (most products) use
+       ar/<id>.glb; otherwise use ar/<id>-standard.glb
+     - Every other chip: ar/<id><suffix>.glb */
+function glbPathFor(productId, preset) {
+    if (preset.id === 'standard'
+        && canonicalLongestFor(productId) === preset.longest) {
+        return 'ar/' + productId + '.glb';
+    }
+    return 'ar/' + productId + preset.suffix + '.glb';
+}
+
 /* Build the SIZES array consumed by the rest of the file for a
-   given product ID. Returns 3 or 4 entries depending on whether
-   Standard (32") is available — Standard is skipped for products
-   whose canonical .glb is already at a different longest dim. */
+   given product ID. Returns all four chip entries (Small / Medium
+   / Standard / Large) for every product — Standard now always
+   appears. Where the GLB sits per product is handled by
+   glbPathFor() above. */
 function buildSizes(productId) {
     const product = PRODUCT_CATALOG[productId];
-    const canonicalLongest = canonicalLongestFor(productId);
-    return SIZE_PRESETS.filter((preset) => {
-        if (preset.id !== 'standard') return true;
-        return canonicalLongest === preset.longest; // Standard only when canonical IS 32"
-    }).map((preset) => {
+    return SIZE_PRESETS.map((preset) => {
         const dims = dimsForSize(product.origW, product.origH, preset.longest);
         return {
             id: preset.id,
             label: preset.label,
             wIn: dims.w,
             hIn: dims.h,
-            glb: 'ar/' + productId + preset.suffix + '.glb'
+            glb: glbPathFor(productId, preset)
         };
     });
 }

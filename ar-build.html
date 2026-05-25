@@ -55,8 +55,10 @@ code { font-size: 0.78rem; background: #f0f0f0; padding: 2px 5px; border-radius:
 <body>
 
 <h1>AR GLB Builder — GOAF Fine Art Prints</h1>
-<p class="sub">Generates the 27 missing per-size GLB files (Small · Medium · Large) for all 9 products.<br>
-Standard-size GLBs already live in <code>ar/</code> — this tool only builds the three additional sizes.</p>
+<p class="sub">Generates per-size GLB files (Small / Medium / Standard / Large) for any product whose canonical
+<code>ar/&lt;id&gt;.glb</code> doesn't already cover that size. Skips duplicates automatically — first
+run typically produces just the Cosmic Return Standard file. Re-run after adding new products to
+the catalogue.</p>
 
 <div class="note">
   <strong>How to use:</strong>
@@ -68,8 +70,8 @@ Standard-size GLBs already live in <code>ar/</code> — this tool only builds th
 </div>
 
 <div class="controls">
-    <button id="buildBtn" onclick="buildAll()">Generate All (27 GLBs)</button>
-    <progress id="prog" value="0" max="27"></progress>
+    <button id="buildBtn" onclick="buildAll()">Generate Missing GLBs</button>
+    <progress id="prog" value="0" max="100"></progress>
     <span id="progText">Ready</span>
 </div>
 
@@ -195,17 +197,28 @@ const PRODUCTS = [
     { id: 'imprint',          title: 'Imprint',          origW: 24,  origH: 32,   image: 'Imprint.jpg'               },
 ];
 
-/* Standard (32") already deployed as ar/{id}.glb — skip it here */
+/* All four sizes the shop offers. For most products, Standard (32")
+   already exists as the canonical ar/{id}.glb (because ar-generator.html
+   produced it at the catalogue's natural dimension). For Cosmic Return
+   alone, the canonical is 42×31.5 — Standard needs a dedicated 32"
+   file (ar/cosmic-return-standard.glb). The skip logic below avoids
+   generating duplicates for products where the canonical IS Standard. */
 const NON_DEFAULT_SIZES = [
-    { label: 'Small',  longest: 18 },
-    { label: 'Medium', longest: 24 },
-    { label: 'Large',  longest: 42 },
+    { label: 'Small',    longest: 18 },
+    { label: 'Medium',   longest: 24 },
+    { label: 'Standard', longest: 32 },
+    { label: 'Large',    longest: 42 },
 ];
 
-/* Build full task list */
+/* Build full task list — skip any (product, size) pair where the
+   product's canonical .glb is already at that longest dimension.
+   That keeps the output minimal: just the missing -standard.glb for
+   Cosmic Return on first run. */
 const TASKS = [];
 for (const p of PRODUCTS) {
+    const canonicalLongest = Math.max(p.origW, p.origH);
     for (const s of NON_DEFAULT_SIZES) {
+        if (s.longest === canonicalLongest) continue;  // would duplicate canonical
         const dims     = calcDims(p.origW, p.origH, s.longest);
         const filename = p.id + '-' + slug(s.label) + '.glb';
         TASKS.push({ product: p, size: s, dims, filename });
@@ -233,6 +246,7 @@ window.buildAll = async function() {
     const btn      = document.getElementById('buildBtn');
     const prog     = document.getElementById('prog');
     const progText = document.getElementById('progText');
+    prog.max       = TASKS.length;
     btn.disabled   = true;
 
     let doneCount = 0, errorCount = 0;
