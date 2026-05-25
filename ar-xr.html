@@ -483,9 +483,9 @@
   <!-- Size label + chips (Small / Medium / Large) -->
   <div class="chip-label size">Size — print dimensions</div>
   <div id="sizeRow">
-    <button class="chip" data-size="small">Small</button>
-    <button class="chip" data-size="medium">Medium</button>
-    <button class="chip active" data-size="large">Large</button>
+    <!-- Size chips rendered dynamically by renderSizeChips() in init() —
+         3 or 4 entries depending on whether the product has a Standard
+         (32"-longest) GLB. See buildSizes() for the rule. -->
   </div>
 
   <!-- Hang-height label + chips. Label text is updated dynamically
@@ -559,18 +559,24 @@ const PRODUCT_CATALOG = {
     'imprint'          : { title: 'Imprint',          origW: 24, origH: 32   }
 };
 
-/* The three size chip presets — longest dimension in inches. The
-   actual width/height of each size depends on the product's aspect
-   ratio (see buildSizes below). The per-size GLB files generated
-   by ar-build.html follow the same convention:
+/* Size chip presets — longest dimension in inches. The actual
+   width/height of each size depends on the product's aspect ratio
+   (see buildSizes below). GLB file convention:
        ar/<product-id>-small.glb     (longest = 18")
        ar/<product-id>-medium.glb    (longest = 24")
        ar/<product-id>-large.glb     (longest = 42")
-   All three exist for every product. */
+       ar/<product-id>.glb           (canonical — Standard = 32" for
+                                      8 of 9 products; Large for
+                                      Cosmic Return only)
+   Standard is only included for products whose CANONICAL .glb is
+   the 32"-longest size. Cosmic Return was authored at 42×31.5, so
+   its canonical IS Large and there is no dedicated 32" file —
+   Standard chip is hidden for that product (3 chips instead of 4). */
 const SIZE_PRESETS = [
-    { id: 'small',  label: 'Small',  longest: 18 },
-    { id: 'medium', label: 'Medium', longest: 24 },
-    { id: 'large',  label: 'Large',  longest: 42 }
+    { id: 'small',    label: 'Small',    longest: 18, suffix: '-small'    },
+    { id: 'medium',   label: 'Medium',   longest: 24, suffix: '-medium'   },
+    { id: 'standard', label: 'Standard', longest: 32, suffix: ''          },
+    { id: 'large',    label: 'Large',    longest: 42, suffix: '-large'    }
 ];
 
 /* Compute the (width, height) in inches for a given preset applied
@@ -582,19 +588,33 @@ function dimsForSize(origW, origH, longest) {
     return { h: longest, w: +(longest / origH * origW).toFixed(2) };
 }
 
+/* Returns the canonical-file longest dimension for a product —
+   determined by whichever dimension is greater in PRODUCT_CATALOG.
+   For Cosmic Return that's 42; for everyone else, 32. Drives the
+   "is Standard available for this product?" check. */
+function canonicalLongestFor(productId) {
+    const p = PRODUCT_CATALOG[productId];
+    return Math.max(p.origW, p.origH);
+}
+
 /* Build the SIZES array consumed by the rest of the file for a
-   given product ID. Returns three entries (small / medium / large)
-   each with the dimensions in inches AND the per-size GLB URL. */
+   given product ID. Returns 3 or 4 entries depending on whether
+   Standard (32") is available — Standard is skipped for products
+   whose canonical .glb is already at a different longest dim. */
 function buildSizes(productId) {
     const product = PRODUCT_CATALOG[productId];
-    return SIZE_PRESETS.map((preset) => {
+    const canonicalLongest = canonicalLongestFor(productId);
+    return SIZE_PRESETS.filter((preset) => {
+        if (preset.id !== 'standard') return true;
+        return canonicalLongest === preset.longest; // Standard only when canonical IS 32"
+    }).map((preset) => {
         const dims = dimsForSize(product.origW, product.origH, preset.longest);
         return {
             id: preset.id,
             label: preset.label,
             wIn: dims.w,
             hIn: dims.h,
-            glb: 'ar/' + productId + '-' + preset.id + '.glb'
+            glb: 'ar/' + productId + preset.suffix + '.glb'
         };
     });
 }
@@ -612,7 +632,15 @@ const INITIAL_SIZE_ID = (function() {
 
 const PRODUCT_TITLE = PRODUCT_CATALOG[PRODUCT_ID].title;
 const SIZES = buildSizes(PRODUCT_ID);
-let currentSize = SIZES.find(s => s.id === INITIAL_SIZE_ID) || SIZES[2];
+/* Default size resolution:
+     1. Honour the URL's ?size= if it's actually available for this product
+     2. Otherwise fall back to Standard if present (most common shop pick)
+     3. Otherwise fall back to Large
+     4. Otherwise the largest available (shouldn't happen — SIZES is non-empty) */
+let currentSize = SIZES.find(s => s.id === INITIAL_SIZE_ID)
+               || SIZES.find(s => s.id === 'standard')
+               || SIZES.find(s => s.id === 'large')
+               || SIZES[SIZES.length - 1];
 
 /* GLB cache — avoids re-downloading when the user toggles between
    sizes. Stores the raw gltf.scene, callers clone() before adding. */
@@ -719,11 +747,11 @@ async function init() {
         $('launchDims').textContent =
             currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
     }
-    /* Also drive the active-state of the size chips inside the AR
-       overlay so a ?size=medium URL boots with Medium highlighted. */
-    document.querySelectorAll('#sizeRow .chip').forEach((c) => {
-        c.classList.toggle('active', c.getAttribute('data-size') === currentSize.id);
-    });
+    /* Render size chips from the SIZES array (3 or 4 entries depending
+       on whether the product has a Standard 32" GLB). Done in JS so
+       Cosmic Return automatically shows 3 chips while the other 8
+       products show all 4. */
+    renderSizeChips();
 
     // Check WebXR support first so we can show a helpful error
     if (!navigator.xr) {
@@ -785,6 +813,19 @@ function refreshHud() {
     const hCm = Math.round(currentSize.hIn * 2.54);
     $('hudTitle').textContent = PRODUCT_TITLE;
     $('hudDims').textContent  = currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+}
+
+/* Build the size chip buttons inside #sizeRow from the SIZES array.
+   3 buttons for Cosmic Return (no Standard), 4 for everyone else.
+   The active chip matches currentSize.id at boot. wireSizeChips()
+   (called later in startXR) attaches the click handlers. */
+function renderSizeChips() {
+    const row = $('sizeRow');
+    if (!row) return;
+    row.innerHTML = SIZES.map((s) => {
+        const active = s.id === currentSize.id ? ' active' : '';
+        return '<button class="chip' + active + '" data-size="' + s.id + '">' + s.label + '</button>';
+    }).join('');
 }
 
 function showError(msg) {

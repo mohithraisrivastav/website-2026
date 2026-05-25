@@ -2821,7 +2821,7 @@
                     var isInApp   = /Instagram|FBAN|FBAV|Line\//.test(navigator.userAgent);
                     if (isAndroid && navigator.xr && !isInApp) {
                         var sizeMap = { 'Small':'small', 'Medium':'medium',
-                                        'Standard':'large', 'Large':'large' };
+                                        'Standard':'standard', 'Large':'large' };
                         var sizeParam = sizeMap[selSize.label] || 'large';
                         if (typeof track === 'function') {
                             track('ar_xr_redirect', {
@@ -3751,7 +3751,7 @@
                         /* Map shop's 4-size lineup to ar-xr's 3-chip lineup.
                            Standard collapses to Large — no 32"-longest GLB
                            is deployed for the custom path. */
-                        var sizeMap = { 'Small': 'small', 'Medium': 'medium', 'Standard': 'large', 'Large': 'large' };
+                        var sizeMap = { 'Small': 'small', 'Medium': 'medium', 'Standard': 'standard', 'Large': 'large' };
                         var sizeLabel = currentArSize ? currentArSize.label : 'Large';
                         var sizeParam = sizeMap[sizeLabel] || 'large';
                         track('ar_xr_redirect', {
