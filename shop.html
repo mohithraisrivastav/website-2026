@@ -2936,6 +2936,9 @@
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
             var arSession = null;
+            /* Currently-selected size in the AR sheet — updated by buildAt
+               so the launch click can pass it to ar-xr.html on Android. */
+            var currentArSize = null;
             var arScaleMult = 1.0;   /* 0.5 – 2.0 scale multiplier for GLB build */
             /* current size list + selected index — kept at IIFE scope so the
                Smaller/Larger buttons can call buildAt() without re-entering openArSheet */
@@ -3277,6 +3280,7 @@
                    different prints at the same size don't share a cached GLB. */
 
                 buildAt = function(sz, isDefault) {
+                    currentArSize = sz;
                     var bW = +(sz.w * arScaleMult).toFixed(2);
                     var bH = +(sz.h * arScaleMult).toFixed(2);
                     var scaleLabel = arScaleMult !== 1
@@ -3418,6 +3422,7 @@
                     });
                     arSession = null;
                 }
+                currentArSize = null;
                 /* remove any pending load listener so it can't fire after close */
                 if (_arLoadListener) {
                     viewer.removeEventListener('load', _arLoadListener);
@@ -3487,6 +3492,32 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
+                    /* ── Android Chrome WebXR fast-path ──
+                       model-viewer's WebXR + Scene Viewer path is brittle on
+                       recent ARCore (the wall-placement Scene Viewer regression
+                       is the canonical case). Send Android+WebXR users to the
+                       custom ar-xr.html experience instead — proper occlusion,
+                       light estimation, gesture controls, tape measure.
+                       Falls through to the existing model-viewer path on any
+                       device that isn't Android-with-WebXR (iOS Quick Look,
+                       desktops, in-app browsers, older Android without xr). */
+                    if (isAndroid && navigator.xr && arMode === 'ar' && arSession) {
+                        /* Map shop's 4-size lineup to ar-xr's 3-chip lineup.
+                           Standard collapses to Large — no 32"-longest GLB
+                           is deployed for the custom path. */
+                        var sizeMap = { 'Small': 'small', 'Medium': 'medium', 'Standard': 'large', 'Large': 'large' };
+                        var sizeLabel = currentArSize ? currentArSize.label : 'Large';
+                        var sizeParam = sizeMap[sizeLabel] || 'large';
+                        track('ar_xr_redirect', {
+                            item_id:   arSession.id,
+                            item_name: arSession.title,
+                            size:      sizeParam
+                        });
+                        location.href = 'ar-xr.html?id=' + encodeURIComponent(arSession.id)
+                                      + '&size=' + sizeParam;
+                        return;
+                    }
+
                     /* in-app browser or desktop: copy the link so the user can open it
                        in a real mobile browser that supports AR. */
                     if (arMode === 'inapp' || arMode === 'desktop') {
