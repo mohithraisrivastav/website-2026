@@ -289,6 +289,55 @@
     color: #CFA246;
   }
 
+  /* Floor-height calibration panel — manual override for when
+     ARCore's detected floor is off. Sits just above #movePanel
+     when the print is placed. */
+  #floorPanel {
+    position: absolute;
+    left: 50%;
+    bottom: max(74px, env(safe-area-inset-bottom, 0px) + 74px);
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(10,10,10,0.62);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.16);
+    border-radius: 20px;
+    pointer-events: auto;
+  }
+  #overlay.placed #floorPanel { display: flex; }
+  .floor-btn {
+    background: rgba(20,17,13,0.74);
+    border: 1px solid rgba(247,243,236,0.18);
+    color: rgba(247,243,236,0.88);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .floor-btn:active {
+    background: rgba(207,162,70,0.32);
+    border-color: rgba(207,162,70,0.75);
+    color: #CFA246;
+  }
+  #floorOffsetLabel {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(247,243,236,0.55);
+    min-width: 46px;
+    text-align: center;
+  }
+  #floorOffsetLabel.active { color: #CFA246; }
+
   /* Debug pill — top-left diagnostic readout. Hidden in production.
      Enable by loading the page with ?debug=1 in the URL. */
   #debugPill {
@@ -460,6 +509,13 @@
   <!-- TAP hint (only when reticle locked + not yet placed) -->
   <div id="tapHint">Tap to place</div>
 
+  <div id="floorPanel" aria-label="Calibrate detected floor height">
+    <button class="floor-btn" data-floor="-1" type="button" aria-label="Floor reference down 1 inch">Floor &minus;</button>
+    <span id="floorOffsetLabel">0&quot;</span>
+    <button class="floor-btn" data-floor="+1" type="button" aria-label="Floor reference up 1 inch">Floor +</button>
+    <button class="floor-btn" data-floor="0"  type="button" aria-label="Reset floor offset" title="Reset floor offset">⟲</button>
+  </div>
+
   <div id="movePanel" aria-label="Adjust placed print">
     <button class="adjust-btn" data-adjust="rot-" type="button" title="Rotate counterclockwise">R-</button>
     <button class="adjust-btn" data-adjust="y+" type="button" title="Move up">Y+</button>
@@ -609,6 +665,14 @@ let isPlaced         = false;
 let sessionStartTime = 0;      // for diagnostic elapsed-time display
 let detectedFloorY   = null;   // world/local-space Y for the lowest detected horizontal plane
 let floorSeenAt      = 0;
+/* Manual floor calibration. ARCore's detected floor can be off by
+   several centimetres on certain surfaces (rugs, tile-line gaps,
+   uneven detection). The user can nudge the floor reference up or
+   down via the floorPanel buttons; this offset is layered on TOP of
+   detectedFloorY so future auto-refinements still apply but the
+   user's correction persists. */
+let floorAdjustOffsetM = 0;
+const FLOOR_ADJUST_STEP_M = 0.0254;  // 1 inch per button press
 
 /* ──── Print transform state (post-placement) ────
    All measurements are in WALL-LOCAL space, i.e. relative to the
@@ -904,6 +968,7 @@ async function startXR() {
     wireChips();
     wireSizeChips();
     wireAdjustControls();
+    wireFloorControls();
     wireFrontWallButton();
     if (!closeButtonWired) {
         closeButtonWired = true;
@@ -1501,6 +1566,13 @@ function hasFreshFloor() {
     return detectedFloorY !== null && (performance.now() - floorSeenAt) < FLOOR_MAX_AGE_MS;
 }
 
+/* Effective floor Y = ARCore's detected floor + user's manual
+   calibration offset. ARCore can keep refining detectedFloorY in
+   the background; the user's offset is preserved on top. */
+function getEffectiveFloorY() {
+    return detectedFloorY !== null ? detectedFloorY + floorAdjustOffsetM : null;
+}
+
 /* PlaneGeometry-based tape strip: a flat quad in 3D space with
    thickness controlled by halfWidth. Four vertices (two triangles)
    updated per frame from endpoints + a perpendicular axis. Bypasses
@@ -1613,7 +1685,7 @@ function drawTapeLabel(text) {
 function alignCenterToHangHeight() {
     if (!hasFreshFloor() || Math.abs(placementWallUp.y) < 0.2) return false;
 
-    const desiredY = detectedFloorY + hangHeightIn * 0.0254;
+    const desiredY = getEffectiveFloorY() + hangHeightIn * 0.0254;
     const currentY = placementAnchorPos.y
         + placementWallRight.y * wallOffsetX
         + placementWallUp.y * wallOffsetY
@@ -1656,10 +1728,11 @@ function updateTapeMeasure() {
     }
 
     const measured = hasFreshFloor();
+    const effFloor = getEffectiveFloorY();
     const heightM = measured
-        ? Math.max(0, _finalPos.y - detectedFloorY)
+        ? Math.max(0, _finalPos.y - effFloor)
         : hangHeightIn * 0.0254;
-    const floorY = measured ? detectedFloorY : _finalPos.y - heightM;
+    const floorY = measured ? effFloor : _finalPos.y - heightM;
     const normalLift = 0.018 + Math.max(0, wallOffsetZ);
     const tickHalf = 0.09;
 
@@ -1795,6 +1868,52 @@ function wireAdjustControls() {
     });
 }
 
+/* Manual floor-height calibration. Buttons are post-placement only.
+   Press-and-hold repeats every 90 ms for fast nudging. After each
+   adjust the print re-snaps to the chosen hang height via
+   alignCenterToHangHeight() so the change is visible immediately
+   on both the tape measure and the print's vertical position. */
+let floorControlsWired = false;
+function adjustFloor(action) {
+    if (action === '0') {
+        floorAdjustOffsetM = 0;
+    } else {
+        const stepIn = parseInt(action, 10);     // +1 or -1
+        floorAdjustOffsetM += stepIn * FLOOR_ADJUST_STEP_M;
+    }
+    refreshFloorOffsetLabel();
+    if (isPlaced) alignCenterToHangHeight();
+}
+function refreshFloorOffsetLabel() {
+    const lbl = document.getElementById('floorOffsetLabel');
+    if (!lbl) return;
+    const inches = Math.round(floorAdjustOffsetM / 0.0254);
+    lbl.textContent = (inches > 0 ? '+' : '') + inches + '"';
+    lbl.classList.toggle('active', inches !== 0);
+}
+function wireFloorControls() {
+    if (floorControlsWired) return;
+    floorControlsWired = true;
+
+    document.querySelectorAll('#floorPanel .floor-btn').forEach((button) => {
+        const action = button.getAttribute('data-floor');
+        button.addEventListener('click', (e) => e.stopPropagation());
+        button.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustFloor(action);
+            stopAdjustRepeat();
+            if (action !== '0') {
+                adjustRepeatTimer = setInterval(() => adjustFloor(action), 90);
+            }
+        });
+        button.addEventListener('pointerup', stopAdjustRepeat);
+        button.addEventListener('pointercancel', stopAdjustRepeat);
+        button.addEventListener('pointerleave', stopAdjustRepeat);
+    });
+}
+
 function wireFrontWallButton() {
     if (frontWallButtonWired) return;
     frontWallButtonWired = true;
@@ -1922,6 +2041,8 @@ function onSessionEnd() {
     isPlaced = false;
     detectedFloorY = null;
     floorSeenAt = 0;
+    floorAdjustOffsetM = 0;
+    refreshFloorOffsetLabel();
     manualWallMode = false;
     manualPlacementReady = false;
     activeSources.clear();
