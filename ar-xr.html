@@ -430,8 +430,9 @@
     <button class="chip active" data-size="large">Large</button>
   </div>
 
-  <!-- Hang-height label + chips -->
-  <div class="chip-label hang">Hang height — gallery standard</div>
+  <!-- Hang-height label + chips. Label text is updated dynamically
+       to reflect floor-detection state — see updateHangLabel(). -->
+  <div class="chip-label hang" id="hangLabel">Hang height — gallery standard</div>
   <div id="chipRow">
     <button class="chip active" data-h="57">57"</button>
     <button class="chip" data-h="60">60"</button>
@@ -502,6 +503,7 @@ const statusPill   = $('statusPill');
 const loadingPill  = $('loadingPill');
 const closeBtn     = $('closeBtn');
 const frontWallBtn = $('frontWallBtn');
+const hangLabel    = $('hangLabel');
 
 /* ──── Three.js state ──── */
 let renderer, scene, camera;
@@ -796,6 +798,7 @@ function onXRFrame(time, frame) {
     }
 
     updateDetectedPlanes(frame);
+    updateHangLabel();
 
     if (!isPlaced) {
         if (manualWallMode) {
@@ -1346,6 +1349,25 @@ function alignCenterToHangHeight() {
     return true;
 }
 
+/* Reflect floor-detection state in the chip-area subtitle so the
+   user can SEE whether a chip pick will be floor-anchored or
+   estimated. Same gate as alignCenterToHangHeight: pre-placement
+   needs a fresh floor; post-placement also needs a near-vertical
+   wall. textContent is only written when the string actually
+   changes (state held in lastHangLabel). */
+let lastHangLabel = '';
+function updateHangLabel() {
+    if (!hangLabel) return;
+    const canSnap = hasFreshFloor()
+        && (!isPlaced || Math.abs(placementWallUp.y) >= 0.2);
+    const text = canSnap
+        ? 'Hang height — gallery standard'
+        : 'Hang height — floor not detected · move device';
+    if (text === lastHangLabel) return;
+    lastHangLabel = text;
+    hangLabel.textContent = text;
+}
+
 function updateTapeMeasure() {
     if (!tapeGroup || !isPlaced) return;
 
@@ -1644,6 +1666,8 @@ function onSessionEnd() {
     planeWireframes.clear();
     if (tapeGroup) tapeGroup.visible = false;
     lastTapeLabel = '';
+    lastHangLabel = '';
+    if (hangLabel) hangLabel.textContent = 'Hang height — gallery standard';
     overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
     frontWallBtn.classList.remove('active');
     frontWallBtn.textContent = 'Use front wall';
