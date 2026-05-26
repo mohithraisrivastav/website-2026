@@ -1868,3 +1868,145 @@ a:not([class]):focus {
 
 /* Scroll cue arrow — on light bg */
 .scroll-cue svg { stroke: var(--accent-gold-text); }
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   GLOBAL "CLEAN" BUTTON SYSTEM — ported from the workshops page redesign.
+   Opt-in via class names so no existing button styling changes.
+
+   Three tiers, in order of weight (subtle → loud):
+
+     .btn-clean          Link-style. Gold text + thin gold underline.
+                         No fill, no box. Workshops' .tier-btn vibe.
+                         Use for secondary CTAs, "View", "Read more", etc.
+
+     .btn-outline        Transparent + 1px border, big letter-spacing,
+                         uppercase, padded. Workshops' .wcta-btn vibe.
+                         Use for primary CTAs on light backgrounds.
+                         Add .btn-on-dark for hero / dark sections.
+
+     .btn-solid          Solid gold fill, dark text, no border.
+                         Workshops' .tier-notify-btn vibe. Use sparingly —
+                         most pages should prefer .btn-clean or .btn-outline.
+
+   All three respect prefers-reduced-motion via transitions that only animate
+   colour / opacity / border, never transforms.
+
+   To apply on a page, just swap the existing button class:
+       <button class="btn-clean">View Format</button>
+       <a class="btn-outline" href="#book">Reserve a Seat</a>
+       <a class="btn-outline btn-on-dark" href="#book">Reserve a Seat</a>
+       <button class="btn-solid">Notify Me</button>
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.btn-clean {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    color: #CFA246;
+    font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(207, 162, 70, 0.4);
+    border-radius: 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
+}
+.btn-clean:hover,
+.btn-clean:focus-visible {
+    color: #1A1612;
+    border-bottom-color: #1A1612;
+    gap: 12px;
+    outline: none;
+}
+.btn-clean:active { color: #1A1612; }
+.btn-clean[disabled],
+.btn-clean.disabled { opacity: 0.35; pointer-events: none; }
+
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: transparent;
+    border: 1px solid rgba(26, 22, 18, 0.4);
+    color: #1A1612;
+    font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.8625rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 20px 44px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+}
+.btn-outline:hover,
+.btn-outline:focus-visible {
+    background: rgba(26, 22, 18, 0.04);
+    border-color: #1A1612;
+    gap: 24px;
+    outline: none;
+}
+.btn-outline.btn-on-dark {
+    color: #F7F3ED;
+    border-color: rgba(252, 250, 246, 0.35);
+}
+.btn-outline.btn-on-dark:hover,
+.btn-outline.btn-on-dark:focus-visible {
+    background: rgba(252, 250, 246, 0.08);
+    border-color: #F7F3ED;
+}
+.btn-outline[disabled],
+.btn-outline.disabled { opacity: 0.35; pointer-events: none; }
+
+
+.btn-solid {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #CFA246;
+    color: #1A1612;
+    border: none;
+    font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-solid:hover,
+.btn-solid:focus-visible {
+    background: #b8883a;
+    outline: none;
+}
+.btn-solid[disabled],
+.btn-solid.disabled { opacity: 0.4; pointer-events: none; }
+
+
+/* Compact size modifier for any of the three tiers */
+.btn-clean.btn-sm,
+.btn-outline.btn-sm,
+.btn-solid.btn-sm {
+    font-size: 0.66rem;
+    letter-spacing: 2px;
+}
+.btn-outline.btn-sm { padding: 12px 24px; }
+.btn-solid.btn-sm   { padding: 10px 20px; }
+
+
+/* Mobile — outline button stretches full-width by default for thumb reach */
+@media (max-width: 600px) {
+    .btn-outline { width: 100%; justify-content: center; }
+}
