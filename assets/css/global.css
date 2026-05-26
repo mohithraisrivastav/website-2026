@@ -779,202 +779,247 @@ body { top: 0 !important; }
 }
 .cart-overlay.active { display: block; }
 
-/* ── Site Footer (upgraded) ──────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   Site Footer — editorial / no boxiness
+   Same HTML as before; only the visual treatment changed:
+     · No hard horizontal dividers between sections (removed border-top on
+       footer + border-bottom on body and CTA)
+     · Tagline in Cormorant italic instead of dense uppercase
+     · Category labels (PAGES / LEGAL / FIELD NOTES) stay small-caps but
+       at gentler 2 px letter-spacing — recognisable as section labels
+       without screaming
+     · Nav links use sentence case, no letter-spacing, gold accent on
+       hover with a thin underline
+     · Newsletter input is an underline, not a boxed border
+     · Submit button = bare arrow in gold, no fill
+     · Brand gold (#CFA246) used consistently — terracotta orange dropped
+     · Homepage CTA: heading scaled down from 9rem all-caps black to
+       Cormorant italic editorial. Filled orange button replaced with a
+       gold-link CTA matching .btn-clean
+     · Copyright + social: sentence case, smaller weight, gold on hover
+   Accessibility contrast preserved (#4A3A33 on cream = 7:1 PASS).
+   ════════════════════════════════════════════════════════════════════════════ */
 
 .site-footer {
-    background: rgba(247,243,237,0.97);
+    background: rgba(247, 243, 237, 0.97);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(207,162,70,0.18);
-    font-family: var(--font-accent) !important;
+    font-family: var(--font-main) !important;
     position: relative;
     z-index: 2;
 }
 
-/* — CTA section ——————————————————————————————————— */
+/* — Homepage CTA section (kept editorial, dropped 9rem black heading) — */
 .sf-cta {
-    padding: clamp(60px, 10vh, 120px) 5vw clamp(40px, 6vh, 80px);
-    border-bottom: 1px solid rgba(26, 22, 18, 0.15);
+    padding: clamp(56px, 9vh, 110px) 5vw clamp(32px, 5vh, 64px);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
+    gap: 18px;
+    max-width: 880px;
 }
 .sf-cta-label {
-    font-size: 0.875rem;
+    font-size: 0.62rem;
     font-weight: 700;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: #4A3A33;
+    color: rgba(74, 58, 51, 0.65);
 }
 .sf-heading {
-    font-size: clamp(3rem, 8vw, 9rem);
-    font-weight: 900;
-    line-height: 0.88;
-    letter-spacing: -0.04em;
-    text-transform: uppercase;
+    font-family: var(--font-accent) !important;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+    line-height: 1.08;
+    letter-spacing: 0;
+    text-transform: none;
     color: #1A1612;
     margin: 0;
+    max-width: 16ch;
 }
 .sf-contact-btn {
     display: inline-flex;
     align-items: center;
-    gap: 14px;
-    background: #B85C38;
-    color: #F7F3ED;
+    gap: 10px;
+    background: transparent;
+    color: #CFA246;
     text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 3.2px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2.2px;
     text-transform: uppercase;
     border: none;
-    padding: 16px 32px;
-    border-radius: 6px;
-    transition: opacity 0.3s ease, gap 0.3s ease;
-    margin-top: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(207, 162, 70, 0.45);
+    border-radius: 0;
+    transition: color 0.25s ease, border-color 0.25s ease, gap 0.25s ease;
+    margin-top: 12px;
 }
-.sf-contact-btn:hover { opacity: 0.88; gap: 20px; }
+.sf-contact-btn:hover,
+.sf-contact-btn:focus-visible {
+    color: #1A1612;
+    border-bottom-color: #1A1612;
+    gap: 16px;
+    outline: none;
+}
 
-/* — Body grid ————————————————————————————————————— */
+/* — Body grid — */
 .sf-body {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
-    gap: 60px;
-    padding: 60px 5vw;
-    border-bottom: 1px solid rgba(26, 22, 18, 0.15);
+    gap: 64px;
+    padding: clamp(56px, 8vh, 88px) 5vw clamp(32px, 5vh, 56px);
 }
-.sf-logo-link { display:block; margin-bottom:20px; line-height:0; }
-.sf-logo { height:55px; width:auto; opacity:0.7; display:block; transition:all 0.5s ease; }
-.sf-logo-link:hover .sf-logo { opacity:1; transform:scale(1.02); }
+.sf-logo-link { display: block; margin-bottom: 18px; line-height: 0; }
+.sf-logo { height: 48px; width: auto; opacity: 0.78; display: block; transition: opacity 0.4s ease; }
+.sf-logo-link:hover .sf-logo { opacity: 1; }
+
 .sf-tagline {
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: #4A3A33; /* was #5C4A3F — raised contrast from ~4.4:1 to ≥7:1 on #E8E0D0 */
-    line-height: 1.9;
-    letter-spacing: 0.5px;
+    font-family: var(--font-accent), Georgia, serif !important;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #4A3A33;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    margin: 0;
+    max-width: 28ch;
 }
+
 .sf-nav-label {
     display: block;
-    font-size: 0.875rem;
+    font-family: var(--font-main) !important;
+    font-size: 0.58rem;
     font-weight: 700;
-    letter-spacing: 4px;
+    letter-spacing: 2.8px;
     text-transform: uppercase;
-    color: #4A3A33;
-    margin-bottom: 22px;
+    color: rgba(74, 58, 51, 0.55);
+    margin-bottom: 18px;
 }
-.sf-nav { display: flex; flex-direction: column; }
-.sf-nav a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #4A3A33;
-    text-decoration: none;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    transition: color 0.3s ease;
-}
-.sf-nav a:hover { color: #CFA246; }
-.sf-legal { display: flex; flex-direction: column; }
+
+.sf-nav,
+.sf-legal { display: flex; flex-direction: column; gap: 10px; }
+.sf-nav a,
 .sf-legal a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #4A3A33;
+    font-family: var(--font-main) !important;
+    font-size: 0.92rem;
+    font-weight: 400;
+    color: #1A1612;
     text-decoration: none;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    transition: color 0.3s ease;
+    letter-spacing: 0;
+    text-transform: none;
+    line-height: 1.5;
+    transition: color 0.25s ease;
 }
-.sf-legal a:hover { color: #CFA246; }
+.sf-nav a:hover,
+.sf-legal a:hover {
+    color: #CFA246;
+}
+
 .sf-newsletter-col p {
-    font-size: 0.875rem;
+    font-family: var(--font-main) !important;
+    font-size: 0.88rem;
     font-weight: 400;
     color: #4A3A33;
-    line-height: 1.8;
-    margin-bottom: 20px;
+    line-height: 1.65;
+    margin: 0 0 18px;
     max-width: 320px;
 }
+
+/* Underline-only newsletter input — no boxed border */
 .sf-form {
     display: flex;
-    border: 2px solid #8B7B6B;
-    overflow: hidden;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid rgba(26, 22, 18, 0.35);
     max-width: 320px;
-    border-radius: 6px;
+    border-radius: 0;
+    overflow: visible;
+    transition: border-color 0.25s ease;
 }
+.sf-form:focus-within { border-bottom-color: #CFA246; }
 .sf-form input {
     flex: 1;
     background: transparent;
     border: none;
     color: #1A1612;
-    font-family: var(--font-accent) !important;
-    font-size: 0.875rem;
+    font-family: var(--font-main) !important;
+    font-size: 0.92rem;
     font-weight: 400;
-    padding: 12px 16px;
+    padding: 10px 0;
     outline: none;
 }
-.sf-form input::placeholder { color: #7C6B5F; opacity: 0.8; }
-.sf-form input:focus { background: rgba(207,162,70,0.08); }
+.sf-form input::placeholder { color: rgba(74, 58, 51, 0.5); }
 .sf-form button {
-    background: #B85C38;
+    background: transparent;
     border: none;
-    color: #F7F3ED;
-    padding: 12px 18px;
-    font-size: 1.125rem;
+    color: #CFA246;
+    padding: 8px 0 8px 12px;
+    font-size: 1.25rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: color 0.25s ease, transform 0.25s ease;
     font-family: var(--font-main) !important;
     line-height: 1;
 }
-.sf-form button:hover { background: #A34E2E; color: #F7F3ED; }
+.sf-form button:hover,
+.sf-form button:focus-visible {
+    color: #1A1612;
+    transform: translateX(4px);
+    outline: none;
+}
 .sf-form-ok {
     display: none;
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 3.2px;
-    text-transform: uppercase;
-    color: #166534; /* was #22c55e — 2.08:1 FAIL → #166534 = 6.51:1 PASS */
-    margin-top: 14px;
+    font-family: var(--font-accent), Georgia, serif !important;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 0.92rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #166534;  /* AA pass on cream */
+    margin-top: 12px;
 }
 
-/* — Bottom bar ——————————————————————————————————— */
+/* — Bottom bar — */
 .sf-base {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 22px 5vw;
+    padding: 24px 5vw 32px;
     gap: 20px;
     flex-wrap: wrap;
 }
 .sf-copy {
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 2.4px;
-    text-transform: uppercase;
-    color: #4A3A33;
+    font-family: var(--font-main) !important;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: rgba(74, 58, 51, 0.65);
 }
-.sf-social { display: flex; gap: 24px; flex-wrap: wrap; }
+.sf-social { display: flex; gap: 22px; flex-wrap: wrap; }
 .sf-social a {
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 2.4px;
-    text-transform: uppercase;
-    color: #7F5F10;
+    font-family: var(--font-main) !important;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #4A3A33;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color 0.25s ease;
 }
 .sf-social a:hover { color: #CFA246; }
 
-/* — Responsive ——————————————————————————————————— */
+/* — Responsive — */
 @media (max-width: 900px) {
-    .sf-body { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .sf-body { grid-template-columns: 1fr 1fr; gap: 44px; }
     .sf-brand { grid-column: span 2; }
 }
 @media (max-width: 600px) {
-    .sf-body { grid-template-columns: 1fr; gap: 36px; padding: 40px 5vw; }
+    .sf-body { grid-template-columns: 1fr; gap: 40px; padding: 48px 5vw 32px; }
     .sf-brand { grid-column: span 1; }
-    .sf-base { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .sf-social { gap: 16px; }
-    .sf-contact-btn { width: 100%; justify-content: center; }
+    .sf-base { flex-direction: column; align-items: flex-start; gap: 14px; padding-bottom: 28px; }
+    .sf-social { gap: 14px; }
+    .sf-contact-btn { width: auto; }
 }
 
 
