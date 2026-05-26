@@ -196,13 +196,14 @@ body { top: 0 !important; }
     letter-spacing: 0.5px;
     transition: 0.3s;
 }
-/* Border-bottom only on top-level nav items, not dropdown children */
+/* Top-level nav items — no underline indicator. Active / hover state
+   communicated via color shift + slight letter-spacing expansion. */
 .nav-links > li > a {
-    border-bottom: 2px solid transparent;
     padding-bottom: 2px;
+    transition: color 0.25s ease, letter-spacing 0.25s ease;
 }
 .nav-links > li > a:hover,
-.nav-links > li > a.active { color: #CFA246; border-bottom-color: #CFA246; }
+.nav-links > li > a.active { color: #CFA246; letter-spacing: 0.04em; }
 
 /* ── Global back navigation ───────────────────────────────────────────────── */
 
@@ -850,16 +851,15 @@ body { top: 0 !important; }
     text-transform: uppercase;
     border: none;
     padding: 6px 0;
-    border-bottom: 1px solid rgba(207, 162, 70, 0.45);
     border-radius: 0;
-    transition: color 0.25s ease, border-color 0.25s ease, gap 0.25s ease;
+    transition: color 0.25s ease, gap 0.25s ease, letter-spacing 0.25s ease;
     margin-top: 12px;
 }
 .sf-contact-btn:hover,
 .sf-contact-btn:focus-visible {
     color: #1A1612;
-    border-bottom-color: #1A1612;
     gap: 16px;
+    letter-spacing: 3px;
     outline: none;
 }
 
@@ -926,18 +926,21 @@ body { top: 0 !important; }
     max-width: 320px;
 }
 
-/* Underline-only newsletter input — no boxed border */
+/* Newsletter input — soft warm tint instead of border or underline.
+   Tint is barely-there at rest (3% black) and warms to gold-tinted
+   on focus. Reads as 'a field to type in' without becoming a box. */
 .sf-form {
     display: flex;
     align-items: center;
     border: none;
-    border-bottom: 1px solid rgba(26, 22, 18, 0.35);
-    max-width: 320px;
     border-radius: 0;
+    max-width: 320px;
+    background: rgba(26, 22, 18, 0.035);
+    padding: 0 4px 0 10px;
+    transition: background 0.25s ease;
     overflow: visible;
-    transition: border-color 0.25s ease;
 }
-.sf-form:focus-within { border-bottom-color: #CFA246; }
+.sf-form:focus-within { background: rgba(207, 162, 70, 0.10); }
 .sf-form input {
     flex: 1;
     background: transparent;
@@ -946,7 +949,7 @@ body { top: 0 !important; }
     font-family: var(--font-main) !important;
     font-size: 0.92rem;
     font-weight: 400;
-    padding: 10px 0;
+    padding: 12px 0;
     outline: none;
 }
 .sf-form input::placeholder { color: rgba(74, 58, 51, 0.5); }
@@ -954,7 +957,7 @@ body { top: 0 !important; }
     background: transparent;
     border: none;
     color: #CFA246;
-    padding: 8px 0 8px 12px;
+    padding: 8px 8px 8px 12px;
     font-size: 1.25rem;
     cursor: pointer;
     transition: color 0.25s ease, transform 0.25s ease;
@@ -1491,19 +1494,19 @@ button, .btn, a.btn, [role="button"] {
     transition: all 0.25s ease;
 }
 
-/* CTA links with underline ──────────────────────────────────────────── */
+/* CTA links — no underline. Color + letter-spacing expansion on hover
+   carries the affordance instead. (Previously a 2 px terracotta border-
+   bottom that turned dark on hover.) */
 a.hero-cta, a.cta-link, .action-btn {
     position: relative;
     text-decoration: none;
-    border-bottom: 2px solid #E86A4A;
-    padding-bottom: 2px;
-    transition: all 0.3s ease;
+    color: #7F5F10;
+    transition: color 0.3s ease, letter-spacing 0.3s ease, gap 0.3s ease;
 }
 
 a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
-    border-bottom-color: #4A3A33;
-    padding-left: 4px;
-    padding-right: 4px;
+    color: #1A1612;
+    letter-spacing: 0.06em;
 }
 
 /* ── Improved Label & Caption Visibility ────────────────────────────── */
@@ -1513,23 +1516,23 @@ a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
     font-weight: 600;
 }
 
-/* Work filter buttons ──────────────────────────────────────────────── */
+/* Work filter buttons — no underline. Color + slight letter-spacing
+   expansion communicates the active state. */
 .wi-filter {
     position: relative;
     padding-bottom: 4px;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease, letter-spacing 0.3s ease;
 }
 
 .wi-filter:hover {
-    border-bottom-color: #E86A4A;
+    color: #1A1612;
     letter-spacing: 3.2px;
 }
 
 .wi-filter.active {
-    color: #4A3A33;
-    border-bottom-color: #E86A4A;
+    color: #1A1612;
     font-weight: 800;
+    letter-spacing: 3.2px;
 }
 
 /* Product purchase buttons
@@ -1752,12 +1755,21 @@ select,
 
 /* Duplicate focus rule removed — see canonical rule above. */
 
-/* Improve link underlines and focus states */
+/* Raw text links — no underline. Gold colour + weight bump on hover
+   carries the affordance instead. WCAG note: relying on colour alone
+   for link affordance is a soft accessibility risk; the gold (#7F5F10)
+   is intentionally distinct from body text (#1A1612) and the weight
+   shift on :hover/:focus provides a second visual channel. */
 a:not([class]) {
   color: #7F5F10;
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+a:not([class]):hover,
+a:not([class]):focus-visible {
+  color: #1A1612;
+  font-weight: 600;
 }
 
 a:not([class]):visited {
@@ -1813,21 +1825,21 @@ a:not([class]):focus {
 /* ── About manifesto ─────────────────────────────────────────────────────── */
 .about-manifesto p      { color: #1A1612; }
 .about-manifesto p em   { color: #B85C38; }
-.manifesto-link         { color: #7F5F10; border-bottom-color: rgba(207,162,70,0.18); }
-.manifesto-link:hover   { color: #CFA246; }
+.manifesto-link         { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.manifesto-link:hover   { color: #CFA246; letter-spacing: 0.04em; }
 
 /* ── Pinned / gallery intro ──────────────────────────────────────────────── */
 .pinned-section         { border-top: 1px solid rgba(207,162,70,0.18); }
 .gallery-intro h2       { color: #1A1612; }
-.gallery-explore-link   { color: #7F5F10; border-bottom: 1px solid rgba(207,162,70,0.18); }
-.gallery-explore-link:hover { color: #CFA246; }
+.gallery-explore-link   { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.gallery-explore-link:hover { color: #CFA246; letter-spacing: 0.04em; }
 
 /* ── Shop preview (index.html) ───────────────────────────────────────────── */
 .shop-preview           { border-top: 1px solid rgba(207,162,70,0.18); }
 .shop-preview-head h2   { color: #1A1612; }
 .shop-preview-head p    { color: #4A3A33; }
-.shop-view-all          { color: #7F5F10; border-bottom: 1px solid rgba(207,162,70,0.18); }
-.shop-view-all:hover    { color: #CFA246; }
+.shop-view-all          { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.shop-view-all:hover    { color: #CFA246; letter-spacing: 0.04em; }
 .shop-preview-card .img-wrap { background: #EDE8DF; }
 .shop-preview-card .cat { color: #4A3A33; }
 .shop-preview-card .price { color: #B85C38; }
@@ -1881,12 +1893,11 @@ a:not([class]):focus {
    #CFA246 remains correct on dark backgrounds (7.8:1 on #1A1612).
    ══════════════════════════════════════════════════════════════════════════════ */
 
-/* Nav active states — navbar bg is near-white, gold text fails */
+/* Nav active states — colour-only indicator (underline removed). */
 .nav-links > li > a.active,
 .nav-dropdown li a.active,
 .nav-has-dropdown > a.active {
     color: var(--accent-gold-text) !important;
-    border-bottom-color: var(--accent-gold-text) !important;
 }
 
 /* Cart icon fill on light navbar */
@@ -1957,17 +1968,16 @@ a:not([class]):focus {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 4px 0;
-    border-bottom: 1px solid rgba(207, 162, 70, 0.4);
     border-radius: 0;
     cursor: pointer;
     text-decoration: none;
-    transition: color 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
+    transition: color 0.25s ease, gap 0.25s ease, letter-spacing 0.25s ease;
 }
 .btn-clean:hover,
 .btn-clean:focus-visible {
     color: #1A1612;
-    border-bottom-color: #1A1612;
     gap: 12px;
+    letter-spacing: 0.13em;
     outline: none;
 }
 .btn-clean:active { color: #1A1612; }
