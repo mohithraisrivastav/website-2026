@@ -152,40 +152,72 @@ window.toggleMobileDropdown = function (btn) {
     }
 })();
 
+/* ── Newsletter — EmailJS integration ───────────────────────────────────── */
 (function () {
-    var form     = document.getElementById('sfForm');
-    var ok       = document.getElementById('sfFormOk');
-    var _loaded  = Date.now();
-    if (!form || !ok) return;
+    var EJS_PUBLIC_KEY   = 'LsKV3_y-rM5wtGjH5';
+    var EJS_SERVICE      = 'service_8nba81m';
+    var EJS_T_SUBSCRIBER = 'template_4sbgpnh';  /* "You're on the list." → subscriber */
+    var EJS_T_OWNER      = 'template_dl8wtkr';  /* "New subscriber" → updates@        */
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        /* Timing check: real users take >2 s to fill in an email */
-        if (Date.now() - _loaded < 2000) return;
+    /* Load EmailJS SDK once, queue sends until ready */
+    var _ready = false, _queue = [];
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload = function () {
+        emailjs.init({ publicKey: EJS_PUBLIC_KEY });
+        _ready = true;
+        _queue.forEach(function (fn) { fn(); });
+        _queue = [];
+    };
+    document.head.appendChild(s);
+
+    function showOk(form, ok) {
         form.style.transition = 'opacity 0.3s ease';
         form.style.opacity    = '0';
         setTimeout(function () {
             form.style.display  = 'none';
+            ok.style.opacity    = '0';
             ok.style.display    = 'block';
+            ok.style.transition = 'opacity 0.4s ease';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { ok.style.opacity = '1'; });
+            });
         }, 320);
-    });
-})();
+    }
 
-/* Modal footer newsletter form */
-(function () {
-    var form    = document.getElementById('sfFormModal');
-    var ok      = document.getElementById('sfFormModalOk');
-    var _loaded = Date.now();
-    if (!form || !ok) return;
+    function wireForm(formId, okId) {
+        var form    = document.getElementById(formId);
+        var ok      = document.getElementById(okId);
+        var _loaded = Date.now();
+        if (!form || !ok) return;
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (Date.now() - _loaded < 2000) return;
-        form.style.transition = 'opacity 0.3s ease';
-        form.style.opacity    = '0';
-        setTimeout(function () {
-            form.style.display = 'none';
-            ok.style.display   = 'block';
-        }, 320);
-    });
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (Date.now() - _loaded < 2000) return;
+            var input = form.querySelector('input[type="email"]');
+            var email = input ? input.value.trim() : '';
+            if (!email) return;
+            var btn = form.querySelector('button');
+            if (btn) btn.disabled = true;
+
+            function send() {
+                Promise.all([
+                    emailjs.send(EJS_SERVICE, EJS_T_SUBSCRIBER, { to_email: email }),
+                    emailjs.send(EJS_SERVICE, EJS_T_OWNER,      { subscriber_email: email })
+                ]).then(function () {
+                    showOk(form, ok);
+                }).catch(function () {
+                    if (btn) btn.disabled = false;
+                    ok.style.color   = '#e07070';
+                    ok.style.display = 'block';
+                    ok.textContent   = 'Something went wrong — please try again.';
+                });
+            }
+
+            if (_ready) { send(); } else { _queue.push(send); }
+        });
+    }
+
+    wireForm('sfForm',      'sfFormOk');
+    wireForm('sfFormModal', 'sfFormModalOk');
 })();
