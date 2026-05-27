@@ -3818,12 +3818,34 @@
                         var url = location.href;
                         var doneLabel = arMode === 'desktop'
                             ? 'Open on your phone to place on your wall'
-                            : 'Paste into Chrome or Safari to view in AR';
+                            : 'Paste into Safari to view in AR';
                         var done = function() {
                             launch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Link Copied';
                             document.getElementById('arHint').textContent = doneLabel;
                             if (arSession) track('ar_link_copied', { item_id: arSession.id, mode: arMode });
                         };
+
+                        /* iOS Chrome / Firefox / Edge: try to jump directly to Safari
+                           via the safari-https:// URL scheme (iOS 9+). If the OS handles
+                           it the user lands in Safari on this exact page. If the scheme
+                           is not supported (very old iOS) we fall back to copy-link after
+                           1.5 s — by which point a successful redirect has already left. */
+                        if (isIOSNonSafari()) {
+                            var safariSchemeUrl = 'safari-https://' + location.host + location.pathname + location.search + location.hash;
+                            location.href = safariSchemeUrl;
+                            setTimeout(function() {
+                                /* Still here → scheme not supported; copy the link instead */
+                                if (navigator.clipboard && navigator.clipboard.writeText) {
+                                    navigator.clipboard.writeText(url).then(done).catch(function() {
+                                        window.prompt('Copy this link and open it in Safari:', url);
+                                    });
+                                } else {
+                                    window.prompt('Copy this link and open it in Safari:', url);
+                                }
+                            }, 1500);
+                            return;
+                        }
+
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(url).then(done).catch(function() {
                                 window.prompt('Copy this link and open it on your phone:', url);
