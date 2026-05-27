@@ -152,25 +152,8 @@ window.toggleMobileDropdown = function (btn) {
     }
 })();
 
-/* ── Newsletter — EmailJS integration ───────────────────────────────────── */
+/* ── Newsletter — Resend via /api/subscribe ─────────────────────────────── */
 (function () {
-    var EJS_PUBLIC_KEY   = 'LsKV3_y-rM5wtGjH5';
-    var EJS_SERVICE      = 'service_8nba81m';
-    var EJS_T_SUBSCRIBER = 'template_4sbgpnh';  /* "You're on the list." → subscriber */
-    var EJS_T_OWNER      = 'template_dl8wtkr';  /* "New subscriber" → updates@        */
-
-    /* Load EmailJS SDK once, queue sends until ready */
-    var _ready = false, _queue = [];
-    var s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-    s.onload = function () {
-        emailjs.init({ publicKey: EJS_PUBLIC_KEY });
-        _ready = true;
-        _queue.forEach(function (fn) { fn(); });
-        _queue = [];
-    };
-    document.head.appendChild(s);
-
     function showOk(form, ok) {
         form.style.transition = 'opacity 0.3s ease';
         form.style.opacity    = '0';
@@ -200,21 +183,28 @@ window.toggleMobileDropdown = function (btn) {
             var btn = form.querySelector('button');
             if (btn) btn.disabled = true;
 
-            function send() {
-                Promise.all([
-                    emailjs.send(EJS_SERVICE, EJS_T_SUBSCRIBER, { to_email: email }),
-                    emailjs.send(EJS_SERVICE, EJS_T_OWNER,      { subscriber_email: email })
-                ]).then(function () {
+            fetch('/api/subscribe', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ email: email })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.ok) {
                     showOk(form, ok);
-                }).catch(function () {
+                } else {
                     if (btn) btn.disabled = false;
                     ok.style.color   = '#e07070';
                     ok.style.display = 'block';
-                    ok.textContent   = 'Something went wrong — please try again.';
-                });
-            }
-
-            if (_ready) { send(); } else { _queue.push(send); }
+                    ok.textContent   = data.error || 'Something went wrong — please try again.';
+                }
+            })
+            .catch(function () {
+                if (btn) btn.disabled = false;
+                ok.style.color   = '#e07070';
+                ok.style.display = 'block';
+                ok.textContent   = 'Something went wrong — please try again.';
+            });
         });
     }
 
