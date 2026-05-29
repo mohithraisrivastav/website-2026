@@ -198,11 +198,11 @@
         .gallery-intro p { font-size: 1rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; }
         .gallery-explore-link { display: inline-block; font-size: 1rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 3px; transition: color 0.25s ease, border-color 0.25s ease; cursor: pointer; }
         .gallery-explore-link:hover { color: #CFA246; border-color: #CFA246; }
-        a.work-link { display: block; text-decoration: none; width: 100%; margin-bottom: 3.5vw; }
+        a.work-link { display: block; text-decoration: none; width: 100%; margin-bottom: 3.5vw; opacity: 0; transform: translateY(60px); }
         a.work-link:last-child { margin-bottom: 0; }
         .work-item { width: 100%; height: 78vh; position: relative; overflow: hidden; background-color: #000; cursor: pointer; border-radius: 6px; }
-        .work-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); will-change: filter, transform; }
-        .work-item:hover img { filter: brightness(1); transform: scale(1.03); }
+        .work-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .work-item:hover img { filter: brightness(1); transform: scale(1.03); will-change: filter, transform; }
         .work-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 45%); pointer-events: none; }
         .work-meta { position: absolute; bottom: 28px; left: 28px; z-index: 2; font-size: 0.8625rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,1); pointer-events: none; }
 
