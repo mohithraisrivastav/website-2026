@@ -184,8 +184,9 @@
             100% { transform: translateY(260%); opacity: 0; }
         }
 
-        .about-manifesto { padding: 8vh 10%; text-align: center; max-width: 1000px; margin: 0 auto; }
+        .about-manifesto { padding: 8vh 5%; text-align: center; max-width: 1400px; margin: 0 auto; }
         .about-manifesto p { font-size: 2rem; font-weight: 300; color: #1A1612; letter-spacing: 1px; line-height: 1.5; }
+        .about-manifesto p + p { margin-top: 1.5em; font-size: 1.35rem; color: #4A3A33; line-height: 1.65; }
         .manifesto-link { display: inline-block; margin-top: 30px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; text-decoration: none; transition: 0.3s; }
         .manifesto-link:hover { color: #1A1612; }
 
@@ -224,6 +225,22 @@
             .shop-preview { padding: 80px 5vw; }
             .shop-preview-head h2 { font-size: 2.5rem; }
             .shop-preview-grid { grid-template-columns: 1fr; gap: 60px; }
+        }
+
+        /* --- 7b. Workshops Preview --- */
+        .workshops-preview { padding: 100px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+        .workshops-preview-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+        .workshops-eyebrow { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #7F5F10; margin-bottom: 28px; }
+        .workshops-preview-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: italic; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
+        .workshops-preview-text p { font-size: 1.1875rem; font-weight: 300; color: #4A3A33; line-height: 1.8; margin-bottom: 1.5em; }
+        .workshops-preview-text p:last-child { margin-bottom: 0; }
+        .workshops-preview-text .ws-lead { font-size: clamp(1.4rem, 2vw, 1.75rem); font-weight: 300; color: #1A1612; line-height: 1.5; margin-bottom: 1.6em; }
+        .workshops-preview-text .ws-close { color: #1A1612; font-weight: 400; }
+        .workshops-cta { display: inline-block; margin-top: 52px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #1A1612; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 6px; transition: 0.3s; }
+        .workshops-cta:hover { color: #1A1612; border-color: #1A1612; letter-spacing: 5px; }
+        @media (max-width: 640px) {
+            .workshops-preview { padding: 70px 6vw; }
+            .workshops-preview-text p { font-size: 1.0625rem; }
         }
 
         /* --- 8. Testimonials --- */
@@ -325,6 +342,10 @@
             .about-manifesto p {
                 font-size: 1.18rem !important;
                 line-height: 1.9 !important;
+            }
+            .about-manifesto p + p {
+                font-size: 1rem !important;
+                margin-top: 1.4em !important;
             }
 
             /* Gallery — vertical on mobile */
