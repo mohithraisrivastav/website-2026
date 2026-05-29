@@ -3818,19 +3818,6 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
-                    /* TEMP DEBUG — blocking alert so it shows before any branch/navigation.
-                       Remove after diagnosis. */
-                    try {
-                        alert(
-                            'AR DEBUG\n'
-                            + 'mode=' + arMode + '\n'
-                            + 'isIOSNonSafari=' + isIOSNonSafari() + '\n'
-                            + 'isInAppBrowser=' + isInAppBrowser() + '\n'
-                            + 'canActivateAR=' + viewer.canActivateAR + '\n'
-                            + 'ios-src=' + (viewer.getAttribute('ios-src') || 'NONE') + '\n'
-                            + 'UA=' + navigator.userAgent
-                        );
-                    } catch (e) {}
                     /* ── Android Chrome WebXR fast-path ──
                        model-viewer's WebXR + Scene Viewer path is brittle on
                        recent ARCore (the wall-placement Scene Viewer regression
