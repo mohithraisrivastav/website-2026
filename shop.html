@@ -3818,6 +3818,16 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
+                    /* TEMP DEBUG — surfaces live state on tap so we can diagnose iOS.
+                       Remove after diagnosis. */
+                    try {
+                        var dbg = document.getElementById('arHint');
+                        if (dbg) dbg.textContent =
+                            'DBG tap✓ mode=' + arMode
+                            + ' ios=' + isIOS + ' and=' + isAndroid
+                            + ' canAR=' + viewer.canActivateAR
+                            + ' iosSrc=' + (viewer.getAttribute('ios-src') ? 'set' : 'none');
+                    } catch (e) {}
                     /* ── Android Chrome WebXR fast-path ──
                        model-viewer's WebXR + Scene Viewer path is brittle on
                        recent ARCore (the wall-placement Scene Viewer regression
