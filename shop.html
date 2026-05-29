@@ -3325,39 +3325,26 @@
                 document.body.style.overflow = 'hidden';
                 arSession = { id: id, title: title, img: img, w: wIn, h: hIn, sizes: sizeList, t0: Date.now() };
 
-                /* ── iOS non-Safari (Chrome, Firefox, Edge…): redirect to Safari immediately ── */
+                /* ── iOS non-Safari (Chrome, Firefox, Edge…): AR Quick Look only works in
+                       Safari on Apple devices. We cannot force-open Safari (the old
+                       safari-https:// scheme is dead on modern iOS), so present a clean
+                       sheet with one clear action: the button copies the link and opens
+                       the native share sheet (which offers Safari). ── */
                 if (isIOSNonSafari()) {
                     arMode = 'inapp';
                     track('ar_ios_nonsafari', { item_id: id, item_name: title });
                     document.getElementById('arDimText').textContent = '';
                     chipsEl.innerHTML = '';
 
-                    /* Show “Opening Safari…” immediately — no dialog, no copy step */
                     load.classList.remove('ar-gone');
                     load.innerHTML =
-                        '<div style=”max-width:280px;text-align:center;”>'
-                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:10px;”>Opening in Safari…</div>'
-                      + '<div style=”font-family:Inter,sans-serif;font-size:0.78rem;line-height:1.7;color:rgba(247,243,236,0.45);”>AR requires Safari on iPhone · redirecting now</div>'
+                        '<div style="max-width:300px;text-align:center;">'
+                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
+                      + '<div style="font-family:Inter,sans-serif;font-size:0.82rem;line-height:1.75;color:rgba(247,243,236,0.5);">AR needs Safari on your iPhone or iPad. Tap below to copy the link and open Safari.</div>'
                       + '</div>';
-                    launch.innerHTML = '';
-                    hintEl.textContent = '';
-
-                    /* Fire safari-https:// scheme — iOS 9+ opens this page directly in Safari */
-                    var safariUrl = 'safari-https://' + location.host + location.pathname + location.search + location.hash;
-                    location.href = safariUrl;
-
-                    /* Still here after 1.5 s → scheme not supported on this device.
-                       Fall back to copy-link so the user isn't stuck on a blank screen. */
-                    setTimeout(function() {
-                        load.innerHTML =
-                            '<div style=”max-width:280px;text-align:center;”>'
-                          + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.92);margin-bottom:10px;”>Open in Safari for AR</div>'
-                          + '<div style=”font-family:Inter,sans-serif;font-size:0.78rem;line-height:1.7;color:rgba(247,243,236,0.45);”>Copy this link and paste it into Safari.</div>'
-                          + '</div>';
-                        launch.innerHTML =
-                            '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link';
-                        hintEl.textContent = 'Paste into Safari to view in AR';
-                    }, 1500);
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link &amp; Open Safari';
+                    hintEl.textContent = 'AR works in Safari on Apple devices';
                     return;
                 }
 
@@ -3857,24 +3844,35 @@
                             if (arSession) track('ar_link_copied', { item_id: arSession.id, mode: arMode });
                         };
 
-                        /* iOS Chrome / Firefox / Edge: try to jump directly to Safari
-                           via the safari-https:// URL scheme (iOS 9+). If the OS handles
-                           it the user lands in Safari on this exact page. If the scheme
-                           is not supported (very old iOS) we fall back to copy-link after
-                           1.5 s — by which point a successful redirect has already left. */
+                        /* iOS Chrome / Firefox / Edge: Apple blocks AR Quick Look in every
+                           browser except Safari, and the old safari-https:// jump scheme is
+                           no longer honoured on modern iOS/iPadOS. So do the two things that
+                           DO work reliably, both on this single user tap:
+                             1. copy the link to the clipboard immediately, and
+                             2. open the native share sheet (navigator.share) — which gives
+                                the user a real "open in Safari" / app target.
+                           Button flips to "Link Copied" either way. */
                         if (isIOSNonSafari()) {
-                            var safariSchemeUrl = 'safari-https://' + location.host + location.pathname + location.search + location.hash;
-                            location.href = safariSchemeUrl;
-                            setTimeout(function() {
-                                /* Still here → scheme not supported; copy the link instead */
-                                if (navigator.clipboard && navigator.clipboard.writeText) {
-                                    navigator.clipboard.writeText(url).then(done).catch(function() {
-                                        window.prompt('Copy this link and open it in Safari:', url);
-                                    });
-                                } else {
-                                    window.prompt('Copy this link and open it in Safari:', url);
-                                }
-                            }, 1500);
+                            /* 1. copy first — synchronous-ish, always attempted */
+                            if (navigator.clipboard && navigator.clipboard.writeText) {
+                                navigator.clipboard.writeText(url).then(done).catch(function(){});
+                            } else {
+                                done();
+                            }
+                            /* 2. native share sheet on the same gesture (open-in-Safari path) */
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: arSession ? arSession.title : 'Fine Art Print',
+                                    text: 'Open in Safari to place this print on your wall in AR',
+                                    url: url
+                                }).catch(function(){
+                                    /* user dismissed or share unsupported — link is already copied */
+                                });
+                            } else if (!navigator.clipboard) {
+                                window.prompt('Copy this link and open it in Safari:', url);
+                            }
+                            document.getElementById('arHint').textContent =
+                                'Link copied · choose Safari from the share sheet, or paste it into Safari';
                             return;
                         }
 
