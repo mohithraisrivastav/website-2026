@@ -1,4 +1,4 @@
-<!-- ============================================================
+﻿<!-- ============================================================
      SHOP PAGE &mdash; SOURCE OF TRUTH
      Products are consolidated here with in-page filters.
      Legacy category pages redirect to this page.
@@ -324,7 +324,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -866,6 +866,16 @@
           const blob = new Blob([glb], { type: 'model/gltf-binary' });
           return URL.createObjectURL(blob);
         });
+    };
+
+    window.__buildArUSDZ = async function(imgUrl, wIn, hIn) {
+      const { USDZExporter } = await import('three/addons/exporters/USDZExporter.js');
+      const image = await loadImage(imgUrl);
+      const scene = await buildScene(image, wIn, hIn);
+      const exporter = new USDZExporter();
+      const result = await exporter.parseAsync(scene);
+      const blob = new Blob([result], { type: 'model/vnd.usd+zip' });
+      return URL.createObjectURL(blob);
     };
     </script>
     <style>
@@ -3225,7 +3235,7 @@
         /* ══ AR SHEET (model-viewer) ═════════════════════════════ */
         /* Bump on EVERY /ar regeneration so iOS Quick Look fetches fresh
            USDZ instead of its cached copy at the same URL. */
-        window.AR_MODEL_VER = '3';
+        window.AR_MODEL_VER = '4';
         (function() {
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
@@ -3268,11 +3278,16 @@
 
             /* Chrome, Firefox, Edge, Opera on iOS all run on WebKit but Apple
                blocks AR Quick Look and WebXR in every browser except Safari.
-               Detect these so we can prompt the user to switch to Safari. */
+               Detect these so we can prompt the user to switch to Safari.
+               NOTE: iPadOS 13+ changed Safari's UA to report as a Mac desktop
+               (no longer contains "iPad"). Detect via maxTouchPoints as fallback. */
+            function isAppleDevice(ua) {
+                return (/iPad|iPhone|iPod/.test(ua) && !window.MSStream)
+                    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            }
             function isIOSNonSafari() {
                 var ua = navigator.userAgent || '';
-                var isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-                if (!isiOS) return false;
+                if (!isAppleDevice(ua)) return false;
                 /* Safari's UA contains "Version/" but NOT CriOS / FxiOS / EdgiOS */
                 return /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|Brave/i.test(ua);
             }
@@ -3310,23 +3325,39 @@
                 document.body.style.overflow = 'hidden';
                 arSession = { id: id, title: title, img: img, w: wIn, h: hIn, sizes: sizeList, t0: Date.now() };
 
-                /* ── iOS non-Safari (Chrome, Firefox, Edge…): AR blocked by Apple ── */
+                /* ── iOS non-Safari (Chrome, Firefox, Edge…): redirect to Safari immediately ── */
                 if (isIOSNonSafari()) {
                     arMode = 'inapp';
                     track('ar_ios_nonsafari', { item_id: id, item_name: title });
+                    document.getElementById('arDimText').textContent = '';
+                    chipsEl.innerHTML = '';
+
+                    /* Show “Opening Safari…” immediately — no dialog, no copy step */
                     load.classList.remove('ar-gone');
                     load.innerHTML =
-                        '<div style=”max-width:300px;text-align:center;”>'
-                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;”>AR requires Safari on iPhone</div>'
-                      + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.84rem;line-height:1.8;color:rgba(247,243,236,0.52);”>'
-                      + 'Apple only allows AR Quick Look in Safari.<br>'
-                      + 'Copy the link below and open it in <strong style=”color:rgba(247,243,236,0.8);”>Safari</strong> for the full wall AR experience.</div>'
+                        '<div style=”max-width:280px;text-align:center;”>'
+                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:10px;”>Opening in Safari…</div>'
+                      + '<div style=”font-family:Inter,sans-serif;font-size:0.78rem;line-height:1.7;color:rgba(247,243,236,0.45);”>AR requires Safari on iPhone · redirecting now</div>'
                       + '</div>';
-                    document.getElementById('arDimText').textContent = '';
-                    launch.innerHTML =
-                        '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link for Safari';
-                    hintEl.textContent = 'Paste into Safari · then tap “See it on Your Wall”';
-                    chipsEl.innerHTML = '';
+                    launch.innerHTML = '';
+                    hintEl.textContent = '';
+
+                    /* Fire safari-https:// scheme — iOS 9+ opens this page directly in Safari */
+                    var safariUrl = 'safari-https://' + location.host + location.pathname + location.search + location.hash;
+                    location.href = safariUrl;
+
+                    /* Still here after 1.5 s → scheme not supported on this device.
+                       Fall back to copy-link so the user isn't stuck on a blank screen. */
+                    setTimeout(function() {
+                        load.innerHTML =
+                            '<div style=”max-width:280px;text-align:center;”>'
+                          + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.92);margin-bottom:10px;”>Open in Safari for AR</div>'
+                          + '<div style=”font-family:Inter,sans-serif;font-size:0.78rem;line-height:1.7;color:rgba(247,243,236,0.45);”>Copy this link and paste it into Safari.</div>'
+                          + '</div>';
+                        launch.innerHTML =
+                            '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link';
+                        hintEl.textContent = 'Paste into Safari to view in AR';
+                    }, 1500);
                     return;
                 }
 
@@ -3350,8 +3381,9 @@
                 }
 
                 /* ── Platform detection (hoisted — used for button state + mountBlob + applyNative) ── */
+                /* iPadOS 13+ reports as Mac desktop UA — use maxTouchPoints as fallback */
                 var isAndroid = /Android/i.test(navigator.userAgent);
-                var isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                var isIOS     = isAppleDevice(navigator.userAgent || '');
                 var isDesktop = !isAndroid && !isIOS;
 
                 arMode = 'ar';
@@ -4283,7 +4315,7 @@
                 .catch(function() { return tryCamera({ audio: false, video: true }); })
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
-                    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    var isIOS = isAppleDevice(navigator.userAgent || '');
                     var isAndroid = /Android/.test(navigator.userAgent);
                     if (denied) {
                         var hint = isIOS

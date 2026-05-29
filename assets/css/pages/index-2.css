@@ -132,7 +132,20 @@
             .shop-preview-grid { grid-template-columns: 1fr; gap: 60px; }
         }
 
-        /* --- 8. Testimonials --- */
+        /* --- 8. Workshops Preview --- */
+        .workshops-preview { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+        .workshops-preview-body { max-width: 720px; }
+        .workshops-preview-title { font-family: var(--font-accent); font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 400; font-style: italic; color: #1A1612; margin-bottom: 32px; letter-spacing: 0; }
+        .workshops-preview-text p { font-size: 1.0625rem; font-weight: 300; color: #4A3A33; line-height: 1.85; margin-bottom: 14px; }
+        .workshops-preview-text p:last-child { margin-bottom: 0; font-weight: 500; color: #1A1612; }
+        @media (max-width: 1100px) {
+            .workshops-preview { padding: 80px 5vw; }
+        }
+        @media (max-width: 640px) {
+            .workshops-preview { padding: 60px 5vw; }
+        }
+
+        /* --- 9. Testimonials --- */
 .testimonials { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
 .testimonials-head { margin-bottom: 80px; }
 .testimonials-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; line-height: 1; }

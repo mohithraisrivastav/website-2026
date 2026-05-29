@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorer's Deck — Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #F7F3ED;
+    font-family: 'Inter', sans-serif;
+    padding: 24px 16px 60px;
+    color: #1A1612;
+  }
+
+  /* ─── Page header ─── */
+  .page-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* ─── State tabs ─── */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .tab {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(207,162,70,0.4);
+    color: #888;
+    cursor: pointer;
+    background: transparent;
+    transition: 0.2s;
+  }
+  .tab.active { background: #CFA246; color: #1A1612; border-color: #CFA246; }
+
+  /* ─── Three-column layout ─── */
+  .cols {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .col-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .col-label.bad    { color: #c0392b; }
+  .col-label.mid    { color: #e67e22; }
+  .col-label.good   { color: #27ae60; }
+
+  /* ─── Card shell ─── */
+  .card {
+    width: 110px;
+    height: 165px;
+    background: rgba(207, 162, 70, 0.38);
+    border: 1px solid rgba(207, 162, 70, 0.55);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  }
+
+  /* corner rows */
+  .corner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.42rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(247,243,236,0.75);
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .corner.author { letter-spacing: 0.5px; white-space: nowrap; font-size: 0.38rem; }
+
+  /* progress bar */
+  .prog {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: rgba(26,22,18,0.15);
+  }
+  .prog-fill {
+    height: 100%;
+    background: rgba(26,22,18,0.45);
+    width: 65%;
+  }
+
+  /* ════════════════════════════════
+     CARD A — CURRENT (broken)
+     flat hierarchy, wrong sizes
+  ════════════════════════════════ */
+  .body-a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 0;
+    overflow: hidden;
+  }
+  .instr-a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.475rem;   /* current 0.88rem scaled to card */
+    font-weight: 400;
+    font-style: italic;
+    color: #1A1612;
+    line-height: 1.55;
+  }
+  .note-a {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.395rem;   /* current 0.72rem scaled */
+    color: rgba(247,243,236,0.72);
+  }
+  .hint-a {
+    font-size: 0.27rem;    /* current 0.5rem scaled = 8px → feels like a glitch */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(247,243,236,0.55);
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ════════════════════════════════
+     CARD B — LAYOUT ONLY fix
+     (zones correct, sizes still flat)
+  ════════════════════════════════ */
+  .body-b {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .quote-zone-b {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .instr-b {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.475rem;   /* same as A — layout fixed but hierarchy still flat */
+    font-weight: 400;
+    font-style: italic;
+    color: #1A1612;
+    line-height: 1.55;
+  }
+  .footer-zone-b {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(207, 162, 70, 0.2);
+  }
+  .note-b {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.395rem;   /* same as A — barely different from instr */
+    color: rgba(247,243,236,0.72);
+  }
+  .hint-b {
+    font-size: 0.37rem;    /* slightly bigger than A but still undifferentiated */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(247,243,236,0.5);
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ════════════════════════════════
+     CARD C — FULL FIX
+     layout + proper typographic scale
+  ════════════════════════════════ */
+  .body-c {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .quote-zone-c {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .instr-c {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.54rem;    /* 1rem on actual card — clearly the hero */
+    font-weight: 400;
+    font-style: italic;
+    color: #1A1612;
+    line-height: 1.5;
+  }
+  .footer-zone-c {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(207, 162, 70, 0.2);
+  }
+  .note-c {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 0.335rem;   /* 0.625rem on actual card — clearly a caption */
+    letter-spacing: 0.5px;
+    color: rgba(247,243,236,0.55);  /* softer opacity too */
+  }
+  .hint-c {
+    font-size: 0.3rem;     /* 0.5625rem on actual — UI chrome, not competing */
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(247,243,236,0.35);  /* very low opacity — whisper */
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* hidden state */
+  .footer-hidden { opacity: 0; }
+
+  /* ─── Divider ─── */
+  hr {
+    border: none;
+    border-top: 1px solid rgba(26,22,18,0.1);
+    margin: 28px 0;
+  }
+
+  /* ─── Scale legend ─── */
+  .legend-title {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #1A1612;
+    margin-bottom: 16px;
+  }
+  .legend {
+    max-width: 340px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgba(26,22,18,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .legend-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid rgba(26,22,18,0.07);
+  }
+  .legend-row:last-child { border-bottom: none; }
+  .legend-row.header {
+    background: rgba(26,22,18,0.05);
+  }
+  .legend-cell {
+    padding: 8px 10px;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    border-right: 1px solid rgba(26,22,18,0.07);
+  }
+  .legend-cell:last-child { border-right: none; }
+  .legend-row.header .legend-cell {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+  }
+  .legend-cell .elem { font-weight: 700; color: #1A1612; font-size: 0.6875rem; }
+  .legend-cell .desc { color: #888; font-size: 0.625rem; display: block; margin-top: 1px; }
+  .bad-val  { color: #c0392b; font-size: 0.6875rem; }
+  .good-val { color: #27ae60; font-size: 0.6875rem; font-weight: 600; }
+
+  /* ─── Bottom note ─── */
+  .bottom-note {
+    max-width: 340px;
+    margin: 16px auto 0;
+    font-size: 0.75rem;
+    color: #666;
+    line-height: 1.6;
+    text-align: center;
+  }
+  .bottom-note strong { color: #1A1612; }
+</style>
+</head>
+<body>
+
+<p class="page-title">Explorer's Deck — Hierarchy Mockup</p>
+<p class="page-sub">375px mobile · card 200×299px · same quote, three typographic approaches</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="setLifted(true, event)">After lift</button>
+  <button class="tab" onclick="setLifted(false, event)">Pre-lift</button>
+</div>
+
+<div class="cols">
+
+  <!-- ── A: Current ── -->
+  <div class="col">
+    <div class="col-label bad">Current<br>broken</div>
+    <div class="card">
+      <div class="corner">
+        <span>Lived Space</span><span>03</span>
+      </div>
+      <div class="body-a">
+        <div class="instr-a">Walk into a space and count how many surfaces are at eye level. That's your conversation map.</div>
+        <span class="note-a footer-target-a">— spatial cognition</span>
+        <span class="hint-a footer-target-a">tap to learn why →</span>
+      </div>
+      <div class="corner author"><span>Mohith Rai Srivastav</span></div>
+      <div class="prog"><div class="prog-fill"></div></div>
+    </div>
+    <!-- issues -->
+    <div style="font-size:0.55rem; color:#c0392b; letter-spacing:1px; text-transform:uppercase; font-weight:700; text-align:center; line-height:1.8;">
+      Quote above center<br>
+      3 elements same weight<br>
+      8px hint = glitch
+    </div>
+  </div>
+
+  <!-- ── B: Layout only ── -->
+  <div class="col">
+    <div class="col-label mid">Layout fix<br>sizes flat</div>
+    <div class="card">
+      <div class="corner">
+        <span>Lived Space</span><span>03</span>
+      </div>
+      <div class="body-b">
+        <div class="quote-zone-b">
+          <div class="instr-b">Walk into a space and count how many surfaces are at eye level. That's your conversation map.</div>
+        </div>
+        <div class="footer-zone-b footer-target-b">
+          <span class="note-b">— spatial cognition</span>
+          <span class="hint-b">tap to learn why →</span>
+        </div>
+      </div>
+      <div class="corner author"><span>Mohith Rai Srivastav</span></div>
+      <div class="prog"><div class="prog-fill"></div></div>
+    </div>
+    <!-- issues -->
+    <div style="font-size:0.55rem; color:#e67e22; letter-spacing:1px; text-transform:uppercase; font-weight:700; text-align:center; line-height:1.8;">
+      Quote centered ✓<br>
+      Footer anchored ✓<br>
+      Still flat scale ✗
+    </div>
+  </div>
+
+  <!-- ── C: Full fix ── -->
+  <div class="col">
+    <div class="col-label good">Full fix<br>hierarchy</div>
+    <div class="card">
+      <div class="corner">
+        <span>Lived Space</span><span>03</span>
+      </div>
+      <div class="body-c">
+        <div class="quote-zone-c">
+          <div class="instr-c">Walk into a space and count how many surfaces are at eye level. That's your conversation map.</div>
+        </div>
+        <div class="footer-zone-c footer-target-c">
+          <span class="note-c">— spatial cognition</span>
+          <span class="hint-c">tap to learn why →</span>
+        </div>
+      </div>
+      <div class="corner author"><span>Mohith Rai Srivastav</span></div>
+      <div class="prog"><div class="prog-fill"></div></div>
+    </div>
+    <!-- what changed -->
+    <div style="font-size:0.55rem; color:#27ae60; letter-spacing:1px; text-transform:uppercase; font-weight:700; text-align:center; line-height:1.8;">
+      Quote centered ✓<br>
+      Footer anchored ✓<br>
+      Clear 3-tier scale ✓
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<p class="legend-title">The scale</p>
+
+<div class="legend">
+  <div class="legend-row header">
+    <div class="legend-cell">Element</div>
+    <div class="legend-cell">Current</div>
+    <div class="legend-cell">Proposed</div>
+  </div>
+  <div class="legend-row">
+    <div class="legend-cell">
+      <span class="elem">Quote</span>
+      <span class="desc">Hero message</span>
+    </div>
+    <div class="legend-cell"><span class="bad-val">0.88rem · full opacity</span></div>
+    <div class="legend-cell"><span class="good-val">1rem · full opacity</span></div>
+  </div>
+  <div class="legend-row">
+    <div class="legend-cell">
+      <span class="elem">Note</span>
+      <span class="desc">Attribution</span>
+    </div>
+    <div class="legend-cell"><span class="bad-val">0.72rem · 72% opacity<br>only 0.16rem smaller</span></div>
+    <div class="legend-cell"><span class="good-val">0.625rem · 55% opacity<br>1.6× smaller than quote</span></div>
+  </div>
+  <div class="legend-row">
+    <div class="legend-cell">
+      <span class="elem">Hint</span>
+      <span class="desc">UI affordance</span>
+    </div>
+    <div class="legend-cell"><span class="bad-val">0.5rem (8px)<br>looks broken</span></div>
+    <div class="legend-cell"><span class="good-val">0.5625rem · 35% opacity<br>uppercase — feels intentional</span></div>
+  </div>
+</div>
+
+<p class="bottom-note">
+  Three differentiators working together on Card C: <strong>size</strong> (quote is 1.6× the caption), <strong>opacity</strong> (100% → 55% → 35%), and <strong>font style</strong> (italic serif → italic serif caption → uppercase sans).
+</p>
+
+<script>
+  function setLifted(lifted, e) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+
+    // A
+    document.querySelectorAll('.footer-target-a').forEach(el => {
+      el.style.opacity = lifted ? '1' : '0';
+    });
+    // B
+    document.querySelectorAll('.footer-target-b').forEach(el => {
+      el.style.opacity = lifted ? '1' : '0';
+    });
+    // C
+    document.querySelectorAll('.footer-target-c').forEach(el => {
+      el.style.opacity = lifted ? '1' : '0';
+    });
+  }
+</script>
+
+</body>
+</html>

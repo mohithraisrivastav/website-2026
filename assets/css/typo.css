@@ -95,7 +95,7 @@ em, i, blockquote, .font-italic {
 
 /* -- Focus ring - clean, accessible, on-brand --------------------------------------- */
 :focus-visible          {
-  outline: 2px solid #CFA246;
+  outline: 2px solid #7F5F10; /* #7F5F10 = 5.39:1 on cream — passes WCAG AA (was #CFA246 = 2.15:1 FAIL) */
   outline-offset: 3px;
   border-radius: 2px;
 }

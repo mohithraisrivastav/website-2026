@@ -25,7 +25,7 @@
     gap: 0.5rem;
 }
 .tier-label {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #CFA246;
@@ -95,7 +95,7 @@
     border: none;
     background: transparent;
     padding: 0.45rem 0.65rem;
-    font-size: 0.78rem;
+    font-size: 1rem; /* ≥16px prevents iOS auto-zoom */
     color: #1A1612;
     outline: none;
     font-family: inherit;
@@ -107,6 +107,7 @@
     background: #CFA246;
     color: #fff;
     padding: 0.45rem 0.8rem;
+    min-height: 44px;
     font-size: 0.72rem;
     letter-spacing: 0.05em;
     font-weight: 600;
@@ -722,13 +723,14 @@
             white-space: nowrap;
         }
         .edeck-dc-corner--author span {
-            font-size: 0.72rem;
-            letter-spacing: 1px;
+            font-size: 0.65rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
         .edeck-dc-body {
             flex:1; display:flex; flex-direction:column;
-            justify-content:center; gap:12px;
-            position:relative; z-index:2; padding:12px 0;
+            justify-content:space-between;
+            position:relative; z-index:2; padding:10px 0;
         }
         /* Idle */
         .edeck-idle {
@@ -745,9 +747,9 @@
         /* Instruction text */
         .edeck-instr {
             font-family:'Cormorant Garamond',serif;
-            font-size:clamp(1.15rem,1.9vw,1.45rem);
+            font-size:clamp(1rem,1.9vw,1.45rem); /* 1rem floor — clearly the hero on mobile */
             font-weight:400; font-style:italic;
-            color:#1A1612; line-height:1.55; overflow:hidden;
+            color:#1A1612; line-height:1.5; overflow:hidden;
         }
         .edeck-line { display:block; overflow:hidden; }
         .edeck-line-in {
@@ -757,8 +759,9 @@
         .edeck-dc.lifted .edeck-line-in { transform:translateY(0); transition-delay:.28s; }
         .edeck-note {
             font-family:var(--font-accent);font-style:italic;
-            font-size:clamp(.85rem,1.3vw,.95rem);
-            color:rgba(247,243,236,0.72);
+            font-size:clamp(.625rem,.95vw,.72rem); /* caption tier — 1.6× smaller than instr */
+            letter-spacing:0.5px;
+            color:rgba(247,243,236,0.55); /* softer than before */
             opacity:0; transition:opacity .8s ease 1s;
         }
         .edeck-dc.lifted .edeck-note { opacity:1; }
@@ -808,15 +811,23 @@
         @media(max-width:640px){
             /* Explorer's Deck — cards first, button below */
             .edeck-inner{ grid-template-columns:1fr; height:auto; }
-            .edeck-right{ order:-1; padding:32px 24px; border-bottom:1px solid rgba(207, 162, 70, .15); border-top:none; min-height:280px; }
+            /* No overflow clipping — card must be free to lift without hitting a boundary */
+            .edeck-right{ order:-1; padding:48px 24px 32px; border-bottom:1px solid rgba(207, 162, 70, .15); border-top:none; min-height:320px; overflow:visible; align-items:flex-end; }
             .edeck-left{ order:1; padding:32px 24px; }
-            /* Clip at stage level so rotated shadow cards don't bleed (hover-lift doesn't fire on touch) */
-            .edeck-stage{ width:min(200px,55vw); overflow:hidden; }
-            /* Restore original rotations — clipped by stage overflow */
+            /* Wider card, no overflow clip */
+            .edeck-stage{ width:min(240px,64vw); overflow:visible; }
+            /* Restore original rotations */
             .edeck-sc:nth-child(1){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
             .edeck-sc:nth-child(2){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
             .edeck-sc:nth-child(3){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
             .edeck-sc:nth-child(4){ transform:translate(var(--ox),var(--oy)) rotate(var(--or)); }
+            /* Small lift — plenty of headroom above stage now */
+            .edeck-dc.lifted{ transform:translateY(-8px) rotate(.1deg); }
+            /* Corner text — tighter spacing + no-wrap so "02 / 57" stays on one line */
+            .edeck-dc-corner{ letter-spacing:1.5px; font-size:0.72rem; }
+            .edeck-dc-corner span:last-child{ white-space:nowrap; }
+            /* Why-hint — keep on one line */
+            .edeck-why-hint{ white-space:nowrap; font-size:0.5rem; letter-spacing:1.5px; }
             /* Reduce letter-spacing on idle label so it fits on narrow card */
             .edeck-idle span{ letter-spacing:2px; font-size:0.75rem; }
             /* Remove blue tap highlight on mobile */

@@ -13,7 +13,7 @@
 
         .logo:hover { opacity: 1; filter: drop-shadow(0 0 15px rgba(201, 164, 76, 0.4)); }
         .nav-links a:hover, .nav-links a.active { color: #CFA246; }
-        .nav-cart { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; cursor: pointer; position: relative; transition: 0.3s; color: #1A1612; }
+        .nav-cart { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; position: relative; transition: 0.3s; color: #1A1612; }
         .nav-cart:hover { opacity: 0.7; }
         .nav-cart svg { width: 20px; height: 20px; fill: currentColor; }
         .nav-cart .cart-count { position: absolute; top: -2px; right: -6px; background: #fff; color: #000; font-size: 0.8625rem; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -320,7 +320,7 @@
         .reader-top .crumbs { color: #1A1612; display: flex; gap: 14px; align-items: center; }
         .reader-top .crumbs { font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
         .reader-top .crumbs .sep { color: #CFA246; }
-        .reader-close { width: 38px; height: 38px; border: 1px solid rgba(207, 162, 70, 0.35); background: transparent; color: #1A1612; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-family: var(--font-accent) !important; }
+        .reader-close { width: 44px; height: 44px; border: 1px solid rgba(207, 162, 70, 0.35); background: transparent; color: #1A1612; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-family: var(--font-accent) !important; }
         .reader-close:hover { border-color: #1A1612; transform: rotate(90deg); }
         .reader-hero { padding: 100px 5vw 60px; text-align: center; max-width: 900px; margin: 0 auto; }
         .reader-hero .date { color: #1A1612; margin-bottom: 36px; display: inline-flex; align-items: center; gap: 16px; }

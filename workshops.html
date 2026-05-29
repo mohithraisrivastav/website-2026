@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -154,7 +154,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -196,17 +196,20 @@
 }
 .edeck-back-body { flex: 1; display: flex; align-items: center; }
 .edeck-why-hint {
-  font-size: 0.5rem; font-weight: 700;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(26,22,18,0.38); pointer-events: none;
+  font-size: 0.5625rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(26,22,18,0.35); pointer-events: none;
   font-family: var(--font-main, sans-serif);
   opacity: 0; transition: opacity 0.5s 1.2s;
-  text-align: right; display: block; margin-top: 8px;
+  text-align: right; display: block;
 }
 .edeck-dc.lifted .edeck-why-hint { opacity: 1; }
 .edeck-dc.why-shown .edeck-why-hint { opacity: 0 !important; transition: none; }
-.edeck-instr { font-size: clamp(0.88rem, 1.45vw, 1.18rem) !important; line-height: 1.55 !important; }
-.edeck-dc-body { overflow: hidden; }
+.edeck-instr { font-size: clamp(1rem, 1.9vw, 1.45rem) !important; line-height: 1.5 !important; }
+.edeck-note  { font-size: clamp(0.625rem, 0.95vw, 0.72rem) !important; letter-spacing: 0.5px !important; }
+.edeck-quote-zone { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.edeck-body-footer { padding-top: 8px; border-top: 1px solid rgba(207,162,70,0.2); }
+.edeck-dc.why-shown .edeck-body-footer { opacity: 0; transition: opacity 0.2s ease; }
 
 /* ─────────────────────────────────────────────
    Redesign overrides — no borders, no outlines
@@ -510,7 +513,7 @@
               <div class="edeck-inner">
 
                 <div class="edeck-left">
-                  <span class="edeck-eyebrow">Explorer's Deck &nbsp;&middot;&nbsp; 57 Cards</span>
+                  <span class="edeck-eyebrow">Explorer's Deck</span>
                   <div>
                     <button class="edeck-btn" id="edeckBtn" aria-label="Pick a card">
                       <span id="edeckBtnLabel">Pick a Card</span>
@@ -539,9 +542,13 @@
                         <span id="edeckNum"></span>
                       </div>
                       <div class="edeck-dc-body">
-                        <div class="edeck-instr" id="edeckInstr"></div>
-                        <span class="edeck-note" id="edeckNote"></span>
-                        <span class="edeck-why-hint">tap card to learn why →</span>
+                        <div class="edeck-quote-zone">
+                          <div class="edeck-instr" id="edeckInstr"></div>
+                          <span class="edeck-note" id="edeckNote"></span>
+                        </div>
+                        <div class="edeck-body-footer">
+                          <span class="edeck-why-hint">tap card to learn why →</span>
+                        </div>
                       </div>
                       <div class="edeck-dc-corner edeck-dc-corner--author">
                         <span>Mohith Rai Srivastav</span>
