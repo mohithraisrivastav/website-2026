@@ -3818,15 +3818,18 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
-                    /* TEMP DEBUG — surfaces live state on tap so we can diagnose iOS.
+                    /* TEMP DEBUG — blocking alert so it shows before any branch/navigation.
                        Remove after diagnosis. */
                     try {
-                        var dbg = document.getElementById('arHint');
-                        if (dbg) dbg.textContent =
-                            'DBG tap✓ mode=' + arMode
-                            + ' ios=' + isIOS + ' and=' + isAndroid
-                            + ' canAR=' + viewer.canActivateAR
-                            + ' iosSrc=' + (viewer.getAttribute('ios-src') ? 'set' : 'none');
+                        alert(
+                            'AR DEBUG\n'
+                            + 'mode=' + arMode + '\n'
+                            + 'isIOSNonSafari=' + isIOSNonSafari() + '\n'
+                            + 'isInAppBrowser=' + isInAppBrowser() + '\n'
+                            + 'canActivateAR=' + viewer.canActivateAR + '\n'
+                            + 'ios-src=' + (viewer.getAttribute('ios-src') || 'NONE') + '\n'
+                            + 'UA=' + navigator.userAgent
+                        );
                     } catch (e) {}
                     /* ── Android Chrome WebXR fast-path ──
                        model-viewer's WebXR + Scene Viewer path is brittle on
