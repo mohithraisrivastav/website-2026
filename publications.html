@@ -62,54 +62,67 @@
 
 <style>
 .pub-intro {
-    max-width: 620px;
+    max-width: 600px;
     font-size: 1.075rem;
     line-height: 1.9;
     color: #1A1612;
-    margin-bottom: 64px;
+    margin-bottom: 56px;
 }
-.pub-group-label {
-    font-size: 0.8625rem;
-    font-weight: 700;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: #7F5F10;
-    margin: 0 0 8px 0;
-}
-.pub-list { max-width: 860px; }
-.pub-item {
-    display: block;
+.pub-list { max-width: 900px; }
+
+/* Magazine index row: medium image left, text right */
+.pub-entry {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 44px;
+    align-items: center;
     text-decoration: none;
     color: inherit;
-    padding: 30px 0;
-    border-bottom: 1px solid rgba(207,162,70,0.25);
-    transition: opacity 0.25s ease;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(207,162,70,0.2);
 }
-.pub-list .pub-item:first-of-type { border-top: 1px solid rgba(207,162,70,0.25); }
-.pub-item .pub-pub {
-    font-size: 0.8625rem;
+.pub-list .pub-entry:first-of-type { border-top: 1px solid rgba(207,162,70,0.2); }
+
+.pub-img-wrap {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #E8E1D5;            /* soft fallback for empty slots */
+}
+.pub-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1.2s cubic-bezier(0.25,1,0.5,1);
+}
+.pub-entry:hover .pub-img-wrap img { transform: scale(1.04); }
+
+.pub-pub {
+    display: block;
+    font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: #7F5F10;
-    margin-bottom: 12px;
-    display: block;
+    margin-bottom: 13px;
 }
-.pub-item .pub-title {
+.pub-title {
+    display: block;
     font-family: var(--font-accent), 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
     font-weight: 400;
     line-height: 1.3;
     color: #1A1612;
-    max-width: 760px;
+    margin-bottom: 18px;
     transition: color 0.25s ease;
 }
-a.pub-item .pub-read {
+.pub-entry:hover .pub-title { color: #7F5F10; }
+.pub-read {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 16px;
     font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 2.5px;
@@ -117,14 +130,37 @@ a.pub-item .pub-read {
     color: #7F5F10;
     transition: gap 0.25s ease;
 }
-a.pub-item:hover .pub-title { color: #7F5F10; }
-a.pub-item:hover .pub-read { gap: 14px; }
-.pub-item.pub-static { cursor: default; }
-.pub-item.pub-static .pub-read { display: none; }
+.pub-entry:hover .pub-read { gap: 14px; }
 
-@media (max-width: 640px) {
-    .pub-intro { font-size: 1rem; margin-bottom: 44px; }
-    .pub-item { padding: 24px 0; }
+/* text-only credits (no link / no image) */
+.pub-also {
+    max-width: 900px;
+    margin-top: 48px;
+    padding-top: 36px;
+    border-top: 1px solid rgba(207,162,70,0.2);
+}
+.pub-also-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7F5F10;
+    margin-bottom: 12px;
+}
+.pub-also-names {
+    font-size: 1.05rem;
+    color: #1A1612;
+    line-height: 1.8;
+}
+
+@media (max-width: 700px) {
+    .pub-entry {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 30px 0;
+    }
+    .pub-intro { font-size: 1rem; margin-bottom: 40px; }
 }
 </style>
 </head>
@@ -204,70 +240,92 @@ a.pub-item:hover .pub-read { gap: 14px; }
 
             <div class="pub-list">
 
-                <a class="pub-item" href="https://www.architecturaldigest.in/story/this-eco-luxury-retreat-in-assagao-lets-architecture-flow-in-tandem-with-the-landscape/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Architectural Digest India</span>
-                    <span class="pub-title">This Eco-Luxury Retreat in Assagao Lets Architecture Flow in Tandem with the Landscape</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.architecturaldigest.in/story/this-eco-luxury-retreat-in-assagao-lets-architecture-flow-in-tandem-with-the-landscape/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/ad-assagao.webp" alt="Architectural Digest India — Assagao eco-luxury retreat" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Architectural Digest India</span>
+                        <span class="pub-title">This Eco-Luxury Retreat in Assagao Lets Architecture Flow in Tandem with the Landscape</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.architecturaldigest.in/story/sawantwadi-palaces-heritage-restoration-is-inspired-by-ganjifa-a-persian-card-game-luxury-hotels-india/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Architectural Digest India</span>
-                    <span class="pub-title">Sawantwadi Palace's Heritage Restoration Is Inspired by Ganjifa</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.architecturaldigest.in/story/sawantwadi-palaces-heritage-restoration-is-inspired-by-ganjifa-a-persian-card-game-luxury-hotels-india/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/ad-sawantwadi.webp" alt="Architectural Digest India — Sawantwadi Palace heritage restoration" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Architectural Digest India</span>
+                        <span class="pub-title">Sawantwadi Palace's Heritage Restoration Is Inspired by Ganjifa</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.architecturaldigest.in/story/lukshmi-vilas-to-the-city-palace-inside-the-most-beautiful-royal-homes-in-india/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Architectural Digest India</span>
-                    <span class="pub-title">From Lukshmi Vilas to the City Palace: The Most Beautiful Royal Homes in India</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.architecturaldigest.in/story/lukshmi-vilas-to-the-city-palace-inside-the-most-beautiful-royal-homes-in-india/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/ad-royal-homes.webp" alt="Architectural Digest India — most beautiful royal homes in India" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Architectural Digest India</span>
+                        <span class="pub-title">From Lukshmi Vilas to the City Palace: The Most Beautiful Royal Homes in India</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.architecturaldigest.in/story/palaces-in-india-that-the-modern-royals-still-call-home/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Architectural Digest India</span>
-                    <span class="pub-title">Palaces in India That the Modern Royals Still Call Home</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.architecturaldigest.in/story/palaces-in-india-that-the-modern-royals-still-call-home/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/ad-palaces.webp" alt="Architectural Digest India — palaces modern royals still call home" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Architectural Digest India</span>
+                        <span class="pub-title">Palaces in India That the Modern Royals Still Call Home</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.cntraveller.in/story/this-homestay-near-manali-is-for-creative-pursuits-and-quiet-time-in-the-mountains/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Condé Nast Traveller</span>
-                    <span class="pub-title">This Homestay Near Manali Is for Creative Pursuits and Quiet Time in the Mountains</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.cntraveller.in/story/this-homestay-near-manali-is-for-creative-pursuits-and-quiet-time-in-the-mountains/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/cnt-manali.webp" alt="Condé Nast Traveller — homestay near Manali" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Condé Nast Traveller</span>
+                        <span class="pub-title">This Homestay Near Manali Is for Creative Pursuits and Quiet Time in the Mountains</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.architectandinteriorsindia.com/projects/engage-with-the-goan-life-in-this-three-storey-family-villa" target="_blank" rel="noopener">
-                    <span class="pub-pub">Architects &amp; Interiors India</span>
-                    <span class="pub-title">Engage with the Goan Life in This Three-Storey Family Villa</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.architectandinteriorsindia.com/projects/engage-with-the-goan-life-in-this-three-storey-family-villa" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/ai-goan-villa.webp" alt="Architects and Interiors India — three-storey Goan family villa" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Architects &amp; Interiors India</span>
+                        <span class="pub-title">Engage with the Goan Life in This Three-Storey Family Villa</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.commercialdesignindia.com/projects/hrlines-architecture-brings-cosmos-to-36400-sq-ft-corportae-office-in-andhra-pradesh" target="_blank" rel="noopener">
-                    <span class="pub-pub">Commercial Design India</span>
-                    <span class="pub-title">HRLines Architecture Brings the Cosmos to a 36,400 Sq Ft Office in Andhra Pradesh</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.commercialdesignindia.com/projects/hrlines-architecture-brings-cosmos-to-36400-sq-ft-corportae-office-in-andhra-pradesh" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/cdi-hrlines.webp" alt="Commercial Design India — HRLines Architecture office Andhra Pradesh" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Commercial Design India</span>
+                        <span class="pub-title">HRLines Architecture Brings the Cosmos to a 36,400 Sq Ft Office in Andhra Pradesh</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://www.re-thinkingthefuture.com/architectural-community/a14645-the-architecture-of-joy-emotional-well-being-through-space-and-light/" target="_blank" rel="noopener">
-                    <span class="pub-pub">Re-Thinking The Future</span>
-                    <span class="pub-title">The Architecture of Joy: Emotional Well-Being Through Space and Light</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://www.re-thinkingthefuture.com/architectural-community/a14645-the-architecture-of-joy-emotional-well-being-through-space-and-light/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/rtf-joy.webp" alt="Re-Thinking The Future — the architecture of joy" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">Re-Thinking The Future</span>
+                        <span class="pub-title">The Architecture of Joy: Emotional Well-Being Through Space and Light</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <a class="pub-item" href="https://thebetterindia.com/341653/unique-homestay-in-goa-maharashtra-sawantwadi-palace-hotel-run-by-royal-family-sawant-bhonsle/" target="_blank" rel="noopener">
-                    <span class="pub-pub">The Better India</span>
-                    <span class="pub-title">A Unique Homestay in the Sawantwadi Palace, Run by the Royal Family</span>
-                    <span class="pub-read">Read the feature &rarr;</span>
+                <a class="pub-entry" href="https://thebetterindia.com/341653/unique-homestay-in-goa-maharashtra-sawantwadi-palace-hotel-run-by-royal-family-sawant-bhonsle/" target="_blank" rel="noopener">
+                    <div class="pub-img-wrap"><img src="images/publications/bi-sawantwadi.webp" alt="The Better India — Sawantwadi Palace homestay" loading="lazy" onerror="this.style.display='none'"></div>
+                    <div class="pub-text">
+                        <span class="pub-pub">The Better India</span>
+                        <span class="pub-title">A Unique Homestay in the Sawantwadi Palace, Run by the Royal Family</span>
+                        <span class="pub-read">Read the feature &rarr;</span>
+                    </div>
                 </a>
 
-                <div class="pub-item pub-static">
-                    <span class="pub-pub">Elle Decor</span>
-                    <span class="pub-title">Featured architectural photography</span>
-                </div>
+            </div>
 
-                <div class="pub-item pub-static">
-                    <span class="pub-pub">Design Owl</span>
-                    <span class="pub-title">Featured architectural photography</span>
-                </div>
-
+            <div class="pub-also">
+                <span class="pub-also-label">Also featured in</span>
+                <p class="pub-also-names">Elle Decor &nbsp;&middot;&nbsp; Design Owl</p>
             </div>
         </div>
 
