@@ -15,9 +15,54 @@
     <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Journal | Mohith Rai Srivastav</title>
-    <meta name="description" content="The Studio Journal &mdash; essays, field notes, and working thoughts from Mohith Rai Srivastav's practice as an architectural photographer.">
+    <meta name="theme-color" content="#CFA246">
+    <title>Blog &amp; Journal | Mohith Rai Srivastav | Architectural Photography</title>
+    <meta name="description" content="Essays and field notes on architectural photography, light, time, and the gap between what is drawn and what is lived. By Mohith Rai Srivastav, architect-turned photographer based in Goa, India.">
+    <meta name="keywords" content="architectural photography blog, photography essays, Mohith Rai Srivastav journal, architecture writing, lived space, light and time, Goa photographer">
     <meta name="author" content="Mohith Rai Srivastav">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.mohithraisrivastav.com/blog.html">
+    <meta property="og:site_name" content="Mohith Rai Srivastav">
+    <meta property="og:title" content="Blog &amp; Journal | Mohith Rai Srivastav">
+    <meta property="og:description" content="Essays and field notes on architectural photography, light, time, and the gap between what is drawn and what is lived.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.mohithraisrivastav.com/blog.html">
+    <meta property="og:image" content="https://www.mohithraisrivastav.com/work/Projects/Solo%20House/_DSC4348-HDR.webp">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog &amp; Journal | Mohith Rai Srivastav">
+    <meta name="twitter:description" content="Essays and field notes on architectural photography, light, time, and the gap between what is drawn and what is lived.">
+    <meta name="twitter:image" content="https://www.mohithraisrivastav.com/work/Projects/Solo%20House/_DSC4348-HDR.webp">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "The Journal — Mohith Rai Srivastav",
+      "description": "Essays and field notes on architectural photography, light, time, and the gap between what is drawn and what is lived.",
+      "url": "https://www.mohithraisrivastav.com/blog.html",
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "name": "Mohith Rai Srivastav",
+        "url": "https://www.mohithraisrivastav.com/"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Mohith Rai Srivastav",
+        "url": "https://www.mohithraisrivastav.com/"
+      },
+      "blogPost": [
+        {
+          "@type": "BlogPosting",
+          "headline": "What Architectural Photography Taught Me About Space",
+          "url": "https://www.mohithraisrivastav.com/essay-05.html",
+          "datePublished": "2026-05-30",
+          "author": { "@type": "Person", "name": "Mohith Rai Srivastav" },
+          "image": "https://www.mohithraisrivastav.com/work/Projects/Solo%20House/_DSC4348-HDR.webp"
+        }
+      ]
+    }
+    </script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
@@ -52,15 +97,14 @@
                 <li class="nav-has-dropdown"><a href="about.html">Practice</a>
                     <ul class="nav-dropdown">
                         <li><a href="about.html">About</a></li>
+                        <li><a href="publications.html">Publications</a></li>
                         <li><a href="blog.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
-                        <li><a href="blog.html">Blog</a></li>
                     </ul>
                 </li>
                 <li><a href="workshops.html">Workshops</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
-            <a href="blog.html">Blog</a>
             </ul>
             <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
             <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
@@ -79,9 +123,9 @@
             <button class="mobile-nav-parent" onclick="toggleMobileDropdown(this)">Practice <span class="mobile-nav-chevron">&#8964;</span></button>
             <div class="mobile-nav-children">
                 <a href="about.html" onclick="toggleMenu()">About</a>
+                <a href="publications.html" onclick="toggleMenu()">Publications</a>
                 <a href="blog.html" onclick="toggleMenu()">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
-                <a href="blog.html" onclick="toggleMenu()">Blog</a>
             </div>
         </div>
         <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -146,11 +190,11 @@
                 <a href="about.html">About</a>
                 <a href="work.html">Work</a>
                 <a href="film.html">Films</a>
+                <a href="publications.html">Publications</a>
                 <a href="blog.html">Journal</a>
                 <a href="workshops.html">Workshops</a>
                 <a href="shop.html">Shop</a>
                 <a href="contact.html">Contact</a>
-            <a href="blog.html">Blog</a>
             </nav>
             <nav class="sf-legal">
                 <span class="sf-nav-label">Legal</span>
