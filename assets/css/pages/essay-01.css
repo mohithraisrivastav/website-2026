@@ -27,7 +27,7 @@ a{text-decoration:none;color:inherit;}
 .essay-panel p{font-family: var(--font-accent) !important;font-size:1rem;font-weight:300;color:#4A3A33;line-height:1.8;margin:0;}
 .essay-body{max-width:920px;margin:0 auto;padding:40px 4vw 100px;font-family: var(--font-main) !important;font-size:1.22rem;font-weight:300;line-height:1.95;color:#1A1612;}
 .essay-body p{margin-bottom:1.8em;}
-.essay-body p.drop::first-letter{float:left;font-family: var(--font-accent) !important;font-size:6.2em;line-height:0.78;font-weight:400;padding:0.04em 0.12em 0 0;color:#1A1612;}
+.essay-body p.drop::first-letter{float:left;font-family: var(--font-accent) !important;font-size:3.6em;line-height:0.82;font-weight:400;padding:0.02em 0.1em 0 0;color:#1A1612;}
 .essay-body h2{font-family: var(--font-accent) !important;font-size:clamp(2.2rem,3.2vw,3rem);font-weight:400;font-style:italic;color:#1A1612;margin:2.8em 0 1.1em;line-height:1.15;}
 .essay-body em{color:#1A1612;font-style:italic;}
 .essay-body strong{color:#1A1612;font-weight:500;}
