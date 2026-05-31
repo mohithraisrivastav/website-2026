@@ -8,9 +8,18 @@ Disallow: /order-failed.html
 Disallow: /membership.html
 Disallow: /journal.html
 Disallow: /shop-demo.html
-Disallow: /nav-flowchart.html
-Disallow: /audit-report.html
 Disallow: /assets.html
 Disallow: /ar-generator.html
+Disallow: /ar-build.html
+
+# Block unused shop variants
+Disallow: /shop-books.html
+Disallow: /shop-digital.html
+Disallow: /shop-guides.html
+Disallow: /shop-tools.html
+Disallow: /digital-products.html
 
 Sitemap: https://www.mohithraisrivastav.com/sitemap.xml
+
+# AI search agents
+Allow: /llms.txt

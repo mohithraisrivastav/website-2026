@@ -14,7 +14,7 @@ a{text-decoration:none;color:inherit;}
 .essay-hero .date::before{display:none;}
 .essay-hero .date::after{display:none;}
 .essay-hero h1{font-family: var(--font-accent) !important;font-size:clamp(3.6rem,6.5vw,7rem);font-weight:400;line-height:0.95;color:#1A1612;margin-bottom:20px;position:relative;z-index:1;max-width:90%;}
-.essay-hero h1 em{font-style:italic;color:#CFA246;}
+.essay-hero h1 em{font-style:normal;color:inherit;}
 .essay-hero .subtitle{font-family: var(--font-accent) !important;font-size:clamp(1.3rem,2vw,1.7rem);font-weight:300;font-style:italic;color:#4A3A33;line-height:1.65;max-width:85%;margin:22px 0 32px;position:relative;z-index:1;}
 .essay-hero .byline{font-size:0.8625rem;font-weight:600;letter-spacing:3px;color:#5E6B73;text-transform:uppercase;display:flex;gap:16px;align-items:center;position:relative;z-index:1;}
 .essay-hero .byline .dot{width:3px;height:3px;background:#5E6B73;border-radius:50%;}

@@ -152,40 +152,62 @@ window.toggleMobileDropdown = function (btn) {
     }
 })();
 
+/* ── Newsletter — Resend via /api/subscribe ─────────────────────────────── */
 (function () {
-    var form     = document.getElementById('sfForm');
-    var ok       = document.getElementById('sfFormOk');
-    var _loaded  = Date.now();
-    if (!form || !ok) return;
-
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        /* Timing check: real users take >2 s to fill in an email */
-        if (Date.now() - _loaded < 2000) return;
+    function showOk(form, ok) {
         form.style.transition = 'opacity 0.3s ease';
         form.style.opacity    = '0';
         setTimeout(function () {
             form.style.display  = 'none';
+            ok.style.opacity    = '0';
             ok.style.display    = 'block';
+            ok.style.transition = 'opacity 0.4s ease';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { ok.style.opacity = '1'; });
+            });
         }, 320);
-    });
-})();
+    }
 
-/* Modal footer newsletter form */
-(function () {
-    var form    = document.getElementById('sfFormModal');
-    var ok      = document.getElementById('sfFormModalOk');
-    var _loaded = Date.now();
-    if (!form || !ok) return;
+    function wireForm(formId, okId) {
+        var form    = document.getElementById(formId);
+        var ok      = document.getElementById(okId);
+        var _loaded = Date.now();
+        if (!form || !ok) return;
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (Date.now() - _loaded < 2000) return;
-        form.style.transition = 'opacity 0.3s ease';
-        form.style.opacity    = '0';
-        setTimeout(function () {
-            form.style.display = 'none';
-            ok.style.display   = 'block';
-        }, 320);
-    });
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (Date.now() - _loaded < 2000) return;
+            var input = form.querySelector('input[type="email"]');
+            var email = input ? input.value.trim() : '';
+            if (!email) return;
+            var btn = form.querySelector('button');
+            if (btn) btn.disabled = true;
+
+            fetch('/api/subscribe', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ email: email })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.ok) {
+                    showOk(form, ok);
+                } else {
+                    if (btn) btn.disabled = false;
+                    ok.style.color   = '#e07070';
+                    ok.style.display = 'block';
+                    ok.textContent   = data.error || 'Something went wrong — please try again.';
+                }
+            })
+            .catch(function () {
+                if (btn) btn.disabled = false;
+                ok.style.color   = '#e07070';
+                ok.style.display = 'block';
+                ok.textContent   = 'Something went wrong — please try again.';
+            });
+        });
+    }
+
+    wireForm('sfForm',      'sfFormOk');
+    wireForm('sfFormModal', 'sfFormModalOk');
 })();

@@ -180,6 +180,10 @@
             border: 1px solid rgba(110, 123, 67, 0.25);
             color: #1A1612;
             padding: 10px 14px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             font-size: 0.8625rem;
             text-transform: uppercase;
@@ -450,6 +454,8 @@
             .logo { height: 45px; }
             .tab-nav { gap: 1.5rem; padding: 0 4vw; -webkit-overflow-scrolling: touch; }
             .modal-content { grid-template-columns: 1fr; gap: 40px; padding: 80px 4vw 60px; }
+            /* iOS auto-zoom prevention: selects must be ≥16px on mobile */
+            .size-select { font-size: 1rem; }
         }
         @media (max-width: 480px) {
             .product-actions { grid-template-columns: 1fr; }
@@ -524,7 +530,7 @@
         .modal-rel-card:hover .rel-img img { transform: scale(1.04); }
         .modal-rel-card .rel-title { font-size: 0.8625rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1A1612; margin-bottom: 4px; }
         .modal-rel-card .rel-price { font-size: 0.875rem; font-weight: 300; color: #1A1612; }
-        .modal-close { position: static; margin-left: auto; flex-shrink: 0; background: transparent; border: 1px solid rgba(207, 162, 70, 0.35); color: #1A1612; width: 36px; height: 36px; font-size: 1.5rem; cursor: pointer; transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: center; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+        .modal-close { position: static; margin-left: auto; flex-shrink: 0; background: transparent; border: 1px solid rgba(207, 162, 70, 0.35); color: #1A1612; width: 44px; height: 44px; font-size: 1.5rem; cursor: pointer; transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: center; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
         .modal-close:hover { background: #1A1612; color: transparent; border-color: #1A1612; transform: rotate(90deg); }
 
         .modal-gallery { display: flex; flex-direction: column; gap: 15px; }
@@ -650,8 +656,8 @@
             background: none;
             border: none;
             color: rgba(255,255,255,0.25);
-            width: 28px;
-            height: 28px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -704,7 +710,7 @@
         .product-card:hover .product-social,
         .product-card:focus-within .product-social { opacity: 1; pointer-events: auto; }
         .psoc-btn {
-            width: 34px; height: 34px;
+            width: 44px; height: 44px;
             border-radius: 50%;
             background: rgba(247,243,236,0.96);
             backdrop-filter: blur(10px);
@@ -741,7 +747,7 @@
             border-bottom: 1px solid rgba(207,162,70,0.15);
         }
         .modal-social .psoc-btn {
-            width: auto; height: 36px;
+            width: auto; height: 44px;
             border-radius: 6px;
             padding: 0 14px;
             gap: 7px;
@@ -1058,7 +1064,7 @@
             margin-bottom: 16px;
         }
         .coa-security-label {
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -1101,7 +1107,7 @@
             gap: 3px;
         }
         .coa-meta-key {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -1207,7 +1213,7 @@
         .rs-slot.rs-ap.rs-sold .rs-num { color: #bbb; }
 
         .rs-status {
-            font-size: 0.58rem;
+            font-size: 0.6875rem;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -1215,7 +1221,7 @@
         }
         .rs-slot.rs-avail .rs-status { color: #4A8C5C; }
         .rs-slot.rs-sold .rs-status  { color: #ccc; }
-        .rs-slot.rs-ap .rs-status    { color: #CFA246; font-size: 0.55rem; }
+        .rs-slot.rs-ap .rs-status    { color: #CFA246; font-size: 0.6875rem; }
         .rs-slot.rs-ap.rs-sold .rs-status { color: #ccc; }
 
         .registry-note {
@@ -1230,7 +1236,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.68rem;
+            font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -1264,7 +1270,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.66rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -1286,7 +1292,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.62rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;

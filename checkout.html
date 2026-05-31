@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZDP3EC98"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KTZDP3EC98');
+</script>
+
     <meta charset="UTF-8">
     <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
@@ -130,11 +140,18 @@
             <div class="summary-breakdown" id="breakdown">
                 <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="subtotalVal">&#8377;0</span></div>
                 <div class="summary-row"><span class="label">Shipping</span><span class="value" id="shippingVal">&mdash;</span></div>
-                <div class="summary-row" id="gstRow"><span class="label">GST (12%)</span><span class="value" id="gstVal">&#8377;0</span></div>
+                <div class="summary-row" id="gstRow"><span class="label">GST</span><span class="value" id="gstVal">&#8377;0</span></div>
                 <div class="summary-row total"><span class="label">Total</span><span class="value" id="totalVal">&#8377;0</span></div>
             </div>
 
             <button type="button" class="pay-btn" id="payBtn" onclick="initiatePayment()">Pay Securely →</button>
+
+            <p id="intlShippingNotice" style="display:none;margin:12px 0 0;font-size:0.75rem;line-height:1.6;opacity:0.7;">
+              * International print shipping is quoted per order — wooden crate delivery cost varies by destination.
+              <a href="mailto:info@mohithraisrivastav.com" style="color:inherit;text-decoration:underline;">Email us</a>
+              or <a href="https://wa.me/919014753403" style="color:inherit;text-decoration:underline;">WhatsApp</a>
+              to confirm shipping cost before payment.
+            </p>
 
             <div class="payment-methods">
                 <div class="label">Accepted Methods</div>
@@ -156,7 +173,7 @@
     });
     </script>
 <script src="assets/js/preloader.js"></script>
-<script src="assets/js/cursor.js"></script>
+<!-- <script src="assets/js/cursor.js"></script> -->
 <script>
 (function() {
     var STATES = {

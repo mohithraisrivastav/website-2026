@@ -72,8 +72,8 @@
         .downloads { background: rgba(247,243,236,0.7) !important; border-color: rgba(26, 22, 18,0.1) !important; }
         .downloads h3 { color: #1A1612 !important; }
         .download-link { border-bottom-color: rgba(26, 22, 18,0.08) !important; }
-        .download-link a { color: #CFA246 !important; border-bottom-color: rgba(207, 162, 70,0.3) !important; }
-        .download-link a:hover { border-bottom-color: #CFA246 !important; }
+        .download-link a { color: #7F5F10 !important; border-bottom-color: rgba(127,95,16,0.3) !important; } /* was #CFA246 = 2.15:1 FAIL */
+        .download-link a:hover { border-bottom-color: #7F5F10 !important; }
         .next-steps h3 { color: #888 !important; }
         .step { border-bottom-color: rgba(26, 22, 18,0.08) !important; }
         .step-num { color: #aaa !important; }

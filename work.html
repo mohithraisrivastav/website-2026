@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZDP3EC98"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KTZDP3EC98');
+</script>
+
     <meta charset="UTF-8">
     <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
@@ -10,12 +20,12 @@
     <meta name="description" content="The full body of work by Mohith Rai Srivastav — architectural photography and slow cinema across South Asia.">
     <meta name="author" content="Mohith Rai Srivastav">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mohithraisrivastav.com/work.html">
+    <link rel="canonical" href="https://www.mohithraisrivastav.com/work.html">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Work | Mohith Rai Srivastav">
     <meta property="og:description" content="The full body of work by Mohith Rai Srivastav — architectural photography and slow cinema across South Asia.">
-    <meta property="og:url" content="https://mohithraisrivastav.com/work.html">
-    <meta property="og:image" content="https://mohithraisrivastav.com/Work/Projects/Villa%20Lluvia/_DSC7368-HDR-Edit.webp">
+    <meta property="og:url" content="https://www.mohithraisrivastav.com/work.html">
+    <meta property="og:image" content="https://www.mohithraisrivastav.com/work/Projects/Villa%20Lluvia/_DSC7368-HDR-Edit.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,6 +34,36 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="assets/js/translate.js" defer></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": "https://www.mohithraisrivastav.com/work.html",
+          "url": "https://www.mohithraisrivastav.com/work.html",
+          "name": "Work — Mohith Rai Srivastav",
+          "description": "The full body of work by Mohith Rai Srivastav — architectural photography and slow cinema across South Asia.",
+          "author": {
+            "@type": "Person",
+            "name": "Mohith Rai Srivastav",
+            "url": "https://www.mohithraisrivastav.com/"
+          },
+          "hasPart": [
+            { "@type": "WebPage", "url": "https://www.mohithraisrivastav.com/photography.html", "name": "Photography" },
+            { "@type": "WebPage", "url": "https://www.mohithraisrivastav.com/film.html", "name": "Film" }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.mohithraisrivastav.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Work", "item": "https://www.mohithraisrivastav.com/work.html" }
+          ]
+        }
+      ]
+    }
+    </script>
 
     <style>
         html, body {
@@ -281,11 +321,13 @@
                         <li><a href="about.html">About</a></li>
                         <li style="display:none"><a href="journal.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                     </ul>
                 </li>
                 <li><a href="workshops.html">Workshops</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
+            <a href="blog.html">Blog</a>
             </ul>
             <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count"></span></a>
             <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -309,6 +351,7 @@
                 <a href="about.html" onclick="toggleMenu()">About</a>
                 <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+                <a href="blog.html" onclick="toggleMenu()">Blog</a>
             </div>
         </div>
         <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -321,7 +364,7 @@
         <!-- Photography -->
         <a class="wo-panel" href="photography.html" aria-label="Photography — commissioned and personal work across South Asia">
             <img class="wo-bg"
-                 src="Work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp"
+                 src="work/Projects/Villa Lluvia/_DSC7368-HDR-Edit.webp"
                  alt="Villa Lluvia — Siolim, Goa"
                  loading="eager"
                  onerror="this.style.opacity='0'">
@@ -378,6 +421,7 @@
                 <a href="workshops.html">Workshops</a>
                 <a href="shop.html">Shop</a>
                 <a href="contact.html">Contact</a>
+            <a href="blog.html">Blog</a>
             </nav>
             <nav class="sf-legal">
             <span class="sf-nav-label">Legal</span>
@@ -386,6 +430,7 @@
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
             <a href="support.html">Support</a>
+            <a href="faq.html">FAQ</a>
         </nav>
         <div class="sf-newsletter-col">
                 <span class="sf-nav-label">Field Notes</span>
@@ -462,7 +507,7 @@
         })();
     </script>
     <script src="assets/js/transitions.js"></script>
-    <script src="assets/js/cursor.js"></script>
+    <!-- <script src="assets/js/cursor.js"></script> -->
     <script src="assets/js/site.js"></script>
     <script src="assets/js/preloader.js"></script>
     <script src="assets/js/cart.js"></script>

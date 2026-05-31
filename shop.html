@@ -1,4 +1,4 @@
-<!-- ============================================================
+﻿<!-- ============================================================
      SHOP PAGE &mdash; SOURCE OF TRUTH
      Products are consolidated here with in-page filters.
      Legacy category pages redirect to this page.
@@ -6,6 +6,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZDP3EC98"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KTZDP3EC98');
+</script>
+
     <meta charset="UTF-8">
     <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
@@ -16,38 +26,315 @@
     <meta name="keywords" content="fine art prints, archival prints, limited edition prints, Mohith Rai Srivastav">
     <meta name="author" content="Mohith Rai Srivastav">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mohithraisrivastav.com/shop.html">
+    <link rel="canonical" href="https://www.mohithraisrivastav.com/shop.html">
     <meta property="og:site_name" content="Mohith Rai Srivastav">
     <meta property="og:title" content="Shop | Mohith Rai Srivastav">
     <meta property="og:description" content="Limited-edition archival fine art prints by Mohith Rai Srivastav.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mohithraisrivastav.com/shop.html">
-    <meta property="og:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <meta property="og:url" content="https://www.mohithraisrivastav.com/shop.html">
+    <meta property="og:image" content="https://www.mohithraisrivastav.com/images/Cosmic Return.webp">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Shop | Mohith Rai Srivastav">
     <meta name="twitter:description" content="Limited-edition archival fine art prints by Mohith Rai Srivastav.">
-    <meta name="twitter:image" content="https://mohithraisrivastav.com/images/Cosmic Return.webp">
+    <meta name="twitter:image" content="https://www.mohithraisrivastav.com/images/Cosmic Return.webp">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ItemList",
-      "url": "https://mohithraisrivastav.com/shop.html",
-      "name": "Shop &mdash; Mohith Rai Srivastav",
-      "description": "Limited-edition archival fine art prints by Mohith Rai Srivastav.",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Cosmic Return", "url": "https://mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 2, "name": "Burnt Earth", "url": "https://mohithraisrivastav.com/shop.html" },
-        { "@type": "ListItem", "position": 3, "name": "Chromatic Rupture", "url": "https://mohithraisrivastav.com/shop.html" }
-      ],
-      "author": { "@type": "Person", "name": "Mohith Rai Srivastav", "url": "https://mohithraisrivastav.com/" }
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://www.mohithraisrivastav.com/#person",
+          "name": "Mohith Rai Srivastav",
+          "url": "https://www.mohithraisrivastav.com/",
+          "jobTitle": "Architectural Photographer",
+          "sameAs": [
+            "https://www.instagram.com/mohithraisrivastav/",
+            "https://www.linkedin.com/in/mohithraisrivastav/"
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "@id": "https://www.mohithraisrivastav.com/shop.html#catalog",
+          "url": "https://www.mohithraisrivastav.com/shop.html",
+          "name": "Fine Art Prints — Mohith Rai Srivastav",
+          "description": "Limited-edition archival pigment fine art prints from the Resurface series. Signed, numbered, accompanied by a certificate of authenticity. Each work is offered in Small, Medium, Standard, and Large editions.",
+          "numberOfItems": 9,
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#cosmic-return",
+                "name": "Cosmic Return",
+                "description": "The largest edition in the Resurface series — a meditation on cyclical transformation, where weathered surfaces carry the residue of countless monsoons. Printed at museum scale to preserve the full tonal depth of the archival pigment.",
+                "image": "https://www.mohithraisrivastav.com/images/Cosmic%20Return.webp",
+                "sku": "MRS-COSMIC-RETURN",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#burnt-earth",
+                "name": "Burnt Earth",
+                "description": "Pigment archaeology: rust, clay, and oxidation read as palimpsest on the built skin of Goa. A close reading of how earth-tones return to the surfaces that first borrowed them.",
+                "image": "https://www.mohithraisrivastav.com/images/Burnt%20Earth.webp",
+                "sku": "MRS-BURNT-EARTH",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#chromatic-rupture",
+                "name": "Chromatic Rupture",
+                "description": "Where paint abandons its architecture. A study of color as a living organism in retreat — documenting the moment pigment separates from the wall it once defined.",
+                "image": "https://www.mohithraisrivastav.com/images/Chromatic%20Rupture.webp",
+                "sku": "MRS-CHROMATIC-RUPTURE",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#after-the-fall",
+                "name": "After The Fall",
+                "description": "Captured in the aftermath of monsoon — surfaces holding the memory of water that has already moved on. Stillness as residue, silence as record.",
+                "image": "https://www.mohithraisrivastav.com/images/After%20The%20Fall.webp",
+                "sku": "MRS-AFTER-THE-FALL",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#cracked-spectrum",
+                "name": "Cracked Spectrum",
+                "description": "Fissures as spectrum. The geometry of structural fatigue rendered as abstract field — reading a wall the way one reads a seismograph.",
+                "image": "https://www.mohithraisrivastav.com/images/Cracked%20Spectrum.webp",
+                "sku": "MRS-CRACKED-SPECTRUM",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#still-organism",
+                "name": "Still Organism",
+                "description": "Architecture considered not as object but as slow body — breathing, absorbing, decaying in place. A portrait of a building at rest within its own transformation.",
+                "image": "https://www.mohithraisrivastav.com/images/The%20Still%20Organism.webp",
+                "sku": "MRS-STILL-ORGANISM",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 7,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#forgotten-skin",
+                "name": "Forgotten Skin",
+                "description": "The exterior wall as memory surface. What the building has witnessed, recorded in pigment, spore, and slow stain.",
+                "image": "https://www.mohithraisrivastav.com/images/The%20Forgotten%20Skin.webp",
+                "sku": "MRS-FORGOTTEN-SKIN",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 8,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#erosion",
+                "name": "Erosion",
+                "description": "Time's deliberate subtraction. A portrait of material yielding to weather across seasons — the wall's quiet negotiation with its own disappearance.",
+                "image": "https://www.mohithraisrivastav.com/images/Erosion.webp",
+                "sku": "MRS-EROSION",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 9,
+              "item": {
+                "@type": "Product",
+                "@id": "https://www.mohithraisrivastav.com/shop.html#imprint",
+                "name": "Imprint",
+                "description": "A trace left by the absence of something that once touched this surface. Architecture as archive of the things it no longer holds.",
+                "image": "https://www.mohithraisrivastav.com/images/Imprint.webp",
+                "sku": "MRS-IMPRINT",
+                "category": "Fine Art Print / Resurface Series",
+                "url": "https://www.mohithraisrivastav.com/shop.html",
+                "brand": { "@id": "https://www.mohithraisrivastav.com/#person" },
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "30000",
+                  "highPrice": "125000",
+                  "offerCount": "4",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://www.mohithraisrivastav.com/shop.html"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What paper and printing process do you use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All prints are produced on 310 GSM archival etching rag using archival pigment inks. They are printed without glass framing and are designed for longevity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are the prints signed and numbered?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every print is hand-signed, numbered, and accompanied by a certificate of authenticity. Editions are small — most works are limited to 5 + 1 AP."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What sizes are available?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Prints are available in Small (18 in), Medium (24 in), Standard (32 in), and Large (42 in). Standard and Large are the flagship editions. Custom larger sizes are available on request for collectors, galleries, and institutions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you ship internationally?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Prints ship worldwide, fully insured. See the shipping page for details on timelines and packaging."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I preview a print in my space before buying?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The shop includes an augmented reality (AR) preview — use your phone camera to place any print on your wall before purchasing."
+          }
+        }
+      ]
     }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -55,13 +342,414 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/pages/shop.css">
+
+    <style>
+        /* ══ SHOP REDESIGN OVERRIDES ══════════════════════════════════════ */
+
+        /* 1. Three-column grid desktop, responsive down to single column */
+        .shop-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 4vw 3vw !important;
+        }
+        @media (max-width: 1100px) {
+            .shop-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 700px) {
+            .shop-grid { grid-template-columns: 1fr !important; }
+        }
+
+        /* 2. Image: strip radius, border, shadow, badge overlay */
+        .product-image {
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: #E8E2DA !important;
+            margin-bottom: 22px !important;
+        }
+        .product-card[data-shop-category="prints"] .product-image::before,
+        .product-card[data-shop-category="books"]  .product-image::before,
+        .product-card[data-shop-category="tools"]  .product-image::before {
+            display: none !important;
+        }
+
+        /* 3. Title: Cormorant italic, not uppercase */
+        .product-title {
+            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-style: italic !important;
+            font-weight: 300 !important;
+            font-size: clamp(1.5rem, 2vw, 2.2rem) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            color: #1A1612 !important;
+            margin-bottom: 4px !important;
+            line-height: 1.15 !important;
+        }
+
+        /* 4. Price: clean, quieter */
+        .product-price {
+            font-size: 0.9rem !important;
+            font-weight: 400 !important;
+            color: #4A3A33 !important;
+            margin-top: 8px !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        /* 5. Hide spec chips on listing — all detail lives in the modal */
+        .product-specs {
+            display: none !important;
+        }
+
+        /* 6. Hide Add to Cart / Buy Now buttons on card listing */
+        .product-actions {
+            display: none !important;
+        }
+
+        /* 6b. Hide newer card elements: COA badge, availability, size dropdown */
+        .coa-badge,
+        .card-availability,
+        .size-select-wrap {
+            display: none !important;
+        }
+
+        /* 6c. Hide in-image overlays on listing cards only — NOT in the modal */
+        .product-social,
+        .product-image .gallery-nav,
+        .product-image .gallery-counter {
+            display: none !important;
+        }
+
+        /* 7. Tab nav: remove gold border, lighten inactive tabs */
+        .tab-nav {
+            border-bottom: none !important;
+            margin-top: 0 !important;
+            gap: 3rem !important;
+        }
+        .tab-btn {
+            font-size: 0.78rem !important;
+            letter-spacing: 2px !important;
+            color: rgba(26, 22, 18, 0.35) !important;
+            padding: 14px 0 !important;
+        }
+        .tab-btn.active {
+            color: #1A1612 !important;
+        }
+        .tab-btn.active::after {
+            background: #1A1612 !important;
+        }
+
+        /* 8. Hide filter summary */
+        .shop-filter-summary {
+            display: none !important;
+        }
+
+        /* 9. Hide saved-actions buttons */
+        .saved-actions {
+            display: none !important;
+        }
+
+        /* 10. Category header: faded Cormorant label + clean prose */
+        .category-header {
+            margin-bottom: 56px !important;
+        }
+        .category-header h2 {
+            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-style: italic !important;
+            font-weight: 300 !important;
+            font-size: clamp(1.3rem, 1.8vw, 2rem) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            color: rgba(26, 22, 18, 0.32) !important;
+            margin-bottom: 20px !important;
+        }
+        .category-header p {
+            font-size: 1.05rem !important;
+            color: #1A1612 !important;
+            line-height: 1.88 !important;
+            max-width: 640px !important;
+            font-weight: 300 !important;
+        }
+
+        /* 11. Section padding */
+        .shop-section {
+            padding: 5vh 5vw 8vh !important;
+        }
+        #prints {
+            padding: 2vh 5vw 8vh !important;
+        }
+
+        /* 12. Remove border between consecutive visible sections */
+        .shop-section + .shop-section:not(.shop-section--hidden) {
+            border-top: none !important;
+        }
+
+        /* 13. Hover: keep subtle scale, just reduce intensity */
+        .product-card:hover .product-image img {
+            transform: scale(1.03) !important;
+        }
+
+        /* ══ MODAL: strip boxiness ══════════════════════════════════════ */
+
+        /* 0. Fix: onerror sets inline opacity:0 on empty-src load —
+              !important overrides the inline style so loaded images show */
+        .gallery-main img.loaded {
+            opacity: 1 !important;
+        }
+
+        /* 1. Edition registry — prose only, no slot visualisation */
+        .registry-slots {
+            display: none !important;
+        }
+        .registry-note {
+            font-size: 1rem !important;
+            font-weight: 300 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            line-height: 1.75 !important;
+            margin: 8px 0 0 !important;
+            padding: 0 !important;
+            max-width: 480px !important;
+        }
+
+        /* 2. COA chips — plain prose, no bordered tags */
+        .coa-security {
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 0 !important;
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        .coa-feature {
+            border: none !important;
+            background: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            font-size: 0.875rem !important;
+            font-weight: 400 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            letter-spacing: 0 !important;
+            text-transform: none !important;
+        }
+        .coa-feature + .coa-feature::before {
+            content: ' · ' !important;
+            color: rgba(26, 22, 18, 0.28) !important;
+        }
+        .coa-security-label {
+            font-size: 0.875rem !important;
+            font-weight: 400 !important;
+            color: rgba(26, 22, 18, 0.38) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            margin-right: 8px !important;
+        }
+        .coa-security-label::after {
+            content: ':' !important;
+        }
+
+        /* 3. Favourite / Add to Collection / Share — no border, icon-opacity only */
+        .psoc-btn {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 6px !important;
+            opacity: 0.45 !important;
+            transition: opacity 0.2s !important;
+        }
+        .psoc-btn:hover,
+        .psoc-btn.active {
+            opacity: 1 !important;
+            background: none !important;
+        }
+
+        /* 4. Reassurance row — strip any pill/chip wrapper */
+        .ra-item {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 5b. Back bar — strip the band */
+        .modal-back-bar {
+            background: transparent !important;
+            border-bottom: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        /* 5c. Close (×) — no circle border */
+        .modal-close {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .modal-close:hover {
+            background: none !important;
+            border: none !important;
+            color: #1A1612 !important;
+        }
+
+        /* 5. Modal category label — keep small caps but quieter */
+        .modal-category {
+            font-size: 0.7rem !important;
+            letter-spacing: 3px !important;
+            color: rgba(26, 22, 18, 0.38) !important;
+            border: none !important;
+            background: none !important;
+        }
+
+        /* 6. Detail accordions — remove top/bottom borders, use spacing only */
+        .md-accordion {
+            border-top: none !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            padding-bottom: 0 !important;
+        }
+        .md-accordion:first-child {
+            border-top: none !important;
+        }
+        .md-acc-trigger {
+            padding: 14px 0 !important;
+        }
+        .md-acc-title {
+            color: rgba(26, 22, 18, 0.55) !important;
+            font-weight: 600 !important;
+            letter-spacing: 3px !important;
+        }
+        .md-accordion.open .md-acc-title {
+            color: #1A1612 !important;
+        }
+        .md-accordion.open .md-acc-icon {
+            color: rgba(26, 22, 18, 0.4) !important;
+        }
+
+        /* 7. Size selector — underline only, no boxy border */
+        #modalSizeWrap select,
+        .modal-size-select,
+        #modalSizeWrap .size-select {
+            border: none !important;
+            border-bottom: 1px solid rgba(26, 22, 18, 0.18) !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            padding: 10px 0 !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 2px !important;
+            text-transform: uppercase !important;
+            color: #1A1612 !important;
+            width: 100% !important;
+            box-shadow: none !important;
+            outline: none !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            cursor: pointer !important;
+        }
+        .modal-size-label,
+        #modalSizeWrap label,
+        .size-select-label {
+            font-size: 0.65rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 3px !important;
+            color: rgba(26, 22, 18, 0.35) !important;
+            margin-bottom: 6px !important;
+        }
+
+        /* 8. ADD TO CART — strip border, plain uppercase text */
+        #modalAddBtn {
+            background: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            color: #1A1612 !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 3px !important;
+            text-transform: uppercase !important;
+            padding: 18px 0 !important;
+            text-decoration: underline !important;
+            text-underline-offset: 5px !important;
+            text-decoration-color: rgba(26, 22, 18, 0.25) !important;
+            width: 100% !important;
+            text-align: center !important;
+            transition: text-decoration-color 0.2s !important;
+        }
+        #modalAddBtn:hover {
+            text-decoration-color: #1A1612 !important;
+            background: none !important;
+        }
+
+        /* 9. BUY NOW — flat rectangle, original terracotta */
+        #modalBuyBtn {
+            border-radius: 0 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 3px !important;
+        }
+
+        /* 9b. ADD TO CART — strip cart icon, secondary weight */
+        #modalAddBtn svg,
+        #modalAddBtn i { display: none !important; }
+        #modalAddBtn {
+            font-size: 0.7rem !important;
+            padding: 12px 0 !important;
+            color: rgba(26, 22, 18, 0.55) !important;
+            text-decoration-color: rgba(26, 22, 18, 0.18) !important;
+        }
+        #modalAddBtn:hover { color: #1A1612 !important; }
+
+        /* 9c. FAVOURITE row — flush, no air, deeply quiet */
+        .modal-social {
+            border-top: none !important;
+            border-bottom: none !important;
+            padding: 2px 0 !important;
+            margin: 0 !important;
+            opacity: 0.3 !important;
+            gap: 16px !important;
+        }
+
+        /* 9d. Tighten purchase section vertical rhythm */
+        #modalSizeWrap { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+        .modal-actions { margin-top: 10px !important; gap: 6px !important; flex-direction: column !important; }
+
+        /* 10. SEE IT ON YOUR WALL — clear, present, not a footnote */
+        #modalRoomBtn,
+        .rv-trigger-btn {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            color: #1A1612 !important;
+            font-size: 0.72rem !important;
+            letter-spacing: 2.5px !important;
+            padding: 10px 0 !important;
+            justify-content: flex-start !important;
+            text-decoration: underline !important;
+            text-underline-offset: 4px !important;
+            text-decoration-color: rgba(26, 22, 18, 0.3) !important;
+            margin-top: 6px !important;
+            opacity: 1 !important;
+        }
+        #modalRoomBtn:hover,
+        .rv-trigger-btn:hover {
+            color: #1A1612 !important;
+            text-decoration-color: #1A1612 !important;
+            border: none !important;
+        }
+
+        /* ── END REDESIGN ─────────────────────────────────────────────── */
+    </style>
+
     <script src="assets/js/translate.js" defer></script>
     <!-- import map for the on-demand 3D builder (must precede module scripts) -->
     <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
       }
     }
     </script>
@@ -72,92 +760,132 @@
     import * as THREE from 'three';
     import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
-    var IN_TO_M = 0.0254, FRAME_BORDER = 0.018, FRAME_DEPTH = 0.032, MAX_TEX = 2048;
+    const IN_TO_M = 0.0254;
+    const FRAME_DEPTH = 0.038;  /* 3.8 cm ≈ 1.5 inches */
+    /* Frame border scales proportionally with print size.
+       Reference: 42-inch (largest) print → 1.8 cm border.
+       Smaller prints use the same ratio so the frame looks
+       visually consistent at every size. */
+    const FRAME_BORDER_REF   = 0.018;              /* metres — reference for 42" print */
+    const FRAME_BORDER_RATIO = FRAME_BORDER_REF / (42 * IN_TO_M); /* ≈ 1.69 % of dim */
+    /* Texture cap scales with device pixel ratio so low-DPR displays
+       (desktop preview, 1× screens) don't waste GPU memory, while
+       flagship 3× phones get extra detail in AR.
+         DPR < 2  → 1024  (1× / low-end)
+         DPR = 2  → 2048  (retina / mid-range — unchanged from original)
+         DPR > 2  → 3072  (3× flagship — capped to avoid OOM on some ARCore devices) */
+    const MAX_TEX = (function() {
+        var dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+        if (dpr >= 3) return 3072;
+        if (dpr >= 2) return 2048;
+        return 1024;
+    }());
 
     function loadImage(src) {
-      return new Promise(function(res, rej) {
-        var im = new Image();
+      return new Promise((resolve, reject) => {
+        const im = new Image();
         im.crossOrigin = 'anonymous';
-        im.onload = function(){
-          /* onload precedes DECODE for large images → blank draw */
-          if (im.decode) { im.decode().then(function(){ res(im); }, function(){ res(im); }); }
-          else res(im);
-        };
-        im.onerror = function(){ rej(new Error('image load failed')); };
+        im.onload = () => resolve(im);
+        im.onerror = () => reject(new Error('Image load failed'));
         im.src = src;
       });
     }
-    /* downscale → real <img> (exporters skip canvas-sourced textures) */
+
     function prepImageEl(image) {
-      var w = image.naturalWidth, h = image.naturalHeight;
-      var s = Math.min(1, MAX_TEX / Math.max(w, h));
+      let w = image.naturalWidth, h = image.naturalHeight;
+      const s = Math.min(1, MAX_TEX / Math.max(w, h));
       w = Math.round(w * s); h = Math.round(h * s);
-      var c = document.createElement('canvas');
+
+      const c = document.createElement('canvas');
       c.width = w; c.height = h;
-      var x = c.getContext('2d');
-      x.imageSmoothingQuality = 'high';
-      x.drawImage(image, 0, 0, w, h);
-      var dataUrl = c.toDataURL('image/jpeg', 0.86);
-      return new Promise(function(res, rej) {
-        var out = new Image();
-        out.onload = function(){
-          if (out.decode) { out.decode().then(function(){ res(out); }, function(){ res(out); }); }
-          else res(out);
-        };
-        out.onerror = function(){ rej(new Error('texture re-encode failed')); };
-        out.src = dataUrl;
+      const ctx = c.getContext('2d');
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(image, 0, 0, w, h);
+
+      return new Promise((resolve, reject) => {
+        const out = new Image();
+        out.onload = () => resolve(out);
+        out.onerror = () => reject(new Error('Texture re-encode failed'));
+        out.src = c.toDataURL('image/jpeg', 0.90);
       });
     }
+
     function buildScene(image, wIn, hIn) {
-      var scene = new THREE.Scene();
-      var artW = wIn * IN_TO_M, artH = hIn * IN_TO_M;
-      var outW = artW + FRAME_BORDER * 2, outH = artH + FRAME_BORDER * 2;
+      const scene = new THREE.Scene();
+      const artW = wIn * IN_TO_M;
+      const artH = hIn * IN_TO_M;
+      /* Scale border with the larger dimension so portrait and landscape
+         prints at the same nominal size get identical border width. */
+      const frameBorder = Math.max(artW, artH) * FRAME_BORDER_RATIO;
+      const outW = artW + (frameBorder * 2);
+      const outH = artH + (frameBorder * 2);
 
-      /* no baked shadow plane — bounding box must equal the framed print
-         or native AR seats, scales, and manipulates it wrong */
+      // Anchor fix: translate the box so its BACK face is exactly at Z=0.
+      // With ar-placement="wall", Z=0 is the physical wall surface.
+      // BoxGeometry builds centred on the origin, so without this the rear
+      // half of the frame sinks into the wall. Shifting by +FRAME_DEPTH/2
+      // moves the entire frame in front of the wall where it belongs.
+      const frameGeo = new THREE.BoxGeometry(outW, outH, FRAME_DEPTH);
+      frameGeo.translate(0, 0, FRAME_DEPTH / 2);
 
-      var frame = new THREE.Mesh(
-        new THREE.BoxGeometry(outW, outH, FRAME_DEPTH),
+      const frame = new THREE.Mesh(
+        frameGeo,
         new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.62, metalness: 0.0 })
       );
       scene.add(frame);
 
-      return prepImageEl(image).then(function(texImg) {
-        var tex = new THREE.Texture(texImg);
+      return prepImageEl(image).then((texImg) => {
+        const tex = new THREE.Texture(texImg);
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = 8;
         tex.needsUpdate = true;
-        var art = new THREE.Mesh(
+
+        // MeshBasicMaterial = unlit — renders the texture at full original brightness
+        // regardless of scene lighting. Ink on paper has its own colour; it should
+        // not be darkened by a dim room. Exports as KHR_materials_unlit in GLB,
+        // supported by model-viewer, iOS Quick Look, and Android Scene Viewer.
+        const art = new THREE.Mesh(
           new THREE.PlaneGeometry(artW, artH),
-          new THREE.MeshStandardMaterial({ map: tex, roughness: 0.34, metalness: 0.0 })
+          new THREE.MeshBasicMaterial({ map: tex })
         );
-        art.position.z = FRAME_DEPTH / 2 + 0.0012;
+        art.position.z = FRAME_DEPTH + 0.0012;
         scene.add(art);
+
         return scene;
       });
     }
 
     function glbExport(scene) {
-      var ex = new GLTFExporter(), opts = { binary: true };
-      if (typeof ex.parseAsync === 'function') return ex.parseAsync(scene, opts);
-      return new Promise(function (resolve, reject) {
-        try {
-          ex.parse(scene, function (r) { resolve(r); }, function (e) { reject(e); }, opts);
-        } catch (e1) {
-          try { ex.parse(scene, function (r) { resolve(r); }, opts); }
-          catch (e2) { reject(e2); }
-        }
+      const exporter = new GLTFExporter();
+      const opts = { binary: true };
+      return new Promise((resolve, reject) => {
+        exporter.parse(
+          scene,
+          (result) => resolve(result),
+          (error) => reject(error),
+          opts
+        );
       });
     }
 
     window.__buildArGLB = function(imgUrl, wIn, hIn) {
       return loadImage(imgUrl)
-        .then(function(image) { return buildScene(image, wIn, hIn); })
-        .then(function(scene) { return glbExport(scene); })
-        .then(function(glb) {
-          var blob = new Blob([glb], { type: 'model/gltf-binary' });
+        .then(image => buildScene(image, wIn, hIn))
+        .then(scene => glbExport(scene))
+        .then(glb => {
+          const blob = new Blob([glb], { type: 'model/gltf-binary' });
           return URL.createObjectURL(blob);
         });
+    };
+
+    window.__buildArUSDZ = async function(imgUrl, wIn, hIn) {
+      const { USDZExporter } = await import('three/addons/exporters/USDZExporter.js');
+      const image = await loadImage(imgUrl);
+      const scene = await buildScene(image, wIn, hIn);
+      const exporter = new USDZExporter();
+      const result = await exporter.parseAsync(scene);
+      const blob = new Blob([result], { type: 'model/vnd.usd+zip' });
+      return URL.createObjectURL(blob);
     };
     </script>
     <style>
@@ -456,7 +1184,7 @@
             pointer-events: auto;
             display: flex; align-items: center; gap: 11px;
             background: #CFA246; color: #14110d; border: none;
-            padding: 16px 34px; font-size: 0.78rem; font-weight: 700;
+            padding: 16px 28px; font-size: 0.78rem; font-weight: 700;
             letter-spacing: 3.5px; text-transform: uppercase; cursor: pointer;
             transition: background 0.2s, transform 0.2s;
             box-shadow: 0 14px 40px rgba(0,0,0,0.45);
@@ -468,6 +1196,281 @@
             font-size: 0.66rem; letter-spacing: 2px; text-transform: uppercase;
             color: rgba(247,243,236,0.32);
         }
+        .ar-size-label {
+            font-size: 0.6rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(247,243,236,0.35);
+        }
+        .ar-scale-row {
+            pointer-events: auto;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .ar-scale-btn {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(247,243,236,0.7); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 1px; padding: 7px 16px; border-radius: 40px;
+            cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            transition: background 0.2s;
+        }
+        .ar-scale-btn:hover { background: rgba(255,255,255,0.14); }
+        .ar-scale-val {
+            font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(247,243,236,0.45); min-width: 48px; text-align: center;
+        }
+        .ar-launch-row {
+            pointer-events: auto;
+            display: flex; gap: 12px; align-items: stretch;
+        }
+        .ar-cal-btn {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.22);
+            color: rgba(247,243,236,0.75);
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 2.5px;
+            text-transform: uppercase; padding: 0 22px; cursor: pointer;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            transition: background 0.2s, color 0.2s;
+        }
+        .ar-cal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+        /* ── In-AR scan feedback (item #3) ──
+           Edge vignette pulse + corner viewfinder marks visualise that ARCore
+           is actively searching for a wall. State classes on #arPromptSlot
+           switch between 'searching' (active scan UI) and 'tracking-good'
+           (calm UI, guideline at full opacity). Tracking state is driven by
+           the model-viewer 'ar-tracking' event. */
+        @keyframes ar-edge-pulse {
+            0%, 100% { opacity: 0.55; }
+            50%      { opacity: 0.95; }
+        }
+        @keyframes ar-corner-pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%      { opacity: 1;   transform: scale(1.06); }
+        }
+        #arEdgeScan {
+            position: fixed; inset: 0; pointer-events: none;
+            box-shadow: inset 0 0 140px 30px rgba(207,162,70,0.22);
+            animation: ar-edge-pulse 2.6s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+            z-index: 5;
+        }
+        #arCornerMarks {
+            position: fixed; inset: 30px; pointer-events: none;
+            z-index: 6;
+        }
+        .ar-corner {
+            position: absolute; width: 22px; height: 22px;
+            border-color: rgba(207,162,70,0.85); border-style: solid;
+            animation: ar-corner-pulse 2.6s ease-in-out infinite;
+            transition: opacity 0.5s ease;
+        }
+        .ar-corner-tl { top: 0;    left: 0;    border-width: 2px 0 0 2px; }
+        .ar-corner-tr { top: 0;    right: 0;   border-width: 2px 2px 0 0; }
+        .ar-corner-bl { bottom: 0; left: 0;    border-width: 0 0 2px 2px; }
+        .ar-corner-br { bottom: 0; right: 0;   border-width: 0 2px 2px 0; }
+
+        /* tracking-good: calm the scan UI, brighten the guideline */
+        #arPromptSlot.ar-tracking-good #arEdgeScan { opacity: 0; }
+        #arPromptSlot.ar-tracking-good .ar-corner  { opacity: 0.35; animation: none; }
+        #arPromptSlot.ar-tracking-good #arEyeLine,
+        #arPromptSlot.ar-tracking-good #arEyeLabel { opacity: 1; }
+
+        /* tracking-poor: dim the guideline so user focuses on fixing tracking */
+        #arPromptSlot.ar-tracking-poor #arEyeLine,
+        #arPromptSlot.ar-tracking-poor #arEyeLabel { opacity: 0.3; }
+        #arEyeLine, #arEyeLabel { transition: opacity 0.4s ease; }
+
+        /* ── ar-prompt slot wrapper ──
+           All overlays inside use position:fixed (relative to viewport)
+           rather than position:absolute (which would require this wrapper
+           to be a positioning context — that nesting fails reliably inside
+           model-viewer's WebXR overlay container). */
+        #arPromptSlot { display: contents; }
+
+        /* ── Measurement HUD (item #1) ──
+           Pill at the top of the AR view. Two lines:
+             1. Print title in Cormorant italic (brand voice)
+             2. Dimensions in Inter, both inches AND centimetres */
+        #arDimHud {
+            position: fixed;
+            top: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.68);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(247,243,236,0.15);
+            border-radius: 24px;
+            padding: 10px 22px;
+            pointer-events: none;
+            white-space: nowrap;
+            text-align: center;
+            transition: opacity 0.4s ease;
+            z-index: 10;
+        }
+        #arDimHudTitle {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic; font-weight: 300;
+            font-size: 0.95rem; line-height: 1.15;
+            color: rgba(247,243,236,0.94);
+            letter-spacing: 0.02em;
+            display: block; margin-bottom: 3px;
+        }
+        #arDimHudMeasure {
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(207,162,70,0.92);
+            text-transform: uppercase;
+            display: block;
+        }
+
+        /* ── Tap-to-confirm visualisation (item #2) ──
+           Center target ring sits at screen center on top of the eye-level
+           guideline — reads as "the print's centre will land here". Pulses
+           when tracking is solid + reveals a TAP hint, so the user can't
+           miss the moment of "ready to place".
+           Lives on top of model-viewer's native reticle; the two complement
+           each other (native shows surface detection, ours shows the tap
+           target in screen space). */
+        @keyframes ar-tap-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1);
+                       box-shadow: 0 0 14px rgba(207,162,70,0.45); }
+            50%      { transform: translate(-50%, -50%) scale(1.16);
+                       box-shadow: 0 0 22px rgba(207,162,70,0.75); }
+        }
+        #arCenterTarget {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(207,162,70,0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 14px rgba(207,162,70,0.45);
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+            z-index: 8;
+        }
+        #arCenterTarget::after {
+            /* inner dot — precision crosshair */
+            content: ''; position: absolute; inset: 0; margin: auto;
+            width: 4px; height: 4px;
+            background: #CFA246; border-radius: 50%;
+        }
+        #arTapHint {
+            position: fixed; top: calc(50% + 30px); left: 50%;
+            transform: translateX(-50%);
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 800;
+            letter-spacing: 5px; text-transform: uppercase;
+            color: #CFA246;
+            text-shadow: 0 1px 8px rgba(20,17,13,0.85),
+                         0 0 14px rgba(20,17,13,0.6);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            white-space: nowrap;
+            z-index: 9;
+        }
+        /* State-driven appearance — uses the same state machine as #3 */
+        #arPromptSlot.ar-tracking-poor #arCenterTarget { opacity: 0.3; }
+        #arPromptSlot.ar-tracking-good #arCenterTarget {
+            opacity: 1;
+            animation: ar-tap-pulse 1.4s ease-in-out infinite;
+        }
+        #arPromptSlot.ar-tracking-good #arTapHint { opacity: 1; }
+
+        /* ── Eye-level guideline + label (item #4b) ──
+           Horizontal gold rule across the AR view at vertical center +
+           a gold pill label just above it. */
+        #arEyeLine {
+            position: fixed; top: 50%; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg,
+                transparent 5%,
+                rgba(207,162,70,0.55) 30%,
+                rgba(207,162,70,0.95) 50%,
+                rgba(207,162,70,0.55) 70%,
+                transparent 95%);
+            transform: translateY(-0.5px);
+            box-shadow: 0 0 14px rgba(207,162,70,0.35);
+            pointer-events: none;
+            z-index: 7;
+        }
+        #arEyeLabel {
+            position: fixed; top: calc(50% - 40px); left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20,17,13,0.78);
+            border: 1px solid rgba(207,162,70,0.45);
+            color: #CFA246;
+            font-family: Inter, sans-serif;
+            font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            padding: 5px 12px; border-radius: 30px;
+            white-space: nowrap;
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            pointer-events: none;
+            z-index: 9;
+        }
+
+        /* ── Wall-detection pill (original element, restyled in CSS) ── */
+        #arWallPrompt {
+            position: fixed;
+            bottom: 128px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.68);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(247,243,236,0.15);
+            border-radius: 24px;
+            padding: 11px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #arWallPromptText {
+            font-family: Inter, sans-serif;
+            font-size: 0.87rem;
+            color: rgba(247,243,236,0.92);
+            letter-spacing: 0.01em;
+        }
+
+        /* ── Hang-height chip row (in-AR, tappable) ── */
+        #arHangChipsAR {
+            position: fixed;
+            bottom: 190px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 6px; flex-wrap: nowrap;
+            pointer-events: auto;
+            white-space: nowrap;
+            z-index: 11;
+        }
+
+        /* ── Hang-height chips (lives INSIDE the WebXR AR session) ──
+           Compact pills above the wall-finding prompt. Tappable in AR;
+           selection updates the eye-level guideline label in real time.
+           Do NOT appear in the pre-AR sheet — the ar-prompt slot is only
+           rendered while a WebXR session is active. */
+        .ar-hang-chip-ar {
+            background: rgba(10,10,10,0.65);
+            border: 1px solid rgba(247,243,236,0.18);
+            color: rgba(247,243,236,0.78);
+            font-family: Inter, sans-serif;
+            font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px;
+            padding: 7px 13px; border-radius: 40px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .ar-hang-chip-ar.ar-hang-on {
+            background: rgba(207,162,70,0.28);
+            border-color: rgba(207,162,70,0.65);
+            color: #CFA246;
+        }
+
         /* model-viewer's own AR button (Android Scene Viewer entry) — hidden, we use ours */
         #arViewer::part(default-ar-button) { display: none; }
 
@@ -485,7 +1488,7 @@
         /* ══ ROOM VIEWER ══════════════════════════════════════════ */
         #roomViewer {
             display: none; position: fixed; inset: 0; z-index: 99999;
-            background: #000; overscroll-behavior: none;
+            background: #000; overscroll-behavior: none; touch-action: none;
         }
         #roomViewer.rv-open { display: block; }
 
@@ -493,50 +1496,35 @@
             position: absolute; inset: 0; width: 100%; height: 100%;
             object-fit: cover;
         }
-        /* sample gallery wall — used when camera is unavailable */
-        #roomViewer.rv-sample-wall {
-            background:
-                radial-gradient(ellipse 120% 80% at 50% 18%, rgba(255,255,255,0.06) 0%, transparent 60%),
-                linear-gradient(176deg, #d8d2c6 0%, #cdc6b8 42%, #bdb5a4 100%);
-        }
-        #roomViewer.rv-sample-wall #rvVideo { display: none; }
-        #roomViewer.rv-sample-wall::after {
-            content: ''; position: absolute; left: 0; right: 0; bottom: 0;
-            height: 26%;
-            background: linear-gradient(to top, rgba(120,110,92,0.32) 0%, transparent 100%);
-            pointer-events: none;
-        }
+        /* Camera-only AR — no sample wall fallback */
 
         /* Print */
         #rvPrintWrap {
-            position: absolute;
+            position: absolute; left: 0; top: 0;
             user-select: none; touch-action: none;
             transform-origin: center center;
             will-change: transform, width, height;
             opacity: 0;
             transition: opacity 0.6s ease, width 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1);
+            /* Wall-mount shadow: tight primary + soft ambient — no big downward float */
             filter:
-                drop-shadow(0 4px 6px rgba(0,0,0,0.4))
-                drop-shadow(0 16px 40px rgba(0,0,0,0.5))
-                drop-shadow(0 40px 80px rgba(0,0,0,0.25));
+                drop-shadow(0 1px 2px rgba(0,0,0,0.75))
+                drop-shadow(0 3px 8px rgba(0,0,0,0.5))
+                drop-shadow(0 8px 22px rgba(0,0,0,0.28));
         }
         #rvPrintWrap.rv-visible { opacity: 1; }
         #rvPrintWrap.rv-sizing  { transition: opacity 0.6s ease, width 0.5s cubic-bezier(.4,0,.2,1), height 0.5s cubic-bezier(.4,0,.2,1); }
         #rvPrintWrap.rv-dragging { transition: none; }
+        /* Ambient wall contact shadow — radiates from behind the frame, not below it */
         #rvPrintWrap::after {
             content: ''; position: absolute;
-            bottom: -16px; left: 10%; right: 10%; height: 20px;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.5) 0%, transparent 70%);
-            filter: blur(7px); pointer-events: none; z-index: -1;
+            inset: -10px; z-index: -1;
+            background: radial-gradient(ellipse at 50% 55%, rgba(0,0,0,0.45) 0%, transparent 68%);
+            filter: blur(14px); pointer-events: none;
         }
         #rvPrintWrap.rv-framed {
-            outline: 13px solid #111;
+            /* outline & box-shadow width set dynamically in JS (1 inch at print scale) */
             filter: none;
-            box-shadow:
-                0 0 0 14px #111,
-                0 0 0 15px rgba(0,0,0,0.15),
-                0 20px 60px rgba(0,0,0,0.6),
-                0 50px 100px rgba(0,0,0,0.3);
         }
         #rvPrint {
             display: block; width: 100%; height: 100%;
@@ -560,10 +1548,30 @@
             padding: 36px 24px 92px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
         }
+        /* ── Persistent size-selection bar — always visible over camera ── */
+        #rvSizeBar {
+            display: none;
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 6;
+            padding: 28px 24px 36px;
+            background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.0) 100%);
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            pointer-events: none; /* let touches pass through gradient — only children are interactive */
+        }
+        #roomViewer.rv-open #rvSizeBar { display: flex; }
+        /* Hide size bar while calibration panel is open so it doesn't stack on top */
+        #roomViewer.rv-calibrating #rvSizeBar { opacity: 0; pointer-events: none; }
+        #rvSizeBar .rv-dim,
+        #rvSizeBar .rv-chips,
+        #rvSizeBar .rv-ar-launch { pointer-events: auto; }
+
+        /* Secondary controls panel — auto-hides, sits above the persistent bar */
         .rv-bottom {
             pointer-events: auto;
-            padding: 90px 24px 32px;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+            padding: 72px 24px 220px; /* 220px clears the always-visible #rvSizeBar below */
             display: flex; flex-direction: column; align-items: center; gap: 16px;
         }
 
@@ -685,6 +1693,88 @@
         }
         .rv-slider-wrap input { width: 100%; accent-color: #CFA246; }
 
+        /* AR launch button inside room viewer */
+        .rv-ar-launch {
+            width: min(430px, 86vw);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: #CFA246; color: #14110d; border: none;
+            padding: 14px 24px; font-size: 0.74rem; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+            margin-top: 4px;
+        }
+        .rv-ar-launch:hover  { background: #d8ad52; }
+        .rv-ar-launch:active { transform: scale(0.98); }
+
+        /* ── Floor / wall junction marker ── */
+        #rvFloorLine {
+            display: none;
+            position: absolute;
+            left: 0; right: 0;
+            top: 72%;           /* JS overrides; 72% is the default starting position */
+            pointer-events: none;
+            z-index: 3;
+        }
+        #roomViewer.rv-open #rvFloorLine { display: block; }
+
+        /* The dashed amber rule */
+        .rv-floor-rule {
+            position: absolute;
+            left: 0; right: 0; top: 0; height: 2px;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(207,162,70,0.9) 0, rgba(207,162,70,0.9) 10px,
+                transparent 10px, transparent 20px
+            );
+            box-shadow: 0 0 10px rgba(207,162,70,0.45);
+            transition: box-shadow 0.15s, background 0.15s;
+        }
+        /* Perspective fill — darkens the "floor" area below the line */
+        .rv-floor-fill {
+            position: absolute;
+            left: 0; right: 0; top: 2px;
+            height: 110px;
+            background: linear-gradient(to bottom, rgba(28,18,6,0.28) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        /* "Floor · drag" label */
+        .rv-floor-label {
+            position: absolute;
+            right: 60px; top: -20px;
+            font-size: 0.53rem; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: rgba(207,162,70,0.72);
+            white-space: nowrap; pointer-events: none;
+        }
+        /* Drag handle — finger-friendly pill, centred on the line */
+        .rv-floor-handle {
+            position: absolute;
+            left: 50%; top: 0;
+            transform: translate(-50%, -50%);
+            min-width: 88px; min-height: 38px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: rgba(207,162,70,0.92);
+            color: #14110d;
+            font-size: 0.58rem; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 16px; border-radius: 40px;
+            pointer-events: auto;
+            cursor: grab;
+            user-select: none; -webkit-user-select: none;
+            touch-action: none;
+            white-space: nowrap;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.5);
+        }
+        .rv-floor-handle:active { cursor: grabbing; }
+        /* Glow when print bottom snaps to the floor line */
+        #rvFloorLine.rv-floor-snap .rv-floor-rule {
+            background: rgba(207,162,70,1);
+            box-shadow: 0 0 0 1px rgba(207,162,70,0.9),
+                        0 0 22px rgba(207,162,70,0.85),
+                        0 0 55px rgba(207,162,70,0.35);
+        }
+
         #rvGuides {
             display: none;
             position: absolute;
@@ -730,24 +1820,40 @@
             color: rgba(255,255,255,0.6);
         }
 
+        /* ── Calibration panel ── */
         #rvCalibration {
             display: none;
             position: absolute;
             left: 50%;
             bottom: 186px;
             z-index: 5;
-            width: min(420px, calc(100vw - 32px));
+            width: min(400px, calc(100vw - 32px));
             transform: translateX(-50%);
-            padding: 16px;
+            padding: 16px 16px 14px;
             border: 1px solid rgba(207,162,70,0.35);
-            border-radius: 8px;
-            background: rgba(14,12,10,0.78);
+            border-radius: 10px;
+            background: rgba(14,12,10,0.88);
             color: rgba(247,243,236,0.82);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 22px 70px rgba(0,0,0,0.42);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 22px 70px rgba(0,0,0,0.5);
+            transition: bottom 0.3s cubic-bezier(.4,0,.2,1),
+                        padding 0.3s cubic-bezier(.4,0,.2,1),
+                        border-radius 0.3s;
+        }
+        /* Phase 2: slim strip pinned to very bottom, full camera visible */
+        #rvCalibration.rv-cal-matching {
+            bottom: 0;
+            left: 0; right: 0;
+            width: 100%;
+            transform: none;
+            border-radius: 0;
+            border-left: none; border-right: none; border-bottom: none;
+            border-top: 1px solid rgba(207,162,70,0.28);
+            padding: 10px 16px 20px;
         }
         #roomViewer.rv-calibrating #rvCalibration { display: block; }
+
         .rv-cal-title {
             font-size: 0.68rem;
             font-weight: 800;
@@ -757,8 +1863,8 @@
             margin-bottom: 10px;
         }
         .rv-cal-text {
-            font-size: 0.82rem;
-            line-height: 1.55;
+            font-size: 0.85rem;
+            line-height: 1.5;
             color: rgba(247,243,236,0.72);
             margin-bottom: 12px;
         }
@@ -767,8 +1873,7 @@
             grid-template-columns: 1fr;
             gap: 10px;
         }
-        .rv-cal-row select,
-        .rv-cal-row input {
+        .rv-cal-row select {
             width: 100%;
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.18);
@@ -776,13 +1881,34 @@
             border-radius: 6px;
             padding: 11px;
         }
+        /* Phase 2 match row */
+        .rv-cal-match-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rv-cal-match-row input[type=range] {
+            flex: 1;
+            accent-color: #CFA246;
+            height: 4px;
+        }
+        .rv-cal-nudge {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            color: #F7F3ED;
+            font-size: 1.1rem; line-height: 1;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
         .rv-cal-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
         }
-        .rv-cal-actions button {
-            flex: 1;
+        .rv-cal-actions button,
+        .rv-cal-match-row button {
             min-height: 40px;
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.18);
@@ -793,11 +1919,14 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .rv-cal-actions button:first-child {
+        .rv-cal-actions button:first-child,
+        .rv-cal-primary {
             background: #CFA246;
             border-color: #CFA246;
             color: #1A1612;
         }
+        .rv-cal-actions .rv-cal-primary { flex: 1.6; }
+        .rv-cal-match-row .rv-cal-primary { padding: 0 14px; white-space: nowrap; }
         #rvMarker {
             display: none;
             position: absolute;
@@ -831,6 +1960,13 @@
             text-transform: uppercase;
         }
         #roomViewer.rv-calibrating #rvMarker { display: block; }
+        /* In match phase, marker nudges up so it's clear of the bottom strip */
+        #roomViewer.rv-cal-matching #rvMarker { top: calc(50% - 40px); }
+        /* Fade print during calibration so wall is clearly visible */
+        #roomViewer.rv-calibrating #rvPrintWrap {
+            opacity: 0.55 !important;
+            pointer-events: none;
+        }
         @media (max-width: 680px) {
             .rv-top { padding: 24px 14px 80px; }
             .rv-bottom { padding: 88px 14px 24px; }
@@ -864,6 +2000,32 @@
             font-size: 0.7rem; color: rgba(247,243,236,0.25);
             letter-spacing: 0.5px; max-width: 240px; line-height: 1.6;
         }
+
+        /* Opening hint — fades automatically, dismisses on touch */
+        #rvHint {
+            position: absolute; inset: 0; z-index: 20;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 20px;
+            background: rgba(0,0,0,0.52);
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+        #rvHint.rv-hint-gone { opacity: 0; }
+        .rv-hint-icon {
+            width: 56px; height: 56px; color: rgba(207,162,70,0.75);
+        }
+        .rv-hint-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.4rem, 5vw, 2.1rem);
+            font-style: italic; font-weight: 300;
+            color: rgba(255,255,255,0.92); letter-spacing: 0.01em;
+            text-align: center; line-height: 1.15;
+        }
+        .rv-hint-sub {
+            font-size: 0.65rem; font-weight: 800; letter-spacing: 3px;
+            text-transform: uppercase; color: rgba(255,255,255,0.45);
+            text-align: center; line-height: 2;
+        }
         /* ══ end Room Viewer ══════════════════════════════════════ */
 
     </style>
@@ -894,7 +2056,7 @@
             <div class="modal-content">
                 <div class="modal-gallery">
                     <div class="gallery-main" onclick="openImgViewer(document.getElementById('modalMainImage').src, document.getElementById('modalMainImage').alt)">
-                        <img id="modalMainImage" src="" alt="">
+                        <img id="modalMainImage" src="" alt="" onerror="this.style.opacity='0'">
                         <div class="gallery-zoom-hint">Click to enlarge</div>
                         <button class="gallery-nav gallery-prev" id="galleryPrev" onclick="event.stopPropagation(); galleryStep(-1)" aria-label="Previous image"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
                         <button class="gallery-nav gallery-next" id="galleryNext" onclick="event.stopPropagation(); galleryStep(1)" aria-label="Next image"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -911,9 +2073,9 @@
                         <button class="action-btn" id="modalAddBtn">Add to Cart</button>
                         <button class="action-btn buy-now-btn" id="modalBuyBtn">Buy Now</button>
                     </div>
-                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="View this print in your room">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                        View in Your Room
+                    <button class="action-btn rv-trigger-btn" id="modalRoomBtn" style="display:none" aria-label="See this print on your wall">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><circle cx="12" cy="13" r="3"/></svg>
+                        See it on Your Wall
                     </button>
 
                     <div class="modal-reassurance" id="modalReassurance"></div>
@@ -946,6 +2108,7 @@
                         <a href="workshops.html">Workshops</a>
                         <a href="shop.html">Shop</a>
                         <a href="contact.html">Contact</a>
+            <a href="blog.html">Blog</a>
                     </nav>
                     <nav class="sf-legal">
                         <span class="sf-nav-label">Legal</span>
@@ -954,6 +2117,7 @@
                         <a href="terms.html">Terms of Service</a>
                         <a href="privacy.html">Privacy Policy</a>
                         <a href="support.html">Support</a>
+            <a href="faq.html">FAQ</a>
                     </nav>
                     <div class="sf-newsletter-col">
                         <span class="sf-nav-label">Field Notes</span>
@@ -1007,11 +2171,13 @@
                         <li><a href="about.html">About</a></li>
                         <li style="display:none"><a href="journal.html">Journal</a></li>
                         <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="blog.html">Blog</a></li>
                     </ul>
                 </li>
                 <li><a href="workshops.html">Workshops</a></li>
                 <li><a href="shop.html">Shop</a></li>
                 <li><a href="contact.html">Contact</a></li>
+            <a href="blog.html">Blog</a>
             </ul>
             <div class="cart-icon" onclick="toggleCart()">
                 <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -1037,6 +2203,7 @@
                 <a href="about.html" onclick="toggleMenu()">About</a>
                 <a href="journal.html" onclick="toggleMenu()" style="display:none">Journal</a>
                 <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+                <a href="blog.html" onclick="toggleMenu()">Blog</a>
             </div>
         </div>
         <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -1080,7 +2247,7 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cosmic-return')" data-orig-w="42" data-orig-h="31.5" data-base-price="125000">
-                    <div class="product-image"><img loading="lazy" src="images/Cosmic Return 05.png" alt="Cosmic Return"></div>
+                    <div class="product-image"><img src="images/Cosmic Return 05.webp" alt="Cosmic Return" width="2100" height="1575"></div>
                     <div class="product-title">Cosmic Return</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 2 + 1 AP</span><span class="spec-tag dim-tag">42 &times; 31.5 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="125000" class="product-price">&#8377;1,25,000</div>
@@ -1090,60 +2257,60 @@
                     </div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('burnt-earth')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Burnt Earth 03.png" alt="Burnt Earth"></div>
+                    <div class="product-image"><img src="images/Burnt Earth 03.webp" alt="Burnt Earth" width="2100" height="1575"></div>
                     <div class="product-title">Burnt Earth</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Burnt Earth','Burnt Earth.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Burnt Earth','Burnt Earth.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Burnt Earth','Burnt Earth.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Burnt Earth','Burnt Earth.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('chromatic-rupture')" data-orig-w="32" data-orig-h="24" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Chromatic Rupture 01.png" alt="Chromatic Rupture"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Chromatic Rupture 01.webp" alt="Chromatic Rupture" width="2100" height="1575"></div>
                     <div class="product-title">Chromatic Rupture</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 24 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Chromatic Rupture','Chromatic Rupture.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Chromatic Rupture','Chromatic Rupture.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Chromatic Rupture','Chromatic Rupture.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Chromatic Rupture','Chromatic Rupture.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('after-the-fall')" data-orig-w="32" data-orig-h="25.5" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/After The Fall 02.webp" alt="After The Fall"></div>
+                    <div class="product-image"><img loading="lazy" src="images/After The Fall 02.webp" alt="After The Fall" width="1568" height="2100"></div>
                     <div class="product-title">After The Fall</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 25.5 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
                     <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'After The Fall','After The Fall 02.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'After The Fall','After The Fall 02.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('cracked-spectrum')" data-orig-w="32" data-orig-h="21.3" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Cracked Spectrum 01.png" alt="Cracked Spectrum"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Cracked Spectrum 01.webp" alt="Cracked Spectrum" width="1409" height="2100"></div>
                     <div class="product-title">Cracked Spectrum</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">32 &times; 21.3 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Cracked Spectrum','Cracked Spectrum.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Cracked Spectrum','Cracked Spectrum.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Cracked Spectrum','Cracked Spectrum.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('still-organism')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/The Still Organism 01.png" alt="Still Organism"></div>
+                    <div class="product-image"><img loading="lazy" src="images/The Still Organism 01.webp" alt="Still Organism" width="1575" height="2100"></div>
                     <div class="product-title">Still Organism</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Still Organism','The Still Organism.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Still Organism','The Still Organism.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Still Organism','The Still Organism.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Still Organism','The Still Organism.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('forgotten-skin')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/The Forgotten Skin 01.png" alt="Forgotten Skin"></div>
+                    <div class="product-image"><img loading="lazy" src="images/The Forgotten Skin 01.webp" alt="Forgotten Skin" width="1575" height="2100"></div>
                     <div class="product-title">Forgotten Skin</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Forgotten Skin','The Forgotten Skin.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Forgotten Skin','The Forgotten Skin.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Forgotten Skin','The Forgotten Skin.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Forgotten Skin','The Forgotten Skin.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('erosion')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Erosion 01.png" alt="Erosion"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Erosion 01.webp" alt="Erosion" width="1024" height="1536"></div>
                     <div class="product-title">Erosion</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Erosion','Erosion.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Erosion','Erosion.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Erosion','Erosion.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Erosion','Erosion.webp')">Buy Now</button></div>
                 </div>
                 <div class="product-card fade-up" data-shop-category="prints" onclick="openProductModal('imprint')" data-orig-w="24" data-orig-h="32" data-base-price="85000">
-                    <div class="product-image"><img loading="lazy" src="images/Imprint 03.png" alt="Imprint"></div>
+                    <div class="product-image"><img loading="lazy" src="images/Imprint 03.webp" alt="Imprint" width="1575" height="2100"></div>
                     <div class="product-title">Imprint</div>
                     <div class="product-specs"><span class="spec-tag ed-tag">Ed. 5 + 1 AP</span><span class="spec-tag dim-tag">24 &times; 32 in</span><span class="spec-tag">310 GSM Etching Rag</span><span class="spec-tag">Signed</span></div>
                     <div data-inr="85000" class="product-price">&#8377;85,000</div>
-                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Imprint','Imprint.jpg')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Imprint','Imprint.jpg')">Buy Now</button></div>
+                    <div class="product-actions"><button class="action-btn" onclick="addPrintToCart(event,'Imprint','Imprint.webp')">Add to Cart</button><button class="action-btn buy-now-btn" onclick="buyPrintNow(event,'Imprint','Imprint.webp')">Buy Now</button></div>
                 </div>
             </div>
         </section>
@@ -1156,7 +2323,9 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" onclick="openProductModal('matter-of-pause')" data-product-id="matter-of-pause" data-shop-category="books">
-                    <div class="product-image"><img loading="lazy" src="images/MATTER_OF_PAUSE_BOOK.jpg" alt="The Matter of Pause (Monograph)" onerror="this.onerror=null;this.src='images/Cosmic Return.webp';"></div>
+                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#C8C2B8;">
+                        <span style="font-size:0.5rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(26,22,18,0.35);">Coming Soon</span>
+                    </div>
                     <div class="product-title">The Matter of Pause (Monograph)</div>
                     <div class="product-specs" id="bookSpecsDisplay"><span class="spec-tag">176 Pages</span><span class="spec-tag">English</span><span class="spec-tag">Digital / Softcover</span></div>
                     <div data-inr="1500" class="product-price" id="bookPriceDisplay">&#8377;1,500</div>
@@ -1181,7 +2350,7 @@
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" onclick="openProductModal('explorer-deck')" data-product-id="explorer-deck" data-shop-category="tools">
-                    <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" onerror="this.onerror=null;this.src='images/Cracked Spectrum.jpg';"></div>
+                    <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" width="1575" height="2100" onerror="this.onerror=null;this.src='images/Cracked Spectrum.jpg';"></div>
                     <div class="product-title">Explorer's Deck</div>
                     <div class="product-specs"><span class="spec-tag">76 Cards</span><span class="spec-tag">6 Suits + Wild</span><span class="spec-tag">Matte Tactile Stock</span></div>
                     <div data-inr="2100" class="product-price">&#8377;2,100</div>
@@ -1210,6 +2379,7 @@
             <a href="workshops.html">Workshops</a>
             <a href="shop.html">Shop</a>
             <a href="contact.html">Contact</a>
+            <a href="blog.html">Blog</a>
         </nav>
         <nav class="sf-legal">
             <span class="sf-nav-label">Legal</span>
@@ -1218,6 +2388,7 @@
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
             <a href="support.html">Support</a>
+            <a href="faq.html">FAQ</a>
         </nav>
         <div class="sf-newsletter-col">
             <span class="sf-nav-label">Field Notes</span>
@@ -1287,63 +2458,63 @@
         const products = {
             'cosmic-return': {
                 title: 'Cosmic Return', price: 125000, category: 'Resurface Series / Fine Art Print', origW: 42, origH: 31.5,
-                images: ['Cosmic Return.webp', 'Cosmic Return 03.png', 'Cosmic Return 05.png'],
+                images: ['Cosmic Return.webp', 'Cosmic Return 03.webp', 'Cosmic Return 05.webp'],
                 description: 'The largest edition in the Resurface series &mdash; a meditation on cyclical transformation, where weathered surfaces carry the residue of countless monsoons. Printed at museum scale to preserve the full tonal depth of the archival pigment.',
                 specs: { Edition: '2 + 1 AP', Dimensions: '42 &mdash; 31.5 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Goa, India', light: 'Late afternoon, October — raking oblique light, three days after monsoon end', frame: 'The wall still held moisture deep in its pores — not visible but present in the surface tension of the pigment. I positioned the camera just below eye-level and angled slightly up, at about fifteen degrees. The decision was to catch the way the ochre layer beneath the whitewash absorbed the last hour of sun differently from the surface above it. The resulting tonal depth is not the image I planned. It is what the light chose to show.' }
             },
             'burnt-earth': {
                 title: 'Burnt Earth', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 24,
-                images: ['Burnt Earth.jpg', 'Burnt Earth 01.png', 'Burnt Earth 03.png'],
+                images: ['Burnt Earth.webp', 'Burnt Earth 01.webp', 'Burnt Earth 03.webp'],
                 description: 'Pigment archaeology: rust, clay, and oxidation read as palimpsest on the built skin of Goa. A close reading of how earth-tones return to the surfaces that first borrowed them.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 24 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Aldona, North Goa', light: 'Midday, March — direct overhead sun, no diffusion, no shade sought', frame: 'The conditions were wrong by every convention — harsh midday light, bleached sky, no softness anywhere. That was exactly the reason to stay. Harsh light does not flatter a surface; it interrogates it. What the camera found was not deterioration but archaeology: the rust-orange layer beneath the paint, the clay deposit at the lower course, the oxidation bloom around an old nail. The tones in this image have not been adjusted. What you see is what was there.' }
             },
             'chromatic-rupture': {
                 title: 'Chromatic Rupture', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 24,
-                images: ['Chromatic Rupture.jpg', 'Chromatic Rupture 01.png',`Chromatic Rupture 02.png`],
+                images: ['Chromatic Rupture.webp', 'Chromatic Rupture 01.webp', 'Chromatic Rupture 02.webp'],
                 description: 'Where paint abandons its architecture. A study of color as a living organism in retreat &mdash; documenting the moment pigment separates from the wall it once defined.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 24 in', Paper: 'Museum board', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Fontainhas, Panaji, Goa', light: 'Morning, January — soft eastern light, low angle, strong colour rendering', frame: 'I had passed this wall many times before the decision to photograph it. The paint was actively separating — not yet fallen, still holding the shape of departure. The January light rendered the blue and yellow as equally weighted, which is not how they appear in stronger illumination. The rupture at the centre reads differently at different times of day. This is the morning version: two colours of equal authority, separating with patience.' }
             },
             'after-the-fall': {
                 title: 'After The Fall', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 25.5,
-                images: ['After The Fall.jpg', 'Chromatic Rupture.jpg', 'Imprint.jpg'],
+                images: ['After The Fall.webp', 'After The Fall 02.webp'],
                 description: 'Captured in the aftermath of monsoon &mdash; surfaces holding the memory of water that has already moved on. Stillness as residue, silence as record.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 25.5 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Siolim, North Goa', light: 'Overcast afternoon, September — diffuse grey sky, monsoon retreating, surface wet from morning rain', frame: 'This was made within two hours of the last heavy rain. The surface still held the water in its lower register — a horizontal tide-line of saturation marking exactly how high the flow had reached. What the image is about is not the wall but the water that is no longer there. The grey light was essential: any sun would have dried the surface before I arrived and closed the record. Timing is not composition. It is the whole decision.' }
             },
             'cracked-spectrum': {
                 title: 'Cracked Spectrum', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 32, origH: 21.3,
-                images: ['Cracked Spectrum.jpg', 'Chromatic Rupture.jpg', 'Burnt Earth.jpg'],
+                images: ['Cracked Spectrum.webp', 'Cracked Spectrum 01.webp'],
                 description: 'Fissures as spectrum. The geometry of structural fatigue rendered as abstract field &mdash; reading a wall the way one reads a seismograph.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '32 &mdash; 21.3 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Industrial periphery, Verna, South Goa', light: 'Overcast afternoon — flat light that renders crack depth without shadow masking', frame: 'The fissure system in this wall had been forming for years. I had visited three times before making the image — twice the light gave too much shadow in the lower cracks, flattening the upper ones. Overcast conditions were necessary: flat light reads a crack network as a drawn line, not a relief. The image is closer to a diagram than a photograph. It documents a structural event — the wall recording the slow arithmetic of expansion, contraction, and time.' }
             },
             'still-organism': {
                 title: 'Still Organism', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
-                images: ['The Still Organism.jpg', 'Cosmic Return.webp', 'Erosion.jpg'],
+                images: ['The Still Organism.webp', 'The Still Organism 01.webp'],
                 description: 'Architecture considered not as object but as slow body &mdash; breathing, absorbing, decaying in place. A portrait of a building at rest within its own transformation.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Village compound, Anjuna, Goa', light: 'Early morning, February — pre-golden hour, cool directional light from the east', frame: 'The building had not been used in several years. The stillness was not absence — it was presence of a different kind. I waited for the point at which no shadow was moving on the facade: the window before the sun begins its rotation across the surface. At that moment the building is most itself — not interacting with light, simply receiving it. The vertical format was the only one that could hold the full logic of the facade without cropping the dialogue between the roof edge and the ground.' }
             },
             'forgotten-skin': {
                 title: 'Forgotten Skin', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
-                images: ['The Forgotten Skin.jpg', 'The Forgotten Skin 01.png'],
+                images: ['The Forgotten Skin.webp', 'The Forgotten Skin 01.webp'],
                 description: 'The exterior wall as memory surface. What the building has witnessed, recorded in pigment, spore, and slow stain.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Portuguese-era structure, Chandor, South Goa', light: 'Late afternoon, November — warm raking light from low sun angle, long shadows from adjacent tree', frame: 'The stain pattern on this wall had been accumulating for decades — water track, biological growth, paint loss, and the shadow-print of a creeper that had since been removed. The raking afternoon light was the only condition in which all four layers read simultaneously without any one of them dominating. I made twelve frames across forty minutes as the sun moved through the tree canopy. This is the one in which nothing is hidden.' }
             },
             'erosion': {
                 title: 'Erosion', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
-                images: ['Erosion.jpg', 'Burnt Earth.jpg', 'The Still Organism.jpg'],
+                images: ['Erosion.webp', 'Erosion 01.webp'],
                 description: "Time's deliberate subtraction. A portrait of material yielding to weather across seasons &mdash; the wall's quiet negotiation with its own disappearance.",
                 specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Coastal building, Morjim, North Goa', light: 'Late afternoon, September — post-monsoon salt air, low warm light, wind from the sea', frame: 'Salt-laden air from the Arabian Sea acts on lime plaster in a specific way — it does not crack, it dissolves. The erasure here is horizontal: the lower register of the wall has been returning to the earth for years while the upper section still holds its coat. I framed the image to place the horizon of erasure at exactly the mid-point. What is above the line and what is below are the same material at different points in the same sentence.' }
             },
             'imprint': {
                 title: 'Imprint', price: 85000, category: 'Resurface Series / Fine Art Print', origW: 24, origH: 32,
-                images: ['Imprint.jpg', 'Cosmic Return.webp', 'The Forgotten Skin.jpg'],
+                images: ['Imprint.webp', 'Imprint 03.webp'],
                 description: 'A trace left by the absence of something that once touched this surface. Architecture as archive of the things it no longer holds.',
                 specs: { Edition: '5 + 1 AP', Dimensions: '24 &mdash; 32 in', Paper: '310 GSM etching rag', Technique: 'Archival pigment print', Signed: 'Yes, verso', Shipping: 'Worldwide, insured' },
                 provenance: { location: 'Old market building, Mapusa, Goa', light: 'Noon, April — high overhead light that falls directly into the recess with no shadow edge', frame: 'Something had been fixed to this wall for a long time and then removed. The adhesive, the fixings, the pressure of the object — all of it remained in the surface as a negative. Noon light was the correct choice: at any other angle the recess casts its own shadow and reads as depth. At noon the shadow is eliminated and what remains is only the trace of a thing that is no longer there. Architecture as archive. The photograph does not explain what was there. That absence is part of the work.' }
@@ -1564,7 +2735,7 @@
             document.getElementById('modalTitle').innerText = p.title;
             document.getElementById('modalPrice').innerText = formatPrice(p.price);
             document.getElementById('modalPrice').dataset.inrPrice = p.price;
-            document.getElementById('modalDescription').innerText = p.description;
+            document.getElementById('modalDescription').innerHTML = p.description;
             document.getElementById('modalMainImage').src = imgPath(p.images[0]);
             document.getElementById('modalMainImage').alt = p.title;
 
@@ -1701,23 +2872,42 @@
                 rvBtn.style.display = 'flex';
                 var rvImg  = imgPath(p.images[0]);
                 var rvAspW = p.origW, rvAspH = p.origH;
+                /* Build size list — str uses "32 × 24 in" format, split on × */
                 var rvSizeList = calcPrintSizes(p.origW, p.origH).map(function(s) {
-                    return { label: s.label, w: parseFloat(s.str), h: parseFloat(s.str.split(/[×x]/)[1]) || p.origH };
-                });
-                /* build clean size list from the size strings */
-                rvSizeList = calcPrintSizes(p.origW, p.origH).map(function(s) {
-                    var parts = s.str.replace(/&mdash;|—/g,'×').split('×').map(function(v){ return parseFloat(v); });
+                    var parts = s.str.split('×').map(function(v){ return parseFloat(v); });
                     return { label: s.label, w: parts[0] || p.origW, h: parts[1] || p.origH };
                 });
                 var rvId = id, rvTitle = p.title;
                 rvBtn.onclick = function() {
                     var selected = sizeWrap.querySelector('.size-select option:checked');
                     var selectedLabel = selected ? selected.dataset.sizeLabel : '';
-                    openRoomViewer(rvImg, rvAspW, rvAspH, rvSizeList, {
-                        id: rvId,
-                        title: rvTitle,
-                        selectedLabel: selectedLabel
-                    });
+                    var selSize = rvSizeList.filter(function(s) {
+                        return s.label === selectedLabel;
+                    })[0] || rvSizeList[0];
+
+                    /* Android + WebXR fast-path: go straight to the custom
+                       ar-xr.html experience. Skips the model-viewer-based AR
+                       sheet entirely — ar-xr has its own size + hang chips,
+                       working occlusion, light estimation, and gesture
+                       controls. One click from product modal to live AR. */
+                    var isAndroid = /Android/i.test(navigator.userAgent);
+                    var isInApp   = /Instagram|FBAN|FBAV|Line\//.test(navigator.userAgent);
+                    if (isAndroid && navigator.xr && !isInApp) {
+                        var sizeMap = { 'Small':'small', 'Medium':'medium',
+                                        'Standard':'standard', 'Large':'large' };
+                        var sizeParam = sizeMap[selSize.label] || 'large';
+                        if (typeof track === 'function') {
+                            track('ar_xr_redirect', {
+                                item_id: rvId, item_name: rvTitle, size: sizeParam,
+                                origin: 'modal_room_btn'
+                            });
+                        }
+                        location.href = 'ar-xr.html?id=' + encodeURIComponent(rvId)
+                                      + '&size=' + sizeParam;
+                        return;
+                    }
+
+                    window.openArSheet(rvId, rvTitle, rvImg, selSize.w, selSize.h, rvSizeList);
                 };
             } else {
                 rvBtn.style.display = 'none';
@@ -1745,7 +2935,13 @@
             if (p.origW) {
                 const sizes = calcPrintSizes(p.origW, p.origH);
                 const foundIdx   = sizes.findIndex(s => s.price === p.price);
-                const defaultIdx = Math.min(foundIdx !== -1 ? foundIdx : 2, sizes.length - 1);
+                /* Sync modal with whatever size the user already picked on the card */
+                const cardEl  = document.querySelector('.product-card[onclick*="\'' + id + '\'"]');
+                const cardSel = cardEl && cardEl.querySelector('.size-select');
+                const cardIdx = cardSel ? parseInt(cardSel.value, 10) : -1;
+                const defaultIdx = (cardIdx >= 0 && cardIdx < sizes.length)
+                    ? cardIdx
+                    : Math.min(foundIdx !== -1 ? foundIdx : 2, sizes.length - 1);
 
                 selectedPrice    = sizes[defaultIdx].price;
                 selectedDimLabel = sizes[defaultIdx].str;
@@ -1778,29 +2974,39 @@
                 sel.appendChild(reqOpt);
 
                 sel.addEventListener('change', function() {
-                    const opt     = this.options[this.selectedIndex];
-                    selectedPrice     = parseInt(opt.dataset.price);
-                    selectedDimLabel  = opt.dataset.dim;
+                    const sz = sizes[this.selectedIndex];
+                    if (!sz) return;   /* guard: disabled "larger sizes" option */
+                    selectedPrice    = sz.price;
+                    selectedDimLabel = sz.str;
                     document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
                     document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
                     /* update Edition + Dimensions in the specs grid */
                     const specsEl = document.getElementById('modalSpecs');
                     specsEl.querySelectorAll('.spec-item').forEach(function(row) {
                         const key = row.querySelector('.spec-label').textContent;
-                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = opt.dataset.edition.replace('Ed. ', '');
-                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = opt.dataset.dim;
+                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = sz.edition.replace('Ed. ', '');
+                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = sz.str;
                     });
                     /* re-render edition registry for the newly selected size */
-                    renderRegistry(currentProduct, opt.dataset.sizeLabel);
+                    renderRegistry(currentProduct, sz.label);
                 });
 
                 wrap.appendChild(lbl);
                 wrap.appendChild(sel);
                 sizeWrap.appendChild(wrap);
 
-                /* set initial price to match default selection */
+                /* set initial price + specs to match default selected size */
                 document.getElementById('modalPrice').textContent = formatPrice(selectedPrice);
                 document.getElementById('modalPrice').dataset.inrPrice = selectedPrice;
+                /* sync Edition + Dimensions in the specs grid with the default size */
+                const defOpt = sel.options[defaultIdx];
+                if (defOpt) {
+                    document.getElementById('modalSpecs').querySelectorAll('.spec-item').forEach(function(row) {
+                        const key = row.querySelector('.spec-label').textContent;
+                        if (key === 'Edition')    row.querySelector('.spec-value').textContent = defOpt.dataset.edition.replace('Ed. ', '');
+                        if (key === 'Dimensions') row.querySelector('.spec-value').textContent = defOpt.dataset.dim;
+                    });
+                }
 
                 /* render edition registry for the default size */
                 renderRegistry(id, sizes[defaultIdx].label);
@@ -1933,7 +3139,11 @@
 
                 // Toggle individual cards (for "Showing N products" count + future sub-filters)
                 cards.forEach(function(card) {
-                    const isVisible = selected === 'all' || card.dataset.shopCategory === selected;
+                    const section = card.closest('.shop-section');
+                    /* Don't count cards inside sections that are permanently hidden
+                       via inline style (e.g. books / tools not yet launched) */
+                    const sectionHidden = section && section.style.display === 'none';
+                    const isVisible = !sectionHidden && (selected === 'all' || card.dataset.shopCategory === selected);
                     card.classList.toggle('is-filtered-out', !isVisible);
                     if (isVisible) visibleCount += 1;
                 });
@@ -2040,11 +3250,20 @@
         /* ══ AR SHEET (model-viewer) ═════════════════════════════ */
         /* Bump on EVERY /ar regeneration so iOS Quick Look fetches fresh
            USDZ instead of its cached copy at the same URL. */
-        window.AR_MODEL_VER = '2';
+        window.AR_MODEL_VER = '4';
         (function() {
             var arProbed = false, arAssetsOk = false;
             var pending  = null;
             var arSession = null;
+            /* Currently-selected size in the AR sheet — updated by buildAt
+               so the launch click can pass it to ar-xr.html on Android. */
+            var currentArSize = null;
+            var arScaleMult = 1.0;   /* 0.5 – 2.0 scale multiplier for GLB build */
+            /* current size list + selected index — kept at IIFE scope so the
+               Smaller/Larger buttons can call buildAt() without re-entering openArSheet */
+            var sizes = [];
+            var defIdx = 0;
+            var buildAt; /* forward-declared; assigned inside openArSheet */
 
             /* analytics — no-ops if no gtag/dataLayer present */
             function track(event, params) {
@@ -2060,7 +3279,9 @@
 
             /* cache built GLB blob URLs per print (per session) */
             var glbCache = {};
-            var arMode = 'ar';   /* 'ar' | 'inapp' */
+            /* single tracked 'load' listener — replaced on every openArSheet, removed on close */
+            var _arLoadListener = null;
+            var arMode = 'ar';   /* 'ar' | 'inapp' | 'desktop' */
 
             /* In-app webviews (Instagram, Facebook, TikTok, etc.) destroy the
                page when native AR launches and barely support the 3D pipeline.
@@ -2070,7 +3291,24 @@
                 return /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|Twitter|TikTok|Musical|Snapchat|Pinterest|LinkedInApp|WhatsApp/i.test(ua);
             }
 
-            window.openArSheet = function(id, title, img, wIn, hIn, sizeList) {
+            /* Chrome, Firefox, Edge, Opera on iOS all run on WebKit but Apple
+               blocks AR Quick Look and WebXR in every browser except Safari.
+               Detect these so we can prompt the user to switch to Safari.
+               NOTE: iPadOS 13+ changed Safari's UA to report as a Mac desktop
+               (no longer contains "iPad"). Detect via maxTouchPoints as fallback. */
+            function isAppleDevice(ua) {
+                return (/iPad|iPhone|iPod/.test(ua) && !window.MSStream)
+                    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            }
+            function isIOSNonSafari() {
+                var ua = navigator.userAgent || '';
+                if (!isAppleDevice(ua)) return false;
+                /* Safari's UA contains "Version/" but NOT CriOS / FxiOS / EdgiOS */
+                return /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|Brave/i.test(ua);
+            }
+
+            window.openArSheet = function(id, title, img, wIn, hIn, sizeList, options) {
+                options = options || {};
                 var sheet  = document.getElementById('arSheet');
                 var viewer = document.getElementById('arViewer');
                 var load   = document.getElementById('arLoading');
@@ -2081,9 +3319,49 @@
                 document.getElementById('arTitle').textContent   = title;
                 document.getElementById('arDimText').textContent = wIn + ' × ' + hIn + ' inches · true size';
 
+                /* Populate the in-AR measurement HUD (item #1): title + dual-unit dims.
+                   Updated again by buildAt() whenever the user picks a different size. */
+                var hudTitle = document.getElementById('arDimHudTitle');
+                var hudMeasure = document.getElementById('arDimHudMeasure');
+                if (hudTitle) hudTitle.textContent = title;
+                if (hudMeasure) {
+                    var wCm0 = Math.round(wIn * 2.54);
+                    var hCm0 = Math.round(hIn * 2.54);
+                    hudMeasure.textContent =
+                        wIn + '" × ' + hIn + '"  ·  ' + wCm0 + ' × ' + hCm0 + ' cm';
+                }
+
+                /* apply calibrated scale from room viewer (or reset to 1) */
+                arScaleMult = options.scaleMult ? Math.max(0.5, Math.min(2.0, options.scaleMult)) : 1.0;
+                var scaleValEl = document.getElementById('arScaleVal');
+                if (scaleValEl) scaleValEl.textContent = Math.round(arScaleMult * 100) + '%';
+
                 sheet.classList.add('ar-open');
                 document.body.style.overflow = 'hidden';
-                arSession = { id: id, title: title, w: wIn, h: hIn, t0: Date.now() };
+                arSession = { id: id, title: title, img: img, w: wIn, h: hIn, sizes: sizeList, t0: Date.now() };
+
+                /* ── iOS non-Safari (Chrome, Firefox, Edge…): AR Quick Look only works in
+                       Safari on Apple devices. We cannot force-open Safari (the old
+                       safari-https:// scheme is dead on modern iOS), so present a clean
+                       sheet with one clear action: the button copies the link and opens
+                       the native share sheet (which offers Safari). ── */
+                if (isIOSNonSafari()) {
+                    arMode = 'inapp';
+                    track('ar_ios_nonsafari', { item_id: id, item_name: title });
+                    document.getElementById('arDimText').textContent = '';
+                    chipsEl.innerHTML = '';
+
+                    load.classList.remove('ar-gone');
+                    load.innerHTML =
+                        '<div style="max-width:300px;text-align:center;">'
+                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
+                      + '<div style="font-family:Inter,sans-serif;font-size:0.82rem;line-height:1.75;color:rgba(247,243,236,0.5);">AR needs Safari on your iPhone or iPad. Tap below to copy the link and open Safari.</div>'
+                      + '</div>';
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link &amp; Open Safari';
+                    hintEl.textContent = 'AR works in Safari on Apple devices';
+                    return;
+                }
 
                 /* ── in-app browser: cannot do native AR here ── */
                 if (isInAppBrowser()) {
@@ -2091,23 +3369,39 @@
                     track('ar_inapp_blocked', { item_id: id, item_name: title });
                     load.classList.remove('ar-gone');
                     load.innerHTML =
-                        '<div style="max-width:300px;text-align:center;">'
-                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;">Open in your browser</div>'
-                      + '<div style="font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);">Live AR needs Chrome or Safari. '
-                      + 'Tap the <strong style="color:rgba(247,243,236,0.8);">⋮</strong> menu at the top of this screen and choose <strong style="color:rgba(247,243,236,0.8);">“Open in browser”</strong>.</div>'
+                        '<div style=”max-width:300px;text-align:center;”>'
+                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
+                      + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);”>Live AR needs Chrome or Safari. '
+                      + 'Tap the <strong style=”color:rgba(247,243,236,0.8);”>⋮</strong> menu at the top of this screen and choose <strong style=”color:rgba(247,243,236,0.8);”>”Open in browser”</strong>.</div>'
                       + '</div>';
                     document.getElementById('arDimText').textContent = '';
                     launch.innerHTML =
-                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link';
+                        '<svg viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2” stroke-linecap=”round” stroke-linejoin=”round”><rect x=”9” y=”9” width=”13” height=”13” rx=”2”/><path d=”M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1”/></svg> Copy Link';
                     hintEl.textContent = 'Then paste it into Chrome or Safari';
                     chipsEl.innerHTML = '';
                     return;
                 }
 
+                /* ── Platform detection (hoisted — used for button state + mountBlob + applyNative) ── */
+                /* iPadOS 13+ reports as Mac desktop UA — use maxTouchPoints as fallback */
+                var isAndroid = /Android/i.test(navigator.userAgent);
+                var isIOS     = isAppleDevice(navigator.userAgent || '');
+                var isDesktop = !isAndroid && !isIOS;
+
                 arMode = 'ar';
-                launch.innerHTML =
-                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> See it on your wall';
-                hintEl.textContent = 'Building the framed print…';
+                if (isDesktop) {
+                    /* Desktop has no AR capability — show the 3D spin viewer but
+                       replace "Place on Wall" with a clipboard link so the user
+                       can easily open it on their phone. */
+                    arMode = 'desktop';
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link for Phone';
+                    hintEl.textContent = 'Drag to explore in 3D · open on your phone to place on your wall';
+                } else {
+                    launch.innerHTML =
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Place on Wall';
+                    hintEl.textContent = 'Building the framed print…';
+                }
 
                 load.classList.remove('ar-gone');
                 load.textContent = 'Building the framed print…';
@@ -2120,16 +3414,47 @@
 
                 track('ar_open', { item_id: id, item_name: title });
 
-                viewer.addEventListener('load', function onL() {
-                    load.classList.add('ar-gone');
-                    viewer.removeEventListener('load', onL);
-                });
+                /* remove any stale listener left over from a previous opening */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
+                }
 
-                /* ── sizes ── */
-                var sizes = (sizeList && sizeList.length)
+                /* model-viewer fires 'load' once per src change — it fires for the
+                   blob src first, then again when applyNative swaps in the hosted URL.
+                   We auto-launch on EVERY load until AR activates, so Android (which
+                   can only launch after the hosted URL replaces the blob) isn't skipped.
+                   _autoLaunchRetries caps the retry loop so the listener never becomes
+                   permanently orphaned (Bug #8). */
+                var _autoLaunchRetries = 0;
+                _arLoadListener = function() {
+                    load.classList.add('ar-gone');
+                    if (options.autoLaunch) {
+                        _autoLaunchRetries++;
+                        setTimeout(function() {
+                            if (viewer.canActivateAR) {
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
+                                viewer.activateAR();
+                            } else if (_autoLaunchRetries >= 3) {
+                                /* safety cap — stop retrying after 3 load events */
+                                viewer.removeEventListener('load', _arLoadListener);
+                                _arLoadListener = null;
+                            }
+                            /* otherwise keep listener — next src swap (blob→hosted) will retry */
+                        }, 700);
+                    } else {
+                        viewer.removeEventListener('load', _arLoadListener);
+                        _arLoadListener = null;
+                    }
+                };
+                viewer.addEventListener('load', _arLoadListener);
+
+                /* ── sizes (assign to IIFE-scope vars so Smaller/Larger can access) ── */
+                sizes = (sizeList && sizeList.length)
                     ? sizeList.slice()
                     : [{ label: 'Standard', w: wIn, h: hIn }];
-                var defIdx = 0;
+                defIdx = 0;
                 for (var si = 0; si < sizes.length; si++) {
                     if (Math.abs(sizes[si].w - wIn) < 0.01 && Math.abs(sizes[si].h - hIn) < 0.01) {
                         defIdx = si; break;
@@ -2142,8 +3467,25 @@
 
                 /* native AR needs REAL hosted urls — blobs can't drive it.
                    Preview-only scope: per-size hosted file if it exists, else
-                   the canonical file (only meaningful at the default size). */
+                   the canonical file (only meaningful at the default size).
+
+                   _nativeController tracks the most recent in-flight HEAD request.
+                   Switching sizes aborts the previous fetch so a slow Small response
+                   cannot stomp a Large src that was already applied (Bugs #4 & #5). */
+                var _nativeController = null;
+                /* Pre-probe results: canonical GLB/USDZ confirmed before the blob
+                   build finishes. null = not yet confirmed; string = confirmed URL. */
+                var _probeGlb = null, _probeUsdz = null;
+
                 function applyNative(sz, isDefault) {
+                    /* abort any previous in-flight HEAD requests */
+                    if (_nativeController) {
+                        try { _nativeController.abort(); } catch (e) {}
+                    }
+                    var ctrl = new AbortController();
+                    _nativeController = ctrl;
+                    var sig = ctrl.signal;
+
                     window.__arNative = false;
                     var sc = slug(sz.label);
                     /* AR_MODEL_VER busts iOS Quick Look's aggressive USDZ
@@ -2155,52 +3497,180 @@
                     var canUsd = 'ar/' + id + '.usdz' + v;
 
                     function use(glb, usdz) {
+                        /* Hosted URL available — set ar-modes for this platform.
+                           Android: webxr FIRST — recent Google Play Services for AR
+                                    updates regressed Scene Viewer's ar_placement=wall
+                                    handling: the app launches and immediately exits
+                                    back to the page (model-viewer issue #2303,
+                                    reproduced on Samsung Galaxy S24 Ultra).
+                                    WebXR runs the AR session in-browser via Chrome's
+                                    ARCore integration and handles vertical-plane
+                                    (wall) placement natively, sidestepping the
+                                    Scene Viewer crash.
+                                    scene-viewer is retained as a fallback for
+                                    devices without WebXR session support.
+                           iOS:     quick-look drives ARKit room scanning; webxr/scene-viewer
+                                    are fallbacks — keep current order. */
+                        if (isAndroid) {
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer');
+                        } else {
+                            viewer.setAttribute('ar-modes', 'webxr scene-viewer quick-look');
+                        }
                         viewer.setAttribute('src', glb);
-                        viewer.setAttribute('ios-src', usdz);
+                        /* Set ios-src directly — all USDZ files are pre-built and
+                           deployed alongside the GLBs. The HEAD check was removed
+                           because it introduced a latency gap on slow mobile connections:
+                           the check completed AFTER model-viewer fired 'load', meaning
+                           a user who tapped "Place on Wall" immediately saw canActivateAR=false.
+                           When regenerating /ar, always deploy all .usdz files and bump AR_MODEL_VER. */
+                        viewer.removeAttribute('ios-src');
+                        if (isIOS && usdz) {
+                            viewer.setAttribute('ios-src', usdz);
+                        }
                         window.__arNative = true;
                         setTimeout(function() {
-                            hintEl.textContent = viewer.canActivateAR
-                                ? 'Move your phone slowly to find a wall'
-                                : 'Drag to explore · open on a phone for live AR';
+                            if (!viewer.canActivateAR) {
+                                hintEl.textContent = 'Drag to explore · open on your phone for live AR';
+                                return;
+                            }
+                            hintEl.textContent = isAndroid
+                                ? 'Tap Place on Wall · point at a flat wall and move your phone slowly'
+                                : 'Tap Place on Wall · move your phone to scan for a wall';
                         }, 400);
                     }
                     function canonicalAttempt() {
                         if (!isDefault) {
-                            hintEl.textContent =
-                                'Preview size · switch to ' + sizes[defIdx].label + ' for live wall AR';
+                            /* No hosted HTTPS GLB for this size — Scene Viewer unavailable.
+                               WebXR (in-browser) CAN use the blob src and shows the correct
+                               physical dimensions, so check if it is available before
+                               showing the "switch to Standard" fallback message. */
+                            setTimeout(function() {
+                                if (viewer.canActivateAR) {
+                                    hintEl.textContent = isAndroid
+                                        ? 'Tap Place on Wall · point at a flat wall and move your phone slowly'
+                                        : 'Tap Place on Wall · move your phone to scan for a wall';
+                                } else {
+                                    hintEl.textContent = 'Switch to ' + sizes[defIdx].label
+                                        + ' for live wall AR · other sizes preview only';
+                                }
+                            }, 500);
                             return;
                         }
-                        fetch(canGlb, { method: 'HEAD' })
+                        /* If the parallel pre-probe already confirmed the canonical
+                           GLB, use it immediately — no extra round-trip needed. */
+                        if (_probeGlb) { use(_probeGlb, _probeUsdz); return; }
+                        fetch(canGlb, { method: 'HEAD', signal: sig })
                             .then(function(r) {
-                                if (r.ok) use(canGlb, canUsd);
-                                else hintEl.textContent = 'Drag to explore — live wall AR coming soon';
+                                if (r.ok) { use(canGlb, canUsd); return; }
+                                /* No hosted file — blob is the only src for the default size.
+                                   iOS Quick Look handles blobs natively; stays at full ar-modes.
+                                   Android: ar-modes was not restricted (default size path),
+                                   so check canActivateAR and update hint accordingly. */
+                                setTimeout(function() {
+                                    if (viewer.canActivateAR) {
+                                        hintEl.textContent = isAndroid
+                                            ? 'Tap Place on Wall · point at a flat wall and move slowly'
+                                            : 'Tap Place on Wall · move your phone to scan for a wall';
+                                    } else {
+                                        hintEl.textContent = isAndroid
+                                            ? 'For best AR: open in Chrome and install Google Play Services for AR'
+                                            : 'Drag to explore · open on your phone for live AR';
+                                    }
+                                }, 600);
                             })
-                            .catch(function() {
+                            .catch(function(e) {
+                                if (e && e.name === 'AbortError') return;
                                 hintEl.textContent = 'Drag to explore — live wall AR coming soon';
                             });
                     }
-                    fetch(perGlb, { method: 'HEAD' })
-                        .then(function(r) { if (r.ok) use(perGlb, perUsd); else canonicalAttempt(); })
-                        .catch(canonicalAttempt);
+                    fetch(perGlb, { method: 'HEAD', signal: sig })
+                        .then(function(r) {
+                            if (r.ok) {
+                                /* Per-size GLB exists. Pass null for USDZ — per-size USDZ
+                                   files are not pre-generated, so ios-src would 404 if we
+                                   used perUsd. iOS Quick Look stays disabled for non-default
+                                   sizes (same as before per-size GLBs existed); Android
+                                   Scene Viewer gets the correctly-sized GLB. */
+                                use(perGlb, null);
+                            } else {
+                                canonicalAttempt();
+                            }
+                        })
+                        .catch(function(e) {
+                            if (e && e.name === 'AbortError') return;
+                            canonicalAttempt();
+                        });
                 }
 
-                var buildCache = {};   /* key "wxh" -> blob url */
+                /* glbCache lives at IIFE scope — survives across re-opens for the
+                   same session so we never rebuild the same print+size twice.
+                   Key format: "productId:scaledW x scaledH" — includes id so two
+                   different prints at the same size don't share a cached GLB. */
 
-                function buildAt(sz, isDefault) {
+                buildAt = function(sz, isDefault) {
+                    currentArSize = sz;
+                    var bW = +(sz.w * arScaleMult).toFixed(2);
+                    var bH = +(sz.h * arScaleMult).toFixed(2);
+                    var scaleLabel = arScaleMult !== 1
+                        ? ' · ' + Math.round(arScaleMult * 100) + '% scale'
+                        : ' · true size';
                     document.getElementById('arDimText').textContent =
-                        sz.w + ' × ' + sz.h + ' inches · true size';
+                        sz.w + ' × ' + sz.h + ' inches' + scaleLabel;
+
+                    /* Keep the in-AR HUD in sync with the active size chip.
+                       Uses the unscaled (true print) dimensions, not bW/bH,
+                       since the buyer wants the print's real catalogue size
+                       — arScaleMult is the room-viewer calibration tweak. */
+                    var hudM = document.getElementById('arDimHudMeasure');
+                    if (hudM) {
+                        var wCmS = Math.round(sz.w * 2.54);
+                        var hCmS = Math.round(sz.h * 2.54);
+                        hudM.textContent =
+                            sz.w + '" × ' + sz.h + '"  ·  ' + wCmS + ' × ' + hCmS + ' cm';
+                    }
+
                     load.classList.remove('ar-gone');
                     load.textContent = 'Building the framed print…';
                     hintEl.textContent = 'Building the framed print…';
 
                     function mountBlob(url) {
-                        /* blob preview always shows the SELECTED true size */
+                        /* Non-default sizes have no hosted HTTPS GLB — the blob is the
+                           permanent src. Scene Viewer is an external app and cannot open
+                           blob:// URLs; restrict to WebXR (in-browser) for those sizes.
+                           Default size: do NOT restrict ar-modes here — use() swaps in
+                           the hosted HTTPS src within ~100ms (parallel probe already ran),
+                           and pre-restricting to webxr prevents model-viewer v3.5.0 from
+                           re-evaluating Scene Viewer after the swap, leaving canActivateAR
+                           false on devices that support ARCore but not WebXR sessions. */
+                        if (isAndroid && !isDefault) {
+                            viewer.setAttribute('ar-modes', 'webxr');
+                        }
                         viewer.setAttribute('src', url);
                         applyNative(sz, isDefault);
                     }
 
-                    var key = sz.w + 'x' + sz.h;
-                    if (buildCache[key]) { mountBlob(buildCache[key]); return; }
+                    var key = id + ':' + bW + 'x' + bH;
+                    if (glbCache[key]) { mountBlob(glbCache[key]); return; }
+
+                    /* Mobile parallel probe: start the canonical GLB HEAD request NOW
+                       so it completes during the 5–15 s blob build, not after.
+                       iOS: allows ios-src to be set before model-viewer fires 'load'.
+                       Android: allows ar-modes to include scene-viewer before the user
+                                taps "Place on Wall" (Scene Viewer needs a real HTTPS URL,
+                                not the blob src used during the build phase).
+                       When canonicalAttempt() runs it finds _probeGlb already set
+                       and calls use() immediately — zero extra round-trips. */
+                    if (!isDesktop && isDefault && !_probeGlb) {
+                        var _pv = '?v=' + (window.AR_MODEL_VER || '1');
+                        fetch('ar/' + id + '.glb' + _pv, { method: 'HEAD' })
+                            .then(function(r) {
+                                if (r.ok) {
+                                    _probeGlb  = 'ar/' + id + '.glb'  + _pv;
+                                    _probeUsdz = 'ar/' + id + '.usdz' + _pv;
+                                }
+                            })
+                            .catch(function() {});
+                    }
 
                     if (typeof window.__buildArGLB !== 'function') {
                         load.textContent = '3D engine still loading — try again in a moment.';
@@ -2208,6 +3678,14 @@
                     }
 
                     var settled = false;
+                    /* Intermediate feedback so the user knows the build is alive.
+                       All three timers are cleared the moment the build settles. */
+                    var t1 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Rendering artwork at full resolution…';
+                    }, 5000);
+                    var t2 = setTimeout(function() {
+                        if (!settled) load.textContent = 'Almost ready…';
+                    }, 11000);
                     var watchdog = setTimeout(function() {
                         if (settled) return;
                         settled = true;
@@ -2215,15 +3693,24 @@
                         track('ar_build_timeout', { item_id: id });
                     }, 18000);
 
-                    window.__buildArGLB(img, sz.w, sz.h)
+                    function clearBuildTimers() {
+                        clearTimeout(t1); clearTimeout(t2); clearTimeout(watchdog);
+                    }
+
+                    window.__buildArGLB(img, bW, bH)
                         .then(function(url) {
-                            if (settled) return;
-                            settled = true; clearTimeout(watchdog);
-                            buildCache[key] = url; mountBlob(url);
+                            if (settled) {
+                                /* watchdog already fired — GLB arrived too late.
+                                   Revoke immediately so the browser can free the memory. */
+                                URL.revokeObjectURL(url);
+                                return;
+                            }
+                            settled = true; clearBuildTimers();
+                            glbCache[key] = url; mountBlob(url);
                         })
                         .catch(function(e) {
                             if (settled) return;
-                            settled = true; clearTimeout(watchdog);
+                            settled = true; clearBuildTimers();
                             load.textContent = 'Could not build the 3D model.';
                             track('ar_build_error', { item_id: id, error: String(e && e.message || e) });
                         });
@@ -2234,7 +3721,7 @@
                 sizes.forEach(function(sz, idx) {
                     var b = document.createElement('button');
                     b.className = 'ar-size-chip' + (idx === defIdx ? ' ar-sz-on' : '');
-                    b.textContent = sz.label;
+                    b.textContent = sz.label + ' · ' + Math.round(sz.w) + '×' + Math.round(sz.h) + '"';
                     b.addEventListener('click', function() {
                         if (b.classList.contains('ar-sz-on')) return;
                         Array.prototype.forEach.call(chipsEl.children, function(c) {
@@ -2262,6 +3749,12 @@
                         seconds: Math.round((Date.now() - arSession.t0) / 1000)
                     });
                     arSession = null;
+                }
+                currentArSize = null;
+                /* remove any pending load listener so it can't fire after close */
+                if (_arLoadListener) {
+                    viewer.removeEventListener('load', _arLoadListener);
+                    _arLoadListener = null;
                 }
                 /* free the model */
                 viewer.removeAttribute('src');
@@ -2327,46 +3820,163 @@
                 }, { passive: true });
 
                 launch.addEventListener('click', function() {
-                    /* in-app browser: copy the link so they can paste into a real browser */
-                    if (arMode === 'inapp') {
+                    /* ── Android Chrome WebXR fast-path ──
+                       model-viewer's WebXR + Scene Viewer path is brittle on
+                       recent ARCore (the wall-placement Scene Viewer regression
+                       is the canonical case). Send Android+WebXR users to the
+                       custom ar-xr.html experience instead — proper occlusion,
+                       light estimation, gesture controls, tape measure.
+                       Falls through to the existing model-viewer path on any
+                       device that isn't Android-with-WebXR (iOS Quick Look,
+                       desktops, in-app browsers, older Android without xr). */
+                    if (isAndroid && navigator.xr && arMode === 'ar' && arSession) {
+                        /* Map shop's 4-size lineup to ar-xr's 3-chip lineup.
+                           Standard collapses to Large — no 32"-longest GLB
+                           is deployed for the custom path. */
+                        var sizeMap = { 'Small': 'small', 'Medium': 'medium', 'Standard': 'standard', 'Large': 'large' };
+                        var sizeLabel = currentArSize ? currentArSize.label : 'Large';
+                        var sizeParam = sizeMap[sizeLabel] || 'large';
+                        track('ar_xr_redirect', {
+                            item_id:   arSession.id,
+                            item_name: arSession.title,
+                            size:      sizeParam
+                        });
+                        location.href = 'ar-xr.html?id=' + encodeURIComponent(arSession.id)
+                                      + '&size=' + sizeParam;
+                        return;
+                    }
+
+                    /* in-app browser or desktop: copy the link so the user can open it
+                       in a real mobile browser that supports AR. */
+                    if (arMode === 'inapp' || arMode === 'desktop') {
                         var url = location.href;
+                        var doneLabel = arMode === 'desktop'
+                            ? 'Open on your phone to place on your wall'
+                            : 'Paste into Safari to view in AR';
                         var done = function() {
                             launch.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Link Copied';
-                            document.getElementById('arHint').textContent = 'Paste into Chrome or Safari to view in AR';
-                            if (arSession) track('ar_link_copied', { item_id: arSession.id });
+                            document.getElementById('arHint').textContent = doneLabel;
+                            if (arSession) track('ar_link_copied', { item_id: arSession.id, mode: arMode });
                         };
+
+                        /* iOS Chrome / Firefox / Edge: Apple blocks AR Quick Look in every
+                           browser except Safari, and the old safari-https:// jump scheme is
+                           no longer honoured on modern iOS/iPadOS. So do the two things that
+                           DO work reliably, both on this single user tap:
+                             1. copy the link to the clipboard immediately, and
+                             2. open the native share sheet (navigator.share) — which gives
+                                the user a real "open in Safari" / app target.
+                           Button flips to "Link Copied" either way. */
+                        if (isIOSNonSafari()) {
+                            /* 1. copy first — synchronous-ish, always attempted */
+                            if (navigator.clipboard && navigator.clipboard.writeText) {
+                                navigator.clipboard.writeText(url).then(done).catch(function(){});
+                            } else {
+                                done();
+                            }
+                            /* 2. native share sheet on the same gesture (open-in-Safari path) */
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: arSession ? arSession.title : 'Fine Art Print',
+                                    text: 'Open in Safari to place this print on your wall in AR',
+                                    url: url
+                                }).catch(function(){
+                                    /* user dismissed or share unsupported — link is already copied */
+                                });
+                            } else if (!navigator.clipboard) {
+                                window.prompt('Copy this link and open it in Safari:', url);
+                            }
+                            document.getElementById('arHint').textContent =
+                                'Link copied · choose Safari from the share sheet, or paste it into Safari';
+                            return;
+                        }
+
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(url).then(done).catch(function() {
-                                window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                                window.prompt('Copy this link and open it on your phone:', url);
                             });
                         } else {
-                            window.prompt('Copy this link, open it in Chrome or Safari:', url);
+                            window.prompt('Copy this link and open it on your phone:', url);
                         }
                         return;
                     }
                     if (viewer.canActivateAR) {
                         if (arSession) track('ar_launch', { item_id: arSession.id, item_name: arSession.title });
                         viewer.activateAR();
-                    } else if (!window.__arNative) {
-                        /* hosted .glb/.usdz not published yet — be honest */
-                        viewer.cameraOrbit = '12deg 82deg 108%';
-                        document.getElementById('arHint').textContent =
-                            'Live wall AR for this print is being published. Drag to explore in 3D.';
-                        if (arSession) track('ar_native_unpublished', { item_id: arSession.id });
                     } else {
-                        /* hosted model exists but device has no AR (desktop) */
+                        /* AR not available on this device */
                         viewer.cameraOrbit = '12deg 82deg 108%';
                         document.getElementById('arHint').textContent =
-                            'Open on your phone for live wall AR. Drag to explore in 3D.';
+                            isAndroid
+                                ? 'AR not available · install Google Play Services for AR in the Play Store'
+                                : isIOS
+                                    ? 'AR not available · try opening in Safari'
+                                    : 'Drag to explore in 3D · open on your phone for live AR';
                     }
                 });
+
+                /* Update wall-detection guidance text + scan-UI state based
+                   on ARCore tracking quality.
+                   Two state classes on #arPromptSlot drive the scan feedback CSS:
+                     .ar-tracking-poor — edge vignette + corner marks pulse,
+                                         guideline dimmed (focus on fixing tracking)
+                     .ar-tracking-good — vignette fades, corners go static,
+                                         guideline at full opacity (ready to tap) */
+                viewer.addEventListener('ar-tracking', function(e) {
+                    var slot       = document.getElementById('arPromptSlot');
+                    var promptText = document.getElementById('arWallPromptText');
+                    if (!slot || !promptText) return;
+                    if (e.detail.status === 'not-tracking') {
+                        slot.classList.remove('ar-tracking-good');
+                        slot.classList.add('ar-tracking-poor');
+                        promptText.textContent = 'Hold steady · scanning the room';
+                    } else {
+                        slot.classList.remove('ar-tracking-poor');
+                        slot.classList.add('ar-tracking-good');
+                        promptText.textContent = 'Wall found · tap on the line to place';
+                    }
+                });
+
+                /* ── Hang-height chips: update the in-AR eye-level label ──
+                   Gallery/museum standard centers art at 57" from the floor.
+                   Users with a sofa typically prefer 60". A 63" line matches
+                   a standing adult's natural eye level.
+                   The chips control the LABEL only — the actual placement
+                   happens wherever the user taps on the wall. The guideline
+                   gives them a visual reference so the tap lands at the
+                   chosen height when the phone is held naturally. */
+                (function wireHangHeightChips() {
+                    var chips = document.querySelectorAll('#arHangChipsAR .ar-hang-chip-ar');
+                    var label = document.getElementById('arEyeLabel');
+                    if (!chips.length || !label) return;
+                    chips.forEach(function(chip) {
+                        chip.addEventListener('click', function(e) {
+                            /* Stop the tap from propagating up to model-viewer's
+                               WebXR placement hit-test — otherwise tapping a chip
+                               would also place the print on whatever wall point
+                               sits behind it. */
+                            e.stopPropagation();
+                            chips.forEach(function(c) { c.classList.remove('ar-hang-on'); });
+                            chip.classList.add('ar-hang-on');
+                            var h = chip.getAttribute('data-h');
+                            label.textContent = h + '" · Print centerline';
+                        });
+                    });
+                })();
 
                 /* track when native AR session actually starts/ends */
                 viewer.addEventListener('ar-status', function(e) {
                     if (!arSession) return;
-                    if (e.detail.status === 'session-started') {
+                    var status = e.detail.status;
+                    if (status === 'session-started') {
                         track('ar_session_start', { item_id: arSession.id, item_name: arSession.title });
-                    } else if (e.detail.status === 'not-presenting') {
+                        /* Short tick — confirms AR session is live.
+                           navigator.vibrate is Android WebXR only; iOS ignores it silently. */
+                        if (navigator.vibrate) navigator.vibrate(30);
+                    } else if (status === 'object-placed') {
+                        /* Satisfying thud when the print lands on the wall. */
+                        if (navigator.vibrate) navigator.vibrate(80);
+                    } else if (status === 'not-presenting') {
                         track('ar_session_end', { item_id: arSession.id, item_name: arSession.title });
                     }
                 });
@@ -2376,6 +3986,67 @@
                         document.getElementById('arSheet').classList.contains('ar-open')) {
                         window.closeArSheet();
                     }
+                });
+
+                /* ── Scale buttons (Smaller / Larger) ── */
+                function updateScaleVal() {
+                    document.getElementById('arScaleVal').textContent =
+                        Math.round(arScaleMult * 100) + '%';
+                }
+                function rebuildCurrentSize() {
+                    /* Directly rebuild — do NOT click() the active chip because
+                       it has an early-return guard that prevents re-triggering */
+                    if (!arSession) return;
+                    var idx = 0;
+                    document.getElementById('arSizeChips').querySelectorAll('.ar-size-chip').forEach(function(b, i) {
+                        if (b.classList.contains('ar-sz-on')) idx = i;
+                    });
+                    var sz = sizes[idx] || sizes[0];
+                    if (sz) buildAt(sz, idx === defIdx);
+                }
+                document.getElementById('arScaleDown').addEventListener('click', function() {
+                    arScaleMult = Math.max(0.5, Math.round((arScaleMult - 0.1) * 10) / 10);
+                    updateScaleVal();
+                    rebuildCurrentSize();
+                });
+                document.getElementById('arScaleUp').addEventListener('click', function() {
+                    arScaleMult = Math.min(2.0, Math.round((arScaleMult + 0.1) * 10) / 10);
+                    updateScaleVal();
+                    rebuildCurrentSize();
+                });
+
+            });
+
+            /* Pre-build hook — called by openRoomViewer so the GLB is ready in
+               glbCache before the user taps "Open in True AR".
+               Always uses arScaleMult=1 (true size; the room viewer doesn't
+               expose scale at pre-build time). If the user later adjusts scale
+               inside the AR sheet a new key is generated and rebuilt then. */
+            window.preloadArGLB = function(id, imgSrc, wIn, hIn) {
+                if (!id || !imgSrc || !wIn || !hIn) return;
+                if (typeof window.__buildArGLB !== 'function') return;
+                /* Mirror the key format used in buildAt() with arScaleMult=1 */
+                var bW  = +parseFloat(wIn).toFixed(2);
+                var bH  = +parseFloat(hIn).toFixed(2);
+                var key = id + ':' + bW + 'x' + bH;
+                if (glbCache[key]) return;   /* already built — nothing to do */
+                window.__buildArGLB(imgSrc, bW, bH)
+                    .then(function(url) {
+                        /* Another call may have populated the key while we were
+                           building — revoke the duplicate to avoid a leak. */
+                        if (glbCache[key]) { URL.revokeObjectURL(url); return; }
+                        glbCache[key] = url;
+                    })
+                    .catch(function() { /* silent — pre-build is best-effort */ });
+            };
+
+            /* Revoke all cached blob URLs when the page is unloaded so the
+               browser can free the GLB ArrayBuffer memory (each build is
+               several MB). We keep them alive during the session for instant
+               re-open (Bug #2 cache), but release them on exit. */
+            window.addEventListener('beforeunload', function() {
+                Object.keys(glbCache).forEach(function(k) {
+                    URL.revokeObjectURL(glbCache[k]);
                 });
             });
         })();
@@ -2401,17 +4072,37 @@
             var rvRotateBase = 0;
             var isFramed = false;
             var hideTimer = null;
+            var rvProductId = '';
+            var rvProductTitle = '';
+
+            /* Floor/wall alignment marker */
+            var rvFloorY        = 0.72;   /* fraction of viewport height; updated by drag */
+            var rvFloorDragging = false;
+            var rvFloorDragStartY = 0;    /* clientY at drag start */
+            var rvFloorYStart   = 0;      /* rvFloorY at drag start */
 
             function pdist(t) {
                 var dx = t[0].clientX - t[1].clientX;
                 var dy = t[0].clientY - t[1].clientY;
                 return Math.sqrt(dx * dx + dy * dy);
             }
+            function angleDiff(a, b) {
+                if (a == null || b == null) return 0;
+                var d = a - b;
+                while (d >  180) d -= 360;
+                while (d < -180) d += 360;
+                return d;
+            }
             function pangle(t) {
                 return Math.atan2(t[1].clientY - t[0].clientY, t[1].clientX - t[0].clientX) * 180 / Math.PI;
             }
             function clampSize(s, allowOversize) {
-                var max = allowOversize ? Math.max(window.innerWidth, window.innerHeight) * 2.2 : window.innerWidth * 0.94;
+                /* Uncalibrated: stay within screen width.
+                   Calibrated / pinch-resized: allow up to 1.5× screen width
+                   so users can zoom in, but never so big they lose context. */
+                var max = allowOversize
+                    ? Math.max(window.innerWidth, window.innerHeight) * 1.5
+                    : window.innerWidth * 0.92;
                 return Math.max(72, Math.min(s, max));
             }
             function activeSize() { return rvSizes[rvSelIdx] || rvSizes[0] || { label: 'Print', w: 24, h: 18 }; }
@@ -2431,16 +4122,33 @@
                 status.textContent = (rvCalibrated ? 'Calibrated scale' : 'Estimated scale') + ' · ' + s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' in · depth ' + currentScaleText();
                 document.getElementById('rvDepthValue').textContent = currentScaleText();
             }
+            /* 1-inch frame at current print scale */
+            function applyRvFrame() {
+                var fw = Math.round(rvPixelsPerInch > 2 ? rvPixelsPerInch : Math.min(window.innerWidth, window.innerHeight) * 0.04);
+                fw = Math.max(6, fw); // never invisible
+                var wrap = document.getElementById('rvPrintWrap');
+                wrap.style.outline = fw + 'px solid #111';
+                wrap.style.boxShadow =
+                    '0 0 0 ' + (fw + 1) + 'px #111,' +
+                    '0 0 0 ' + (fw + 2) + 'px rgba(0,0,0,0.18),' +
+                    '0 20px 60px rgba(0,0,0,0.6),' +
+                    '0 50px 100px rgba(0,0,0,0.3)';
+            }
+
             function updateTransform() {
                 var wrap = document.getElementById('rvPrintWrap');
                 var s = activeSize();
                 rvAspect = s.w / s.h;
-                wrap.style.left = rvPos.x + 'px';
-                wrap.style.top = rvPos.y + 'px';
                 wrap.style.width = rvSize + 'px';
                 wrap.style.height = (rvSize / rvAspect) + 'px';
-                wrap.style.transform = 'rotate(' + rvRotation.toFixed(1) + 'deg)';
+                /* Use translate() for position so the composited layer, hit area,
+                   and visual all stay in sync on mobile (left/top can diverge
+                   from the composited hit region when filter+will-change are set). */
+                wrap.style.transform =
+                    'translate(' + rvPos.x.toFixed(1) + 'px,' + rvPos.y.toFixed(1) + 'px)' +
+                    ' rotate(' + rvRotation.toFixed(1) + 'deg)';
                 document.getElementById('rvDim').textContent = s.label + ' · ' + roundDim(s.w) + ' × ' + roundDim(s.h) + ' inches';
+                if (isFramed) applyRvFrame();
                 updateStatus();
             }
             function sizeFromScale(s) {
@@ -2450,14 +4158,21 @@
             function recenterForSize(nextSize) {
                 var nextH = nextSize / rvAspect;
                 rvPos.x = (window.innerWidth - nextSize) / 2;
-                rvPos.y = (window.innerHeight - nextH) / 2;
+                /* Place in upper zone — walls live here in typical room photos, not the floor/table area */
+                rvPos.y = Math.max(60, Math.round(window.innerHeight * 0.18));
             }
             function selectSize(idx) {
+                /* Resize in-place — keep the print centre at the same screen position
+                   so the user's wall placement isn't destroyed when they tap a size chip */
+                var oldH = rvSize / Math.max(0.01, rvAspect);
+                var centerX = rvPos.x + rvSize / 2;
+                var centerY = rvPos.y + oldH / 2;
                 rvSelIdx = idx;
                 var s = activeSize();
                 rvAspect = s.w / s.h;
                 rvSize = sizeFromScale(s);
-                recenterForSize(rvSize);
+                rvPos.x = centerX - rvSize / 2;
+                rvPos.y = centerY - (rvSize / rvAspect) / 2;
                 var wrap = document.getElementById('rvPrintWrap');
                 wrap.classList.add('rv-sizing');
                 updateTransform();
@@ -2469,6 +4184,12 @@
             function markerWidthInches() {
                 var sel = document.getElementById('rvMarkerSelect');
                 return parseFloat(sel.value) || 8.27;
+            }
+
+            function updateFloorLine() {
+                var el = document.getElementById('rvFloorLine');
+                if (!el) return;
+                el.style.top = Math.round(rvFloorY * window.innerHeight) + 'px';
             }
 
             window.openRoomViewer = function(imgSrc, aspW, aspH, sizes, options) {
@@ -2485,20 +4206,29 @@
                 rvPixelsPerInch = rvSize / activeSize().w;
                 recenterForSize(rvSize);
 
+                rvProductId    = options.id    || '';
+                rvProductTitle = options.title || '';
                 document.getElementById('rvTitle').textContent = options.title || 'View in Your Room';
                 document.getElementById('rvPrint').src = imgSrc;
                 document.getElementById('rvDepthSlider').value = 100;
                 document.getElementById('rvNoCam').style.display = 'none';
-                document.getElementById('roomViewer').classList.remove('rv-sample-wall', 'rv-calibrating', 'rv-guides-on');
+                document.getElementById('roomViewer').classList.remove('rv-calibrating', 'rv-guides-on');
                 document.getElementById('rvGuideToggle').classList.remove('rv-on');
                 document.getElementById('rvCalBtn').classList.remove('rv-on');
+
+                /* Reset floor line to default position */
+                rvFloorY = 0.72;
+                rvFloorDragging = false;
+                var floorEl = document.getElementById('rvFloorLine');
+                if (floorEl) floorEl.classList.remove('rv-floor-snap');
+                updateFloorLine();
 
                 var chipsEl = document.getElementById('rvChips');
                 chipsEl.innerHTML = '';
                 rvSizes.forEach(function(s, i) {
                     var b = document.createElement('button');
                     b.className = 'rv-chip' + (i === rvSelIdx ? ' rv-active' : '');
-                    b.textContent = s.label;
+                    b.textContent = s.label + ' · ' + Math.round(s.w) + '×' + Math.round(s.h) + '"';
                     b.setAttribute('aria-label', s.label + ' size, ' + roundDim(s.w) + ' by ' + roundDim(s.h) + ' inches');
                     b.onclick = function() { selectSize(i); showChrome(); };
                     chipsEl.appendChild(b);
@@ -2517,14 +4247,44 @@
                     document.getElementById('rvPrintWrap').classList.add('rv-visible');
                 }, 120);
 
+                /* Show opening hint, fade it out after 3 s or on first touch */
+                var hintEl = document.getElementById('rvHint');
+                hintEl.classList.remove('rv-hint-gone');
+                var hintTimer = setTimeout(function() {
+                    hintEl.classList.add('rv-hint-gone');
+                }, 3000);
+                var rvEl = document.getElementById('roomViewer');
+                rvEl.addEventListener('touchstart', function dismissHint() {
+                    clearTimeout(hintTimer);
+                    hintEl.classList.add('rv-hint-gone');
+                    rvEl.removeEventListener('touchstart', dismissHint);
+                }, { passive: true, once: true });
+
                 showChrome();
                 startRvCamera();
+
+                /* Pre-build the GLB for the default size in the background so
+                   "Open in True AR" loads instantly rather than showing the
+                   "Building the framed print…" spinner. Delayed 1.5 s to let
+                   camera startup and first paint finish first. */
+                if (rvProductId) {
+                    var _preW = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].w : aspW;
+                    var _preH = rvSizes[rvSelIdx] ? rvSizes[rvSelIdx].h : aspH;
+                    setTimeout(function() {
+                        if (typeof window.preloadArGLB === 'function') {
+                            window.preloadArGLB(rvProductId, imgSrc, _preW, _preH);
+                        }
+                    }, 1500);
+                }
             };
 
             window.closeRoomViewer = function() {
                 clearTimeout(hideTimer);
+                rvFloorDragging = false;
                 document.getElementById('roomViewer').classList.remove('rv-open', 'rv-calibrating');
                 document.getElementById('rvPrintWrap').classList.remove('rv-visible');
+                var floorEl = document.getElementById('rvFloorLine');
+                if (floorEl) floorEl.classList.remove('rv-floor-snap');
                 document.body.style.overflow = '';
                 if (rvStream) { rvStream.getTracks().forEach(function(t){ t.stop(); }); rvStream = null; }
             };
@@ -2550,39 +4310,44 @@
                         v.srcObject = stream;
                         v.play().catch(function(){});
                         v.style.display = '';
-                        document.getElementById('roomViewer').classList.remove('rv-sample-wall');
                         nc.style.display = 'none';
                     });
                 }
 
-                tryCamera({ video: { facingMode: { ideal: 'environment' } } })
-                .catch(function() { return tryCamera({ video: true }); })
+                tryCamera({
+                    audio: false,
+                    video: {
+                        facingMode: { ideal: 'environment' },
+                        width:  { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    }
+                })
+                .catch(function() {
+                    return tryCamera({ audio: false, video: { facingMode: { ideal: 'environment' } } });
+                })
+                .catch(function() { return tryCamera({ audio: false, video: true }); })
                 .catch(function(err) {
                     var denied = err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError' || err.name === 'SecurityError';
+                    var isIOS = isAppleDevice(navigator.userAgent || '');
+                    var isAndroid = /Android/.test(navigator.userAgent);
                     if (denied) {
-                        p.innerHTML = 'Camera is off for this site.<br><br><span style="font-size:0.8rem;font-style:normal;opacity:0.5;line-height:1.7;display:block;">Enable camera access, or use the sample wall preview.</span>';
+                        var hint = isIOS
+                            ? 'Go to Settings → Safari → Camera → Allow.'
+                            : isAndroid
+                            ? 'Tap the lock icon in address bar → Camera → Allow.'
+                            : 'Allow camera access in browser settings.';
+                        p.innerHTML = 'Camera access is blocked.<br><span style="font-size:0.78rem;font-style:normal;opacity:0.55;line-height:1.8;display:block;margin-top:8px;">' + hint + '</span>';
                     } else if (err.name === 'NotFoundError') {
-                        p.textContent = 'No camera found on this device.';
+                        p.textContent = 'No camera found. Open on your phone to view in your room.';
                     } else {
-                        p.textContent = 'Camera could not start.';
+                        p.textContent = 'Camera could not start. Try reloading the page.';
                     }
-                    if (b) {
-                        b.style.display = '';
-                        b.textContent = 'View on a Sample Wall';
-                        b.onclick = window.useRvSampleWall;
-                    }
+                    if (b) { b.style.display = ''; b.textContent = 'Try Again'; b.onclick = window.startRvCamera; }
                     nc.style.display = 'flex';
                 });
             };
 
-            window.useRvSampleWall = function() {
-                document.getElementById('rvNoCam').style.display = 'none';
-                var v = document.getElementById('rvVideo');
-                if (v) v.style.display = 'none';
-                document.getElementById('roomViewer').classList.add('rv-sample-wall');
-                document.getElementById('rvPrintWrap').classList.add('rv-visible');
-                showChrome();
-            };
+
 
             window.toggleRvGuides = function(force) {
                 var rv = document.getElementById('roomViewer');
@@ -2596,10 +4361,45 @@
                 var rv = document.getElementById('roomViewer');
                 var on = typeof force === 'boolean' ? force : !rv.classList.contains('rv-calibrating');
                 rv.classList.toggle('rv-calibrating', on);
+                rv.classList.remove('rv-cal-matching');
                 document.getElementById('rvCalBtn').classList.toggle('rv-on', on);
+                /* Reset to phase 1 */
+                var p1 = document.getElementById('rvCalPhase1');
+                var p2 = document.getElementById('rvCalPhase2');
+                var cal = document.getElementById('rvCalibration');
+                if (p1) p1.style.display = '';
+                if (p2) p2.style.display = 'none';
+                if (cal) cal.classList.remove('rv-cal-matching');
                 if (on) window.toggleRvGuides(true);
                 updateRvMarkerFromControl();
                 showChrome();
+            };
+
+            /* Phase 1 → Phase 2: hide panel, show slim strip */
+            window.rvCalStartMatch = function() {
+                var rv   = document.getElementById('roomViewer');
+                var cal  = document.getElementById('rvCalibration');
+                var p1   = document.getElementById('rvCalPhase1');
+                var p2   = document.getElementById('rvCalPhase2');
+                if (p1) p1.style.display = 'none';
+                if (p2) p2.style.display = '';
+                if (cal) cal.classList.add('rv-cal-matching');
+                rv.classList.add('rv-cal-matching');
+                /* Seed slider: use calibrated ppi if available, else estimate from screen width */
+                var inp = document.getElementById('rvMarkerWidth');
+                if (inp) {
+                    var ppi = rvPixelsPerInch > 0 ? rvPixelsPerInch : (window.innerWidth / 16);
+                    var guess = Math.round(markerWidthInches() * ppi);
+                    inp.value = Math.min(340, Math.max(80, guess));
+                }
+                updateRvMarkerFromControl();
+            };
+
+            window.rvCalNudge = function(delta) {
+                var inp = document.getElementById('rvMarkerWidth');
+                if (!inp) return;
+                inp.value = Math.min(340, Math.max(80, parseFloat(inp.value) + delta));
+                updateRvMarkerFromControl();
             };
 
             window.updateRvMarkerFromControl = function() {
@@ -2623,8 +4423,15 @@
 
             window.toggleRvFrame = function() {
                 isFramed = !isFramed;
-                document.getElementById('rvPrintWrap').classList.toggle('rv-framed', isFramed);
+                var wrap = document.getElementById('rvPrintWrap');
+                wrap.classList.toggle('rv-framed', isFramed);
                 document.getElementById('rvFrameBtn').classList.toggle('rv-on', isFramed);
+                if (isFramed) {
+                    applyRvFrame();
+                } else {
+                    wrap.style.outline = '';
+                    wrap.style.boxShadow = '';
+                }
                 showChrome();
             };
 
@@ -2714,6 +4521,16 @@
                     if (rvPointerId !== e.pointerId) return;
                     rvPos.x = e.clientX - rvDragOffset.x;
                     rvPos.y = e.clientY - rvDragOffset.y;
+                    /* Snap print bottom to floor line when within 30 px */
+                    var floorPx  = rvFloorY * window.innerHeight;
+                    var printH   = rvSize / Math.max(0.01, rvAspect);
+                    var flEl     = document.getElementById('rvFloorLine');
+                    if (Math.abs((rvPos.y + printH) - floorPx) < 30) {
+                        rvPos.y = floorPx - printH;
+                        if (flEl) flEl.classList.add('rv-floor-snap');
+                    } else {
+                        if (flEl) flEl.classList.remove('rv-floor-snap');
+                    }
                     updateTransform();
                 });
                 wrap.addEventListener('pointerup', function(e) {
@@ -2723,7 +4540,21 @@
                     }
                 });
 
-                wrap.addEventListener('touchstart', function(e) {
+                /* ── Touch: drag from ANYWHERE on screen ───────────────────────────
+                   Single finger on background or print → move the print.
+                   Two fingers → pinch-resize + twist-rotate.
+                   Taps on buttons/chips are excluded so the chrome still works.   */
+                rv.addEventListener('touchstart', function(e) {
+                    showChrome();
+                    /* Let button/chip and floor-handle taps through untouched */
+                    if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    /* Floor handle: begin floor-line drag */
+                    if (e.target.closest('.rv-floor-handle')) {
+                        rvFloorDragging = true;
+                        rvFloorDragStartY = e.touches[0].clientY;
+                        rvFloorYStart = rvFloorY;
+                        return;
+                    }
                     if (e.touches.length === 1) {
                         rvDragOffset.x = e.touches[0].clientX - rvPos.x;
                         rvDragOffset.y = e.touches[0].clientY - rvPos.y;
@@ -2733,15 +4564,37 @@
                         rvRotateStart = pangle(e.touches);
                         rvRotateBase = rvRotation;
                     }
-                    showChrome();
-                    e.stopPropagation();
-                    e.preventDefault();
-                }, { passive: false });
+                }, { passive: true });  /* passive keeps click events alive on buttons */
 
-                wrap.addEventListener('touchmove', function(e) {
+                rv.addEventListener('touchmove', function(e) {
+                    if (e.target.closest('button, .rv-chip, select, input, label, a')) return;
+                    /* ── Floor line drag ── */
+                    if (rvFloorDragging && e.touches.length === 1) {
+                        var dy = e.touches[0].clientY - rvFloorDragStartY;
+                        rvFloorY = Math.max(0.2, Math.min(0.92,
+                            rvFloorYStart + dy / window.innerHeight));
+                        updateFloorLine();
+                        /* Clear snap glow since user is repositioning the line */
+                        var floorEl = document.getElementById('rvFloorLine');
+                        if (floorEl) floorEl.classList.remove('rv-floor-snap');
+                        e.preventDefault();
+                        return;
+                    }
+                    /* ── Print drag ── */
                     if (e.touches.length === 1) {
                         rvPos.x = e.touches[0].clientX - rvDragOffset.x;
                         rvPos.y = e.touches[0].clientY - rvDragOffset.y;
+                        /* Snap print bottom to floor line when within 30 px */
+                        var floorPx  = rvFloorY * window.innerHeight;
+                        var printH   = rvSize / Math.max(0.01, rvAspect);
+                        var printBot = rvPos.y + printH;
+                        var flEl     = document.getElementById('rvFloorLine');
+                        if (Math.abs(printBot - floorPx) < 30) {
+                            rvPos.y = floorPx - printH;   /* lock bottom to floor line */
+                            if (flEl) flEl.classList.add('rv-floor-snap');
+                        } else {
+                            if (flEl) flEl.classList.remove('rv-floor-snap');
+                        }
                     } else if (e.touches.length === 2) {
                         var ratio = pdist(e.touches) / Math.max(1, rvPinchStart);
                         rvSize = clampSize(rvPinchSizeStart * ratio);
@@ -2753,6 +4606,45 @@
                     e.preventDefault();
                 }, { passive: false });
 
+                /* When a pinch ends and one finger stays on screen, re-anchor the
+                   drag offset to the remaining finger so the print doesn't jump.   */
+                rv.addEventListener('touchend', function(e) {
+                    if (rvFloorDragging) {
+                        rvFloorDragging = false;
+                        return;
+                    }
+                    if (e.touches.length === 1 &&
+                        !e.target.closest('button, .rv-chip, select, input, label, a')) {
+                        rvDragOffset.x = e.touches[0].clientX - rvPos.x;
+                        rvDragOffset.y = e.touches[0].clientY - rvPos.y;
+                    }
+                }, { passive: true });
+
+
+                /* ── Floor handle — mouse drag (desktop) ── */
+                var floorHandle = document.getElementById('rvFloorHandle');
+                if (floorHandle) {
+                    floorHandle.addEventListener('mousedown', function(e) {
+                        rvFloorDragging   = true;
+                        rvFloorDragStartY = e.clientY;
+                        rvFloorYStart     = rvFloorY;
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                }
+                document.addEventListener('mousemove', function(e) {
+                    if (!rvFloorDragging) return;
+                    var dy = e.clientY - rvFloorDragStartY;
+                    rvFloorY = Math.max(0.2, Math.min(0.92,
+                        rvFloorYStart + dy / window.innerHeight));
+                    updateFloorLine();
+                    var flEl = document.getElementById('rvFloorLine');
+                    if (flEl) flEl.classList.remove('rv-floor-snap');
+                });
+                document.addEventListener('mouseup', function() {
+                    rvFloorDragging = false;
+                });
+
                 document.addEventListener('keydown', function(e) {
                     if (!rv.classList.contains('rv-open')) return;
                     if (e.key === 'Escape') window.closeRoomViewer();
@@ -2762,6 +4654,23 @@
                     if (e.key === 'ArrowDown') { rvPos.y += 8; updateTransform(); }
                 });
             });
+
+            /* ── Launch native wall AR from the room viewer ──────────────────
+               Reads the calibrated rvDepth as the scale multiplier so whatever
+               size the user set during calibration is preserved in AR.         */
+            window.launchRvAR = function() {
+                if (typeof window.openArSheet !== 'function') return;
+                var sel  = rvSizes[rvSelIdx] || rvSizes[0] || { w: 12, h: 12 };
+                var img  = document.getElementById('rvPrint').src;
+                var id   = rvProductId;
+                var titl = rvProductTitle;
+                var scale = rvDepth || 1.0;
+                window.closeRoomViewer();
+                window.openArSheet(id, titl, img, sel.w, sel.h, rvSizes, {
+                    scaleMult: scale,
+                    autoLaunch: true
+                });
+            };
         })();
         /* ══ end Room Viewer JS ══════════════════════════════════ */
 
@@ -3171,7 +5080,15 @@
 
                 sel.addEventListener('change', function() {
                     var opt = this.options[this.selectedIndex];
-                    if (priceEl) priceEl.textContent = formatPrice(parseInt(opt.dataset.price));
+                    var newPrice = parseInt(opt.dataset.price);
+                    if (priceEl) {
+                        /* formatPrice lives in currency.js — fall back to plain INR if not ready */
+                        priceEl.textContent = (typeof window.formatPrice === 'function')
+                            ? window.formatPrice(newPrice)
+                            : '₹' + newPrice.toLocaleString('en-IN');
+                        /* keep data-inr in sync so currency-switch re-renders correctly */
+                        priceEl.setAttribute('data-inr', newPrice);
+                    }
                     if (dimTag)  dimTag.textContent  = opt.dataset.dim;
                     if (edTag)   edTag.textContent   = opt.dataset.edition;
                 });
@@ -3179,6 +5096,23 @@
                 wrap.appendChild(sel);
                 var actionsEl = card.querySelector('.product-actions');
                 if (actionsEl) card.insertBefore(wrap, actionsEl);
+
+                /* Sync card price / edition / dim to the default selection on load.
+                   Without this, Cosmic Return (and any card whose data-base-price
+                   differs from the Standard-tier price) shows Large-tier data while
+                   the Standard option is already selected. */
+                var defOpt = sel.options[cardDefaultIdx];
+                if (defOpt) {
+                    var defPrice = parseInt(defOpt.dataset.price);
+                    if (priceEl) {
+                        priceEl.textContent = (typeof window.formatPrice === 'function')
+                            ? window.formatPrice(defPrice)
+                            : '₹' + defPrice.toLocaleString('en-IN');
+                        priceEl.setAttribute('data-inr', defPrice);
+                    }
+                    if (dimTag) dimTag.textContent = defOpt.dataset.dim;
+                    if (edTag)  edTag.textContent  = defOpt.dataset.edition;
+                }
             });
         })();
 
@@ -3414,6 +5348,7 @@
     ar-modes="webxr scene-viewer quick-look"
     ar-placement="wall"
     ar-scale="fixed"
+    xr-environment
     camera-controls
     auto-rotate
     auto-rotate-delay="1200"
@@ -3423,31 +5358,123 @@
     min-camera-orbit="-Infinity 25deg 60%"
     max-camera-orbit="Infinity 155deg 200%"
     touch-action="none"
-    shadow-intensity="1.15"
-    shadow-softness="0.95"
-    exposure="1.0"
-    tone-mapping="commerce"
+    shadow-intensity="0.85"
+    shadow-softness="1"
+    exposure="1.1"
+    tone-mapping="neutral"
     environment-image="neutral"
-    interaction-prompt="none"
-    disable-tap>
+    interaction-prompt="none">
+    <!-- ar-prompt slot: shown inside the WebXR session as an overlay before
+         the model is placed. Two pieces of guidance:
+           (1) horizontal eye-level guideline + hang-height label — gives the
+               architect/buyer a visual reference for where the print's center
+               will land when they tap. Aligned with the natural eye-level line
+               when the phone is held vertically at a normal reading height.
+           (2) wall-finding pill — updated by the ar-tracking event listener. -->
+    <div slot="ar-prompt" id="arPromptSlot">
+
+      <!-- Every overlay below is position:fixed directly to the viewport.
+           This matches the structure of the original (working) wall-prompt
+           pill so model-viewer's WebXR overlay renders all of them
+           reliably during the placement phase. -->
+
+      <!-- Measurement HUD: title + dimensions, top of screen -->
+      <div id="arDimHud">
+        <span id="arDimHudTitle">Print</span>
+        <span id="arDimHudMeasure">— × —</span>
+      </div>
+
+      <!-- Edge vignette pulse: soft gold glow while searching -->
+      <div id="arEdgeScan"></div>
+
+      <!-- Corner viewfinder marks: pulse while searching, calm when locked -->
+      <div id="arCornerMarks">
+        <div class="ar-corner ar-corner-tl"></div>
+        <div class="ar-corner ar-corner-tr"></div>
+        <div class="ar-corner ar-corner-bl"></div>
+        <div class="ar-corner ar-corner-br"></div>
+      </div>
+
+      <!-- Eye-level guideline: horizontal gold rule at screen center -->
+      <div id="arEyeLine"></div>
+
+      <!-- Eye-level label: above the guideline -->
+      <div id="arEyeLabel">57" · Print centerline</div>
+
+      <!-- Center target: pulses when tracking is solid -->
+      <div id="arCenterTarget"></div>
+
+      <!-- Tap hint: appears beneath the ring when tracking-good -->
+      <div id="arTapHint">Tap</div>
+
+      <!-- Hang-height chips: in-AR, tappable -->
+      <div id="arHangChipsAR">
+        <button class="ar-hang-chip-ar ar-hang-on" data-h="57">57"</button>
+        <button class="ar-hang-chip-ar" data-h="60">60"</button>
+        <button class="ar-hang-chip-ar" data-h="63">63"</button>
+      </div>
+
+      <!-- Wall-detection pill: bottom of screen -->
+      <div id="arWallPrompt">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+          <rect x="7" y="7" width="10" height="10" rx="1"/>
+        </svg>
+        <span id="arWallPromptText">Point camera at a wall · move slowly</span>
+      </div>
+    </div>
   </model-viewer>
 
   <div class="ar-loading" id="arLoading">Preparing the print…</div>
 
   <div class="ar-foot">
+    <div class="ar-size-label">Choose a size</div>
     <div class="ar-size-chips" id="arSizeChips"></div>
     <div class="ar-dim" id="arDimText"></div>
-    <button id="arLaunch">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      See it on your wall
-    </button>
-    <span class="ar-hint" id="arHint">Point your phone at the wall</span>
+    <div class="ar-scale-row">
+      <button class="ar-scale-btn" id="arScaleDown">Smaller</button>
+      <span class="ar-scale-val" id="arScaleVal">100%</span>
+      <button class="ar-scale-btn" id="arScaleUp">Larger</button>
+    </div>
+    <div class="ar-launch-row">
+      <button id="arLaunch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Place on Wall
+      </button>
+    </div>
+    <span class="ar-hint" id="arHint">Tap Place on Wall · adjust size with the chips below</span>
   </div>
 </div>
 
 <!-- ── Room Viewer ──────────────────────────────────────── -->
 <div id="roomViewer" role="dialog" aria-modal="true" aria-label="View print in your room">
   <video id="rvVideo" autoplay playsinline muted></video>
+
+  <!-- Opening hint — auto-fades, dismissed on first touch -->
+  <div id="rvHint" class="rv-hint-gone" aria-hidden="true">
+    <svg class="rv-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="14" rx="2"/>
+      <path d="M7 21h10M12 17v4"/>
+      <circle cx="8.5" cy="9.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <div class="rv-hint-title">Point camera at a wall</div>
+    <div class="rv-hint-sub">Drag to position &nbsp;·&nbsp; Pinch to resize<br>Pinch-rotate to spin</div>
+  </div>
+  <!-- Floor / wall junction marker — drag the pill to align with the real floor -->
+  <div id="rvFloorLine" aria-label="Floor alignment — drag to match where the floor meets the wall">
+    <div class="rv-floor-fill"></div>
+    <div class="rv-floor-rule"></div>
+    <span class="rv-floor-label">Floor &middot; drag to align</span>
+    <div class="rv-floor-handle" id="rvFloorHandle">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round" width="10" height="10">
+        <polyline points="4,6 8,2 12,6"/>
+        <polyline points="4,10 8,14 12,10"/>
+      </svg>
+      Floor
+    </div>
+  </div>
+
   <div id="rvGuides" aria-hidden="true">
     <div class="rv-guide-grid"></div>
     <div class="rv-guide-cross"></div>
@@ -3458,6 +5485,7 @@
   <div id="rvPrintWrap">
     <img id="rvPrint" src="" alt="Print preview" draggable="false">
   </div>
+
 
   <div id="rvChrome">
     <div class="rv-top">
@@ -3492,8 +5520,6 @@
       </div>
     </div>
     <div class="rv-bottom">
-      <div class="rv-dim" id="rvDim"></div>
-      <div class="rv-chips" id="rvChips"></div>
       <div class="rv-tool-row" aria-label="Placement controls">
         <button class="rv-mini-btn" onclick="adjustRvRotation(-1.5)" aria-label="Rotate left">-1.5°</button>
         <button class="rv-mini-btn" onclick="adjustRvRotation(1.5)" aria-label="Rotate right">+1.5°</button>
@@ -3508,22 +5534,47 @@
     </div>
   </div>
 
+  <!-- Always-visible size selection + True AR launch — never auto-hides -->
+  <div id="rvSizeBar" aria-label="Size selection">
+    <div class="rv-dim" id="rvDim"></div>
+    <div class="rv-chips" id="rvChips"></div>
+    <button class="rv-ar-launch" onclick="launchRvAR()" id="rvArBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Open in True AR
+    </button>
+  </div>
+
   <div id="rvCalibration" role="group" aria-label="Scale calibration">
-    <div class="rv-cal-title">Scale calibration</div>
-    <div class="rv-cal-text">Place a known object on the wall, match the gold marker to it, then confirm. This sets the print closer to real size.</div>
-    <div class="rv-cal-row">
-      <select id="rvMarkerSelect" onchange="updateRvMarkerFromControl()">
-        <option value="8.27">A4 paper width — 8.27 in</option>
-        <option value="11.69">A4 paper height — 11.69 in</option>
-        <option value="3.37">Credit card width — 3.37 in</option>
-        <option value="12">12 in ruler</option>
-      </select>
-      <input id="rvMarkerWidth" type="range" min="80" max="340" value="190" oninput="updateRvMarkerFromControl()">
+
+    <!-- Phase 1: pick reference object -->
+    <div id="rvCalPhase1">
+      <div class="rv-cal-title">Scale calibration</div>
+      <div class="rv-cal-text">What's on your wall right now?</div>
+      <div class="rv-cal-row">
+        <select id="rvMarkerSelect" onchange="updateRvMarkerFromControl()">
+          <option value="8.27">A4 paper — short edge (8.27 in)</option>
+          <option value="11.69">A4 paper — long edge (11.69 in)</option>
+          <option value="3.37">Credit card width (3.37 in)</option>
+          <option value="12">30 cm ruler (11.8 in)</option>
+        </select>
+      </div>
+      <div class="rv-cal-actions">
+        <button type="button" class="rv-cal-primary" onclick="rvCalStartMatch()">Place it on the wall &rarr;</button>
+        <button type="button" onclick="toggleRvCalibration(false)">Cancel</button>
+      </div>
     </div>
-    <div class="rv-cal-actions">
-      <button type="button" onclick="confirmRvCalibration()">Set Scale</button>
-      <button type="button" onclick="toggleRvCalibration(false)">Cancel</button>
+
+    <!-- Phase 2: fine-tune slider, full camera visible -->
+    <div id="rvCalPhase2" style="display:none">
+      <div class="rv-cal-match-row">
+        <button class="rv-cal-nudge" type="button" onclick="rvCalNudge(-5)" aria-label="Smaller">&#8722;</button>
+        <input id="rvMarkerWidth" type="range" min="80" max="340" value="190" oninput="updateRvMarkerFromControl()">
+        <button class="rv-cal-nudge" type="button" onclick="rvCalNudge(5)" aria-label="Larger">&#43;</button>
+        <button class="rv-cal-primary" type="button" onclick="confirmRvCalibration()">&#10003; Matches</button>
+        <button type="button" onclick="toggleRvCalibration(false)">&#10005;</button>
+      </div>
     </div>
+
   </div>
 
   <div id="rvNoCam" style="display:none">
@@ -3540,7 +5591,7 @@
 
 <script src="assets/js/preloader.js"></script>
 <script src="assets/js/transitions.js"></script>
-<script src="assets/js/cursor.js"></script>
+<!-- <script src="assets/js/cursor.js"></script> -->
 <script src="assets/js/reveals.js"></script>
 <script>
 (function(){const s=document.querySelector('.sline-stage');const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#1A1612';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();

@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZDP3EC98"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KTZDP3EC98');
+</script>
+
     <meta charset="UTF-8">
     <script src="assets/js/theme.js"></script>
     <link rel="icon" type="image/webp" href="images/Mohith LOGO.webp">
@@ -9,6 +19,7 @@
 <title>What Corbusier Got Wrong &mdash; Mohith Rai Srivastav</title>
 <meta name="description" content="A respectful disagreement with the master, delivered from the steps of the Capitol Complex at six in the morning.">
 <meta name="author" content="Mohith Rai Srivastav">
+<meta name="robots" content="index, follow">
 <link rel="canonical" href="https://www.mohithraisrivastav.com/essay-04.html">
 <!-- Open Graph -->
 <meta property="og:type" content="article">
@@ -82,11 +93,13 @@
               <li><a href="about.html">About</a></li>
               <li><a href="journal.html" class="active">Journal</a></li>
               <li><a href="resurface.html">Resurface</a></li>
+                        <li><a href="blog.html">Blog</a></li>
           </ul>
       </li>
       <li><a href="workshops.html">Workshops</a></li>
       <li><a href="shop.html">Shop</a></li>
       <li><a href="contact.html">Contact</a></li>
+            <a href="blog.html">Blog</a>
     </ul>
     <a href="#" class="nav-cart" onclick="event.preventDefault();toggleCart();" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span class="cart-count" id="cartCountGlobal"></span></a>
     <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -109,6 +122,7 @@
           <a href="about.html" onclick="toggleMenu()">About</a>
           <a href="journal.html" onclick="toggleMenu()" class="active">Journal</a>
           <a href="resurface.html" onclick="toggleMenu()">Resurface</a>
+                <a href="blog.html" onclick="toggleMenu()">Blog</a>
       </div>
   </div>
   <a href="workshops.html" onclick="toggleMenu()">Workshops</a>
@@ -140,7 +154,7 @@
 </div>
 
 <div class="essay-foot">
-  <div class="signoff">&mdash; M.R.S.</div>
+  <div class="signoff">&mdash; Mohith Rai Srivastav</div>
   <div class="tags">
     <span class="tag">Modernism</span>
     <span class="tag">Architecture</span>
@@ -192,6 +206,7 @@
       <a href="workshops.html">Workshops</a>
       <a href="shop.html">Shop</a>
       <a href="contact.html">Contact</a>
+            <a href="blog.html">Blog</a>
     </nav>
     <nav class="sf-legal">
       <span class="sf-nav-label">Legal</span>
@@ -200,6 +215,7 @@
       <a href="terms.html">Terms of Service</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="support.html">Support</a>
+            <a href="faq.html">FAQ</a>
     </nav>
     <div class="sf-newsletter-col">
       <span class="sf-nav-label">Field Notes</span>
@@ -263,7 +279,7 @@ document.getElementById('sfForm').addEventListener('submit', e => {
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <div id="page-curtain"></div>
 <script src="assets/js/transitions.js"></script>
-<script src="assets/js/cursor.js"></script>
+<!-- <script src="assets/js/cursor.js"></script> -->
 <script src="assets/js/cart.js"></script>
 </body>
 </html>

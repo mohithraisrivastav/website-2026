@@ -1,0 +1,2339 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     ar-xr.html — CUSTOM WEBXR AR
+
+     Standalone WebXR Immersive AR experience for any of the nine
+     framed prints in the GOAF catalogue. Replaces model-viewer
+     entirely with direct Three.js + WebXR API access.
+
+     URL:  /ar-xr.html?id=<product-id>&size=small|medium|large
+           id   defaults to cosmic-return if absent / unknown
+           size defaults to large
+     See PRODUCT_CATALOG below for valid product IDs.
+
+     What this delivers vs. model-viewer:
+       - Persistent UI during the ENTIRE AR session (HUD, chips,
+         close button) — model-viewer's ar-prompt slot hides on
+         placement, this doesn't
+       - Vertical-plane (wall) hit-test with normal filtering
+       - XRAnchor-based placement (print stays put as you walk
+         around the room, no drift)
+       - Post-placement hang-height adjustment (chips slide the
+         print up/down the wall in real time)
+       - Architect-grade real-world scale from the existing GLB
+
+     iOS path: untouched. iOS uses Quick Look in shop.html.
+     This file is Android Chrome only.
+
+     URL: /ar-xr.html  (Phase 2 will accept ?id=<product> param)
+     ============================================================ -->
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTZDP3EC98"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KTZDP3EC98');
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#14110d">
+<title>AR — GOAF Fine Art</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; touch-action: none; }
+  body {
+    background: #14110d; color: #f7f3ec;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* During AR session, body background must NOT be visible — the
+     camera feed renders under the Three.js canvas. */
+  body.xr-active { background: transparent; }
+
+  /* WebXR canvas: full-viewport, behind the overlay. */
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1;
+  }
+
+  /* ── PRE-AR LAUNCH SCREEN ───────────────────────────────────
+     Shown until the user taps "Enter AR" — required because
+     WebXR session start needs a user gesture. */
+  #launchScreen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px;
+    background: radial-gradient(circle at 50% 30%,
+                rgba(207,162,70,0.08) 0%, transparent 60%), #14110d;
+    z-index: 100;
+  }
+  #launchScreen h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic; font-weight: 300;
+    font-size: 2.4rem; letter-spacing: 0.5px;
+    color: #f7f3ec; margin-bottom: 8px;
+  }
+  #launchScreen .dims {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: #CFA246; margin-bottom: 56px;
+  }
+  #startBtn {
+    background: #CFA246; color: #14110d;
+    border: none; padding: 18px 42px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem; font-weight: 800;
+    letter-spacing: 4px; text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 14px 40px rgba(207,162,70,0.3);
+    transition: background 0.2s, transform 0.2s;
+  }
+  #startBtn:active { transform: scale(0.97); }
+  #startBtn:disabled { opacity: 0.4; cursor: default; }
+  #errorMsg {
+    margin-top: 32px; max-width: 320px; text-align: center;
+    font-size: 0.82rem; line-height: 1.7;
+    color: rgba(247,243,236,0.6);
+  }
+  #errorMsg.show { color: #e88c8c; }
+
+  /* ── WEBXR DOM OVERLAY ─────────────────────────────────────
+     Renders OVER the AR camera feed during the session. Persists
+     for the lifetime of the session — no hiding on placement.
+     Element passed to WebXR via session options.domOverlay.root.
+
+     CRITICAL: must be display:block (not display:none) at the
+     moment requestSession() is called — the dom-overlay feature
+     requires the root element to be VISIBLE in the document when
+     the session starts. We hide via opacity/visibility instead. */
+  #overlay {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 50;
+  }
+  #overlay.active { opacity: 1; visibility: visible; }
+  #overlay button { pointer-events: auto; }
+
+  /* Measurement HUD (top) */
+  #hud {
+    position: absolute;
+    top: max(56px, env(safe-area-inset-top, 56px));
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 26px;
+    padding: 11px 24px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  #hudTitle {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic; font-weight: 300;
+    font-size: 1rem; line-height: 1.15;
+    color: rgba(247,243,236,0.95);
+    margin-bottom: 4px;
+  }
+  #hudDims {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: #CFA246;
+  }
+
+  /* Wall-finding prompt + status (bottom-centre) */
+  #statusPill {
+    position: absolute;
+    bottom: max(120px, env(safe-area-inset-bottom, 0px) + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 24px;
+    padding: 11px 22px;
+    display: flex; align-items: center; gap: 10px;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+  }
+  #statusPill svg { flex-shrink: 0; }
+  #statusText {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem; font-weight: 400;
+    color: rgba(247,243,236,0.92);
+  }
+  #statusPill.placed { opacity: 0; pointer-events: none; }
+  #overlay.placed #statusPill { opacity: 0; pointer-events: none; }
+
+  #frontWallBtn {
+    position: absolute;
+    bottom: max(72px, env(safe-area-inset-bottom, 0px) + 72px);
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+    background: rgba(10,10,10,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(207,162,70,0.48);
+    color: #CFA246;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 2.6px;
+    text-transform: uppercase;
+    padding: 11px 18px;
+    border-radius: 24px;
+    cursor: pointer;
+  }
+  #frontWallBtn.active {
+    background: rgba(207,162,70,0.26);
+    border-color: rgba(207,162,70,0.82);
+  }
+  #overlay.placed #frontWallBtn { display: none; }
+
+  /* Chip rows (size + hang-height) and labels — stacked above the
+     bottom status pill. Layout from bottom to top:
+        120px  status pill
+        180px  hang-height chips
+        225px  HANG HEIGHT label
+        265px  size chips
+        310px  SIZE label                                              */
+  #chipRow, #sizeRow {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  /* Bottom layout (panels hidden, labels removed):
+       status pill        bottom: 60px
+       hang chips         bottom: 110px
+       size chips         bottom: 160px                                */
+  #chipRow { bottom: max(110px, env(safe-area-inset-bottom, 0px) + 110px); }
+  #sizeRow { bottom: max(160px, env(safe-area-inset-bottom, 0px) + 160px); }
+  .chip {
+    pointer-events: auto;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(247,243,236,0.2);
+    color: rgba(247,243,236,0.78);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem; font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 9px 16px; border-radius: 40px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .chip.active {
+    background: rgba(207,162,70,0.3);
+    border-color: rgba(207,162,70,0.7);
+    color: #CFA246;
+  }
+  .chip[disabled] { opacity: 0.4; pointer-events: none; }
+  .chip-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.56rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(247,243,236,0.4);
+    white-space: nowrap;
+  }
+  .chip-label.hang { bottom: max(225px, env(safe-area-inset-bottom, 0px) + 225px); }
+  .chip-label.size { bottom: max(310px, env(safe-area-inset-bottom, 0px) + 310px); }
+
+  #movePanel {
+    position: absolute;
+    left: 50%;
+    bottom: max(22px, env(safe-area-inset-bottom, 0px) + 22px);
+    transform: translateX(-50%);
+    display: none;
+    grid-template-columns: repeat(3, 44px);
+    gap: 8px;
+    padding: 10px;
+    background: rgba(10,10,10,0.62);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.16);
+    border-radius: 20px;
+    pointer-events: auto;
+  }
+  /* #movePanel hidden — gestures handle X/Y (1-finger drag),
+     Z (2-finger pinch), rotation (2-finger twist) directly.
+     Element kept in DOM so the click handlers stay valid if we
+     ever want to surface it again. */
+  #overlay.placed #movePanel { display: none; }
+  .adjust-btn {
+    width: 44px;
+    height: 38px;
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 14px;
+    background: rgba(20,17,13,0.74);
+    color: rgba(247,243,236,0.88);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    cursor: pointer;
+  }
+  .adjust-btn:active {
+    background: rgba(207,162,70,0.32);
+    border-color: rgba(207,162,70,0.75);
+    color: #CFA246;
+  }
+
+  /* Compact floor calibration pill — bottom-right corner, always
+     visible post-placement. Sized small enough not to clutter the
+     view but large enough for thumb-tap. ARCore's detected floor
+     can be off on rugs / featureless tile / low light, and the
+     3-finger gesture is hardware-fragile on most phones, so a
+     visible button affordance is the reliable path. */
+  #floorPanel {
+    position: absolute;
+    right: max(16px, env(safe-area-inset-right, 0px) + 16px);
+    bottom: max(70px, env(safe-area-inset-bottom, 0px) + 70px);
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: rgba(10,10,10,0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 16px;
+    pointer-events: auto;
+  }
+  #overlay.placed #floorPanel { display: flex; }
+  .floor-btn {
+    background: transparent;
+    border: none;
+    color: rgba(247,243,236,0.85);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    min-width: 32px;
+  }
+  .floor-btn:active {
+    background: rgba(207,162,70,0.32);
+    color: #CFA246;
+  }
+  /* Sandwich the offset readout between the +/- buttons */
+  #floorOffsetLabel {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: rgba(247,243,236,0.5);
+    min-width: 28px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  #floorOffsetLabel.active { color: #CFA246; }
+  /* Floor-panel label above the pill — explains what the buttons do.
+     Subtle, easy to spot once the user looks for it. */
+  #floorPanelLabel {
+    position: absolute;
+    right: max(16px, env(safe-area-inset-right, 0px) + 16px);
+    bottom: max(106px, env(safe-area-inset-bottom, 0px) + 106px);
+    display: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: rgba(247,243,236,0.4);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  #overlay.placed #floorPanelLabel { display: block; }
+
+  /* Debug pill — top-left diagnostic readout. Hidden in production.
+     Enable by loading the page with ?debug=1 in the URL. */
+  #debugPill {
+    display: none;
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top, 20px));
+    left: 20px;
+    background: rgba(10,10,10,0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 14px;
+    padding: 8px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 0.62rem;
+    color: rgba(247,243,236,0.85);
+    line-height: 1.45;
+    white-space: pre;
+    pointer-events: none;
+    z-index: 60;
+  }
+  #debugPill.show { display: block; }
+
+  /* TAP hint (only visible when reticle locks; placement only) */
+  #tapHint {
+    position: absolute;
+    top: calc(50% + 36px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.66rem; font-weight: 800;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: #CFA246;
+    text-shadow: 0 1px 8px rgba(20,17,13,0.9),
+                 0 0 16px rgba(20,17,13,0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #overlay.tracking-good:not(.placed) #tapHint { opacity: 1; }
+
+  /* Close button (top-right) */
+  #closeBtn {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top, 20px));
+    right: 20px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #f7f3ec;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #closeBtn:active { background: rgba(207,162,70,0.4); }
+
+  /* Edge vignette (search feedback — fades when tracking solid) */
+  #edgeScan {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 140px 30px rgba(207,162,70,0.22);
+    animation: edge-pulse 2.6s ease-in-out infinite;
+    transition: opacity 0.5s ease;
+  }
+  #overlay.tracking-good #edgeScan,
+  #overlay.placed #edgeScan { opacity: 0; }
+  @keyframes edge-pulse {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 0.95; }
+  }
+
+  /* (Old centered init pulse hint removed — was conflicting with the
+     bottom status pill. Status messaging now lives in one place.) */
+
+  /* Loading state for the GLB */
+  #loadingPill {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(247,243,236,0.18);
+    border-radius: 24px;
+    padding: 14px 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: rgba(247,243,236,0.85);
+    z-index: 200;
+    display: none;
+  }
+  #loadingPill.show { display: block; }
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- Pre-AR launch screen — required user gesture for WebXR session start.
+     H1 + dims are populated dynamically from PRODUCT_TITLE / currentSize. -->
+<div id="launchScreen">
+  <h1 id="launchTitle">Loading…</h1>
+  <div class="dims" id="launchDims">&nbsp;</div>
+  <button id="startBtn" disabled>Loading…</button>
+  <div id="errorMsg"></div>
+</div>
+
+<!-- WebXR DOM overlay — visible throughout the AR session -->
+<div id="overlay">
+
+  <!-- Edge vignette: pulses while searching, fades when locked -->
+  <div id="edgeScan"></div>
+
+  <!-- (Old centered "Move device" pulse removed — was contradicting
+       the bottom status pill. Status messaging now consolidated into
+       the single pill below.) -->
+
+  <!-- Measurement HUD -->
+  <div id="hud">
+    <div id="hudTitle">Cosmic Return</div>
+    <div id="hudDims">42" × 31.5" · 107 × 80 cm</div>
+  </div>
+
+  <!-- Close button -->
+  <button id="closeBtn" aria-label="Exit AR">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <button id="frontWallBtn" type="button">Use front wall</button>
+
+  <!-- Size chips (rendered dynamically by renderSizeChips() in init).
+       Labels removed — chips are self-evident at a glance. -->
+  <div id="sizeRow"></div>
+
+  <!-- Hang-height chips. Labels removed for the same reason; the
+       floor-detection feedback that used to live in the label now
+       surfaces only via the '~' prefix on the tape measure label
+       and the 0"/±N" floor-offset readout. -->
+  <div id="chipRow">
+    <button class="chip active" data-h="57">57"</button>
+    <button class="chip" data-h="60">60"</button>
+    <button class="chip" data-h="63">63"</button>
+  </div>
+
+  <!-- Status pill (wall-finding / placed feedback) -->
+  <div id="statusPill">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f7f3ec" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12H6M18 12H22M12 2V6M12 18V22"/>
+      <rect x="7" y="7" width="10" height="10" rx="1"/>
+    </svg>
+    <span id="statusText">Slowly point your camera at a wall</span>
+  </div>
+
+  <!-- TAP hint (only when reticle locked + not yet placed) -->
+  <div id="tapHint">Tap to place</div>
+
+  <!-- Floor calibration pill (bottom-right). Manual override for
+       when ARCore's auto-detected floor is off, or didn't detect
+       at all. Always visible post-placement. -->
+  <div id="floorPanelLabel">Floor</div>
+  <div id="floorPanel" aria-label="Calibrate detected floor height">
+    <button class="floor-btn" data-floor="-1" type="button" aria-label="Floor reference down 1 inch">−</button>
+    <span id="floorOffsetLabel">0&quot;</span>
+    <button class="floor-btn" data-floor="+1" type="button" aria-label="Floor reference up 1 inch">+</button>
+  </div>
+
+  <div id="movePanel" aria-label="Adjust placed print">
+    <button class="adjust-btn" data-adjust="rot-" type="button" title="Rotate counterclockwise">R-</button>
+    <button class="adjust-btn" data-adjust="y+" type="button" title="Move up">Y+</button>
+    <button class="adjust-btn" data-adjust="rot+" type="button" title="Rotate clockwise">R+</button>
+    <button class="adjust-btn" data-adjust="x-" type="button" title="Move left">X-</button>
+    <button class="adjust-btn" data-adjust="reset" type="button" title="Reset position">0</button>
+    <button class="adjust-btn" data-adjust="x+" type="button" title="Move right">X+</button>
+    <button class="adjust-btn" data-adjust="z-" type="button" title="Move toward wall">Z-</button>
+    <button class="adjust-btn" data-adjust="y-" type="button" title="Move down">Y-</button>
+    <button class="adjust-btn" data-adjust="z+" type="button" title="Move away from wall">Z+</button>
+  </div>
+
+  <!-- Loading pill while the GLB downloads after session start -->
+  <div id="loadingPill">Preparing the print…</div>
+
+  <!-- Diagnostic: real-time hit-test info so we can see what ARCore
+       is actually returning on the user's device. Remove once the
+       wall path is confirmed working. -->
+  <div id="debugPill">init</div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { XREstimatedLight } from 'three/addons/webxr/XREstimatedLight.js';
+
+/* ──────────────────────────────────────────────────────────────
+   Product catalogue + URL-driven selection.
+   Open with /ar-xr.html?id=<product>&size=small|medium|large
+   to launch a specific print at a specific size. Falls back to
+   cosmic-return at Large if the id is missing or unknown. */
+const PRODUCT_CATALOG = {
+    'cosmic-return'    : { title: 'Cosmic Return',    origW: 42, origH: 31.5 },
+    'burnt-earth'      : { title: 'Burnt Earth',      origW: 32, origH: 24   },
+    'chromatic-rupture': { title: 'Chromatic Rupture',origW: 32, origH: 24   },
+    'after-the-fall'   : { title: 'After The Fall',   origW: 32, origH: 25.5 },
+    'cracked-spectrum' : { title: 'Cracked Spectrum', origW: 32, origH: 21.3 },
+    'still-organism'   : { title: 'Still Organism',   origW: 24, origH: 32   },
+    'forgotten-skin'   : { title: 'Forgotten Skin',   origW: 24, origH: 32   },
+    'erosion'          : { title: 'Erosion',          origW: 24, origH: 32   },
+    'imprint'          : { title: 'Imprint',          origW: 24, origH: 32   }
+};
+
+/* Size chip presets — longest dimension in inches. The actual
+   width/height of each size depends on the product's aspect ratio
+   (see buildSizes below). GLB file convention:
+       ar/<product-id>-small.glb     (longest = 18")
+       ar/<product-id>-medium.glb    (longest = 24")
+       ar/<product-id>-large.glb     (longest = 42")
+       ar/<product-id>.glb           (canonical — Standard = 32" for
+                                      8 of 9 products; Large for
+                                      Cosmic Return only)
+   Standard is only included for products whose CANONICAL .glb is
+   the 32"-longest size. Cosmic Return was authored at 42×31.5, so
+   its canonical IS Large and there is no dedicated 32" file —
+   Standard chip is hidden for that product (3 chips instead of 4). */
+const SIZE_PRESETS = [
+    { id: 'small',    label: 'Small',    longest: 18, suffix: '-small'    },
+    { id: 'medium',   label: 'Medium',   longest: 24, suffix: '-medium'   },
+    { id: 'standard', label: 'Standard', longest: 32, suffix: '-standard' },
+    { id: 'large',    label: 'Large',    longest: 42, suffix: '-large'    }
+];
+
+/* Compute the (width, height) in inches for a given preset applied
+   to a product's aspect ratio. Mirrors ar-build.html's calcDims. */
+function dimsForSize(origW, origH, longest) {
+    if (origW >= origH) {
+        return { w: longest, h: +(longest / origW * origH).toFixed(2) };
+    }
+    return { h: longest, w: +(longest / origH * origW).toFixed(2) };
+}
+
+/* Returns the canonical-file longest dimension for a product —
+   the value whichever dimension is greater in PRODUCT_CATALOG.
+   For Cosmic Return that's 42; for everyone else, 32. Determines
+   which GLB file the Standard chip should load (canonical .glb when
+   it IS Standard, dedicated -standard.glb when canonical is Large). */
+function canonicalLongestFor(productId) {
+    const p = PRODUCT_CATALOG[productId];
+    return Math.max(p.origW, p.origH);
+}
+
+/* GLB filename resolver — handles the Cosmic Return Standard case
+   without affecting any other product:
+     - Standard chip: if canonical IS 32" (most products) use
+       ar/<id>.glb; otherwise use ar/<id>-standard.glb
+     - Every other chip: ar/<id><suffix>.glb */
+function glbPathFor(productId, preset) {
+    if (preset.id === 'standard'
+        && canonicalLongestFor(productId) === preset.longest) {
+        return 'ar/' + productId + '.glb';
+    }
+    return 'ar/' + productId + preset.suffix + '.glb';
+}
+
+/* Build the SIZES array consumed by the rest of the file for a
+   given product ID. Returns all four chip entries (Small / Medium
+   / Standard / Large) for every product — Standard now always
+   appears. Where the GLB sits per product is handled by
+   glbPathFor() above. */
+function buildSizes(productId) {
+    const product = PRODUCT_CATALOG[productId];
+    return SIZE_PRESETS.map((preset) => {
+        const dims = dimsForSize(product.origW, product.origH, preset.longest);
+        return {
+            id: preset.id,
+            label: preset.label,
+            wIn: dims.w,
+            hIn: dims.h,
+            glb: glbPathFor(productId, preset)
+        };
+    });
+}
+
+/* Parse the URL once at script load. Validates against the catalog —
+   unknown ids silently fall back to cosmic-return. */
+const PRODUCT_ID = (function() {
+    const id = new URLSearchParams(location.search).get('id');
+    return (id && PRODUCT_CATALOG[id]) ? id : 'cosmic-return';
+})();
+const INITIAL_SIZE_ID = (function() {
+    const s = new URLSearchParams(location.search).get('size');
+    return ['small', 'medium', 'large'].includes(s) ? s : 'large';
+})();
+
+const PRODUCT_TITLE = PRODUCT_CATALOG[PRODUCT_ID].title;
+const SIZES = buildSizes(PRODUCT_ID);
+/* Default size resolution:
+     1. Honour the URL's ?size= if it's actually available for this product
+     2. Otherwise fall back to Standard if present (most common shop pick)
+     3. Otherwise fall back to Large
+     4. Otherwise the largest available (shouldn't happen — SIZES is non-empty) */
+let currentSize = SIZES.find(s => s.id === INITIAL_SIZE_ID)
+               || SIZES.find(s => s.id === 'standard')
+               || SIZES.find(s => s.id === 'large')
+               || SIZES[SIZES.length - 1];
+
+/* GLB cache — avoids re-downloading when the user toggles between
+   sizes. Stores the raw gltf.scene, callers clone() before adding. */
+const glbCache = new Map();
+
+/* ──── Element handles ──── */
+const $ = (id) => document.getElementById(id);
+const launchScreen = $('launchScreen');
+const startBtn     = $('startBtn');
+const errorMsg     = $('errorMsg');
+const overlay      = $('overlay');
+const statusText   = $('statusText');
+const statusPill   = $('statusPill');
+const loadingPill  = $('loadingPill');
+const closeBtn     = $('closeBtn');
+const frontWallBtn = $('frontWallBtn');
+const hangLabel    = $('hangLabel');
+
+/* Debug pill stays in the DOM but is hidden by default. Append
+   ?debug=1 to the URL to reveal it during testing. textContent
+   assignments throughout the file remain — they're cheap no-ops on
+   a hidden element and let us enable diagnostics live by reloading
+   with the query flag. */
+if (new URLSearchParams(location.search).has('debug')) {
+    $('debugPill').classList.add('show');
+}
+
+/* ──── Three.js state ──── */
+let renderer, scene, camera;
+let printModel       = null;   // GLB scene
+let reticle          = null;   // Hit-test visualization (a thin gold ring on the wall)
+let tapeGroup        = null;   // Floor-to-centre measurement overlay
+let ambientLight     = null;   // fallback ambient when XR estimation not granted
+let directionalLight = null;   // fallback key light
+let xrEstimatedLight = null;   // XREstimatedLight from WebXR light-estimation feature
+
+/* Baseline intensities used when light-estimation is NOT available.
+   When estimation kicks in, both fade to 0 (the XREstimatedLight
+   handles the scene) and are restored if estimation ends. */
+const BASE_AMBIENT_INTENSITY     = 0.7;
+const BASE_DIRECTIONAL_INTENSITY = 1.1;
+
+/* ──── WebXR state ──── */
+let xrSession        = null;
+let xrRefSpace       = null;   // local reference space (origin = where session started)
+let viewerSpace      = null;   // viewer space (origin = device)
+let hitTestSource    = null;
+let printAnchor      = null;   // XRAnchor for placed print
+let isPlaced         = false;
+let sessionStartTime = 0;      // for diagnostic elapsed-time display
+let detectedFloorY   = null;   // world/local-space Y for the lowest detected horizontal plane
+let floorSeenAt      = 0;
+/* Manual floor calibration. ARCore's detected floor can be off by
+   several centimetres on certain surfaces (rugs, tile-line gaps,
+   uneven detection). The user can nudge the floor reference up or
+   down via the floorPanel buttons; this offset is layered on TOP of
+   detectedFloorY so future auto-refinements still apply but the
+   user's correction persists. */
+let floorAdjustOffsetM = 0;
+const FLOOR_ADJUST_STEP_M = 0.0254;  // 1 inch per button press
+
+/* ──── Print transform state (post-placement) ────
+   All measurements are in WALL-LOCAL space, i.e. relative to the
+   placement anchor:
+     wallOffsetX  metres along the wall to the right
+     wallOffsetY  metres up the wall (chip clicks AND vertical drag)
+     wallOffsetZ  metres out from / into the wall
+     wallRotZ     radians, rotation around the wall normal
+   Updated by hang-height chips, single-finger drag, and two-finger
+   twist gestures. Applied each frame in updatePrintFromAnchor. */
+const DEFAULT_HANG_HEIGHT_IN = 57;
+let hangHeightIn = DEFAULT_HANG_HEIGHT_IN;
+let wallOffsetX  = 0;
+let wallOffsetY  = 0;
+let wallOffsetZ  = 0;
+let wallRotZ     = 0;
+
+/* Manual front-wall fallback. ARCore often detects floors and side walls
+   before a blank wall viewed straight-on; this mode gives the user a
+   camera-facing virtual wall when hit-test never returns that plane. */
+let manualWallMode = false;
+let manualPlacementReady = false;
+let manualWallDistanceM = 1.8;
+const MOVE_STEP_M = 0.0254;
+const ROT_STEP_RAD = THREE.MathUtils.degToRad(2);
+let adjustRepeatTimer = null;
+let adjustControlsWired = false;
+let frontWallButtonWired = false;
+let hangChipsWired = false;
+let sizeChipsWired = false;
+let closeButtonWired = false;
+
+/* ──── Init: pre-AR support check + load GLB in background ──── */
+async function init() {
+    /* Apply product info to launch screen + document title BEFORE the
+       support check, so even the 'AR unavailable' fallback message
+       shows the correct print name. Active size chip in the SIZES
+       array drives the dimensions readout. */
+    document.title = 'AR — ' + PRODUCT_TITLE + ' — GOAF Fine Art';
+    $('launchTitle').textContent = PRODUCT_TITLE;
+    {
+        const wCm = Math.round(currentSize.wIn * 2.54);
+        const hCm = Math.round(currentSize.hIn * 2.54);
+        $('launchDims').textContent =
+            currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+    }
+    /* Render size chips from the SIZES array (3 or 4 entries depending
+       on whether the product has a Standard 32" GLB). Done in JS so
+       Cosmic Return automatically shows 3 chips while the other 8
+       products show all 4. */
+    renderSizeChips();
+
+    // Check WebXR support first so we can show a helpful error
+    if (!navigator.xr) {
+        showError('WebXR is not available in this browser. Open this page in Chrome on an Android device with ARCore.');
+        return;
+    }
+
+    let supported = false;
+    try {
+        supported = await navigator.xr.isSessionSupported('immersive-ar');
+    } catch (e) {
+        showError('Could not check AR support: ' + e.message);
+        return;
+    }
+    if (!supported) {
+        showError('Immersive AR is not supported on this device. ARCore + Chrome required.');
+        return;
+    }
+
+    /* Preload the default (Large) GLB so session start doesn't block.
+       Other sizes load lazily when the user taps a size chip. */
+    try {
+        printModel = await loadSizedGLB(currentSize);
+        printModel.visible = false;
+    } catch (e) {
+        showError('Could not load the print model: ' + e.message);
+        return;
+    }
+
+    /* Wire start button */
+    startBtn.disabled = false;
+    startBtn.textContent = 'Enter AR';
+    startBtn.addEventListener('click', startXR);
+
+    /* HUD initial state */
+    refreshHud();
+}
+
+/* Load (or fetch from cache) the GLB for a given size. Returns a
+   fresh THREE.Object3D each call so the same scene-graph never gets
+   attached to two scenes at once. */
+async function loadSizedGLB(size) {
+    let template = glbCache.get(size.glb);
+    if (!template) {
+        const loader = new GLTFLoader();
+        const gltf = await loader.loadAsync(size.glb);
+        template = gltf.scene;
+        template.traverse((obj) => {
+            if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = false; }
+        });
+        glbCache.set(size.glb, template);
+    }
+    return template.clone(true);
+}
+
+/* Push the current product title + currentSize into the HUD pill. */
+function refreshHud() {
+    const wCm = Math.round(currentSize.wIn * 2.54);
+    const hCm = Math.round(currentSize.hIn * 2.54);
+    $('hudTitle').textContent = PRODUCT_TITLE;
+    $('hudDims').textContent  = currentSize.wIn + '" × ' + currentSize.hIn + '"  ·  ' + wCm + ' × ' + hCm + ' cm';
+}
+
+/* Build the size chip buttons inside #sizeRow from the SIZES array.
+   3 buttons for Cosmic Return (no Standard), 4 for everyone else.
+   The active chip matches currentSize.id at boot. wireSizeChips()
+   (called later in startXR) attaches the click handlers. */
+function renderSizeChips() {
+    const row = $('sizeRow');
+    if (!row) return;
+    row.innerHTML = SIZES.map((s) => {
+        const active = s.id === currentSize.id ? ' active' : '';
+        return '<button class="chip' + active + '" data-size="' + s.id + '">' + s.label + '</button>';
+    }).join('');
+}
+
+function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('show');
+    startBtn.disabled = true;
+    startBtn.textContent = 'AR Unavailable';
+}
+
+/* ──── Three.js renderer setup ──── */
+function initThree() {
+    renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    /* Critical for WebXR AR: explicit transparent clear so the camera feed
+       composites under the canvas. Without this, every frame clears to
+       opaque black and the camera passthrough is hidden. */
+    renderer.setClearColor(0x000000, 0);
+    renderer.xr.enabled = true;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.NoToneMapping;
+    document.body.appendChild(renderer.domElement);
+
+    scene  = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera();
+
+    /* Fallback lighting — used when WebXR light-estimation isn't
+       granted by the runtime. These are baseline values that look
+       reasonable on typical indoor walls without any environment
+       information. References kept at module scope so the XR
+       estimation hooks can fade them out when real-room lighting
+       takes over. */
+    ambientLight = new THREE.AmbientLight(0xffffff, BASE_AMBIENT_INTENSITY);
+    directionalLight = new THREE.DirectionalLight(0xffffff, BASE_DIRECTIONAL_INTENSITY);
+    directionalLight.position.set(0.5, 1, 0.3);
+    scene.add(ambientLight, directionalLight);
+
+    /* WebXR light estimation — uses the device's ARCore light
+       probe to drive a dynamic THREE.Light + environment cubemap
+       that match the actual room lighting in real time.
+       Fires 'estimationstart' the first frame data is available;
+       'estimationend' if/when the session loses it or ends. We
+       fade the fallback lights to zero while estimation is active
+       so the print isn't double-lit. */
+    xrEstimatedLight = new XREstimatedLight(renderer);
+    xrEstimatedLight.addEventListener('estimationstart', () => {
+        scene.add(xrEstimatedLight);
+        if (xrEstimatedLight.environment) scene.environment = xrEstimatedLight.environment;
+        ambientLight.intensity = 0;
+        directionalLight.intensity = 0;
+    });
+    xrEstimatedLight.addEventListener('estimationend', () => {
+        scene.remove(xrEstimatedLight);
+        scene.environment = null;
+        ambientLight.intensity = BASE_AMBIENT_INTENSITY;
+        directionalLight.intensity = BASE_DIRECTIONAL_INTENSITY;
+    });
+
+    // Hit-test reticle — a thin gold ring + center dot drawn on the wall.
+    // Always sits flush against whatever vertical plane is hit.
+    const reticleGroup = new THREE.Group();
+    const ringGeo = new THREE.RingGeometry(0.07, 0.082, 48);
+    const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xCFA246, side: THREE.DoubleSide,
+        transparent: true, opacity: 0.92
+    });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    reticleGroup.add(ring);
+    const dotGeo = new THREE.CircleGeometry(0.008, 24);
+    const dotMat = new THREE.MeshBasicMaterial({ color: 0xCFA246 });
+    const dot = new THREE.Mesh(dotGeo, dotMat);
+    reticleGroup.add(dot);
+
+    reticle = reticleGroup;
+    reticle.visible = false;
+    reticle.matrixAutoUpdate = false;
+    scene.add(reticle);
+
+    initTapeMeasure();
+
+    // Add the print to the scene (initially hidden)
+    if (printModel) scene.add(printModel);
+}
+
+/* ──── Start WebXR session ──── */
+async function startXR() {
+    initThree();
+
+    /* The overlay element MUST be in the document AND visible (not
+       display:none) BEFORE requestSession is called — otherwise Chrome
+       silently fails the dom-overlay feature handshake. So we activate
+       the overlay first, request the session second. */
+    overlay.classList.add('active');
+    document.body.classList.add('xr-active');
+    launchScreen.style.display = 'none';
+    loadingPill.classList.add('show');
+
+    /* hit-test + anchors + dom-overlay are required.
+       Optional features:
+         plane-detection   — XRPlane polygons for the wireframes
+         light-estimation  — real-room lighting via XREstimatedLight
+         depth-sensing     — real-world geometry occlusion. Requires
+                             a depthSensing config object specifying
+                             usage + data format. 'gpu-optimized' +
+                             'luminance-alpha' is the standard
+                             ARCore-friendly pair that Three.js
+                             can bind as a depth texture and use to
+                             automatically occlude depth-tested
+                             scene objects against the real world. */
+    const sessionInit = {
+        requiredFeatures: ['hit-test', 'anchors', 'dom-overlay'],
+        optionalFeatures: ['plane-detection', 'light-estimation', 'depth-sensing'],
+        depthSensing: {
+            usagePreference:      ['gpu-optimized', 'cpu-optimized'],
+            dataFormatPreference: ['luminance-alpha', 'float32']
+        },
+        domOverlay: { root: overlay }
+    };
+
+    try {
+        xrSession = await navigator.xr.requestSession('immersive-ar', sessionInit);
+    } catch (e) {
+        showLoadingError('Session start failed: ' + e.message);
+        return;
+    }
+
+    xrSession.addEventListener('end', onSessionEnd);
+    xrSession.addEventListener('select', onSelect);
+    xrSession.addEventListener('selectstart', onSelectStart);
+    xrSession.addEventListener('selectend', onSelectEnd);
+
+    /* Three.js's renderer.xr.setSession() internally calls
+       requestReferenceSpace with a default type. On most Android Chrome
+       devices that default is 'local-floor', which requires the AR
+       runtime to estimate the floor — not all devices support it
+       (Samsung S24 Ultra refuses it). Force the type to 'local' BEFORE
+       setSession so Three.js asks for the always-supported one. */
+    renderer.xr.setReferenceSpaceType('local');
+
+    try {
+        await renderer.xr.setSession(xrSession);
+    } catch (e) {
+        showLoadingError('Renderer XR setup failed: ' + e.message);
+        return;
+    }
+
+    try {
+        xrRefSpace  = await xrSession.requestReferenceSpace('local');
+        viewerSpace = await xrSession.requestReferenceSpace('viewer');
+    } catch (e) {
+        showLoadingError('Reference space failed: ' + e.message);
+        return;
+    }
+
+    try {
+        /* Explicit entityTypes: ['plane'] — some Chrome builds default
+           to no entity types if omitted, which silently produces zero
+           hits. 'plane' is the WebXR-spec name for ARCore's detected
+           planes (both horizontal and vertical when available). */
+        hitTestSource = await xrSession.requestHitTestSource({
+            space: viewerSpace,
+            entityTypes: ['plane']
+        });
+    } catch (e) {
+        /* Some browsers don't accept entityTypes; retry without it. */
+        try {
+            hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+        } catch (e2) {
+            showLoadingError('Hit-test source failed: ' + e2.message);
+            return;
+        }
+    }
+
+    sessionStartTime = performance.now();
+
+    /* Wire UI handlers */
+    wireChips();
+    wireSizeChips();
+    wireAdjustControls();
+    wireFloorControls();
+    wireFloorGestures();
+    wireFrontWallButton();
+    if (!closeButtonWired) {
+        closeButtonWired = true;
+        closeBtn.addEventListener('click', () => { try { xrSession.end(); } catch(e){} });
+    }
+
+    /* Start the render loop. Loading pill is removed on the FIRST frame
+       that successfully renders (so the user sees the camera as soon as
+       it's available, not on an arbitrary timer). */
+    renderer.setAnimationLoop(onXRFrame);
+}
+
+/* Visible failure surface inside the AR overlay so we never silently
+   leave the user staring at a stuck loading state. */
+function showLoadingError(msg) {
+    loadingPill.classList.add('show');
+    loadingPill.style.color = '#e88c8c';
+    loadingPill.style.maxWidth = '320px';
+    loadingPill.style.fontFamily = 'Inter, sans-serif';
+    loadingPill.style.fontStyle = 'normal';
+    loadingPill.style.fontSize = '0.78rem';
+    loadingPill.style.lineHeight = '1.5';
+    loadingPill.style.textAlign = 'center';
+    loadingPill.textContent = msg;
+    console.error('[AR-XR]', msg);
+}
+
+/* ──── Render loop ──── */
+let firstFrameRendered = false;
+
+function onXRFrame(time, frame) {
+    if (!frame || !xrRefSpace) {
+        renderer.render(scene, camera);
+        return;
+    }
+
+    updateDetectedPlanes(frame);
+    updateHangLabel();
+
+    if (!isPlaced) {
+        if (manualWallMode) {
+            updateManualFrontWall(frame);
+        } else {
+            updateReticle(frame);
+        }
+    } else {
+        updateTwist(frame);
+        updateDrag(frame);
+        updateFloorDrag(frame);
+        updatePrintFromAnchor(frame);
+    }
+
+    renderer.render(scene, camera);
+
+    /* First successful frame → camera passthrough is live, hide loading */
+    if (!firstFrameRendered) {
+        firstFrameRendered = true;
+        loadingPill.classList.remove('show');
+    }
+}
+
+/* ──── Plane-detection wireframes ────
+   Requires the optional 'plane-detection' WebXR feature (requested at
+   session start). If the runtime didn't grant it, frame.detectedPlanes
+   is undefined and we just skip rendering — no error.
+
+   Each XRPlane carries a polygon of points lying in its local X-Z
+   plane (y = 0 per spec), with the planeSpace's local Y axis as the
+   surface normal. We build a closed LineLoop for each plane, position
+   it via the plane's pose, and update only when ARCore marks the
+   plane as changed (lastChangedTime) — this keeps GC churn low.
+
+   Wall planes (orientation === 'vertical') render in brand gold so
+   the user can SEE which walls ARCore has locked. Floor / ceiling
+   render in subtle grey — useful confirmation that detection is
+   alive, without competing with the wall outlines visually.
+
+   After placement we fade wireframes to ~25% opacity so they don't
+   compete with the placed print, but stay visible enough to confirm
+   the print is on a detected surface. */
+const planeWireframes = new Map();           // XRPlane → THREE.LineLoop
+const planeLastChanged = new WeakMap();      // XRPlane → DOMHighResTimeStamp
+const _planePoints = [];
+
+const WALL_LINE_COLOR  = 0xCFA246;
+const FLOOR_LINE_COLOR = 0x9c9388;
+const WALL_OPACITY_SEARCH = 0.85;
+const WALL_OPACITY_PLACED = 0.25;
+const FLOOR_OPACITY_SEARCH = 0.32;
+const FLOOR_OPACITY_PLACED = 0.10;
+const FLOOR_MAX_AGE_MS = 7000;
+
+function buildPlaneGeometry(polygon) {
+    /* polygon entries are DOMPointReadOnly { x, y, z, w } with y == 0.
+       Build a closed loop by repeating the first vertex at the end. */
+    _planePoints.length = 0;
+    for (const pt of polygon) {
+        _planePoints.push(new THREE.Vector3(pt.x, 0, pt.z));
+    }
+    if (_planePoints.length > 0) {
+        _planePoints.push(_planePoints[0].clone());
+    }
+    return new THREE.BufferGeometry().setFromPoints(_planePoints);
+}
+
+function makePlaneWireframe(plane) {
+    const isVertical = plane.orientation === 'vertical';
+    const mat = new THREE.LineBasicMaterial({
+        color: isVertical ? WALL_LINE_COLOR : FLOOR_LINE_COLOR,
+        transparent: true,
+        opacity: isVertical ? WALL_OPACITY_SEARCH : FLOOR_OPACITY_SEARCH,
+        depthTest: true,
+        depthWrite: false
+    });
+    const line = new THREE.LineLoop(buildPlaneGeometry(plane.polygon), mat);
+    line.matrixAutoUpdate = false;
+    line.userData.isVertical = isVertical;
+    return line;
+}
+
+function updateDetectedPlanes(frame) {
+    /* Feature may not be granted on this device / runtime */
+    if (!frame.detectedPlanes) return;
+
+    const seen = new Set();
+    let frameFloorY = Infinity;
+
+    for (const plane of frame.detectedPlanes) {
+        seen.add(plane);
+
+        let wireframe = planeWireframes.get(plane);
+        if (!wireframe) {
+            wireframe = makePlaneWireframe(plane);
+            planeWireframes.set(plane, wireframe);
+            scene.add(wireframe);
+            planeLastChanged.set(plane, plane.lastChangedTime);
+        } else if (planeLastChanged.get(plane) !== plane.lastChangedTime) {
+            /* Geometry changed — rebuild the polygon outline */
+            wireframe.geometry.dispose();
+            wireframe.geometry = buildPlaneGeometry(plane.polygon);
+            planeLastChanged.set(plane, plane.lastChangedTime);
+        }
+
+        const pose = frame.getPose(plane.planeSpace, xrRefSpace);
+        if (pose) {
+            wireframe.matrix.fromArray(pose.transform.matrix);
+            wireframe.visible = true;
+
+            if (plane.orientation === 'horizontal') {
+                frameFloorY = Math.min(frameFloorY, pose.transform.position.y);
+            }
+
+            /* Fade after placement so wireframes confirm without
+               dominating the view */
+            const targetOp = wireframe.userData.isVertical
+                ? (isPlaced ? WALL_OPACITY_PLACED  : WALL_OPACITY_SEARCH)
+                : (isPlaced ? FLOOR_OPACITY_PLACED : FLOOR_OPACITY_SEARCH);
+            if (wireframe.material.opacity !== targetOp) {
+                wireframe.material.opacity = targetOp;
+            }
+        } else {
+            wireframe.visible = false;
+        }
+    }
+
+    /* Garbage-collect planes that no longer exist (ARCore can drop a
+       plane if it merges or loses tracking) */
+    for (const [plane, wireframe] of planeWireframes) {
+        if (!seen.has(plane)) {
+            scene.remove(wireframe);
+            wireframe.geometry.dispose();
+            wireframe.material.dispose();
+            planeWireframes.delete(plane);
+        }
+    }
+
+    if (Number.isFinite(frameFloorY)) {
+        detectedFloorY = frameFloorY;
+        floorSeenAt = performance.now();
+    }
+}
+
+/* ──── Hit-test → reticle (placement phase) ────
+   WebXR hit-test pose convention (per spec):
+     local Y axis = surface normal (perpendicular to detected plane)
+     local X, Z  = lie ON the surface, oriented arbitrarily
+   So for a wall: pose's Y axis is roughly horizontal in world space.
+   For a floor:   pose's Y axis is roughly vertical   in world space.
+   Wall filter: world-space Y component of the pose's Y axis is small. */
+const _surfaceNormal = new THREE.Vector3();
+const _quat          = new THREE.Quaternion();
+const _hitMatrix     = new THREE.Matrix4();
+const _hitPos        = new THREE.Vector3();
+const _hitQuat       = new THREE.Quaternion();
+const _hitScale      = new THREE.Vector3();
+const _worldUp       = new THREE.Vector3(0, 1, 0);
+const _wallRight     = new THREE.Vector3();
+const _wallUp        = new THREE.Vector3();
+const _viewerMatrix  = new THREE.Matrix4();
+const _viewerPos     = new THREE.Vector3();
+const _viewerQuat    = new THREE.Quaternion();
+const _viewerForward = new THREE.Vector3();
+const _manualMatrix  = new THREE.Matrix4();
+
+/* Build a placement matrix that puts the GLB upright on the wall:
+     - origin at the hit point
+     - model's +Z (front face / print) points along the wall normal
+       (i.e. into the room, away from the wall)
+     - model's +Y (height axis) is the wall's local up — world up
+       projected onto the wall surface
+     - model's +X (width axis) is the horizontal-along-wall direction
+   GLB was authored with print on +Z face, back of frame at z=0, so
+   the back face lands flush against the wall and the print faces the
+   viewer. */
+function buildWallPlacementMatrixFromNormal(srcMatrix, normalWorld, outMatrix) {
+    srcMatrix.decompose(_hitPos, _hitQuat, _hitScale);
+    const normal = normalWorld.clone().normalize();
+    /* Horizontal-along-wall = worldUp × normal */
+    _wallRight.crossVectors(_worldUp, normal);
+    if (_wallRight.lengthSq() < 1e-6) {
+        /* Degenerate: normal is parallel to worldUp (shouldn't happen
+           for walls, but guard against NaN). Use world X as fallback. */
+        _wallRight.set(1, 0, 0);
+    }
+    _wallRight.normalize();
+    /* Wall up = normal × right  (re-orthogonalises against worldUp) */
+    _wallUp.crossVectors(normal, _wallRight).normalize();
+    outMatrix.makeBasis(_wallRight, _wallUp, normal);
+    outMatrix.setPosition(_hitPos);
+    return outMatrix;
+}
+
+function updateManualFrontWall(frame) {
+    const viewerPose = frame.getViewerPose(xrRefSpace);
+    if (!viewerPose) {
+        reticle.visible = false;
+        manualPlacementReady = false;
+        setTrackingState('poor');
+        return;
+    }
+
+    _viewerMatrix.fromArray(viewerPose.transform.matrix);
+    _viewerMatrix.decompose(_viewerPos, _viewerQuat, _hitScale);
+
+    /* Camera looks down local -Z. The virtual wall sits in front of the
+       camera; its normal points back toward the user. */
+    _viewerForward.set(0, 0, -1).applyQuaternion(_viewerQuat).normalize();
+    _hitPos.copy(_viewerPos).addScaledVector(_viewerForward, manualWallDistanceM);
+    _surfaceNormal.copy(_viewerForward).multiplyScalar(-1);
+
+    _manualMatrix.identity();
+    _manualMatrix.setPosition(_hitPos);
+    buildWallPlacementMatrixFromNormal(_manualMatrix, _surfaceNormal, reticle.matrix);
+    lastPlacementMatrix.copy(reticle.matrix);
+    lastHit = null;
+    manualPlacementReady = true;
+
+    reticle.visible = true;
+    setTrackingState('good');
+    statusText.textContent = 'Front wall mode · tap to place';
+    debugPill.textContent =
+        'manual wall\n' +
+        'distance: ' + manualWallDistanceM.toFixed(2) + 'm\n' +
+        'anchor: no';
+}
+
+const debugPill = document.getElementById('debugPill');
+/* Reusable scratch for the hit-test pose's local Y axis (surface
+   normal per WebXR Hit Test spec). */
+const _axisY = new THREE.Vector3();
+
+function updateReticle(frame) {
+    const results = frame.getHitTestResults(hitTestSource);
+    const elapsedS = ((performance.now() - sessionStartTime) / 1000).toFixed(0);
+
+    if (results.length === 0) {
+        reticle.visible = false;
+        lastHit = null;
+        setTrackingState('poor');
+        debugPill.textContent = 'hits: 0\nelapsed: ' + elapsedS + 's';
+        /* ARCore detects vertical planes via PARALLAX — features on
+           the wall must visibly shift between frames. Pointing straight
+           at a wall and standing still produces almost no parallax, so
+           the wall never gets detected as a plane. The trick is to
+           SWEEP the phone in a slow arc PARALLEL to the wall surface,
+           or take a step sideways while keeping the wall in frame. */
+        if (!isPlaced) {
+            statusText.textContent = elapsedS < 6
+                ? 'Sweep the phone slowly along the wall'
+                : 'Step sideways · or use front wall';
+        }
+        return;
+    }
+
+    const hit = results[0];
+    const pose = hit.getPose(xrRefSpace);
+    if (!pose) {
+        reticle.visible = false;
+        lastHit = null;
+        setTrackingState('poor');
+        debugPill.textContent = 'hits: ' + results.length + '\nno pose';
+        return;
+    }
+
+    /* WebXR Hit Test spec: pose's local Y axis IS the surface normal
+       in world space. For walls the normal is roughly horizontal, so
+       its world-Y component stays near zero. */
+    _quat.set(
+        pose.transform.orientation.x,
+        pose.transform.orientation.y,
+        pose.transform.orientation.z,
+        pose.transform.orientation.w
+    );
+    _axisY.set(0, 1, 0).applyQuaternion(_quat);
+    const isWall = Math.abs(_axisY.y) < 0.5;
+
+    debugPill.textContent =
+        'hits: ' + results.length + '\n' +
+        'elapsed: ' + elapsedS + 's\n' +
+        'normal.y: ' + _axisY.y.toFixed(2) + '\n' +
+        'wall: ' + (isWall ? 'yes' : 'no');
+
+    /* Always show the reticle for any hit, but only allow placement
+       when it's on a wall. Reticle uses the raw hit matrix for now
+       so it sits flush with whatever surface is detected. */
+    _hitMatrix.fromArray(pose.transform.matrix);
+
+    if (isWall) {
+        /* Build proper wall placement orientation (print stands upright,
+           back to wall, face to viewer). The matrix builder clones the
+           normal internally so passing _axisY directly is safe. */
+        buildWallPlacementMatrixFromNormal(_hitMatrix, _axisY, reticle.matrix);
+        lastPlacementMatrix.copy(reticle.matrix);
+        lastHit = hit;
+        setTrackingState('good');
+    } else {
+        if (Math.abs(_axisY.y) > 0.75) {
+            detectedFloorY = pose.transform.position.y;
+            floorSeenAt = performance.now();
+        }
+        /* Just visualise the hit so we know detection is working,
+           but don't allow placement here. */
+        reticle.matrix.copy(_hitMatrix);
+        lastHit = null;
+        setTrackingState('poor');
+        if (!isPlaced) statusText.textContent = 'Aim at a wall, not the floor';
+    }
+    reticle.visible = true;
+}
+
+let lastHit = null;
+let lastPlacementMatrix = new THREE.Matrix4();
+
+/* Frozen-at-placement values for stable orientation as the user
+   moves around. Position follows the anchor each frame; orientation
+   is locked from the placement moment to avoid jitter.
+   placementWallRight / Up / Normal define the wall's local basis —
+   used by drag/twist gestures to project screen motion onto the
+   wall surface. */
+let placementOrientation = new THREE.Quaternion();
+let placementWallRight   = new THREE.Vector3();
+let placementWallUp      = new THREE.Vector3();
+let placementWallNormal  = new THREE.Vector3();
+let placementAnchorPos   = new THREE.Vector3();
+/* Scratch for the Matrix4.decompose inside onSelect — module-level
+   so each tap-to-place doesn't allocate two fresh Vector3s. */
+const _selectTmpPos      = new THREE.Vector3();
+const _selectTmpScale    = new THREE.Vector3();
+
+/* ──── Multi-touch gesture state (post-placement) ────
+   activeSources tracks all currently-active XRInputSources.
+     size === 1  → one-finger drag (slide print along wall)
+     size === 2  → two-finger twist (rotate around wall normal)
+     size === 0 or 3+ → idle / suspended
+   onSelectStart / onSelectEnd call applySourceState() to transition
+   cleanly between modes. Pre-placement selectstart is ignored — the
+   onSelect 'select' handler still owns placement. */
+const activeSources      = new Set();
+let activeDragSource     = null;
+let dragInitialized      = false;
+let dragStartWallX       = 0;
+let dragStartWallY       = 0;
+let lastTwistAngle       = null;     // null = not yet captured for this twist gesture
+let lastPinchDistance    = null;     // pairs with twist on 2-finger gestures
+let lastFloorDragRayY    = null;     // 3-finger floor calibration: last frame's mean ray-Y
+const _dragRay           = new THREE.Ray();
+const _dragQuat          = new THREE.Quaternion();
+const _dragIntersect     = new THREE.Vector3();
+const _dragStartIntersect = new THREE.Vector3();
+const _dragDelta         = new THREE.Vector3();
+const _wallPlane         = new THREE.Plane();
+const _twistA            = new THREE.Vector3();
+const _twistB            = new THREE.Vector3();
+const _twistAB           = new THREE.Vector3();
+
+/* ──── Tap-to-place (WebXR 'select' event) ────
+   Fires when the user taps the screen in an AR area not covered by
+   an overlay element. Taps on chips or close button do NOT fire
+   this — they fire normal DOM click events instead. */
+async function onSelect() {
+    if (isPlaced || (!lastHit && !manualPlacementReady)) return;
+
+    /* Freeze the orientation + wall-up axis from the moment of placement.
+       Uses module-level scratch vars (see _selectTmpPos / _selectTmpScale)
+       to keep tap-to-place allocation-free. */
+    lastPlacementMatrix.decompose(_selectTmpPos, placementOrientation, _selectTmpScale);
+    placementAnchorPos.copy(_selectTmpPos);
+
+    /* Re-derive the wall-up axis from the placement matrix's Y column. */
+    placementWallRight.setFromMatrixColumn(lastPlacementMatrix, 0).normalize();
+    placementWallUp.setFromMatrixColumn(lastPlacementMatrix, 1).normalize();
+    placementWallNormal.setFromMatrixColumn(lastPlacementMatrix, 2).normalize();
+    alignCenterToHangHeight();
+
+    if (lastHit) {
+        try {
+            printAnchor = await lastHit.createAnchor();
+        } catch (e) {
+            printAnchor = null;
+        }
+    } else {
+        printAnchor = null;
+    }
+
+    isPlaced = true;
+    manualWallMode = false;
+    manualPlacementReady = false;
+    printModel.visible = true;
+    reticle.visible = false;
+    frontWallBtn.classList.remove('active');
+
+    overlay.classList.add('placed');
+    statusText.textContent = 'Placed · 1-finger move · 2-finger pinch+rotate · drag floor pill or 3-finger drag for floor';
+
+    if (navigator.vibrate) navigator.vibrate(60);
+}
+
+/* ──── Drag + twist gestures (post-placement) ────
+   selectstart adds an input source; selectend removes it. Mode
+   follows count: 1 → drag, 2 → twist, anything else → suspended.
+   Both modes re-initialise on every transition (intersect origins
+   for drag, last angle for twist) so handing off between fingers
+   never produces a jump. */
+function applySourceState() {
+    /* Always reset every gesture's running origin so each new mode
+       captures fresh baselines on its first frame. */
+    activeDragSource  = null;
+    dragInitialized   = false;
+    lastTwistAngle    = null;
+    lastPinchDistance = null;
+    lastFloorDragRayY = null;
+
+    if (activeSources.size === 1) {
+        activeDragSource = activeSources.values().next().value;
+    }
+    /* size === 2 → updateTwist handles both rotation + Z pinch
+       size === 3 → updateFloorDrag calibrates floor
+       size === 0 or > 3 → all gestures no-op                       */
+}
+
+function onSelectStart(e) {
+    if (!isPlaced) return;
+    activeSources.add(e.inputSource);
+    applySourceState();
+}
+
+function onSelectEnd(e) {
+    activeSources.delete(e.inputSource);
+    applySourceState();
+}
+
+/* Helper: intersect a given XRInputSource's target-ray with the
+   current wall plane, write into `out`. Returns true on success. */
+function intersectSourceWithWall(source, frame, out) {
+    const tPose = frame.getPose(source.targetRaySpace, xrRefSpace);
+    if (!tPose) return false;
+    _dragRay.origin.set(
+        tPose.transform.position.x,
+        tPose.transform.position.y,
+        tPose.transform.position.z
+    );
+    _dragQuat.set(
+        tPose.transform.orientation.x,
+        tPose.transform.orientation.y,
+        tPose.transform.orientation.z,
+        tPose.transform.orientation.w
+    );
+    _dragRay.direction.set(0, 0, -1).applyQuaternion(_dragQuat);
+    return !!_dragRay.intersectPlane(_wallPlane, out);
+}
+
+/* Two-finger gesture: handles BOTH rotation (twist) AND depth-from-
+   wall (pinch) in a single pass over the input sources. Projects
+   both rays onto the wall plane once, then derives:
+     - angle of the A→B vector in wall-local 2D → rotation (wallRotZ)
+     - distance between A and B in wall metres → Z (wallOffsetZ)
+   Pinch metaphor: bringing fingers together pulls the print toward
+   the viewer (positive wallOffsetZ, print stands further out from
+   the wall). Spreading fingers pushes it back toward the wall. */
+const PINCH_SENSITIVITY = 1.0;   // 1 metre of pinch delta → 1 metre of Z
+
+function updateTwist(frame) {
+    if (!isPlaced || activeSources.size !== 2) {
+        lastTwistAngle    = null;
+        lastPinchDistance = null;
+        return;
+    }
+
+    _wallPlane.setFromNormalAndCoplanarPoint(placementWallNormal, placementAnchorPos);
+
+    const iter = activeSources.values();
+    const sourceA = iter.next().value;
+    const sourceB = iter.next().value;
+
+    if (!intersectSourceWithWall(sourceA, frame, _twistA)) return;
+    if (!intersectSourceWithWall(sourceB, frame, _twistB)) return;
+
+    _twistAB.copy(_twistB).sub(_twistA);
+
+    /* Rotation */
+    const angle = Math.atan2(
+        _twistAB.dot(placementWallUp),
+        _twistAB.dot(placementWallRight)
+    );
+    if (lastTwistAngle !== null) {
+        let dAngle = angle - lastTwistAngle;
+        if (dAngle >  Math.PI) dAngle -= 2 * Math.PI;
+        if (dAngle < -Math.PI) dAngle += 2 * Math.PI;
+        wallRotZ += dAngle;
+    }
+    lastTwistAngle = angle;
+
+    /* Pinch → Z */
+    const distance = _twistAB.length();
+    if (lastPinchDistance !== null) {
+        const dDist = lastPinchDistance - distance;   // pinch (closer) → +Z
+        wallOffsetZ += dDist * PINCH_SENSITIVITY;
+    }
+    lastPinchDistance = distance;
+}
+
+/* Floor calibration via DOM touch events (not WebXR input sources).
+   Chrome's WebXR dom-overlay implementation routes some multi-finger
+   touches through DOM rather than as XRInputSources, so the previous
+   activeSources.size === 3 check never fired on real hardware. DOM
+   touch events fire reliably for all simultaneous touches.
+
+   Two gestures wired below in wireFloorGestures():
+
+   A) 3-finger drag anywhere in the AR view (NOT on chips/buttons):
+      Drag up → floor moves up · Drag down → floor moves down
+      One screen-height of drag = 1 metre of floor offset.
+
+   B) 1-finger drag on the FLOOR PILL itself:
+      Tap the '0"' readout area and drag up/down to scrub the floor
+      offset. Half a screen-height of drag = 0.5 m of floor offset.
+      Faster than tap-and-hold the +/- buttons for big corrections.
+
+   updateFloorDrag is now a no-op kept for backward compatibility
+   with the render-loop call site. */
+function updateFloorDrag() { /* DOM-based now, no per-frame work */ }
+
+let touchFloorDragActive   = false;
+let touchFloorDragStartY   = 0;
+let touchFloorDragStartOff = 0;
+const TOUCH_FLOOR_SENSITIVITY_3F = 1.0;  // 1 screen-height = 1 m
+const TOUCH_FLOOR_SENSITIVITY_1F = 0.5;  // pill drag is finer
+
+function isTouchOnInteractive(touch) {
+    const t = touch.target;
+    return t && t.closest && t.closest('button, .chip, #floorOffsetLabel, #floorPanel');
+}
+
+let floorGesturesWired = false;
+function wireFloorGestures() {
+    if (floorGesturesWired) return;
+    floorGesturesWired = true;
+    /* Three-finger drag anywhere on the overlay (excluding UI). */
+    overlay.addEventListener('touchstart', (e) => {
+        if (!isPlaced) return;
+        if (e.touches.length !== 3) { touchFloorDragActive = false; return; }
+        for (let i = 0; i < e.touches.length; i++) {
+            if (isTouchOnInteractive(e.touches[i])) {
+                touchFloorDragActive = false;
+                return;
+            }
+        }
+        touchFloorDragActive   = true;
+        touchFloorDragStartY   = e.touches[0].clientY;
+        touchFloorDragStartOff = floorAdjustOffsetM;
+    }, { passive: true });
+
+    overlay.addEventListener('touchmove', (e) => {
+        if (!touchFloorDragActive) return;
+        if (e.touches.length !== 3) { touchFloorDragActive = false; return; }
+        const dy = e.touches[0].clientY - touchFloorDragStartY;
+        /* dy negative → finger moves UP on screen → floor moves UP */
+        const screenFrac = -dy / window.innerHeight;
+        floorAdjustOffsetM = touchFloorDragStartOff + screenFrac * TOUCH_FLOOR_SENSITIVITY_3F;
+        refreshFloorOffsetLabel();
+        alignCenterToHangHeight();
+    }, { passive: true });
+
+    overlay.addEventListener('touchend', (e) => {
+        if (e.touches.length < 3) touchFloorDragActive = false;
+    }, { passive: true });
+
+    /* Drag the floor pill itself for fast calibration. Anywhere on
+       the panel except the +/- buttons (which have their own
+       press-and-hold handlers). */
+    const panel = document.getElementById('floorPanel');
+    if (panel) {
+        let panelDragActive = false;
+        let panelDragStartY = 0;
+        let panelDragStartOff = 0;
+        panel.addEventListener('touchstart', (e) => {
+            if (!isPlaced) return;
+            if (e.touches.length !== 1) return;
+            if (e.touches[0].target.closest('.floor-btn')) return;  // let +/- handle it
+            e.stopPropagation();
+            panelDragActive = true;
+            panelDragStartY = e.touches[0].clientY;
+            panelDragStartOff = floorAdjustOffsetM;
+        }, { passive: true });
+        panel.addEventListener('touchmove', (e) => {
+            if (!panelDragActive) return;
+            e.stopPropagation();
+            const dy = e.touches[0].clientY - panelDragStartY;
+            const screenFrac = -dy / window.innerHeight;
+            floorAdjustOffsetM = panelDragStartOff + screenFrac * TOUCH_FLOOR_SENSITIVITY_1F;
+            refreshFloorOffsetLabel();
+            alignCenterToHangHeight();
+        }, { passive: true });
+        panel.addEventListener('touchend',   () => { panelDragActive = false; }, { passive: true });
+        panel.addEventListener('touchcancel',() => { panelDragActive = false; }, { passive: true });
+    }
+}
+
+function updateDrag(frame) {
+    if (!activeDragSource || !isPlaced) return;
+
+    _wallPlane.setFromNormalAndCoplanarPoint(placementWallNormal, placementAnchorPos);
+    if (!intersectSourceWithWall(activeDragSource, frame, _dragIntersect)) return;
+
+    if (!dragInitialized) {
+        _dragStartIntersect.copy(_dragIntersect);
+        dragStartWallX = wallOffsetX;
+        dragStartWallY = wallOffsetY;
+        dragInitialized = true;
+        return;
+    }
+
+    /* World-space delta projected onto wall-local axes */
+    _dragDelta.copy(_dragIntersect).sub(_dragStartIntersect);
+    wallOffsetX = dragStartWallX + _dragDelta.dot(placementWallRight);
+    wallOffsetY = dragStartWallY + _dragDelta.dot(placementWallUp);
+}
+
+/* ──── Post-placement: keep print on the wall every frame ────
+   Position comes from the XRAnchor (follows ARCore refinement, so
+   the print doesn't drift as the user moves). Orientation is locked
+   from placement time for visual stability.
+   Hang-height offset is applied along the wall's local up axis (not
+   world Y) so it stays parallel to the wall surface even if the wall
+   is slightly off-vertical. */
+const _anchorPos     = new THREE.Vector3();
+const _finalPos      = new THREE.Vector3();
+const _anchorMatrix4 = new THREE.Matrix4();
+const _localZRot     = new THREE.Quaternion();
+const _localZAxis    = new THREE.Vector3(0, 0, 1);
+const _tapeBottom    = new THREE.Vector3();
+const _tapeTop       = new THREE.Vector3();
+const _tapeTickA     = new THREE.Vector3();
+const _tapeTickB     = new THREE.Vector3();
+const _tapeLabelPos  = new THREE.Vector3();
+
+/* Tape segments are now real PlaneGeometry strips rather than
+   THREE.Line — WebGL forces lines to 1 device pixel regardless of
+   settings, so we get proper world-space thickness this way.
+   Each segment is a 5 mm gold strip on top of a 9 mm dark halo
+   strip, giving ~2 mm of dark margin around the gold on every
+   side. Reads on bright/sunlit walls without changing brand
+   colours. */
+const GOLD_STRIP_HALF_WIDTH = 0.0025;  // 5 mm gold strip
+const HALO_STRIP_HALF_WIDTH = 0.0045;  // 9 mm halo strip (2 mm dark margin)
+const HALO_COLOR            = 0x1a1612;
+const HALO_OPACITY          = 0.78;
+
+/* Label positioning constants. Label is a camera-facing Sprite at
+   0.52 m × 0.16 m world scale (set in initTapeMeasure). Offset from
+   the tape line scales with the current print width so it always
+   sits just past the right edge of the print with a consistent
+   gap, regardless of Small / Medium / Large selection. */
+const LABEL_GAP_M           = 0.05;    // 5 cm clear space between print and label
+const LABEL_HALF_WIDTH_M    = 0.26;    // matches sprite scale 0.52 set in initTapeMeasure
+
+let tapeLine             = null;
+let tapeLineHalo         = null;
+let tapeBottomTick       = null;
+let tapeBottomTickHalo   = null;
+let tapeTopTick          = null;
+let tapeTopTickHalo      = null;
+let tapeLabelSprite      = null;
+let tapeLabelTexture     = null;
+let tapeLabelCanvas      = null;
+let tapeLabelContext     = null;
+let lastTapeLabel        = '';
+
+/* True only when ARCore has actually returned a horizontal-plane
+   detection within the freshness window. Drives the '~' prefix on
+   the tape label (estimated vs. measured) — but does NOT gate
+   alignment math anymore. */
+function isFloorMeasured() {
+    return detectedFloorY !== null && (performance.now() - floorSeenAt) < FLOOR_MAX_AGE_MS;
+}
+
+/* Effective floor Y = best floor reference we have, plus the user's
+   manual calibration offset. Resolution order:
+     1. ARCore's detected floor (most accurate when available)
+     2. Bootstrap from placement: assume the chip-selected hang
+        height matched the anchor when the user tapped. This is the
+        wrong floor by construction (it just makes the tape's
+        labelled value match the chip exactly), BUT it gives the
+        manual +/- pill a real reference to adjust from. The user
+        nudges until the tape's bottom tick visually aligns with the
+        actual floor — then the calibration is accurate.
+   Manual offset always applies on top, so the calibration buttons
+   are never no-ops once a print is placed. */
+function getEffectiveFloorY() {
+    if (detectedFloorY !== null) {
+        return detectedFloorY + floorAdjustOffsetM;
+    }
+    if (isPlaced) {
+        return placementAnchorPos.y
+             - hangHeightIn * 0.0254
+             + floorAdjustOffsetM;
+    }
+    return null;
+}
+
+/* hasFreshFloor() retained for code that wants 'do we have ANY
+   floor reference to use'. Always true post-placement now. */
+function hasFreshFloor() {
+    return getEffectiveFloorY() !== null;
+}
+
+/* PlaneGeometry-based tape strip: a flat quad in 3D space with
+   thickness controlled by halfWidth. Four vertices (two triangles)
+   updated per frame from endpoints + a perpendicular axis. Bypasses
+   the WebGL 1-pixel line-width limitation entirely. */
+function makeTapeStrip(color, opacity) {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(12), 3));
+    geometry.setIndex([0, 1, 2, 0, 2, 3]);
+    const material = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        depthTest: false,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.frustumCulled = false;
+    mesh.renderOrder = 100;
+    return mesh;
+}
+
+/* Position the four vertices of a strip mesh as a quad spanning a→b
+   with thickness halfWidth*2 along perpAxis. */
+function setTapeStrip(mesh, a, b, perpAxis, halfWidth) {
+    const pos = mesh.geometry.attributes.position.array;
+    const px = perpAxis.x * halfWidth;
+    const py = perpAxis.y * halfWidth;
+    const pz = perpAxis.z * halfWidth;
+
+    pos[0]  = a.x - px; pos[1]  = a.y - py; pos[2]  = a.z - pz;
+    pos[3]  = a.x + px; pos[4]  = a.y + py; pos[5]  = a.z + pz;
+    pos[6]  = b.x + px; pos[7]  = b.y + py; pos[8]  = b.z + pz;
+    pos[9]  = b.x - px; pos[10] = b.y - py; pos[11] = b.z - pz;
+
+    mesh.geometry.attributes.position.needsUpdate = true;
+}
+
+/* Updates a gold strip + its dark halo strip in one call. halo is
+   wider (HALO_STRIP_HALF_WIDTH > GOLD_STRIP_HALF_WIDTH) and sits
+   below the gold via renderOrder, so it reads as an outline. */
+function setTapeStripWithHalo(gold, halo, a, b, perpAxis) {
+    setTapeStrip(halo, a, b, perpAxis, HALO_STRIP_HALF_WIDTH);
+    setTapeStrip(gold, a, b, perpAxis, GOLD_STRIP_HALF_WIDTH);
+}
+
+function initTapeMeasure() {
+    tapeGroup = new THREE.Group();
+    tapeGroup.visible = false;
+    tapeGroup.renderOrder = 100;
+
+    /* Halos first — wider dark strips, added to the group before
+       the gold strips and at renderOrder 99 so they reliably render
+       behind. */
+    tapeLineHalo       = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeLineHalo.renderOrder = 99;
+    tapeBottomTickHalo = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeBottomTickHalo.renderOrder = 99;
+    tapeTopTickHalo    = makeTapeStrip(HALO_COLOR, HALO_OPACITY); tapeTopTickHalo.renderOrder = 99;
+    tapeGroup.add(tapeLineHalo, tapeBottomTickHalo, tapeTopTickHalo);
+
+    /* Gold strips on top */
+    tapeLine       = makeTapeStrip(0xCFA246, 0.95);
+    tapeBottomTick = makeTapeStrip(0xf7f3ec, 0.85);
+    tapeTopTick    = makeTapeStrip(0xf7f3ec, 0.85);
+    tapeGroup.add(tapeLine, tapeBottomTick, tapeTopTick);
+
+    tapeLabelCanvas = document.createElement('canvas');
+    tapeLabelCanvas.width = 512;
+    tapeLabelCanvas.height = 160;
+    tapeLabelContext = tapeLabelCanvas.getContext('2d');
+    tapeLabelTexture = new THREE.CanvasTexture(tapeLabelCanvas);
+    tapeLabelTexture.colorSpace = THREE.SRGBColorSpace;
+    tapeLabelSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: tapeLabelTexture,
+        transparent: true,
+        depthTest: false,
+        depthWrite: false
+    }));
+    tapeLabelSprite.renderOrder = 101;
+    tapeLabelSprite.scale.set(0.52, 0.16, 1);
+    tapeGroup.add(tapeLabelSprite);
+
+    scene.add(tapeGroup);
+}
+
+function formatTapeLabel(heightM, isMeasured) {
+    const inches = Math.round(heightM / 0.0254);
+    const cm = Math.round(heightM * 100);
+    return (isMeasured ? '' : '~') + inches + '" / ' + cm + ' cm to centre';
+}
+
+function drawTapeLabel(text) {
+    if (text === lastTapeLabel) return;
+    lastTapeLabel = text;
+
+    const ctx = tapeLabelContext;
+    ctx.clearRect(0, 0, tapeLabelCanvas.width, tapeLabelCanvas.height);
+    ctx.fillStyle = 'rgba(10,10,10,0.78)';
+    ctx.fillRect(0, 20, tapeLabelCanvas.width, 104);
+    ctx.strokeStyle = 'rgba(207,162,70,0.82)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, 22, tapeLabelCanvas.width - 4, 100);
+    ctx.fillStyle = '#CFA246';
+    ctx.font = '700 34px Inter, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, tapeLabelCanvas.width / 2, 74);
+    tapeLabelTexture.needsUpdate = true;
+}
+
+function alignCenterToHangHeight() {
+    if (!hasFreshFloor() || Math.abs(placementWallUp.y) < 0.2) return false;
+
+    const desiredY = getEffectiveFloorY() + hangHeightIn * 0.0254;
+    const currentY = placementAnchorPos.y
+        + placementWallRight.y * wallOffsetX
+        + placementWallUp.y * wallOffsetY
+        + placementWallNormal.y * wallOffsetZ;
+    wallOffsetY += (desiredY - currentY) / placementWallUp.y;
+    return true;
+}
+
+/* Reflect floor-detection state in the chip-area subtitle so the
+   user can SEE whether a chip pick will be floor-anchored or
+   estimated. Same gate as alignCenterToHangHeight: pre-placement
+   needs a fresh floor; post-placement also needs a near-vertical
+   wall. textContent is only written when the string actually
+   changes (state held in lastHangLabel). */
+let lastHangLabel = '';
+function updateHangLabel() {
+    if (!hangLabel) return;
+    const canSnap = hasFreshFloor()
+        && (!isPlaced || Math.abs(placementWallUp.y) >= 0.2);
+    const text = canSnap
+        ? 'Hang height — gallery standard'
+        : 'Hang height — floor not detected · move device';
+    if (text === lastHangLabel) return;
+    lastHangLabel = text;
+    hangLabel.textContent = text;
+}
+
+function updateTapeMeasure() {
+    if (!tapeGroup || !isPlaced) return;
+
+    /* Tape only makes architectural sense on a near-vertical wall —
+       the rule is meant to drop straight down to the floor. Bail if
+       the placement's wall-up axis isn't reasonably aligned with
+       world-up (same threshold as alignCenterToHangHeight). Hides
+       the tape group entirely so a leftover from a previous
+       placement can't linger at a weird angle. */
+    if (Math.abs(placementWallUp.y) < 0.2) {
+        tapeGroup.visible = false;
+        return;
+    }
+
+    /* effFloor is always a real number post-placement — bootstrap
+       handles the case where ARCore hasn't detected a floor.
+       'measured' only governs the ~ prefix on the label so the user
+       knows whether they're seeing ARCore data or an estimate. */
+    const effFloor = getEffectiveFloorY();
+    const measured = isFloorMeasured();
+    const heightM = Math.max(0, _finalPos.y - effFloor);
+    const floorY  = effFloor;
+    const normalLift = 0.018 + Math.max(0, wallOffsetZ);
+    const tickHalf = 0.09;
+
+    _tapeBottom.copy(_finalPos);
+    _tapeBottom.y = floorY;
+    _tapeBottom.addScaledVector(placementWallNormal, normalLift);
+
+    _tapeTop.copy(_finalPos).addScaledVector(placementWallNormal, normalLift);
+
+    /* Vertical rule — strip width extends along placementWallRight */
+    setTapeStripWithHalo(tapeLine, tapeLineHalo,
+        _tapeBottom, _tapeTop, placementWallRight);
+
+    _tapeTickA.copy(_tapeBottom).addScaledVector(placementWallRight, -tickHalf);
+    _tapeTickB.copy(_tapeBottom).addScaledVector(placementWallRight, tickHalf);
+    /* Horizontal tick — strip width extends along placementWallUp */
+    setTapeStripWithHalo(tapeBottomTick, tapeBottomTickHalo,
+        _tapeTickA, _tapeTickB, placementWallUp);
+
+    _tapeTickA.copy(_tapeTop).addScaledVector(placementWallRight, -tickHalf);
+    _tapeTickB.copy(_tapeTop).addScaledVector(placementWallRight, tickHalf);
+    setTapeStripWithHalo(tapeTopTick, tapeTopTickHalo,
+        _tapeTickA, _tapeTickB, placementWallUp);
+
+    drawTapeLabel(formatTapeLabel(heightM, measured));
+
+    /* Label centre offset = print half-width + 5 cm gap + label
+       half-width. Result: label's LEFT edge sits 5 cm past the
+       print's right edge regardless of size selected. Without
+       scaling, the fixed 0.32 m offset overlapped the print
+       footprint on Large and floated awkwardly far from Small. */
+    const printHalfWidthM = (currentSize.wIn * 0.0254) / 2;
+    const labelOffsetRight = printHalfWidthM + LABEL_GAP_M + LABEL_HALF_WIDTH_M;
+
+    _tapeLabelPos.copy(_tapeBottom).lerp(_tapeTop, 0.5)
+        .addScaledVector(placementWallRight, labelOffsetRight)
+        .addScaledVector(placementWallNormal, 0.02);
+    tapeLabelSprite.position.copy(_tapeLabelPos);
+    tapeGroup.visible = true;
+}
+
+function updatePrintFromAnchor(frame) {
+    if (printAnchor) {
+        const pose = frame.getPose(printAnchor.anchorSpace, xrRefSpace);
+        if (pose) {
+            _anchorMatrix4.fromArray(pose.transform.matrix);
+            _anchorPos.setFromMatrixPosition(_anchorMatrix4);
+        } else {
+            _anchorPos.copy(placementAnchorPos);
+        }
+    } else {
+        _anchorPos.copy(placementAnchorPos);
+    }
+
+    _finalPos.copy(_anchorPos)
+        .addScaledVector(placementWallRight, wallOffsetX)
+        .addScaledVector(placementWallUp, wallOffsetY)
+        .addScaledVector(placementWallNormal, wallOffsetZ);
+
+    printModel.position.copy(_finalPos);
+    printModel.quaternion
+        .copy(placementOrientation)
+        .multiply(_localZRot.setFromAxisAngle(_localZAxis, wallRotZ));
+    printModel.scale.set(1, 1, 1);
+    printModel.updateMatrix();
+
+    updateTapeMeasure();
+}
+
+/* ──── Tracking state → overlay class toggle ──── */
+function setTrackingState(state) {
+    if (state === 'good') {
+        overlay.classList.add('tracking-good');
+        overlay.classList.remove('tracking-poor');
+        if (!isPlaced) statusText.textContent = 'Wall found · tap the gold ring to place';
+    } else {
+        overlay.classList.remove('tracking-good');
+        overlay.classList.add('tracking-poor');
+        if (!isPlaced) statusText.textContent = 'Slowly point your camera at a wall';
+    }
+}
+
+/* Fine adjustment controls. */
+function resetWallOffsets() {
+    wallOffsetX = 0;
+    wallOffsetZ = 0;
+    wallRotZ = 0;
+    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
+    if (isPlaced) alignCenterToHangHeight();
+}
+
+function adjustPrint(action) {
+    switch (action) {
+        case 'x-': wallOffsetX -= MOVE_STEP_M; break;
+        case 'x+': wallOffsetX += MOVE_STEP_M; break;
+        case 'y-': wallOffsetY -= MOVE_STEP_M; break;
+        case 'y+': wallOffsetY += MOVE_STEP_M; break;
+        case 'z-': wallOffsetZ -= MOVE_STEP_M; break;
+        case 'z+': wallOffsetZ += MOVE_STEP_M; break;
+        case 'rot-': wallRotZ -= ROT_STEP_RAD; break;
+        case 'rot+': wallRotZ += ROT_STEP_RAD; break;
+        case 'reset': resetWallOffsets(); break;
+    }
+}
+
+function stopAdjustRepeat() {
+    if (adjustRepeatTimer) {
+        clearInterval(adjustRepeatTimer);
+        adjustRepeatTimer = null;
+    }
+}
+
+function wireAdjustControls() {
+    if (adjustControlsWired) return;
+    adjustControlsWired = true;
+
+    document.querySelectorAll('#movePanel .adjust-btn').forEach((button) => {
+        const action = button.getAttribute('data-adjust');
+        button.addEventListener('click', (e) => e.stopPropagation());
+        button.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustPrint(action);
+            stopAdjustRepeat();
+            if (action !== 'reset') {
+                adjustRepeatTimer = setInterval(() => adjustPrint(action), 90);
+            }
+        });
+        button.addEventListener('pointerup', stopAdjustRepeat);
+        button.addEventListener('pointercancel', stopAdjustRepeat);
+        button.addEventListener('pointerleave', stopAdjustRepeat);
+    });
+}
+
+/* Manual floor-height calibration. Buttons are post-placement only.
+   Press-and-hold repeats every 90 ms for fast nudging. After each
+   adjust the print re-snaps to the chosen hang height via
+   alignCenterToHangHeight() so the change is visible immediately
+   on both the tape measure and the print's vertical position. */
+let floorControlsWired = false;
+function adjustFloor(action) {
+    if (action === '0') {
+        floorAdjustOffsetM = 0;
+    } else {
+        const stepIn = parseInt(action, 10);     // +1 or -1
+        floorAdjustOffsetM += stepIn * FLOOR_ADJUST_STEP_M;
+    }
+    refreshFloorOffsetLabel();
+    if (isPlaced) alignCenterToHangHeight();
+}
+function refreshFloorOffsetLabel() {
+    const lbl = document.getElementById('floorOffsetLabel');
+    if (!lbl) return;
+    const inches = Math.round(floorAdjustOffsetM / 0.0254);
+    lbl.textContent = (inches > 0 ? '+' : '') + inches + '"';
+    lbl.classList.toggle('active', inches !== 0);
+}
+function wireFloorControls() {
+    if (floorControlsWired) return;
+    floorControlsWired = true;
+
+    /* +/- buttons with press-and-hold repeat */
+    document.querySelectorAll('#floorPanel .floor-btn').forEach((button) => {
+        const action = button.getAttribute('data-floor');
+        button.addEventListener('click', (e) => e.stopPropagation());
+        button.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustFloor(action);
+            stopAdjustRepeat();
+            adjustRepeatTimer = setInterval(() => adjustFloor(action), 90);
+        });
+        button.addEventListener('pointerup', stopAdjustRepeat);
+        button.addEventListener('pointercancel', stopAdjustRepeat);
+        button.addEventListener('pointerleave', stopAdjustRepeat);
+    });
+
+    /* Tap the offset readout (e.g. '+3"') to reset floor to 0. */
+    const lbl = document.getElementById('floorOffsetLabel');
+    if (lbl) {
+        lbl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isPlaced) return;
+            adjustFloor('0');
+        });
+        lbl.style.cursor = 'pointer';
+    }
+}
+
+function wireFrontWallButton() {
+    if (frontWallButtonWired) return;
+    frontWallButtonWired = true;
+
+    frontWallBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isPlaced) return;
+
+        manualWallMode = !manualWallMode;
+        manualPlacementReady = false;
+        lastHit = null;
+        frontWallBtn.classList.toggle('active', manualWallMode);
+        frontWallBtn.textContent = manualWallMode ? 'Scanning front' : 'Use front wall';
+
+        if (!manualWallMode) {
+            reticle.visible = false;
+            setTrackingState('poor');
+        }
+    });
+}
+
+/* ──── Hang-height chips ────
+   Updates state pre- and post-placement.
+   - Pre-placement: changes the future hang height
+   - Post-placement: slides the print up or down the wall in real time
+     by adjusting wallOffsetY. The next frame's updatePrintFromAnchor
+     will apply the new offset. */
+function wireChips() {
+    if (hangChipsWired) return;
+    hangChipsWired = true;
+
+    const chips = document.querySelectorAll('#chipRow .chip');
+    chips.forEach((chip) => {
+        chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chips.forEach((c) => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const newH = parseInt(chip.getAttribute('data-h'), 10);
+
+            /* Single source of truth for the absolute floor-anchored
+               alignment: alignCenterToHangHeight(). It internally
+               guards on hasFreshFloor() + wall-up tilt. If it can't
+               run (no detected floor or tilted wall), fall back to a
+               relative delta from the previous hang height. */
+            const previousH = hangHeightIn;
+            hangHeightIn = newH;
+
+            if (isPlaced) {
+                if (!alignCenterToHangHeight()) {
+                    wallOffsetY += (newH - previousH) * 0.0254;
+                }
+            }
+        });
+    });
+}
+
+/* Size chips — swap the GLB live, both before and after placement.
+   Pre-placement: just updates currentSize + HUD; the next reticle
+   tap will place the newly-selected size.
+   Post-placement: loads (or pulls from cache) the new GLB, removes
+   the current model from the scene, attaches the new one to the
+   anchor with the SAME placement orientation + hang offset — visual
+   continuity, no need to re-tap. */
+async function wireSizeChips() {
+    if (sizeChipsWired) return;
+    sizeChipsWired = true;
+
+    const chips = document.querySelectorAll('#sizeRow .chip');
+    for (const chip of chips) {
+        chip.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const sizeId = chip.getAttribute('data-size');
+            const newSize = SIZES.find((s) => s.id === sizeId);
+            if (!newSize || newSize === currentSize) return;
+
+            /* Visual feedback while loading */
+            chips.forEach((c) => { c.setAttribute('disabled', ''); c.classList.remove('active'); });
+            chip.classList.add('active');
+
+            try {
+                const newModel = await loadSizedGLB(newSize);
+
+                /* Swap into the scene */
+                if (printModel && scene) scene.remove(printModel);
+                printModel = newModel;
+                if (scene) scene.add(printModel);
+
+                /* If we're post-placement, restore the placement transform
+                   so the new size appears at the same anchor + same hang
+                   height without the user re-tapping. */
+                if (isPlaced) {
+                    printModel.visible = true;
+                    printModel.matrixAutoUpdate = false;
+                    /* Position + orientation are reapplied each frame by
+                       updatePrintFromAnchor — nothing else needed here. */
+                } else {
+                    printModel.visible = false;
+                }
+
+                currentSize = newSize;
+                refreshHud();
+            } catch (err) {
+                /* Load failed — revert UI */
+                console.error('[AR-XR] size swap failed', err);
+                chip.classList.remove('active');
+                const prev = document.querySelector(
+                    '#sizeRow .chip[data-size="' + currentSize.id + '"]'
+                );
+                if (prev) prev.classList.add('active');
+            } finally {
+                chips.forEach((c) => c.removeAttribute('disabled'));
+            }
+        });
+    }
+}
+
+/* ──── Session end / cleanup ──── */
+function onSessionEnd() {
+    if (hitTestSource) { hitTestSource.cancel(); hitTestSource = null; }
+    xrRefSpace = null;
+    viewerSpace = null;
+    printAnchor = null;
+    isPlaced = false;
+    detectedFloorY = null;
+    floorSeenAt = 0;
+    floorAdjustOffsetM = 0;
+    refreshFloorOffsetLabel();
+    manualWallMode = false;
+    manualPlacementReady = false;
+    activeSources.clear();
+    activeDragSource = null;
+    dragInitialized = false;
+    lastTwistAngle = null;
+    lastPinchDistance = null;
+    lastFloorDragRayY = null;
+    wallOffsetX = 0;
+    wallOffsetY = (hangHeightIn - DEFAULT_HANG_HEIGHT_IN) * 0.0254;
+    wallOffsetZ = 0;
+    wallRotZ = 0;
+    stopAdjustRepeat();
+    firstFrameRendered = false;
+    /* Drop all detected-plane wireframes — fresh start on next entry */
+    for (const [, wireframe] of planeWireframes) {
+        if (scene) scene.remove(wireframe);
+        wireframe.geometry.dispose();
+        wireframe.material.dispose();
+    }
+    planeWireframes.clear();
+    if (tapeGroup) tapeGroup.visible = false;
+    lastTapeLabel = '';
+    lastHangLabel = '';
+    if (hangLabel) hangLabel.textContent = 'Hang height — gallery standard';
+    overlay.classList.remove('active', 'tracking-good', 'tracking-poor', 'placed');
+    frontWallBtn.classList.remove('active');
+    frontWallBtn.textContent = 'Use front wall';
+    document.body.classList.remove('xr-active');
+    loadingPill.classList.remove('show');
+    if (renderer) {
+        renderer.setAnimationLoop(null);
+        renderer.domElement.remove();
+        renderer = null;
+    }
+    launchScreen.style.display = 'flex';
+}
+
+/* ──── Resize handling (rare in WebXR but safe to have) ──── */
+window.addEventListener('resize', () => {
+    if (renderer) renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ──── Go ──── */
+init();
+</script>
+
+</body>
+</html>

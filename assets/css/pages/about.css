@@ -33,9 +33,9 @@
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #CFA246;
+            color: #7F5F10;
             text-decoration: none;
-            border-bottom: 1px solid #CFA246;
+            border-bottom: 1px solid #7F5F10;
             padding-bottom: 8px;
             transition: color 0.3s ease, border-color 0.3s ease;
         }

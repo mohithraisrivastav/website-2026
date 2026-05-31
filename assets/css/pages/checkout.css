@@ -41,7 +41,7 @@
         .summary-item .qty { font-size: 0.8625rem; color: #666; }
         .summary-item .price { font-size: 0.938rem; color: #fff; font-weight: 600; }
         .summary-empty { padding: 40px 0; text-align: center; color: #555; font-size: 1rem; }
-        .remove-item { background: none; border: none; padding: 0; font-size: 1rem; color: #555; cursor: pointer; transition: color 0.2s; line-height: 1; display: flex; align-items: center; justify-content: center; }
+        .remove-item { background: none; border: none; padding: 0; font-size: 1rem; color: #555; cursor: pointer; transition: color 0.2s; line-height: 1; display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
         .remove-item:hover { color: #e05a3a; }
 
         .summary-breakdown { border-top: 1px solid #222; padding-top: 25px; margin-bottom: 25px; }

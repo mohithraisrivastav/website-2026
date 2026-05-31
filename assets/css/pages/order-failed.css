@@ -38,7 +38,7 @@
         .fail-label { color: #cc4444 !important; }
         .fail-msg { color: #555 !important; }
         .reason-box { background: rgba(247,243,236,0.82) !important; border-color: rgba(26, 22, 18,0.1) !important; backdrop-filter: blur(8px); color: #666 !important; }
-        .reason-box .label { color: #888 !important; }
+        .reason-box .label { color: #595959 !important; } /* was #888 = 3.5:1 FAIL — #595959 = 5.9:1 PASS */
         .reassure { color: #666 !important; }
         .cta-btn { border-color: rgba(26, 22, 18,0.2) !important; color: #1A1612 !important; }
         .cta-btn:hover { background: #1A1612 !important; color: #F7F3ED !important; border-color: #1A1612 !important; }

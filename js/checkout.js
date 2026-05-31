@@ -13,23 +13,42 @@ const CONFIG = {
   // Set to full URL e.g. 'https://api.yoursite.com' if backend is separate.
   API_BASE: '',
 
-  // GST rates — products 12%, shipping 18% (SAC 996812)
-  GST_RATE_PRODUCT:  0.12,
-  GST_RATE_SHIPPING: 0.18,
+  // GST: composite supply under CGST Act S.8 — 12% on (subtotal + shipping).
+  // Shipping is ancillary to the principal supply (print); same rate applies.
+  // International exports are zero-rated.
+  GST_RATE: 0.12,
 
-  // Shipping rate card (₹): base covers first 2 kg, then per extra kg.
-  // Zones: 0=Goa, 1=India, 2=SAARC, 3=ME/SEAsia, 4=Europe, 5=Americas/RoW
-  SHIPPING_ZONES: {
-    0: { name: 'Goa (local)',            base: 300,   perKg: 150  },
-    1: { name: 'India',                  base: 700,   perKg: 250  },
-    2: { name: 'SAARC',                  base: 3500,  perKg: 800  },
-    3: { name: 'Middle East / SE Asia',  base: 6000,  perKg: 1200 },
-    4: { name: 'Europe / UK',            base: 8500,  perKg: 1600 },
-    5: { name: 'Americas / RoW',         base: 10500, perKg: 2000 }
+  // Print size → shipping tier.
+  // Tiers correspond to wooden crate dimensional weights (approximate):
+  //   small ~13 kg | medium ~19 kg | standard ~29 kg | large ~42 kg
+  // ADD NEW PRINTS HERE when the catalogue grows.
+  PRINT_SIZE_TIERS: {
+    'Cosmic Return':     'large',    // 42 × 31.5 in
+    'Burnt Earth':       'standard', // 32 × 24 in
+    'Chromatic Rupture': 'standard', // 32 × 24 in
+    'After The Fall':    'standard', // 32 × 25.5 in
+    'Cracked Spectrum':  'standard', // 32 × 21.3 in
+    'Still Organism':    'standard', // 24 × 32 in
+    'Forgotten Skin':    'standard', // 24 × 32 in
+    'Erosion':           'standard', // 24 × 32 in
+    'Imprint':           'standard', // 24 × 32 in
   },
-  SHIPPING_BASE_WEIGHT: 2, // kg included in base rate
 
-  // Country → zone mapping (IN handled separately for Goa detection)
+  // Fixed domestic shipping per wooden crate, per print, per zone.
+  // Zones: 0 = Goa, 1 = Rest of India.
+  // Update these once actual crate dimensions and courier rates are confirmed.
+  PRINT_SHIPPING_RATES: {
+    small:    { 0: 1200, 1: 2500 },
+    medium:   { 0: 1800, 1: 3800 },
+    standard: { 0: 2800, 1: 5500 },
+    large:    { 0: 4000, 1: 8000 },
+  },
+
+  // Flat domestic rate for non-print physical items (books, card deck) — per order.
+  NON_PRINT_DOMESTIC: { 0: 250, 1: 450 },
+
+  // Country → zone (used only for non-print international orders).
+  // Print international shipping is always contact-for-quote.
   COUNTRY_ZONES: {
     NP:2, LK:2, BD:2, BT:2, MV:2,
     AE:3, SA:3, QA:3, OM:3, KW:3, BH:3,
@@ -39,23 +58,14 @@ const CONFIG = {
     US:5, CA:5, MX:5, BR:5, AR:5, CL:5, AU:5, NZ:5, ZA:5
   },
 
-  // Product shipping weights in kg (including packaging / rigid tube)
-  // ADD NEW PRODUCTS HERE — missing entries fall back to 0.8kg with a console warning
-  PRODUCT_WEIGHTS: {
-    'Cosmic Return':              2.0,
-    'Burnt Earth':                2.0,
-    'Chromatic Rupture':          2.0,
-    'After The Fall':             2.0,
-    'Cracked Spectrum':           2.0,
-    'Still Organism':             2.0,
-    'Forgotten Skin':             2.0,
-    'Erosion':                    2.0,
-    'Imprint':                    2.0,
-    'The Matter of Pause (Paperback)':0.8,
-    'Explorer Deck':              0.3,
-    'The Explorer\'s Deck':        0.3,
-    'The Matter of Pause (Digital)':  0     // zero = digital, no shipping
-  }
+  // Flat international rate for non-print items (books, card deck) — per order.
+  NON_PRINT_INTL: { 2: 1500, 3: 2000, 4: 2800, 5: 3500 },
+
+  // Non-print products: weight = 0 means digital (no shipping).
+  // Used only for digital detection — not for calculating shipping cost.
+  DIGITAL_PRODUCTS: {
+    'The Matter of Pause (Digital)': true,
+  },
 };
 
 const RAZORPAY_KEY_FALLBACK = 'rzp_live_SnSDb6pnYeccsB';
@@ -95,15 +105,35 @@ function fmt(n) {
   return '₹' + Math.round(n).toLocaleString('en-IN');
 }
 
-// FIX: console.warn when product weight is missing — prevents silent undercharging
-// Handles dimension-suffixed names e.g. "After The Fall — Small (30×20 cm)"
-function getItemWeight(title) {
-  if (typeof CONFIG.PRODUCT_WEIGHTS[title] === 'number') return CONFIG.PRODUCT_WEIGHTS[title];
-  // Strip dimension suffix added at cart-add time (e.g. " — Small (30×20 cm)")
+// Returns the shipping tier ('small'|'medium'|'standard'|'large') for a print,
+// or null if the item is not a print (book, deck, digital).
+//
+// Priority:
+//   1. Size suffix in title  e.g. "Burnt Earth — Small (46×35 cm)"  → 'small'
+//   2. PRINT_SIZE_TIERS lookup by base product name (fixed-size prints)
+function getItemTier(title) {
+  // 1. Extract size name from suffix added by the product modal
+  const sizeMatch = title.match(/[—\-–]\s*(Small|Medium|Standard|Large)\s*\(/i);
+  if (sizeMatch) {
+    const sizeMap = { small: 'small', medium: 'medium', standard: 'standard', large: 'large' };
+    const tier = sizeMap[sizeMatch[1].toLowerCase()];
+    if (tier) return tier;
+  }
+  // 2. Fall back to per-product lookup (for titles without a size suffix)
+  if (CONFIG.PRINT_SIZE_TIERS[title] !== undefined) return CONFIG.PRINT_SIZE_TIERS[title];
   const base = title.replace(/\s+[—\-–].+$/, '').trim();
-  if (typeof CONFIG.PRODUCT_WEIGHTS[base] === 'number') return CONFIG.PRODUCT_WEIGHTS[base];
-  console.warn(`[checkout] Unknown product weight for: "${title}" — using 0.8 kg fallback. Add it to CONFIG.PRODUCT_WEIGHTS.`);
-  return 0.8;
+  if (CONFIG.PRINT_SIZE_TIERS[base] !== undefined) return CONFIG.PRINT_SIZE_TIERS[base];
+  return null;
+}
+
+function isPrint(title) {
+  return getItemTier(title) !== null;
+}
+
+function isDigital(title) {
+  if (CONFIG.DIGITAL_PRODUCTS[title]) return true;
+  const base = title.replace(/\s+[—\-–].+$/, '').trim();
+  return !!CONFIG.DIGITAL_PRODUCTS[base];
 }
 
 function isDomestic() {
@@ -125,18 +155,54 @@ function getZone() {
   return CONFIG.COUNTRY_ZONES[country] != null ? CONFIG.COUNTRY_ZONES[country] : 5;
 }
 
-// FIX: weight now multiplied by qty so shipping is correct for multiple units
+// Returns shipping cost in ₹, or null if the order contains prints shipping
+// internationally (requires manual quote — payment is blocked in this case).
 function calculateShipping() {
   if (cart.length === 0) return 0;
-  const totalWeight = cart.reduce((w, i) => w + getItemWeight(i.title) * (i.qty || 1), 0);
-  if (totalWeight <= 0) return 0; // all digital
-  const zone    = CONFIG.SHIPPING_ZONES[getZone()];
-  const extraKg = Math.max(0, Math.ceil(totalWeight - CONFIG.SHIPPING_BASE_WEIGHT));
-  return zone.base + extraKg * zone.perKg;
+
+  const country      = document.getElementById('countrySelect').value;
+  const international = country !== 'IN';
+  const zone         = getZone(); // 0=Goa, 1=India, 2-5=international zones
+
+  // International + any print in cart → contact-for-quote (null = blocked)
+  if (international && cart.some(i => isPrint(i.title))) return null;
+
+  let printCost        = 0;
+  let hasNonPrintPhys  = false;
+
+  for (const item of cart) {
+    if (isDigital(item.title)) continue;
+    const qty  = item.qty || 1;
+    const tier = getItemTier(item.title);
+
+    if (tier) {
+      // Print: fixed rate per crate × qty (each print ships in its own crate)
+      const rates = CONFIG.PRINT_SHIPPING_RATES[tier] || CONFIG.PRINT_SHIPPING_RATES.standard;
+      const rate  = (zone in rates) ? rates[zone] : rates[1];
+      printCost  += rate * qty;
+    } else {
+      hasNonPrintPhys = true;
+    }
+  }
+
+  // Non-print physical items (books, decks): flat per-order rate, one box
+  let nonPrintCost = 0;
+  if (hasNonPrintPhys) {
+    if (international) {
+      nonPrintCost = CONFIG.NON_PRINT_INTL[zone] || CONFIG.NON_PRINT_INTL[5];
+    } else {
+      nonPrintCost = (zone in CONFIG.NON_PRINT_DOMESTIC)
+        ? CONFIG.NON_PRINT_DOMESTIC[zone]
+        : CONFIG.NON_PRINT_DOMESTIC[1];
+    }
+  }
+
+  const total = printCost + nonPrintCost;
+  return total > 0 ? total : 0;
 }
 
 function hasPhysicalItems() {
-  return cart.some(item => getItemWeight(item.title) > 0);
+  return cart.some(item => !isDigital(item.title));
 }
 
 function imgPath(src) {
@@ -185,35 +251,49 @@ function removeItem(index) {
 
 // --- RECALCULATE ---
 function recalculate() {
-  // FIX: subtotal respects qty per item
-  const subtotal = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
-  const shipping = calculateShipping();
+  const subtotal     = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0);
+  const shipping     = calculateShipping(); // null = intl prints, needs quote
+  const quoteNeeded  = shipping === null;
+  const domestic     = isDomestic();
 
-  // FIX: separate GST rates — 12% on products, 18% on shipping (SAC 996812)
-  // Export / international orders are zero-rated
-  const productGST  = isDomestic() ? subtotal * CONFIG.GST_RATE_PRODUCT  : 0;
-  const shippingGST = isDomestic() ? shipping * CONFIG.GST_RATE_SHIPPING : 0;
-  const gst         = productGST + shippingGST;
-  const total       = subtotal + shipping + gst;
+  // GST: composite supply — 12% on (subtotal + shipping), domestic only.
+  // When shipping is null (quote needed), we show subtotal only — no GST yet.
+  const gst   = (domestic && !quoteNeeded) ? Math.round((subtotal + shipping) * CONFIG.GST_RATE) : 0;
+  const total = quoteNeeded ? subtotal : subtotal + shipping + gst;
 
-  currentTotals = { subtotal, shipping, gst, total };
+  currentTotals = { subtotal, shipping: quoteNeeded ? 0 : shipping, gst, total };
 
   document.getElementById('subtotalVal').innerText = fmt(subtotal);
 
-  // FIX: clear digital-only label when no physical items
   if (!hasPhysicalItems()) {
     document.getElementById('shippingVal').innerText = 'Digital delivery';
+  } else if (quoteNeeded) {
+    document.getElementById('shippingVal').innerText = 'Quoted separately';
   } else {
-    document.getElementById('shippingVal').innerText = shipping === 0 ? 'Calculating…' : fmt(shipping);
+    document.getElementById('shippingVal').innerText = fmt(shipping);
   }
 
-  document.getElementById('gstVal').innerText  = fmt(gst);
-  document.getElementById('totalVal').innerText = fmt(total);
+  document.getElementById('gstVal').innerText   = fmt(gst);
+  document.getElementById('totalVal').innerText  = quoteNeeded ? fmt(subtotal) + '*' : fmt(total);
 
-  // Hide GST row for international (export zero-rated)
-  document.getElementById('gstRow').style.display = isDomestic() ? 'flex' : 'none';
-  // Hide shipping section entirely for digital-only orders
+  // GST row: domestic only, and only when shipping is known
+  document.getElementById('gstRow').style.display = (domestic && !quoteNeeded) ? 'flex' : 'none';
+  // Shipping section: hide for digital-only carts
   document.getElementById('shippingSection').style.display = hasPhysicalItems() ? 'block' : 'none';
+
+  // Pay button: disabled and relabelled when quote is needed
+  const payBtn = document.getElementById('payBtn');
+  if (quoteNeeded) {
+    payBtn.disabled    = true;
+    payBtn.textContent = 'Contact for Shipping Quote →';
+  } else {
+    payBtn.disabled    = false;
+    payBtn.textContent = 'Pay Securely →';
+  }
+
+  // International quote notice
+  const noticeEl = document.getElementById('intlShippingNotice');
+  if (noticeEl) noticeEl.style.display = quoteNeeded ? 'block' : 'none';
 }
 
 // --- VALIDATION ---
