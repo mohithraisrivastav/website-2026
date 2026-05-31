@@ -16,6 +16,11 @@
       "source": "/Work/:path*",
       "destination": "/work/:path*",
       "permanent": true
+    },
+    {
+      "source": "/essay-05.html",
+      "destination": "/what-architectural-photography-taught-me-about-space.html",
+      "permanent": true
     }
   ],
   "rewrites": [
