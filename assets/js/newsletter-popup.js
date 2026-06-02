@@ -1,4 +1,4 @@
-// Newsletter Popup - Exit Intent (Desktop) + 50% Scroll (Mobile)
+// Newsletter Popup - Side drawer, triggers at 57% scroll depth
 
 (function() {
   const MODAL_ID = 'nlPopupModal';
@@ -7,8 +7,6 @@
   const STORAGE_KEY = 'nlPopupShown';
 
   let shown = false;
-  const isMobile = () => window.innerWidth < 768;
-  const isDesktop = () => window.innerWidth >= 768;
 
   function shouldShow() {
     if (shown) return false;
@@ -31,20 +29,11 @@
     if (modal) modal.classList.remove('show');
   }
 
-  // Desktop: exit-intent — cursor reaches top of page
-  function setupExitIntent() {
-    if (!isDesktop()) return;
-    document.addEventListener('mousemove', function(e) {
-      if (e.clientY <= 5) showModal();
-    });
-  }
-
-  // Mobile: trigger at 50% scroll depth
+  // Trigger at 57% scroll depth — all devices
   function setupScrollTrigger() {
-    if (!isMobile()) return;
     window.addEventListener('scroll', function onScroll() {
       const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-      if (scrolled >= 0.5) {
+      if (scrolled >= 0.57) {
         window.removeEventListener('scroll', onScroll);
         showModal();
       }
@@ -66,13 +55,8 @@
   }
 
   function init() {
-    setupExitIntent();
     setupScrollTrigger();
     setupForm();
-
-    // Close on overlay click
-    const overlay = document.getElementById(MODAL_ID);
-    if (overlay) overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
     // Close button
     const btn = document.querySelector('#' + MODAL_ID + ' .nl-close-btn');
