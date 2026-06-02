@@ -148,7 +148,7 @@
         <section class="work-hero">
             <h1>Architectural<br><span class="hero-light">Photography</span></h1>
             <div class="hero-line"></div>
-            <p style="max-width:620px;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1rem,1.3vw,1.15rem);color:rgba(255,255,255,0.55);line-height:1.75;margin-top:1.6em;">Selected works by Mohith Rai Srivastav — architectural photographer based in Goa, India. Projects span residential, hospitality, heritage, and institutional architecture across South Asia.</p>
+            <p style="max-width:620px;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(1rem,1.3vw,1.15rem);color:rgba(255,255,255,0.85);line-height:1.75;margin-top:1.6em;">Selected works by Mohith Rai Srivastav — architectural photographer based in Goa, India. Projects span residential, hospitality, heritage, and institutional architecture across South Asia.</p>
         </section>
 
         <section class="works-index">
@@ -320,20 +320,14 @@
         gsap.from('.work-hero h1', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 });
         gsap.from('.hero-line',    { scaleX: 0, transformOrigin: 'left', duration: 1.5, ease: 'power3.out', delay: 0.5 });
 
-        /* -- Bokeh fade: blur resolves to sharp as card fades in -- */
+        /* -- Cinematic dissolve: clean fade in, no blur -- */
         document.querySelectorAll('.wi-card').forEach(card => {
             gsap.fromTo(card,
-                {
-                    opacity: 0,
-                    filter: 'blur(12px)',
-                    scale: 1.02
-                },
+                { opacity: 0 },
                 {
                     opacity: 1,
-                    filter: 'blur(0px)',
-                    scale: 1,
-                    duration: 1.1,
-                    ease: 'power3.out',
+                    duration: 1.4,
+                    ease: 'power2.inOut',
                     scrollTrigger: {
                         trigger: card,
                         start: 'top 94%',
