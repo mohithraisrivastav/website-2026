@@ -320,22 +320,20 @@
         gsap.from('.work-hero h1', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 });
         gsap.from('.hero-line',    { scaleX: 0, transformOrigin: 'left', duration: 1.5, ease: 'power3.out', delay: 0.5 });
 
-        /* -- Cinematic reveal: each card individually -- */
+        /* -- Bokeh fade: blur resolves to sharp as card fades in -- */
         document.querySelectorAll('.wi-card').forEach(card => {
             gsap.fromTo(card,
                 {
                     opacity: 0,
-                    y: 80,
-                    scale: 0.97,
-                    clipPath: 'inset(6% 0% 0% 0%)'
+                    filter: 'blur(12px)',
+                    scale: 1.02
                 },
                 {
                     opacity: 1,
-                    y: 0,
+                    filter: 'blur(0px)',
                     scale: 1,
-                    clipPath: 'inset(0% 0% 0% 0%)',
-                    duration: 1.6,
-                    ease: 'power4.out',
+                    duration: 1.8,
+                    ease: 'power2.out',
                     scrollTrigger: {
                         trigger: card,
                         start: 'top 94%',
