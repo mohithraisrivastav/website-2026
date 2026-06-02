@@ -899,6 +899,16 @@ Mohith understands architectural storytelling and delivers stunning visuals that
         gsap.ticker.add((time) => { lenis.raf(time * 1000); });
         gsap.ticker.lagSmoothing(0);
 
+        // -- Newsletter popup: fires when #shop-preview enters view (~36% down) --
+        ScrollTrigger.create({
+            trigger: '#shop-preview',
+            start: 'top 80%',
+            once: true,
+            onEnter: function() {
+                if (typeof window.nlShowPopup === 'function') window.nlShowPopup();
+            }
+        });
+
         // Refresh ScrollTrigger after all images have loaded to prevent position miscalculations
         // Also activate the deferred Vimeo iframe — loading it here keeps it off the critical path
         window.addEventListener('load', () => {
