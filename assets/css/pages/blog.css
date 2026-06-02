@@ -414,7 +414,7 @@
             .discussion-wall::-webkit-scrollbar { height: 8px; }
             .discussion-wall::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
             .discussion-wall::-webkit-scrollbar-track { background: transparent; }
-            .note-card { min-width: 280px; scroll-snap-align: start; flex-shrink: 0; }
+            .note-card { min-width: 78vw; max-width: 340px; scroll-snap-align: start; flex-shrink: 0; }
         }
 
         /* -- Featured concept image grain overlay -------------- */

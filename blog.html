@@ -413,13 +413,11 @@
             reader.scrollTop = 0;
             lenis.destroy();
             document.body.style.overflow = 'hidden';
-            document.body.style.filter = 'brightness(0.2)';
             updateProgress();
         }
         function closeReader() {
             reader.classList.remove('active');
             document.body.style.overflow = '';
-            document.body.style.filter = '';
             lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
             function newRaf(t) { lenis.raf(t); requestAnimationFrame(newRaf); }
             requestAnimationFrame(newRaf);
