@@ -494,6 +494,145 @@
                 line-height: 1.1 !important;
             }
         }
+
+        /* Newsletter Popup */
+        #nlPopupModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 22, 18, 0.3);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        #nlPopupModal.show {
+            display: flex;
+            animation: nlFadeIn 0.4s ease;
+        }
+
+        @keyframes nlFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .nl-modal-content {
+            background: white;
+            padding: 40px 45px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            animation: nlSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
+        }
+
+        @keyframes nlSlideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nl-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #d4c5b9;
+            transition: color 0.3s;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nl-close-btn:hover {
+            color: #999;
+        }
+
+        .nl-modal-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            color: #1A1612;
+        }
+
+        .nl-modal-content p {
+            font-size: 0.95rem;
+            color: #1A1612;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .nl-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .nl-form input {
+            padding: 14px 0;
+            border: none;
+            border-bottom: 1px solid #d4c5b9;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            background: transparent;
+            color: #1A1612;
+            margin-bottom: 24px;
+            transition: border-color 0.3s;
+        }
+
+        .nl-form input::placeholder {
+            color: #a89f99;
+        }
+
+        .nl-form input:focus {
+            outline: none;
+            border-bottom-color: #CFA246;
+        }
+
+        .nl-form button {
+            align-self: flex-start;
+            padding: 12px 0;
+            background: none;
+            color: #1A1612;
+            border: none;
+            font-weight: 600;
+            letter-spacing: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            border-bottom: 1px solid #CFA246;
+            padding-bottom: 8px;
+            padding-right: 12px;
+        }
+
+        .nl-form button:hover {
+            color: #CFA246;
+        }
+
+        @media (max-width: 767px) {
+            .nl-modal-content {
+                padding: 35px 30px;
+            }
+        }
     </style>
     <script src="assets/js/translate.js" defer></script>
 </head>
@@ -927,6 +1066,21 @@ Mohith understands architectural storytelling and delivers stunning visuals that
 <script>
 (function(){const s=document.querySelector('.sline-stage');const c=document.createElement('canvas');c.id='slineCanvas';s.appendChild(c);const ctx=c.getContext('2d');let W=window.innerWidth;c.width=W;c.height=60;window.addEventListener('resize',()=>{W=window.innerWidth;c.width=W;});let id,start;const amp=5,lw=1,op=0.22,gs=2,dur=2200,rop=0.15;function frame(ts){if(!start)start=ts;const el=ts-start,p=Math.min(1,el/dur),tx=W*p;const act=p<0.15?p/0.15*0.3:p<0.5?0.3+(p-0.15)/0.35*0.7:p<0.75?1-(p-0.5)/0.25*0.85:Math.max(0,0.15-(p-0.75)/0.25*0.15);ctx.clearRect(0,0,W,60);const draw=(lw2,op2,shadow)=>{if(shadow){ctx.save();ctx.shadowColor='rgba(255,255,255,0.3)';ctx.shadowBlur=gs*act*4;}ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${op2})`;ctx.lineWidth=lw2;ctx.lineCap='round';const st=Math.max(2,Math.floor(tx/2));for(let i=0;i<=st;i++){const x=(i/st)*tx,y=8+amp*act*(Math.sin(x*.07)*.5+Math.sin(x*.19+1.2)*.3+Math.sin(x*.37+2.5)*.2);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();if(shadow)ctx.restore();};if(act>0.1)draw(lw*2.5,op*act*0.5,true);draw(lw,op*(0.4+act*0.6),false);if(p<0.98){const tx2=tx,ty=8+amp*act*(Math.sin(tx2*.07)*.5+Math.sin(tx2*.19+1.2)*.3+Math.sin(tx2*.37+2.5)*.2);ctx.save();ctx.shadowColor='rgba(255,255,255,0.8)';ctx.shadowBlur=gs*3;ctx.beginPath();ctx.arc(tx2,ty,gs*.8,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore();id=requestAnimationFrame(frame);}else{ctx.clearRect(0,0,W,60);ctx.beginPath();ctx.strokeStyle=`rgba(255,255,255,${rop})`;ctx.lineWidth=1;ctx.moveTo(0,8);ctx.lineTo(W,8);ctx.stroke();}}requestAnimationFrame(frame);})();
 </script>
+
+<!-- Newsletter Popup -->
+<div id="nlPopupModal">
+    <div class="nl-modal-content">
+        <button class="nl-close-btn" aria-label="Close">&times;</button>
+        <h3>Field Notes</h3>
+        <p>Stay connected with project updates, blogs and workshops.</p>
+        <form class="nl-form" id="nlPopupForm">
+            <input type="email" id="nlPopupEmail" placeholder="your@email.com" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+<script src="assets/js/newsletter-popup.js"></script>
 
 </body>
 </html>
