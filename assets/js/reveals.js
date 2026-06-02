@@ -46,15 +46,21 @@
     });
   }
 
-  // ── .img-wrap img  (index.html shop preview) ──────────────────────────────
-  document.querySelectorAll('.img-wrap img').forEach(function (img, i) {
+  // ── .img-wrap img  (index.html shop preview) — pure dissolve ─────────────
+  document.querySelectorAll('.img-wrap img').forEach(function (img) {
     const card = img.closest('.shop-preview-card') || img.parentElement;
-    // Stagger cards in same row: offset by position within siblings
-    const siblings = card.parentElement
-      ? Array.from(card.parentElement.children).filter(c => c.classList.contains('shop-preview-card'))
-      : [];
-    const idx = siblings.indexOf(card);
-    revealImg(img, card, idx >= 0 ? idx * 0.12 : 0);
+    gsap.set(card, { opacity: 0 });
+    gsap.to(card, {
+      opacity: 1,
+      duration: 1.4,
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 95%',
+        toggleActions: 'play none none none',
+        once: true
+      }
+    });
   });
 
   // ── .product-image img  (shop.html) ───────────────────────────────────────
