@@ -498,141 +498,101 @@
         /* Newsletter Popup */
         #nlPopupModal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(26, 22, 18, 0.3);
+            inset: 0;
+            background: transparent;
             display: none;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-end;
+            justify-content: flex-start;
             z-index: 2000;
+            pointer-events: none;
         }
 
         #nlPopupModal.show {
             display: flex;
-            animation: nlFadeIn 0.4s ease;
-        }
-
-        @keyframes nlFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .nl-modal-content {
-            background: white;
-            padding: 40px 45px;
-            max-width: 450px;
-            width: 90%;
+            background: #faf8f5;
+            border-top: 1px solid rgba(207, 162, 70, 0.25);
+            border-right: 1px solid rgba(207, 162, 70, 0.1);
+            width: 360px;
+            max-width: 100%;
+            padding: 36px 32px 44px;
             position: relative;
-            animation: nlSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            border-radius: 2px;
+            pointer-events: all;
+            animation: nlSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 4px -4px 30px rgba(0, 0, 0, 0.06);
         }
 
         @keyframes nlSlideUp {
-            from {
-                transform: translateY(40px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
         }
 
         .nl-close-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 16px;
+            right: 16px;
             background: none;
             border: none;
-            font-size: 28px;
+            font-size: 18px;
             cursor: pointer;
-            color: #d4c5b9;
+            color: #a89f99;
             transition: color 0.3s;
             padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            line-height: 1;
         }
 
-        .nl-close-btn:hover {
-            color: #999;
-        }
+        .nl-close-btn:hover { color: #1A1612; }
 
-        .nl-modal-content h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 300;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            color: #1A1612;
+        .nl-eyebrow {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #CFA246;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
         }
 
         .nl-modal-content p {
-            font-size: 0.95rem;
-            color: #1A1612;
-            line-height: 1.7;
-            margin-bottom: 30px;
+            font-size: 0.88rem;
+            color: #5C4A3F;
+            line-height: 1.65;
+            margin-bottom: 24px;
             font-weight: 400;
         }
 
         .nl-form {
             display: flex;
-            flex-direction: column;
             gap: 0;
+            border-bottom: 1px solid #d4c5b9;
         }
 
         .nl-form input {
-            padding: 14px 0;
+            flex: 1;
+            padding: 10px 0;
             border: none;
-            border-bottom: 1px solid #d4c5b9;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
             background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
             color: #1A1612;
-            margin-bottom: 24px;
-            transition: border-color 0.3s;
-        }
-
-        .nl-form input::placeholder {
-            color: #a89f99;
-        }
-
-        .nl-form input:focus {
             outline: none;
-            border-bottom-color: #CFA246;
+            transition: none;
         }
+
+        .nl-form input::placeholder { color: #a89f99; }
 
         .nl-form button {
-            align-self: flex-start;
-            padding: 12px 0;
             background: none;
-            color: #1A1612;
             border: none;
-            font-weight: 600;
-            letter-spacing: 3px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            border-bottom: 1px solid #CFA246;
-            padding-bottom: 8px;
-            padding-right: 12px;
-        }
-
-        .nl-form button:hover {
             color: #CFA246;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 10px 0 10px 12px;
+            transition: color 0.3s;
         }
 
-        @media (max-width: 767px) {
-            .nl-modal-content {
-                padding: 35px 30px;
-            }
-        }
+        .nl-form button:hover { color: #1A1612; }
     </style>
     <script src="assets/js/translate.js" defer></script>
 </head>
@@ -1071,11 +1031,11 @@ Mohith understands architectural storytelling and delivers stunning visuals that
 <div id="nlPopupModal">
     <div class="nl-modal-content">
         <button class="nl-close-btn" aria-label="Close">&times;</button>
-        <h3>Field Notes</h3>
+        <div class="nl-eyebrow">Field Notes</div>
         <p>Stay connected with project updates, blogs and workshops.</p>
         <form class="nl-form" id="nlPopupForm">
             <input type="email" id="nlPopupEmail" placeholder="your@email.com" required>
-            <button type="submit">Subscribe</button>
+            <button type="submit">&#8594;</button>
         </form>
     </div>
 </div>
