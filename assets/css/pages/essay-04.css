@@ -40,11 +40,11 @@ a { text-decoration: none; color: inherit; }
   font-size: clamp(2.8rem, 5.5vw, 5.5rem);
   font-weight: 400; line-height: 1.05; color: #1A1612; margin-bottom: 30px;
 }
-.essay-hero h1 em { font-style: italic; color: #CFA246; }
+.essay-hero h1 em { font-style: normal; color: #CFA246; }
 .essay-hero .subtitle {
   font-family: var(--font-accent) !important;
   font-size: clamp(1.2rem, 1.8vw, 1.4rem); font-weight: 300;
-  font-style: italic; color: #4A3A33; line-height: 1.55;
+  font-style: normal; color: #4A3A33; line-height: 1.55;
   max-width: 640px; margin: 0 auto 40px;
 }
 .essay-hero .byline {
@@ -79,17 +79,17 @@ a { text-decoration: none; color: inherit; }
 .essay-body h2 {
   font-family: var(--font-accent) !important;
   font-size: clamp(1.8rem, 2.8vw, 2.4rem);
-  font-weight: 500; font-style: italic; color: #1A1612;
+  font-weight: 500; font-style: normal; color: #1A1612;
   margin: 2.2em 0 0.8em; line-height: 1.2;
 }
-.essay-body em { color: #1A1612; font-style: italic; }
+.essay-body em { color: #1A1612; font-style: normal; }
 .essay-body strong { color: #1A1612; font-weight: 500; }
 .essay-body blockquote {
   margin: 2.2em 0; padding: 0 0 0 2em;
   border-left: 2px solid rgba(26, 22, 18,0.2);
   font-family: var(--font-accent) !important;
   font-size: clamp(1.4rem, 2vw, 2rem);
-  font-weight: 400; font-style: italic;
+  font-weight: 400; font-style: normal;
   line-height: 1.35; color: #1A1612;
 }
 .essay-body blockquote cite {
@@ -103,7 +103,7 @@ a { text-decoration: none; color: inherit; }
 .essay-body figure img { width: 100%; display: block; }
 .essay-body figure figcaption {
   font-family: var(--font-accent) !important;
-  font-size: 1rem; font-style: italic; color: #888;
+  font-size: 1rem; font-style: normal; color: #888;
   margin-top: 12px; text-align: center;
 }
 .essay-body hr { border: 0; text-align: center; margin: 3em 0; }
@@ -114,7 +114,7 @@ a { text-decoration: none; color: inherit; }
   border-top: 1px solid rgba(26, 22, 18,0.1); border-bottom: 1px solid rgba(26, 22, 18,0.1);
   font-family: var(--font-accent) !important;
   font-size: clamp(1.6rem, 2.5vw, 2.4rem);
-  font-weight: 400; font-style: italic;
+  font-weight: 400; font-style: normal;
   line-height: 1.3; color: #1A1612; text-align: center;
 }
 
@@ -126,7 +126,7 @@ a { text-decoration: none; color: inherit; }
 }
 .essay-foot .signoff {
   font-family: var(--font-accent) !important;
-  font-style: italic; color: #1A1612; font-size: 1.4rem; margin-bottom: 40px;
+  font-style: normal; color: #1A1612; font-size: 1.4rem; margin-bottom: 40px;
 }
 .essay-foot .tags { display: flex; gap: 12px; flex-wrap: wrap; }
 .essay-foot .tag {

@@ -13,7 +13,7 @@
 .policy-hero h1 {
     font-size: clamp(2.8rem, 5vw, 5.5rem);
     font-weight: 300;
-    font-style: italic;
+    font-style: normal;
     line-height: 1.0;
     letter-spacing: -0.02em;
     color: #1A1612;

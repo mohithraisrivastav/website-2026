@@ -15,7 +15,7 @@
         .x-icon svg { width: 32px; height: 32px; fill: #ff6b6b; }
 
         .fail-label { font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #ff6b6b; text-transform: uppercase; margin-bottom: 20px; }
-        h1 { font-size: clamp(3.125rem, 6vw, 5.625rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 30px; }
+        h1 { font-size: clamp(3.125rem, 6vw, 5.625rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 30px; }
         .fail-msg { font-size: 1.25rem; font-weight: 300; color: #aaa; line-height: 1.8; max-width: 520px; margin: 0 auto 20px; }
 
         .reason-box { background: #0f0f0f; border: 1px solid #222; padding: 25px; margin: 30px auto; text-align: left; font-size: 1rem; color: #888; max-width: 520px; }

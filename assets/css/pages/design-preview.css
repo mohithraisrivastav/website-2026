@@ -58,7 +58,7 @@
     }
     .hero-series-tag::before { content:''; display:block; width:20px; height:1px; background:var(--terracotta); }
     .hero-main-title {
-      font-family:var(--serif); font-weight:300; font-style:italic;
+      font-family:var(--serif); font-weight:300; font-style:normal;
       font-size:clamp(3rem, 5.5vw, 6.5rem);
       color:var(--near-black); line-height:.95; letter-spacing:-.01em;
       margin-bottom:36px;
@@ -125,7 +125,7 @@
 
     .new-series-label { font-size:.62rem; letter-spacing:4px; text-transform:uppercase; color:var(--dust); margin-bottom:18px; }
     .new-title {
-      font-family:var(--serif); font-weight:300; font-style:italic;
+      font-family:var(--serif); font-weight:300; font-style:normal;
       font-size:clamp(2.8rem,5vw,5.5rem);
       color:var(--near-black); line-height:.95; margin-bottom:24px; letter-spacing:-.01em;
     }
@@ -169,7 +169,7 @@
     .nav-items-new .nav-item.primary { color:var(--near-black); }
 
     .nav-section-note {
-      font-family:var(--serif); font-size:1.1rem; font-weight:300; font-style:italic;
+      font-family:var(--serif); font-size:1.1rem; font-weight:300; font-style:normal;
       color:var(--bark); line-height:1.9; max-width:600px;
     }
 
@@ -188,14 +188,14 @@
     .essay-body p+p { margin-top:1.9em; }
     .essay-echo { margin-top:80px; padding-top:40px; border-top:1px solid var(--rule); display:flex; gap:24px; align-items:center; }
     .essay-echo-thumb { width:72px; height:72px; flex-shrink:0; background:linear-gradient(135deg, #c8bdb2 0%, #a0918a 100%); }
-    .essay-echo-text { font-family:var(--serif); font-size:.95rem; font-weight:300; font-style:italic; color:var(--dust); line-height:1.7; }
+    .essay-echo-text { font-family:var(--serif); font-size:.95rem; font-weight:300; font-style:normal; color:var(--dust); line-height:1.7; }
     .essay-echo-link { display:inline-block; margin-top:10px; font-size:.62rem; letter-spacing:3px; text-transform:uppercase; color:var(--terracotta); text-decoration:none; }
 
     /* ════════════════════════════════════════
        6 — CLOSING
     ════════════════════════════════════════ */
     .closing { padding:18vh 5vw; max-width:820px; border-top:1px solid var(--rule); }
-    .closing-heading { font-family:var(--serif); font-weight:300; font-style:italic; font-size:clamp(2rem,4vw,4rem); color:var(--near-black); line-height:1.08; margin-bottom:36px; }
+    .closing-heading { font-family:var(--serif); font-weight:300; font-style:normal; font-size:clamp(2rem,4vw,4rem); color:var(--near-black); line-height:1.08; margin-bottom:36px; }
     .closing-body { font-family:var(--serif); font-size:1.2rem; font-weight:300; color:var(--bark); line-height:1.95; max-width:640px; }
 
     /* ── footer ── */

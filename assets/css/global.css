@@ -835,7 +835,7 @@ body { top: 0 !important; }
 .sf-heading {
     font-family: var(--font-accent) !important;
     font-weight: 300;
-    font-style: italic;
+    font-style: normal;
     font-size: clamp(2.2rem, 5.5vw, 4.2rem);
     line-height: 1.08;
     letter-spacing: 0;
@@ -883,7 +883,7 @@ body { top: 0 !important; }
 
 .sf-tagline {
     font-family: var(--font-accent), Georgia, serif !important;
-    font-style: italic;
+    font-style: normal;
     font-weight: 300;
     font-size: 1rem;
     color: #4A3A33;
@@ -980,7 +980,7 @@ body { top: 0 !important; }
 .sf-form-ok {
     display: none;
     font-family: var(--font-accent), Georgia, serif !important;
-    font-style: italic;
+    font-style: normal;
     font-weight: 300;
     font-size: 0.92rem;
     letter-spacing: 0;
@@ -1356,7 +1356,7 @@ blockquote,
 .hero-light {
     font-family: var(--font-body), Georgia, serif !important;
     font-weight: 400 !important;
-    font-style: italic !important;
+    font-style: normal !important;
     letter-spacing: var(--tracking-body) !important;
 }
 
@@ -1440,7 +1440,7 @@ b,
 .essence-box p {
     font-family: var(--font-accent), Georgia, serif !important;
     font-weight: 400 !important;
-    font-style: italic !important;
+    font-style: normal !important;
     font-size: 1.25rem;
     line-height: 1.6;
     color: #E86A4A;
@@ -1670,7 +1670,7 @@ blockquote *,
 .accent,
 [data-font="accent"] {
     font-family: var(--font-body), Georgia, serif !important;
-    font-style: italic;
+    font-style: normal;
 }
 
 /* ── Enhanced Form Input Focus States ───────────────────────────────── */

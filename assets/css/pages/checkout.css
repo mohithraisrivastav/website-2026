@@ -15,7 +15,7 @@
 
         .checkout-wrap { max-width: 1400px; margin: 0 auto; padding: 20px 5vw 100px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; }
 
-        .page-title { font-size: clamp(3.125rem, 5vw, 5rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 50px; }
+        .page-title { font-size: clamp(3.125rem, 5vw, 5rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 50px; }
 
         .form-section { margin-bottom: 50px; }
         .form-label { font-size: 0.8625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: #555; margin-bottom: 25px; display: block; border-bottom: 1px solid #222; padding-bottom: 15px; }

@@ -43,7 +43,7 @@
         .studio-header .sh-tag::before { content: ''; width: 20px; height: 1px; background: #CFA246; }
         .studio-header h1 {
             font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300;
-            font-style: italic; letter-spacing: -0.01em; line-height: 0.95;
+            font-style: normal; letter-spacing: -0.01em; line-height: 0.95;
         }
         .studio-header h1 span { color: #CFA246; }
         .studio-header .sh-right {
@@ -160,7 +160,7 @@
             margin-bottom: 14px; letter-spacing: -0.01em;
             transition: color 0.3s;
         }
-        .concept h2 em { font-style: italic; color: #1A1612; }
+        .concept h2 em { font-style: normal; color: #1A1612; }
         .concept:hover h2 { color: #1A1612; }
 
         .concept .c-excerpt {
@@ -254,7 +254,7 @@
         .note-card .n-text {
             font-family: var(--font-accent) !important;
             font-size: 0.92rem; font-weight: 300; color: #1A1612;
-            line-height: 1.65; font-style: italic;
+            line-height: 1.65; font-style: normal;
             transition: color 0.3s;
         }
         .note-card:hover .n-text { color: #1A1612; }
@@ -281,7 +281,7 @@
         .collab-strip h3 {
             font-family: var(--font-accent) !important;
             font-size: clamp(1.6rem, 3vw, 2.8rem);
-            font-weight: 400; font-style: italic; color: #1A1612;
+            font-weight: 400; font-style: normal; color: #1A1612;
             margin-bottom: 16px; line-height: 1.1;
         }
         .collab-strip p {
@@ -327,8 +327,8 @@
         .reader-hero .date { font-size: 0.8625rem; font-weight: 700; letter-spacing: 6px; text-transform: uppercase; }
         .reader-hero .date::before, .reader-hero .date::after { content: ''; width: 30px; height: 1px; background: #CFA246; }
         .reader-hero h1 { font-family: var(--font-accent) !important; font-size: clamp(2.2rem, 5.5vw, 4.5rem); font-weight: 400; line-height: 1.05; color: #1A1612; margin-bottom: 30px; }
-        .reader-hero h1 em { font-style: italic; color: #1A1612; }
-        .reader-hero .subtitle { font-family: var(--font-accent) !important; font-size: 1.15rem; font-weight: 300; font-style: italic; color: #9a9590; line-height: 1.55; max-width: 640px; margin: 0 auto 40px; }
+        .reader-hero h1 em { font-style: normal; color: #1A1612; }
+        .reader-hero .subtitle { font-family: var(--font-accent) !important; font-size: 1.15rem; font-weight: 300; font-style: normal; color: #9a9590; line-height: 1.55; max-width: 640px; margin: 0 auto 40px; }
         .reader-hero .byline { color: #CFA246; display: flex; gap: 20px; justify-content: center; align-items: center; }
         .reader-hero .byline { font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
         .reader-hero .byline .dot { width: 3px; height: 3px; background: #CFA246; border-radius: 50%; }
@@ -337,20 +337,20 @@
         .reader-body { max-width: 680px; margin: 0 auto; padding: 0 5vw 80px; font-family: var(--font-main) !important; font-size: 1.2rem; font-weight: 300; line-height: 1.85; color: #d4d0c9; }
         .reader-body p { margin-bottom: 1.5em; }
         .reader-body p.drop::first-letter { float: left; font-family: var(--font-accent) !important; font-size: 5.2em; line-height: 0.85; font-weight: 500; padding: 0.08em 0.12em 0 0; color: #1A1612; }
-        .reader-body h2 { font-family: var(--font-accent) !important; font-size: 2rem; font-weight: 500; font-style: italic; color: #1A1612; margin: 2.2em 0 0.8em; line-height: 1.2; }
+        .reader-body h2 { font-family: var(--font-accent) !important; font-size: 2rem; font-weight: 500; font-style: normal; color: #1A1612; margin: 2.2em 0 0.8em; line-height: 1.2; }
         .reader-body h3 { font-family: var(--font-accent) !important; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #1A1612; text-transform: uppercase; margin: 2.5em 0 1em; }
         .reader-body h3::before { content: '— '; color: #CFA246; }
-        .reader-body em { color: #1A1612; font-style: italic; }
+        .reader-body em { color: #1A1612; font-style: normal; }
         .reader-body strong { color: #1A1612; font-weight: 500; }
-        .reader-body blockquote { margin: 2.2em 0; padding: 0 0 0 2em; border-left: 2px solid #fff; font-family: var(--font-accent) !important; font-size: 1.7rem; font-weight: 400; font-style: italic; line-height: 1.35; color: #1A1612; }
+        .reader-body blockquote { margin: 2.2em 0; padding: 0 0 0 2em; border-left: 2px solid #fff; font-family: var(--font-accent) !important; font-size: 1.7rem; font-weight: 400; font-style: normal; line-height: 1.35; color: #1A1612; }
         .reader-body blockquote cite { display: block; margin-top: 0.8em; font-family: var(--font-accent) !important; font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px; color: #1A1612; text-transform: uppercase; font-style: normal; }
         .reader-body figure { margin: 3em 0; }
         .reader-body figure img { width: 100%; display: block; }
-        .reader-body figure figcaption { font-family: var(--font-accent) !important; font-size: 0.8625rem; font-style: italic; color: #1A1612; margin-top: 12px; text-align: center; }
+        .reader-body figure figcaption { font-family: var(--font-accent) !important; font-size: 0.8625rem; font-style: normal; color: #1A1612; margin-top: 12px; text-align: center; }
         .reader-body hr { border: 0; text-align: center; margin: 3em 0; }
         .reader-body hr::before { content: '* * *'; color: #CFA246; letter-spacing: 1em; font-size: 0.9rem; }
         .reader-foot { max-width: 680px; margin: 0 auto; padding: 40px 5vw 80px; border-top: 1px solid rgba(207, 162, 70, 0.25); }
-        .reader-foot .signoff { font-family: var(--font-accent) !important; font-style: italic; color: #1A1612; font-size: 1.1rem; margin-bottom: 40px; }
+        .reader-foot .signoff { font-family: var(--font-accent) !important; font-style: normal; color: #1A1612; font-size: 1.1rem; margin-bottom: 40px; }
         .reader-foot .tags { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 50px; }
         .reader-foot .tag { color: #1A1612; border: 1px solid rgba(207, 162, 70, 0.35); padding: 8px 14px; border-radius: 4px; }
         .reader-foot .tag { font-size: 0.8625rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }

@@ -51,7 +51,7 @@
         }
         .hero-left { display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; text-align: left; z-index: 10; min-width: 0; }
         .hero-spacer { font-size: 0.875rem; font-weight: 600; letter-spacing: 5px; color: #5C4A3F; margin-bottom: 24px; text-transform: uppercase; opacity: 0; animation: slowFadeIn 2s ease 0.5s forwards; }
-        .hero-title { font-size: clamp(3rem, 6vw, 10rem); font-weight: 300; font-style: italic; line-height: 0.95; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+        .hero-title { font-size: clamp(3rem, 6vw, 10rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
         
         .hero-right { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; position: relative; height: 100%; gap: 20px; }
         .viewfinder { width: 36vw; min-width: min(300px, 85vw); aspect-ratio: 3 / 4; overflow: hidden; position: relative; z-index: 2; box-shadow: 0 20px 50px rgba(0,0,0,0.8); opacity: 0; animation: slowFadeIn 3s ease 1s forwards; background: transparent; }
@@ -137,7 +137,7 @@
         .workshops-preview { padding: 100px 5vw; background: transparent; border-top: 1px solid #CFA246; }
         .workshops-preview-inner { max-width: 760px; margin: 0 auto; text-align: center; }
         .workshops-eyebrow { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #7F5F10; margin-bottom: 28px; }
-        .workshops-preview-title { font-family: var(--font-accent); font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: italic; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
+        .workshops-preview-title { font-family: var(--font-accent); font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: normal; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
         .workshops-preview-text p { font-size: 1.1875rem; font-weight: 300; color: #4A3A33; line-height: 1.8; margin-bottom: 1.5em; }
         .workshops-preview-text p:last-child { margin-bottom: 0; }
         .workshops-preview-text .ws-lead { font-size: clamp(1.4rem, 2vw, 1.75rem); font-weight: 300; color: #1A1612; line-height: 1.5; margin-bottom: 1.6em; }
@@ -199,11 +199,11 @@
   margin: 0 0 28px;
   padding-left: 24px;                              /* space for the rule */
   border-left: 2px solid rgba(207, 162, 70, 0.35);  /* quiet orange rule */
-  font-style: italic;
+  font-style: normal;
 }        /* --- 9. Pull Quote --- */
         .pull-quote { padding: 80px 8vw; background: transparent; border-top: 1px solid #CFA246; text-align: center; }
         .pull-quote-inner { max-width: 1100px; margin: 0 auto; }
-        .pull-quote blockquote { font-size: clamp(1.875rem, 3.2vw, 3.5rem); font-weight: 300; color: #1A1612; line-height: 1.5; letter-spacing: 0.5px; font-style: italic; position: relative; }
+        .pull-quote blockquote { font-size: clamp(1.875rem, 3.2vw, 3.5rem); font-weight: 300; color: #1A1612; line-height: 1.5; letter-spacing: 0.5px; font-style: normal; position: relative; }
         .pull-quote blockquote::before { content: '"'; display: block; font-size: 7.5rem; color: rgba(207, 162, 70, 0.2); line-height: 0.3; margin-bottom: 30px; font-style: normal; }
         .pull-quote .attribution { margin-top: 50px; font-size: 0.875rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; }
         .pull-quote .attribution::before { content: '— '; color: #FFFFFF; }

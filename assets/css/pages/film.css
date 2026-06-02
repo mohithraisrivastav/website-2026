@@ -19,11 +19,11 @@
         .hero-top .dash { width: 40px; height: 1px; background: #333; margin: 0 20px; flex-shrink: 0; align-self: center; }
         .hero-top-left, .hero-top-right { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
 
-        .hero-title { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: italic; line-height: 0.95; letter-spacing: -0.01em; margin: 20px 0 16px; position: relative; z-index: 1; }
+        .hero-title { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; margin: 20px 0 16px; position: relative; z-index: 1; }
         .hero-title .rec-dot { display: inline-block; width: 0.32em; height: 0.32em; background: #ff3434; border-radius: 50%; margin-left: 0.25em; vertical-align: 0.28em; box-shadow: 0 0 20px rgba(255,52,52,0.6), 0 0 40px rgba(255,52,52,0.3); animation: rec-breathe 1.6s ease-in-out infinite; }
         @keyframes rec-breathe { 0%,100% { opacity: 0.4; transform: scale(0.85); box-shadow: 0 0 10px rgba(255,52,52,0.3); } 50% { opacity: 1; transform: scale(1); box-shadow: 0 0 24px rgba(255,52,52,0.7), 0 0 48px rgba(255,52,52,0.35); } }
 
-        .hero-sub { font-family: var(--font-accent) !important; font-size: 2.1485rem; font-weight: 300; font-style: italic; color: #1A1612; max-width: 780px; line-height: 1.4; position: relative; z-index: 1; margin-bottom: 0; }
+        .hero-sub { font-family: var(--font-accent) !important; font-size: 2.1485rem; font-weight: 300; font-style: normal; color: #1A1612; max-width: 780px; line-height: 1.4; position: relative; z-index: 1; margin-bottom: 0; }
         .hero-sub::before { content: ''; display: block; width: 40px; height: 1px; background: #1A1612; opacity: 0.4; margin-bottom: 25px; }
 
         .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; border-top: 1px solid rgba(207, 162, 70, 0.25); padding-top: 30px; position: relative; z-index: 1; }
@@ -67,7 +67,7 @@
         .film-info { display: grid; grid-template-columns: 80px 1fr 1fr auto; gap: 40px; align-items: start; }
         .film-num { font-size: 4.6875rem; font-weight: 900; line-height: 1; color: #CFA246; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; transition: 0.4s; }
         .film:hover .film-num { color: #1A1612; }
-        .film-title { font-size: clamp(2.3438rem, 2.8vw, 3.75rem); font-weight: 300; font-style: italic; line-height: 1; letter-spacing: -0.01em; }
+        .film-title { font-size: clamp(2.3438rem, 2.8vw, 3.75rem); font-weight: 300; font-style: normal; line-height: 1; letter-spacing: -0.01em; }
         .film-title .category { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px; color: #1A1612; text-transform: uppercase; margin-top: 14px; }
         .film-desc { font-size: 1.2188rem; font-weight: 300; color: #1A1612; line-height: 1.75; max-width: 460px; }
         .film-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 18px; text-align: right; }
@@ -82,7 +82,7 @@
         .reels-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 5vw 44px; }
         .reels-header-left { display: flex; flex-direction: column; gap: 12px; }
         .reels-eyebrow { font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #444; text-transform: uppercase; }
-        .reels-title-text { font-size: clamp(3rem, 4vw, 5.5rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; }
+        .reels-title-text { font-size: clamp(3rem, 4vw, 5.5rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; }
         .reels-count { font-size: 0.8625rem; font-weight: 700; letter-spacing: 3px; color: #CFA246; text-transform: uppercase; padding-bottom: 8px; }
 
         .reels-track-wrap { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 5vw 4px; cursor: grab; user-select: none; }
@@ -171,8 +171,8 @@
 
         /* ========= Closing ========= */
         .closing { padding: 20vh 5vw; text-align: center; border-top: 1px solid #CFA246; }
-        .closing .mark { font-family: var(--font-accent) !important; font-size: 5.4688rem; font-weight: 300; font-style: italic; color: #CFA246; line-height: 1; margin-bottom: 40px; }
-        .closing h3 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: italic; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 30px; }
+        .closing .mark { font-family: var(--font-accent) !important; font-size: 5.4688rem; font-weight: 300; font-style: normal; color: #CFA246; line-height: 1; margin-bottom: 40px; }
+        .closing h3 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 30px; }
         .closing p { font-size: 2.1485rem; font-weight: 300; color: #1A1612; max-width: 540px; margin: 0 auto 50px; line-height: 1.8; }
         .closing-cta { display: inline-flex; align-items: center; gap: 20px; font-size: 1.3673rem; font-weight: 700; letter-spacing: 4px; color: #1A1612; text-transform: uppercase; padding: 22px 44px; border: 1px solid #CFA246; border-radius: 6px; transition: 0.4s; cursor: pointer; }
         .closing-cta:hover { border-color: #1A1612; padding: 22px 60px; gap: 30px; }

@@ -85,7 +85,7 @@
         }
         .reg-info h2 {
             font-size: clamp(2rem, 3vw, 3rem);
-            font-weight: 300; font-style: italic;
+            font-weight: 300; font-style: normal;
             letter-spacing: -0.01em; line-height: 1.02; margin-bottom: 32px;
         }
         .reg-info .reg-blurb {

@@ -9,7 +9,7 @@
 
         /* --- 4. Hero Section --- */
         .shop-hero { min-height: 0; padding: 28px 5vw 36px; display: flex; flex-direction: column; justify-content: flex-end; }
-        .shop-hero h1 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 20px; }
+        .shop-hero h1 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 20px; }
         .shop-hero p { font-size: 1.125rem; color: #1A1612; font-weight: 300; max-width: 600px; margin-bottom: 40px; }
         .hero-cta { font-size: 1.3673rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #1A1612; text-decoration: none; border-bottom: 1px solid #1A1612; padding-bottom: 5px; width: fit-content; transition: color 0.25s ease, border-color 0.25s ease; }
         .hero-cta:hover { color: #CFA246; border-color: #CFA246; }
@@ -421,7 +421,7 @@
 
         /* Dedicated Category Headings */
         .category-header { margin-bottom: 40px; }
-        .category-header h2 { font-size: 3.4375rem; font-weight: 300; font-style: italic; letter-spacing: 0; margin-bottom: 10px; }
+        .category-header h2 { font-size: 3.4375rem; font-weight: 300; font-style: normal; letter-spacing: 0; margin-bottom: 10px; }
         .category-header p { font-size: 1.325rem; color: #1A1612; max-width: 600px; }
 
         /* Configuration Styling */
@@ -600,7 +600,7 @@
 
         .modal-info { padding: 10px 0; }
         .modal-category { font-size: 0.9375rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: #1A1612; margin-bottom: 25px; }
-        .modal-title { font-size: clamp(3.125rem, 4vw, 5.4688rem); font-weight: 300; font-style: italic; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 25px; }
+        .modal-title { font-size: clamp(3.125rem, 4vw, 5.4688rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 25px; }
         .modal-price { font-size: 1.5rem; font-weight: 300; color: #1A1612; margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #CFA246; letter-spacing: 1px; }
         .modal-description { font-family: var(--font-accent) !important; font-size: clamp(1rem, 1.15vw, 1.25rem); font-weight: 300; line-height: 1.85; color: #1A1612; margin-bottom: 40px; }
 
@@ -909,7 +909,7 @@
             font-family: var(--font-accent) !important;
             font-size: clamp(1.6rem, 2.4vw, 2.8rem);
             font-weight: 400;
-            font-style: italic;
+            font-style: normal;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             line-height: 1.1;
@@ -1387,7 +1387,7 @@
             font-family: var(--font-accent);
             font-size: clamp(0.975rem, 1.1vw, 1.125rem);
             font-weight: 300;
-            font-style: italic;
+            font-style: normal;
             color: #1A1612;
             line-height: 1.95;
         }

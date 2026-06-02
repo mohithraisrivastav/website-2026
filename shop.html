@@ -385,7 +385,7 @@
         /* 3. Title: Cormorant italic, not uppercase */
         .product-title {
             font-family: 'Cormorant Garamond', Georgia, serif !important;
-            font-style: italic !important;
+            font-style: normal !important;
             font-weight: 300 !important;
             font-size: clamp(1.5rem, 2vw, 2.2rem) !important;
             text-transform: none !important;
@@ -463,7 +463,7 @@
         }
         .category-header h2 {
             font-family: 'Cormorant Garamond', Georgia, serif !important;
-            font-style: italic !important;
+            font-style: normal !important;
             font-weight: 300 !important;
             font-size: clamp(1.3rem, 1.8vw, 2rem) !important;
             text-transform: none !important;
@@ -1094,7 +1094,7 @@
         }
         .ar-bar-title {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-style: italic; font-weight: 300;
+            font-style: normal; font-weight: 300;
             font-size: 1.15rem; color: rgba(247,243,236,0.88);
         }
         .ar-close {
@@ -1162,7 +1162,7 @@
         }
         .ar-dim {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-style: italic; font-weight: 300;
+            font-style: normal; font-weight: 300;
             font-size: clamp(1rem, 3.4vw, 1.35rem);
             color: rgba(247,243,236,0.7); letter-spacing: 0.02em;
         }
@@ -1316,7 +1316,7 @@
         }
         #arDimHudTitle {
             font-family: 'Cormorant Garamond', Georgia, serif;
-            font-style: italic; font-weight: 300;
+            font-style: normal; font-weight: 300;
             font-size: 0.95rem; line-height: 1.15;
             color: rgba(247,243,236,0.94);
             letter-spacing: 0.02em;
@@ -1487,7 +1487,7 @@
             position: absolute; inset: 0; z-index: 2;
             display: flex; align-items: center; justify-content: center;
             color: rgba(247,243,236,0.35);
-            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-family: 'Cormorant Garamond', serif; font-style: normal;
             font-size: 1.05rem; letter-spacing: 0.5px;
             pointer-events: none; transition: opacity 0.4s;
         }
@@ -1602,7 +1602,7 @@
         .rv-title {
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.3rem, 4vw, 2rem);
-            font-style: italic;
+            font-style: normal;
             font-weight: 300;
             line-height: 1.05;
         }
@@ -1639,7 +1639,7 @@
         .rv-dim {
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.1rem, 3.5vw, 1.5rem);
-            font-style: italic; font-weight: 300;
+            font-style: normal; font-weight: 300;
             color: rgba(255,255,255,0.85);
             letter-spacing: 0.02em;
             transition: opacity 0.3s;
@@ -1993,7 +1993,7 @@
         }
         #rvNoCam svg { color: rgba(207,162,70,0.3); }
         #rvNoCam p {
-            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-family: 'Cormorant Garamond', serif; font-style: normal;
             font-size: 1.15rem; font-weight: 300;
             color: rgba(247,243,236,0.65); max-width: 260px; line-height: 1.8;
         }
@@ -2025,7 +2025,7 @@
         .rv-hint-title {
             font-family: 'Cormorant Garamond', Georgia, serif;
             font-size: clamp(1.4rem, 5vw, 2.1rem);
-            font-style: italic; font-weight: 300;
+            font-style: normal; font-weight: 300;
             color: rgba(255,255,255,0.92); letter-spacing: 0.01em;
             text-align: center; line-height: 1.15;
         }
@@ -3362,7 +3362,7 @@
                     load.classList.remove('ar-gone');
                     load.innerHTML =
                         '<div style="max-width:300px;text-align:center;">'
-                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
+                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:normal;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
                       + '<div style="font-family:Inter,sans-serif;font-size:0.82rem;line-height:1.75;color:rgba(247,243,236,0.5);">AR needs Safari on your iPhone or iPad. Tap below to copy the link and open Safari.</div>'
                       + '</div>';
                     launch.innerHTML =
@@ -3378,7 +3378,7 @@
                     load.classList.remove('ar-gone');
                     load.innerHTML =
                         '<div style=”max-width:300px;text-align:center;”>'
-                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
+                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:normal;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
                       + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);”>Live AR needs Chrome or Safari. '
                       + 'Tap the <strong style=”color:rgba(247,243,236,0.8);”>⋮</strong> menu at the top of this screen and choose <strong style=”color:rgba(247,243,236,0.8);”>”Open in browser”</strong>.</div>'
                       + '</div>';
@@ -5239,13 +5239,13 @@
                 + 'body { font-family: Georgia, serif; font-size: 11pt; color: #1A1612; background: #fff; line-height: 1.75; }'
                 + '.ph { border-bottom: 0.5pt solid #CFA246; padding-bottom: 18pt; margin-bottom: 30pt; }'
                 + '.pa { font-size: 7.5pt; letter-spacing: 5pt; text-transform: uppercase; color: #aaa; margin-bottom: 6pt; }'
-                + '.pt { font-size: 28pt; font-weight: 400; font-style: italic; line-height: 1.1; margin-bottom: 8pt; }'
+                + '.pt { font-size: 28pt; font-weight: 400; font-style: normal; line-height: 1.1; margin-bottom: 8pt; }'
                 + '.ps { font-size: 8pt; letter-spacing: 4pt; text-transform: uppercase; color: #CFA246; }'
                 + '.pf { display: flex; gap: 14pt; margin-bottom: 11pt; }'
                 + '.pk { font-size: 7.5pt; letter-spacing: 3.5pt; text-transform: uppercase; color: #999; min-width: 52pt; padding-top: 2pt; flex-shrink: 0; }'
                 + '.pv { font-size: 10.5pt; }'
                 + '.pn { margin: 28pt 0 20pt; padding: 18pt 22pt; border-left: 2pt solid #CFA246; }'
-                + '.pn p { font-size: 11pt; font-style: italic; line-height: 2.0; }'
+                + '.pn p { font-size: 11pt; font-style: normal; line-height: 2.0; }'
                 + '.pfoot { border-top: 0.5pt solid rgba(207,162,70,0.4); padding-top: 12pt; margin-top: 32pt; font-size: 7.5pt; letter-spacing: 2pt; text-transform: uppercase; color: #bbb; display: flex; justify-content: space-between; }'
                 + '</style></head><body>'
                 + '<div class="ph">'
