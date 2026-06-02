@@ -29,15 +29,33 @@
     if (modal) modal.classList.remove('show');
   }
 
-  // Trigger at 57% scroll depth — all devices
+  // Trigger at 57% scroll depth — hooks into Lenis if available, else native scroll
   function setupScrollTrigger() {
-    window.addEventListener('scroll', function onScroll() {
-      const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-      if (scrolled >= 0.57) {
-        window.removeEventListener('scroll', onScroll);
+    function checkScroll(scrollY) {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) return;
+      if (scrollY / maxScroll >= 0.57) {
         showModal();
+        // Detach from Lenis
+        if (window.__lenis) window.__lenis.off('scroll', onLenisScroll);
       }
-    }, { passive: true });
+    }
+
+    function onLenisScroll({ scroll }) {
+      checkScroll(scroll);
+    }
+
+    // Wait for Lenis to be ready (it's initialised slightly after this script loads)
+    function attachLenis() {
+      if (window.__lenis) {
+        window.__lenis.on('scroll', onLenisScroll);
+      } else {
+        // Fallback: retry until Lenis is ready
+        setTimeout(attachLenis, 200);
+      }
+    }
+
+    attachLenis();
   }
 
   // Form submit
