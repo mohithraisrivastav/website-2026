@@ -320,22 +320,23 @@
         gsap.from('.work-hero h1', { y: 60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.2 });
         gsap.from('.hero-line',    { scaleX: 0, transformOrigin: 'left', duration: 1.5, ease: 'power3.out', delay: 0.5 });
 
-        /* -- Reveal: cards fade + rise staggered per column -- */
-        cols.forEach((col, ci) => {
-            const cards = col.querySelectorAll('.wi-card');
-            ScrollTrigger.batch(cards, {
-                onEnter: batch => gsap.to(batch, {
+        /* -- Reveal: each card individually on scroll -- */
+        document.querySelectorAll('.wi-card').forEach(card => {
+            gsap.fromTo(card,
+                { opacity: 0, y: 50 },
+                {
                     opacity: 1,
                     y: 0,
                     duration: 0.9,
                     ease: 'power3.out',
-                    stagger: 0.12,
-                    delay: ci * 0.08,
-                    overwrite: true
-                }),
-                start: 'top 92%',
-                once: true
-            });
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 92%',
+                        toggleActions: 'play none none none',
+                        once: true
+                    }
+                }
+            );
         });
 
     </script>
