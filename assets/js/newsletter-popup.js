@@ -4,7 +4,7 @@
   const MODAL_ID = 'nlPopupModal';
   const FORM_ID = 'nlPopupForm';
   const INPUT_ID = 'nlPopupEmail';
-  const STORAGE_KEY = 'nlPopupShown';
+  const STORAGE_KEY = 'nlPopupShown_v2';
 
   let shown = false;
 

@@ -235,7 +235,7 @@
         .shop-view-all { font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #1A1612; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 6px; transition: 0.3s; }
         .shop-view-all:hover { color: #1A1612; border-color: #1A1612; }
         .shop-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-        .shop-preview-card { cursor: pointer; text-decoration: none; color: inherit; opacity: 0; }
+        .shop-preview-card { cursor: pointer; text-decoration: none; color: inherit; }
         .shop-preview-card .img-wrap { position: relative; aspect-ratio: 1/1; overflow: hidden; background: #E0D5C7; margin-bottom: 20px; }
         .shop-preview-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.92); transition: 1.2s cubic-bezier(0.25, 1, 0.5, 1); }
         .shop-preview-card:hover img { filter: brightness(1); transform: scale(1.03); }
@@ -948,20 +948,18 @@ Mohith understands architectural storytelling and delivers stunning visuals that
 
         // -- Shop preview cards: cinematic dissolve ----------------------------
         gsap.utils.toArray('.shop-preview-card').forEach(card => {
-            gsap.fromTo(card,
-                { opacity: 0 },
-                {
-                    opacity: 1,
-                    duration: 1.4,
-                    ease: 'power2.inOut',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 94%',
-                        toggleActions: 'play none none none',
-                        once: true
-                    }
+            gsap.set(card, { opacity: 0 });
+            gsap.to(card, {
+                opacity: 1,
+                duration: 1.4,
+                ease: 'power2.inOut',
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 95%',
+                    toggleActions: 'play none none none',
+                    once: true
                 }
-            );
+            });
         });
 
         // -- Section heading reveals -------------------------------------------
