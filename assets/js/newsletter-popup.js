@@ -34,7 +34,7 @@
     function checkScroll(scrollY) {
       const maxScroll = document.body.scrollHeight - window.innerHeight;
       if (maxScroll <= 0) return;
-      if (scrollY / maxScroll >= 0.57) {
+      if (scrollY / maxScroll >= 0.36) {
         showModal();
         // Detach from Lenis
         if (window.__lenis) window.__lenis.off('scroll', onLenisScroll);
