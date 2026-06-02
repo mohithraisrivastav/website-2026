@@ -373,10 +373,14 @@
             .journal-left {
                 position: relative; top: auto; height: auto;
                 overflow-y: visible; padding-right: 0;
-                border-right: none; border-bottom: 1px solid rgba(207, 162, 70, 0.25);
+                border-right: none;
+            }
+            /* Mobile: show Concepts & Essays first, then Journal observations */
+            .journal-right {
+                padding-left: 0; order: -1;
+                border-bottom: 1px solid rgba(207, 162, 70, 0.25);
                 padding-bottom: 40px; margin-bottom: 40px;
             }
-            .journal-right { padding-left: 0; }
             .concept-board { grid-template-columns: 1fr; }
             .concept.featured { grid-column: span 1; grid-template-columns: 1fr; gap: 30px; }
             .concept.featured .c-img { order: -1; aspect-ratio: 16/9; }
