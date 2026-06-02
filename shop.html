@@ -4778,8 +4778,30 @@
             window.__lenisRafId = requestAnimationFrame(raf);
         }
         initLenis();
-        gsap.to(".fade-up", { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: ".fade-up", start: "top 95%" } });
-        gsap.utils.toArray('.product-card').forEach(item => { gsap.to(item, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: item, start: "top 90%" } }); });
+        // Header / non-card elements: gentle rise + fade.
+        // Explicit fromTo (not .from) + immediateRender:false — avoids GSAP's
+        // wrong-end-value capture that can strand elements when the trigger is
+        // already past at load.
+        gsap.utils.toArray('.fade-up:not(.product-card)').forEach(function (el) {
+            gsap.fromTo(el,
+                { y: 24, opacity: 0 },
+                { y: 0, opacity: 1, duration: 1.0, ease: 'power3.out',
+                  immediateRender: false,
+                  scrollTrigger: { trigger: el, start: 'top 92%', once: true } }
+            );
+        });
+
+        // Product cards: cinematic dissolve (matches photography page + homepage).
+        // immediateRender:false keeps a card at its natural opacity until its own
+        // trigger fires — so filtered-out cards can never get stranded invisible.
+        gsap.utils.toArray('.product-card').forEach(function (card) {
+            gsap.fromTo(card,
+                { opacity: 0 },
+                { opacity: 1, duration: 1.4, ease: 'power2.inOut',
+                  immediateRender: false,
+                  scrollTrigger: { trigger: card, start: 'top 95%', toggleActions: 'play none none none', once: true } }
+            );
+        });
 
         /* -- Favourites ----------------------------------------------- */
         function getFavs() { return JSON.parse(localStorage.getItem('shop_favs') || '[]'); }

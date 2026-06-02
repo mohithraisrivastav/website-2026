@@ -63,15 +63,9 @@
     });
   });
 
-  // ── .product-image img  (shop.html) ───────────────────────────────────────
-  document.querySelectorAll('.product-image img').forEach(function (img, i) {
-    const card = img.closest('.product-card') || img.parentElement;
-    const siblings = card.parentElement
-      ? Array.from(card.parentElement.children).filter(c => c.classList.contains('product-card'))
-      : [];
-    const idx = siblings.indexOf(card);
-    revealImg(img, card, idx >= 0 ? (idx % 3) * 0.1 : 0);
-  });
+  // ── shop.html product cards: clean dissolve is handled in shop.html's own
+  //    inline script (gsap.from with immediateRender:false). No clip-path wipe
+  //    here so the effect matches the photography page and homepage shop preview.
 
   // ── .card-img  (work.html masonry) ────────────────────────────────────────
   document.querySelectorAll('.card-img').forEach(function (img) {
