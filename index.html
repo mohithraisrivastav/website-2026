@@ -152,12 +152,13 @@
         .hero-h1 { margin: 0; font-weight: 300; }
         .hero-title { display: block; font-size: clamp(3rem, 6vw, 10rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
         
-        .hero-right { display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; height: 100%; gap: 20px; }
+        .hero-right { display: flex; align-items: center; justify-content: center; position: relative; height: 100%; }
         .viewfinder { width: 30vw; min-width: min(300px, 85vw); aspect-ratio: 4 / 5; overflow: hidden; position: relative; z-index: 2; box-shadow: 0 20px 50px rgba(0,0,0,0.8); opacity: 0; animation: slowFadeIn 3s ease 1s forwards; background: transparent; }
         .viewfinder .parallax-media { position: absolute; width: 160%; height: 160%; top: -20%; left: -30%; object-fit: cover; border: none; pointer-events: none; filter: brightness(0.75); transition: filter 1.5s ease; }
         .viewfinder:hover .parallax-media { filter: brightness(1); }
 
-        .hero-text { position: relative; bottom: auto; right: auto; z-index: 3; opacity: 0; align-self: flex-end; padding-right: 2px; }
+        /* Absolutely positioned so it doesn't offset the viewfinder's centering */
+        .hero-text { position: absolute; bottom: 5%; right: 2px; z-index: 3; opacity: 0; padding-right: 2px; }
         .parallax-text { font-size: 1rem; font-weight: 600; letter-spacing: 4px; color: #4A3A33; text-transform: uppercase; }
 
         .scroll-cue {
