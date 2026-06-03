@@ -1,4 +1,4 @@
-.policy-hero {
+﻿.policy-hero {
     padding: 120px 5vw 60px;
     border-bottom: 1px solid rgba(207,162,70,0.2);
 }
@@ -7,7 +7,7 @@
     font-weight: 700;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: #CFA246;
+    color: var(--color-accent);
     margin-bottom: 24px;
 }
 .policy-hero h1 {
@@ -16,7 +16,7 @@
     font-style: normal;
     line-height: 1.0;
     letter-spacing: -0.02em;
-    color: #1A1612;
+    color: var(--text-primary);
     margin-bottom: 24px;
 }
 .policy-hero .updated {
@@ -42,7 +42,7 @@
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #CFA246;
+    color: var(--color-accent);
     margin-bottom: 28px;
 }
 .policy-section p {
@@ -69,15 +69,15 @@
     content: '—';
     position: absolute;
     left: 0;
-    color: #CFA246;
+    color: var(--color-accent);
     font-weight: 700;
 }
 .policy-section ul li:last-child { border-bottom: none; }
-.policy-section strong { color: #1A1612; font-weight: 700; }
-.policy-section a { color: #CFA246; text-decoration: underline; text-underline-offset: 3px; }
+.policy-section strong { color: var(--text-primary); font-weight: 700; }
+.policy-section a { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
 .policy-highlight {
     background: rgba(207,162,70,0.07);
-    border-left: 3px solid #CFA246;
+    border-left: 3px solid var(--color-accent);
     padding: 20px 24px;
     margin: 28px 0;
     font-size: 0.9375rem;

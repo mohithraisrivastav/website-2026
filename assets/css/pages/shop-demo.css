@@ -28,8 +28,8 @@
         }
         .hud-btn {
             background: rgba(26,23,20,0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+
+
             border: 1px solid rgba(255,255,255,0.06);
             color: #F2EDE6;
             padding: 8px 16px;

@@ -5,8 +5,8 @@
     position: absolute;
     top: -48px;
     left: 0;
-    background: #1A1612;
-    color: #F7F3ED;
+    background: var(--text-primary);
+    color: var(--bg-primary);
     padding: 8px 20px;
     z-index: 99999;
     text-decoration: none;
@@ -49,51 +49,150 @@ body { top: 0 !important; }
  * NOTE: ::selection and scrollbar styles live in typo.css — not repeated here.
  *
  * Palette V5 · Final
- *   Base        #F7F3ED  Parchment
- *   Background  #EDE8DF  Off-white
- *   Surface     #EDE8DF  Warm linen
+ *   Base        var(--bg-primary)  Parchment
+ *   Background  var(--bg-secondary)  Off-white
+ *   Surface     var(--bg-secondary)  Warm linen
  *   Card        #E2D8C6  Card linen  (cards only)
  *   Highlight   #F6EBC8  Gold light
- *   Accent      #CFA246  Gold          — dark bg only (7.8:1 on #1A1612)
- *   Gold-text   #7F5F10  Dark amber    — light bg text (5.39:1 on #F7F3ED) WCAG AA
- *   Action      #B85C38  Terracotta
- *   Hover       #A34E2E  Terracotta dark
- *   Relief      #6B5E4F  Warm taupe (text/labels only)
- *   Main text   #1A1612
- *   Secondary   #4A3A33
- *   Depth       #2C1F1A  /  #2B2B2B
+ *   Accent      var(--color-accent)  Gold          — dark bg only (7.8:1 on var(--text-primary))
+ *   Gold-text   var(--color-accent-text)  Dark amber    — light bg text (5.39:1 on var(--bg-primary)) WCAG AA
+ *   Action      var(--color-action)  Terracotta
+ *   Hover       var(--color-action-hover)  Terracotta dark
+ *   Relief      var(--text-tertiary)  Warm taupe (text/labels only)
+ *   Main text   var(--text-primary)
+ *   Secondary   var(--text-secondary)
+ *   Depth       var(--depth-dark)  /  #2B2B2B
  */
 
 /* ── Design tokens ───────────────────────────────────────────────────────── */
 
 :root {
-    /* Layout */
-    --nav-height: 120px; /* logo (80px) + padding (1.25rem × 2 = 40px) */
+    /* ════════════════════════════════════════════════════════════════════════
+       DESIGN TOKENS — Color, spacing, typography, elevation
+       Semantic names map to visual purpose. Single source of truth for brand.
+       ════════════════════════════════════════════════════════════════════════ */
+
+    /* Layout & Sizing */
+    --nav-height: 120px;
+    --spacing-xs:  4px;
+    --spacing-sm:  8px;
+    --spacing-md:  12px;
+    --spacing-lg:  16px;
+    --spacing-xl:  24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
+    --spacing-4xl: 64px;
+    --spacing-5xl: 80px;
+
+    /* ── Color Primitives (Hue-based foundation) ─────────────────────────── */
+
+    /* Neutrals: warm tinted grays & creams (restrained palette) */
+    --color-neutral-100: #FAFAFA;  /* Near white, warm tint */
+    --color-neutral-200: #F7F3ED;  /* Parchment — primary light bg */
+    --color-neutral-300: #F0E8D0;  /* Gold light highlight */
+    --color-neutral-400: #EDE8DF;  /* Off-white — secondary bg */
+    --color-neutral-500: #D4CFC3;  /* Light taupe */
+    --color-neutral-600: #A89A8E;  /* Medium taupe */
+    --color-neutral-700: #6B5E4F;  /* Warm taupe — labels */
+    --color-neutral-800: #4A3A33;  /* Dark gray — secondary text */
+    --color-neutral-900: #1A1612;  /* Near black — primary text */
+
+    /* Accent: warm gold (architectural, precious) */
+    --color-accent-light:   #F6EBC8;  /* Gold tint on neutral */
+    --color-accent:         #CFA246;  /* Main gold — ~7.8:1 on dark */
+    --color-accent-dark:    #B8902E;  /* Dark gold — rarely used */
+    --color-accent-text:    #7F5F10;  /* Dark amber — text on light */
+
+    /* Action: terracotta (warmth, engagement) */
+    --color-action-light:   #E86A4A;  /* Light terracotta */
+    --color-action:         #B85C38;  /* Primary action */
+    --color-action-hover:   #A34E2E;  /* Hover state */
+    --color-action-active:  #8A2E12;  /* Pressed state */
+
+    /* ── Semantic Color Tokens (Intent-based) ────────────────────────────── */
 
     /* Backgrounds */
-    --bg-base:       #F7F3ED;
-    --bg-main:       #F7F3ED;
-    --bg-surface:    #EDE8DF;
-    --bg-card:       #EDE8DF;
-    --bg-highlight:  #F0E8D0;
+    --bg-primary:   var(--color-neutral-200);  /* Main page bg */
+    --bg-secondary: var(--color-neutral-400);  /* Cards, surfaces */
+    --bg-tertiary:  var(--color-neutral-100);  /* Lightest bg */
+    --bg-overlay:   rgba(26, 22, 18, 0.5);    /* Dark overlay */
+    --bg-accent:    var(--color-accent);       /* Accent bg (rare) */
 
     /* Text */
-    --text-main:     #1A1612;
-    --text-secondary:#4A3A33;
-    --text-relief:   #6B5E4F;
+    --text-primary:    var(--color-neutral-900);  /* Main body text */
+    --text-secondary:  var(--color-neutral-800);  /* Labels, captions */
+    --text-tertiary:   var(--color-neutral-700);  /* Weak contrast */
+    --text-inverse:    var(--color-neutral-100);  /* Text on dark */
+    --text-link:       var(--color-accent-text);  /* Links */
+    --text-action:     var(--color-action);       /* Action text */
 
-    /* Accent */
-    --accent-gold:        #CFA246;  /* dark backgrounds only — 7.8:1 on #1A1612 */
-    --accent-gold-text:   #7F5F10;  /* light backgrounds — 5.39:1 on #F7F3ED  WCAG AA */
-    --accent-primary:     #B85C38;
-    --accent-hover:       #A34E2E;
+    /* Borders & Dividers */
+    --border-light:    rgba(207, 162, 70, 0.15);   /* Subtle gold */
+    --border-default:  rgba(207, 162, 70, 0.25);   /* Default divider */
+    --border-strong:   rgba(26, 22, 18, 0.2);      /* Strong divider */
 
-    /* Links */
-    --link-color:    #7F5F10;
+    /* Depth (layering & emphasis) */
+    --depth-dark:      #2C1F1A;  /* Dark depth layer */
+    --depth-charcoal:  #2B2B2B;  /* Very dark overlay */
+    --depth-subtle:    rgba(0, 0, 0, 0.03);  /* Barely perceptible */
+    --depth-medium:    rgba(0, 0, 0, 0.1);   /* Gentle depth */
+    --depth-strong:    rgba(0, 0, 0, 0.2);   /* Heavy shadow */
 
-    /* Depth */
-    --depth-dark:    #2C1F1A;
-    --depth-charcoal:#2B2B2B;
+    /* Interactive States */
+    --state-hover:     rgba(207, 162, 70, 0.1);   /* Hover tint */
+    --state-active:    var(--color-action-active);  /* Active/pressed */
+    --state-disabled:  rgba(75, 58, 51, 0.3);      /* Disabled opacity */
+    --state-focus:     var(--color-accent);        /* Focus outline */
+
+    /* ── Typography Scale ────────────────────────────────────────────────── */
+
+    --font-accent:  'Cormorant Garamond', Georgia, serif;
+    --font-main:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono:    'Courier New', monospace;
+
+    --text-xs:      0.75rem;   /* 12px */
+    --text-sm:      0.875rem;  /* 14px */
+    --text-base:    1rem;      /* 16px */
+    --text-lg:      1.125rem;  /* 18px */
+    --text-xl:      1.25rem;   /* 20px */
+    --text-2xl:     1.5rem;    /* 24px */
+    --text-3xl:     2rem;      /* 32px */
+    --text-4xl:     2.5rem;    /* 40px */
+    --text-5xl:     3rem;      /* 48px */
+
+    --font-weight-light:  300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold:   700;
+
+    /* ── Elevation & Shadows ────────────────────────────────────────────── */
+
+    --shadow-sm:     0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md:     0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg:     0 10px 15px rgba(0, 0, 0, 0.15);
+    --shadow-xl:     0 20px 25px rgba(0, 0, 0, 0.2);
+
+    /* ── Transitions & Animation ────────────────────────────────────────── */
+
+    --transition-fast:     150ms ease-out;
+    --transition-normal:   250ms ease-out;
+    --transition-slow:     400ms ease-out;
+    --easing-smooth:       cubic-bezier(0.25, 1, 0.5, 1);
+
+    /* ── Legacy aliases (backward-compat — do not add new uses) ─────────── */
+    --accent-gold:        var(--color-accent);
+    --accent-gold-text:   var(--color-accent-text);
+    --accent-primary:     var(--color-action);
+    --accent-hover:       var(--color-action-hover);
+    --bg-base:            var(--bg-primary);
+    --bg-main:            var(--bg-primary);
+    --bg-surface:         var(--bg-secondary);
+    --bg-card:            var(--bg-secondary);
+    --bg-highlight:       var(--color-neutral-300);
+    --text-main:          var(--text-primary);
+    --text-relief:        var(--text-tertiary);
+    --link-color:         var(--color-accent-text);
 }
 
 /* ── Fixed-position guards ───────────────────────────────────────────────
@@ -117,10 +216,8 @@ body { top: 0 !important; }
     position: fixed !important;
     top: 0 !important; left: 0;
     width: 100%;
-    background: rgba(247,243,237,0.92);
+    background: rgba(247,243,237,0.98);
     z-index: 14500;
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     border-bottom: 1px solid rgba(207,162,70,0.18);
     overflow: visible;
 }
@@ -150,7 +247,7 @@ body { top: 0 !important; }
     display: block !important;
     font-size: 1.25rem !important;
     font-weight: 600 !important;
-    color: #1A1612 !important;
+    color: var(--text-primary) !important;
     letter-spacing: 0 !important;
     text-transform: none !important;
     line-height: 1.3 !important;
@@ -162,7 +259,7 @@ body { top: 0 !important; }
     font-size: 0.75rem !important;
     font-weight: 400 !important;
     letter-spacing: 0.5px !important;
-    color: #4A3A33 !important;
+    color: var(--text-secondary) !important;
     text-transform: none !important;
     font-family: var(--font-accent) !important;
     margin-top: 4px !important;
@@ -187,7 +284,7 @@ body { top: 0 !important; }
     padding: 0;
 }
 .nav-links a {
-    color: #4A3A33;
+    color: var(--text-secondary);
     text-decoration: none;
     text-transform: none;
     font-size: 0.875rem;
@@ -202,7 +299,7 @@ body { top: 0 !important; }
     transition: color 0.25s ease, letter-spacing 0.25s ease;
 }
 .nav-links > li > a:hover,
-.nav-links > li > a.active { color: #CFA246; letter-spacing: 0.04em; }
+.nav-links > li > a.active { color: var(--color-accent); letter-spacing: 0.04em; }
 
 /* ── Global back navigation ───────────────────────────────────────────────── */
 
@@ -216,11 +313,9 @@ body { top: 0 !important; }
     align-items: center !important;
     gap: 18px !important;
     padding: 14px 5vw !important;
-    background: rgba(247, 243, 237, 0.94) !important;
+    background: rgba(247, 243, 237, 0.98) !important;
     border-bottom: 1px solid rgba(26, 22, 18, 0.1) !important;
     box-shadow: none !important;
-    backdrop-filter: blur(14px) !important;
-    -webkit-backdrop-filter: blur(14px) !important;
 }
 
 .global-back-link,
@@ -232,7 +327,7 @@ body { top: 0 !important; }
     appearance: none !important;
     background: transparent !important;
     border: none !important;
-    color: #4A3A33 !important;
+    color: var(--text-secondary) !important;
     cursor: pointer !important;
     text-decoration: none !important;
     font-size: 0.8125rem !important;
@@ -246,7 +341,7 @@ body { top: 0 !important; }
 .global-back-link:hover,
 .essay-back a:hover,
 .nav-back:hover {
-    color: #CFA246 !important;
+    color: var(--color-accent) !important;
 }
 
 .global-back-link svg,
@@ -300,14 +395,14 @@ body { top: 0 !important; }
     font-weight: 700;
     letter-spacing: 1.6px;
     text-transform: uppercase;
-    color: #1A1612;
+    color: var(--text-primary);
     background: none;
     border: none;
     cursor: pointer;
     text-decoration: none;
     transition: color 0.2s;
 }
-.page-back-btn:hover { color: #1A1612; }
+.page-back-btn:hover { color: var(--text-primary); }
 .page-back-btn svg {
     width: 14px;
     height: 14px;
@@ -340,8 +435,8 @@ body { top: 0 !important; }
     background: rgba(247, 243, 237, 0.97);
     border: 1px solid rgba(207, 162, 70, 0.15);
     border-radius: 8px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+
+
     box-shadow: 0 8px 24px rgba(26, 22, 18, 0.1);
     min-width: 150px;
     z-index: 500;
@@ -370,7 +465,7 @@ body { top: 0 !important; }
     font-weight: 600;
     letter-spacing: 1.8px;
     text-transform: uppercase;
-    color: #4A3A33 !important;
+    color: var(--text-secondary) !important;
     text-decoration: none !important;
     border: none !important;
     white-space: nowrap;
@@ -378,10 +473,10 @@ body { top: 0 !important; }
     transition: color 0.15s, background 0.15s;
 }
 .nav-dropdown li a:hover  {
-    color: #CFA246 !important;
+    color: var(--color-accent) !important;
     background: rgba(207,162,70,0.06);
 }
-.nav-dropdown li a.active { color: #CFA246 !important; }
+.nav-dropdown li a.active { color: var(--color-accent) !important; }
 
 /* Subtle separator between items */
 .nav-dropdown li + li {
@@ -389,13 +484,13 @@ body { top: 0 !important; }
 }
 
 /* Parent link highlights gold when a dropdown child is the active page */
-.nav-has-dropdown > a.active { color: #CFA246 !important; }
+.nav-has-dropdown > a.active { color: var(--color-accent) !important; }
 
 /* ── Mobile nav accordion ────────────────────────────────────────────────── */
 .mobile-nav-group { width: 100%; text-align: center; }
 .mobile-nav-parent {
     background: none; border: none;
-    color: #1A1612;
+    color: var(--text-primary);
     font-family: var(--font-main);
     font-size: 2.5rem;
     font-weight: 200;
@@ -406,7 +501,7 @@ body { top: 0 !important; }
     width: 100%; padding: 0;
     transition: color 0.3s;
 }
-.mobile-nav-parent:hover { color: #CFA246; }
+.mobile-nav-parent:hover { color: var(--color-accent); }
 .mobile-nav-chevron {
     font-size: 0.7em;
     display: inline-block;
@@ -426,11 +521,11 @@ body { top: 0 !important; }
     font-size: clamp(0.95rem, 2.5vw, 1.1rem) !important;
     letter-spacing: 3.2px !important;
     font-weight: 400 !important;
-    color: #4A3A33 !important;
+    color: var(--text-secondary) !important;
     text-decoration: none;
     transition: color 0.25s;
 }
-.mobile-nav-children a:hover { color: #CFA246 !important; }
+.mobile-nav-children a:hover { color: var(--color-accent) !important; }
 
 /* ── Nav Cart icon (.nav-cart variant — used on most pages) ──────────────── */
 
@@ -443,7 +538,7 @@ body { top: 0 !important; }
     cursor: pointer;
     position: relative;
     transition: opacity 0.3s ease;
-    color: #CFA246;
+    color: var(--color-accent);
 }
 .nav-cart:hover { opacity: 0.7; }
 .nav-cart svg {
@@ -454,8 +549,8 @@ body { top: 0 !important; }
 .nav-cart .cart-count {
     position: absolute;
     top: -2px; right: -6px;
-    background: #B85C38;
-    color: #F7F3ED;
+    background: var(--color-action);
+    color: var(--bg-primary);
     font-size: 0.875rem;
     font-weight: 700;
     width: 16px; height: 16px;
@@ -482,17 +577,17 @@ body { top: 0 !important; }
 }
 .cart-icon svg {
     width: 18px; height: 18px;
-    fill: #CFA246;
+    fill: var(--color-accent);
     transition: 0.3s;
 }
-.cart-icon:hover svg { fill: #CFA246; }
+.cart-icon:hover svg { fill: var(--color-accent); }
 
 /* Standalone .cart-count used by .cart-icon (slightly different position) */
 .cart-icon .cart-count {
     position: absolute;
     top: -5px; right: -5px;
-    background: #B85C38;
-    color: #F7F3ED;
+    background: var(--color-action);
+    color: var(--bg-primary);
     font-size: 0.875rem;
     font-weight: 900;
     width: 14px; height: 14px;
@@ -514,7 +609,7 @@ body { top: 0 !important; }
 .sf-contact-btn:focus-visible,
 .sf-social a:focus-visible,
 .mobile-menu a:focus-visible {
-    outline: 2px solid #7F5F10;
+    outline: 2px solid var(--color-accent-text);
     outline-offset: 4px;
     border-radius: 2px;
 }
@@ -531,7 +626,7 @@ body { top: 0 !important; }
 .pnav-prev:focus-visible,
 .pnav-next:focus-visible,
 .pnav-index:focus-visible {
-    outline: 2px solid #7F5F10;
+    outline: 2px solid var(--color-accent-text);
     outline-offset: 6px;
     border-radius: 3px;
 }
@@ -551,7 +646,7 @@ body { top: 0 !important; }
 }
 .hamburger span {
     width: 100%; height: 2px;
-    background: #1A1612;
+    background: var(--text-primary);
     transition: all 0.4s cubic-bezier(0.7, 0, 0.3, 1);
 }
 .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
@@ -564,7 +659,7 @@ body { top: 0 !important; }
     position: fixed !important;
     top: 0 !important; left: 0;
     width: 100%; height: 100vh;
-    background: #F7F3ED;
+    background: var(--bg-primary);
     z-index: 15500;
     display: flex;
     flex-direction: column;
@@ -594,7 +689,7 @@ body { top: 0 !important; }
     background: none;
     border: none;
     cursor: pointer;
-    color: #1A1612;
+    color: var(--text-primary);
     font-size: 2.5rem;
     font-weight: 200;
     line-height: 1;
@@ -602,12 +697,12 @@ body { top: 0 !important; }
     transition: color 0.3s ease;
     font-family: var(--font-accent);
 }
-.mobile-menu-close:hover { color: #CFA246; }
+.mobile-menu-close:hover { color: var(--color-accent); }
 .mobile-menu a {
     font-size: 2.5rem;
     font-weight: 200;
     text-decoration: none !important;
-    color: #1A1612 !important;
+    color: var(--text-primary) !important;
     text-transform: uppercase;
     letter-spacing: 3.2px;
 }
@@ -618,7 +713,7 @@ body { top: 0 !important; }
     position: fixed;
     top: 0; right: 0;
     width: 450px; height: 100vh;
-    background: #EDE8DF;
+    background: var(--bg-secondary);
     z-index: 14600;
     /* translateX(100%) = exactly one sidebar-width off-screen — no bleed regardless of overflow settings */
     transform: translateX(100%);
@@ -649,7 +744,7 @@ body { top: 0 !important; }
     font-weight: 700;
     letter-spacing: 3.2px;
     text-transform: uppercase;
-    color: #1A1612;
+    color: var(--text-primary);
 }
 .close-cart {
     cursor: pointer;
@@ -657,7 +752,7 @@ body { top: 0 !important; }
     font-weight: 600;
     letter-spacing: 1.6px;
     text-transform: uppercase;
-    color: #4A3A33;
+    color: var(--text-secondary);
     background: none;
     border: none;
     padding: 12px 16px;
@@ -694,11 +789,11 @@ body { top: 0 !important; }
     font-weight: 700;
     letter-spacing: 2.4px;
     text-transform: uppercase;
-    color: #4A3A33;
+    color: var(--text-secondary);
 }
 .cart-empty-sub {
     font-size: 0.875rem;
-    color: #1A1612;
+    color: var(--text-primary);
     letter-spacing: 1px;
 }
 
@@ -720,7 +815,7 @@ body { top: 0 !important; }
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #1A1612;
+    color: var(--text-primary);
     margin-bottom: 5px;
 }
 .cart-item p {
@@ -729,13 +824,13 @@ body { top: 0 !important; }
 }
 .remove-item {
     font-size: 0.875rem;
-    color: #B85C38;
+    color: var(--color-action);
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: color 0.2s ease;
 }
-.remove-item:hover { color: #A34E2E; }
+.remove-item:hover { color: var(--color-action-hover); }
 
 .cart-footer {
     border-top: 1px solid #8B7B6B;
@@ -748,13 +843,13 @@ body { top: 0 !important; }
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 1.6px;
-    color: #1A1612;
+    color: var(--text-primary);
 }
 .checkout-btn {
     width: 100%;
     padding: 20px;
-    background: #B85C38;
-    color: #F7F3ED;
+    background: var(--color-action);
+    color: var(--bg-primary);
     border: none;
     font-family: var(--font-accent) !important;
     font-size: 0.875rem;
@@ -767,7 +862,7 @@ body { top: 0 !important; }
     text-decoration: none;
 }
 .checkout-btn:hover {
-    background: #A34E2E;
+    background: var(--color-action-hover);
     letter-spacing: 4px;
     transform: translateY(-2px);
     box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15), 0 4px 12px rgba(184,92,56,0.25);
@@ -782,7 +877,7 @@ body { top: 0 !important; }
     background: rgba(26, 22, 18, 0.6);
     z-index: 14550;
     display: none;
-    backdrop-filter: blur(5px);
+
 }
 .cart-overlay.active { display: block; }
 
@@ -799,18 +894,18 @@ body { top: 0 !important; }
        hover with a thin underline
      · Newsletter input is an underline, not a boxed border
      · Submit button = bare arrow in gold, no fill
-     · Brand gold (#CFA246) used consistently — terracotta orange dropped
+     · Brand gold (var(--color-accent)) used consistently — terracotta orange dropped
      · Homepage CTA: heading scaled down from 9rem all-caps black to
        Cormorant italic editorial. Filled orange button replaced with a
        gold-link CTA matching .btn-clean
      · Copyright + social: sentence case, smaller weight, gold on hover
-   Accessibility contrast preserved (#4A3A33 on cream = 7:1 PASS).
+   Accessibility contrast preserved (var(--text-secondary) on cream = 7:1 PASS).
    ════════════════════════════════════════════════════════════════════════════ */
 
 .site-footer {
     background: rgba(247, 243, 237, 0.97);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+
+
     font-family: var(--font-main) !important;
     position: relative;
     z-index: 2;
@@ -830,7 +925,7 @@ body { top: 0 !important; }
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #6B5E4F;
+    color: var(--text-tertiary);
 }
 .sf-heading {
     font-family: var(--font-accent) !important;
@@ -840,7 +935,7 @@ body { top: 0 !important; }
     line-height: 1.08;
     letter-spacing: 0;
     text-transform: none;
-    color: #1A1612;
+    color: var(--text-primary);
     margin: 0;
     max-width: 16ch;
 }
@@ -849,7 +944,7 @@ body { top: 0 !important; }
     align-items: center;
     gap: 10px;
     background: transparent;
-    color: #CFA246;
+    color: var(--color-accent);
     text-decoration: none;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -864,7 +959,7 @@ body { top: 0 !important; }
 }
 .sf-contact-btn:hover,
 .sf-contact-btn:focus-visible {
-    color: #1A1612;
+    color: var(--text-primary);
     gap: 16px;
     letter-spacing: 3px;
     outline: none;
@@ -886,7 +981,7 @@ body { top: 0 !important; }
     font-style: normal;
     font-weight: 300;
     font-size: 1rem;
-    color: #4A3A33;
+    color: var(--text-secondary);
     line-height: 1.7;
     letter-spacing: 0.01em;
     margin: 0;
@@ -900,7 +995,7 @@ body { top: 0 !important; }
     font-weight: 700;
     letter-spacing: 2.8px;
     text-transform: uppercase;
-    color: #6B5E4F;
+    color: var(--text-tertiary);
     margin-bottom: 18px;
 }
 
@@ -911,7 +1006,7 @@ body { top: 0 !important; }
     font-family: var(--font-main) !important;
     font-size: 0.92rem;
     font-weight: 400;
-    color: #1A1612;
+    color: var(--text-primary);
     text-decoration: none;
     letter-spacing: 0;
     text-transform: none;
@@ -920,14 +1015,14 @@ body { top: 0 !important; }
 }
 .sf-nav a:hover,
 .sf-legal a:hover {
-    color: #CFA246;
+    color: var(--color-accent);
 }
 
 .sf-newsletter-col p {
     font-family: var(--font-main) !important;
     font-size: 0.88rem;
     font-weight: 400;
-    color: #4A3A33;
+    color: var(--text-secondary);
     line-height: 1.65;
     margin: 0 0 18px;
     max-width: 320px;
@@ -952,7 +1047,7 @@ body { top: 0 !important; }
     flex: 1;
     background: transparent;
     border: none;
-    color: #1A1612;
+    color: var(--text-primary);
     font-family: var(--font-main) !important;
     font-size: 0.92rem;
     font-weight: 400;
@@ -963,7 +1058,7 @@ body { top: 0 !important; }
 .sf-form button {
     background: transparent;
     border: none;
-    color: #CFA246;
+    color: var(--color-accent);
     padding: 8px 8px 8px 12px;
     font-size: 1.25rem;
     cursor: pointer;
@@ -973,7 +1068,7 @@ body { top: 0 !important; }
 }
 .sf-form button:hover,
 .sf-form button:focus-visible {
-    color: #1A1612;
+    color: var(--text-primary);
     transform: translateX(4px);
     outline: none;
 }
@@ -985,7 +1080,7 @@ body { top: 0 !important; }
     font-size: 0.92rem;
     letter-spacing: 0;
     text-transform: none;
-    color: #CFA246;
+    color: var(--color-accent);
     margin-top: 12px;
 }
 
@@ -1013,11 +1108,11 @@ body { top: 0 !important; }
     font-weight: 500;
     letter-spacing: 0;
     text-transform: none;
-    color: #4A3A33;
+    color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.25s ease;
 }
-.sf-social a:hover { color: #CFA246; }
+.sf-social a:hover { color: var(--color-accent); }
 
 /* — Responsive — */
 @media (max-width: 900px) {
@@ -1085,7 +1180,7 @@ body { top: 0 !important; }
    block that sets body { background: transparent }.
    html is the only element inline <style> blocks cannot reach.           */
 html {
-  background: #F7F3ED !important;
+  background: var(--bg-primary) !important;
 }
 
 body {
@@ -1220,8 +1315,8 @@ body .reader-hero {
     width: 44px;
     height: 44px;
     border: 1px solid rgba(207,162,70,0.4);
-    background: #F7F3ED;
-    color: #1A1612;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1238,9 +1333,9 @@ body .reader-hero {
     pointer-events: auto;
 }
 .back-to-top:hover {
-    color: #F7F3ED;
-    border-color: #CFA246;
-    background: #CFA246;
+    color: var(--bg-primary);
+    border-color: var(--color-accent);
+    background: var(--color-accent);
 }
 
 /* ------------------------------------------------------------------
@@ -1470,7 +1565,7 @@ b,
     z-index: 1;
 }
 #theme-toggle:hover {
-    color: #4A3A33;
+    color: var(--text-secondary);
     border-color: rgba(110, 123, 67, 0.8);
     background: rgba(110, 123, 67, 0.1);
 }
@@ -1510,12 +1605,12 @@ button, .btn, a.btn, [role="button"] {
 a.hero-cta, a.cta-link, .action-btn {
     position: relative;
     text-decoration: none;
-    color: #7F5F10;
+    color: var(--color-accent-text);
     transition: color 0.3s ease, letter-spacing 0.3s ease, gap 0.3s ease;
 }
 
 a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
-    color: #1A1612;
+    color: var(--text-primary);
     letter-spacing: 0.06em;
 }
 
@@ -1535,12 +1630,12 @@ a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
 }
 
 .wi-filter:hover {
-    color: #1A1612;
+    color: var(--text-primary);
     letter-spacing: 3.2px;
 }
 
 .wi-filter.active {
-    color: #1A1612;
+    color: var(--text-primary);
     font-weight: 800;
     letter-spacing: 3.2px;
 }
@@ -1562,7 +1657,7 @@ a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
     padding: 0 14px !important;
     border: 1px solid rgba(26, 22, 18, 0.28) !important;
     background: transparent !important;
-    color: #1A1612 !important;
+    color: var(--text-primary) !important;
     font-family: var(--font-main) !important;
     font-size: 0.75rem !important;
     font-weight: 500 !important;
@@ -1577,23 +1672,23 @@ a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
 .product-actions .action-btn:hover,
 .modal-actions .action-btn:hover {
     padding: 0 14px !important;
-    border-color: #1A1612 !important;
+    border-color: var(--text-primary) !important;
     background: rgba(26, 22, 18, 0.06) !important;
-    color: #1A1612 !important;
+    color: var(--text-primary) !important;
 }
 
 .product-actions .buy-now-btn,
 .modal-actions .buy-now-btn {
-    background: #B85C38 !important;
-    border-color: #B85C38 !important;
-    color: #F7F3ED !important;
+    background: var(--color-action) !important;
+    border-color: var(--color-action) !important;
+    color: var(--bg-primary) !important;
 }
 
 .product-actions .buy-now-btn:hover,
 .modal-actions .buy-now-btn:hover {
-    background: #A34E2E !important;
-    border-color: #A34E2E !important;
-    color: #F7F3ED !important;
+    background: var(--color-action-hover) !important;
+    border-color: var(--color-action-hover) !important;
+    color: var(--bg-primary) !important;
 }
 
 .product-actions .action-btn svg,
@@ -1684,7 +1779,7 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
     outline: none;
     box-shadow: none;
-    border-bottom-color: #CFA246;
+    border-bottom-color: var(--color-accent);
 }
 
 input::placeholder, textarea::placeholder {
@@ -1710,7 +1805,7 @@ input::placeholder, textarea::placeholder {
 .section-header,
 .list-label,
 .zone-label {
-  color: #4A3A33 !important;
+  color: var(--text-secondary) !important;
   font-weight: 600 !important;
 }
 
@@ -1732,7 +1827,7 @@ label,
 label,
 .form-label,
 .field-label {
-  color: #4A3A33 !important;
+  color: var(--text-secondary) !important;
   font-weight: 600 !important;
 }
 
@@ -1767,29 +1862,29 @@ select,
 
 /* Raw text links — no underline. Gold colour + weight bump on hover
    carries the affordance instead. WCAG note: relying on colour alone
-   for link affordance is a soft accessibility risk; the gold (#7F5F10)
-   is intentionally distinct from body text (#1A1612) and the weight
+   for link affordance is a soft accessibility risk; the gold (var(--color-accent-text))
+   is intentionally distinct from body text (var(--text-primary)) and the weight
    shift on :hover/:focus provides a second visual channel. */
 a:not([class]) {
-  color: #7F5F10;
+  color: var(--color-accent-text);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease, font-weight 0.2s ease;
 }
 a:not([class]):hover,
 a:not([class]):focus-visible {
-  color: #1A1612;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 a:not([class]):visited {
-  color: #7F5F10;
+  color: var(--color-accent-text);
 }
 
 a:not([class]):hover,
 a:not([class]):focus {
-  color: #CFA246;
-  text-decoration-color: #CFA246;
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
   text-decoration-thickness: 2px;
 }
 
@@ -1824,83 +1919,83 @@ a:not([class]):focus {
    ══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Hero elements (index.html) ──────────────────────────────────────────── */
-.hero-spacer        { color: #4A3A33; }
-.hero-title         { color: #1A1612; }
-.hero-title .script { color: #B85C38; }
-.parallax-text      { color: #4A3A33; }
-.scroll-cue span    { color: #4A3A33; }
-.scroll-cue svg     { stroke: #CFA246; }
-.scroll-bg-text     { color: #1A1612; opacity: 0.025; }
+.hero-spacer        { color: var(--text-secondary); }
+.hero-title         { color: var(--text-primary); }
+.hero-title .script { color: var(--color-action); }
+.parallax-text      { color: var(--text-secondary); }
+.scroll-cue span    { color: var(--text-secondary); }
+.scroll-cue svg     { stroke: var(--color-accent); }
+.scroll-bg-text     { color: var(--text-primary); opacity: 0.025; }
 
 /* ── About manifesto ─────────────────────────────────────────────────────── */
-.about-manifesto p      { color: #1A1612; }
-.about-manifesto p em   { color: #B85C38; }
-.manifesto-link         { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
-.manifesto-link:hover   { color: #CFA246; letter-spacing: 0.04em; }
+.about-manifesto p      { color: var(--text-primary); }
+.about-manifesto p em   { color: var(--color-action); }
+.manifesto-link         { color: var(--color-accent-text); transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.manifesto-link:hover   { color: var(--color-accent); letter-spacing: 0.04em; }
 
 /* ── Pinned / gallery intro ──────────────────────────────────────────────── */
 .pinned-section         { border-top: 1px solid rgba(207,162,70,0.18); }
-.gallery-intro h2       { color: #1A1612; }
-.gallery-explore-link   { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
-.gallery-explore-link:hover { color: #CFA246; letter-spacing: 0.04em; }
+.gallery-intro h2       { color: var(--text-primary); }
+.gallery-explore-link   { color: var(--color-accent-text); transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.gallery-explore-link:hover { color: var(--color-accent); letter-spacing: 0.04em; }
 
 /* ── Shop preview (index.html) ───────────────────────────────────────────── */
 .shop-preview           { border-top: 1px solid rgba(207,162,70,0.18); }
-.shop-preview-head h2   { color: #1A1612; }
-.shop-preview-head p    { color: #4A3A33; }
-.shop-view-all          { color: #7F5F10; transition: color 0.25s ease, letter-spacing 0.25s ease; }
-.shop-view-all:hover    { color: #CFA246; letter-spacing: 0.04em; }
-.shop-preview-card .img-wrap { background: #EDE8DF; }
-.shop-preview-card .cat { color: #4A3A33; }
-.shop-preview-card .price { color: #B85C38; }
-.shop-preview-card h3   { color: #1A1612; }
+.shop-preview-head h2   { color: var(--text-primary); }
+.shop-preview-head p    { color: var(--text-secondary); }
+.shop-view-all          { color: var(--color-accent-text); transition: color 0.25s ease, letter-spacing 0.25s ease; }
+.shop-view-all:hover    { color: var(--color-accent); letter-spacing: 0.04em; }
+.shop-preview-card .img-wrap { background: var(--bg-secondary); }
+.shop-preview-card .cat { color: var(--text-secondary); }
+.shop-preview-card .price { color: var(--color-action); }
+.shop-preview-card h3   { color: var(--text-primary); }
 
 /* ── Testimonials ────────────────────────────────────────────────────────── */
 .testimonials           { border-top: 1px solid rgba(207,162,70,0.18); }
-.testimonials-head h2   { color: #1A1612; }
-.testimonials-head p    { color: #4A3A33; }
-.testimonial::before    { color: #CFA246; }
+.testimonials-head h2   { color: var(--text-primary); }
+.testimonials-head p    { color: var(--text-secondary); }
+.testimonial::before    { color: var(--color-accent); }
 .testimonial blockquote {
-    color: #1A1612;
+    color: var(--text-primary);
     border-left: 2px solid rgba(207,162,70,0.35);
 }
 
 /* ── Pull quote ──────────────────────────────────────────────────────────── */
 .pull-quote             { border-top: 1px solid rgba(207,162,70,0.18); }
-.pull-quote blockquote  { color: #1A1612; }
+.pull-quote blockquote  { color: var(--text-primary); }
 .pull-quote blockquote::before { color: rgba(207,162,70,0.2); }
-.pull-quote .attribution { color: #4A3A33; }
+.pull-quote .attribution { color: var(--text-secondary); }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
 .btn-primary {
-    background: #B85C38;
-    color: #F7F3ED;
+    background: var(--color-action);
+    color: var(--bg-primary);
     border: none;
 }
-.btn-primary:hover { background: #A34E2E; }
+.btn-primary:hover { background: var(--color-action-hover); }
 
 .btn-outline {
-    color: #7F5F10;
-    border: 1px solid #7F5F10;
+    color: var(--color-accent-text);
+    border: 1px solid var(--color-accent-text);
     background: transparent;
 }
 .btn-outline:hover {
-    background: #7F5F10;
-    color: #F7F3ED;
+    background: var(--color-accent-text);
+    color: var(--bg-primary);
 }
 
 .btn-gold {
-    background: #CFA246;
-    color: #F7F3ED;
+    background: var(--color-accent);
+    color: var(--bg-primary);
     border: none;
 }
 .btn-gold:hover { background: #B8902E; }
 
 /* ══════════════════════════════════════════════════════════════════════════════
    WCAG AA CONTRAST FIX — 2026 AUDIT
-   #CFA246 gold achieves only 2.15:1 on #F7F3ED (light bg) — FAIL.
-   All gold TEXT on light backgrounds must use --accent-gold-text (#7F5F10 = 5.39:1).
-   #CFA246 remains correct on dark backgrounds (7.8:1 on #1A1612).
+   var(--color-accent) gold achieves only 2.15:1 on var(--bg-primary) (light bg) — FAIL.
+   All gold TEXT on light backgrounds must use --accent-gold-text (var(--color-accent-text) = 5.39:1).
+   var(--color-accent) remains correct on dark backgrounds (7.8:1 on var(--text-primary)).
    ══════════════════════════════════════════════════════════════════════════════ */
 
 /* Nav active states — colour-only indicator (underline removed). */
@@ -1971,7 +2066,7 @@ a:not([class]):focus {
     gap: 8px;
     background: transparent;
     border: none;
-    color: #CFA246;
+    color: var(--color-accent);
     font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.72rem;
     font-weight: 600;
@@ -1985,12 +2080,12 @@ a:not([class]):focus {
 }
 .btn-clean:hover,
 .btn-clean:focus-visible {
-    color: #1A1612;
+    color: var(--text-primary);
     gap: 12px;
     letter-spacing: 0.13em;
     outline: none;
 }
-.btn-clean:active { color: #1A1612; }
+.btn-clean:active { color: var(--text-primary); }
 .btn-clean[disabled],
 .btn-clean.disabled { opacity: 0.35; pointer-events: none; }
 
@@ -2001,7 +2096,7 @@ a:not([class]):focus {
     gap: 16px;
     background: transparent;
     border: 1px solid rgba(26, 22, 18, 0.4);
-    color: #1A1612;
+    color: var(--text-primary);
     font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.8625rem;
     font-weight: 700;
@@ -2016,18 +2111,18 @@ a:not([class]):focus {
 .btn-outline:hover,
 .btn-outline:focus-visible {
     background: rgba(26, 22, 18, 0.04);
-    border-color: #1A1612;
+    border-color: var(--text-primary);
     gap: 24px;
     outline: none;
 }
 .btn-outline.btn-on-dark {
-    color: #F7F3ED;
+    color: var(--bg-primary);
     border-color: rgba(252, 250, 246, 0.35);
 }
 .btn-outline.btn-on-dark:hover,
 .btn-outline.btn-on-dark:focus-visible {
     background: rgba(252, 250, 246, 0.08);
-    border-color: #F7F3ED;
+    border-color: var(--bg-primary);
 }
 .btn-outline[disabled],
 .btn-outline.disabled { opacity: 0.35; pointer-events: none; }
@@ -2037,8 +2132,8 @@ a:not([class]):focus {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #CFA246;
-    color: #1A1612;
+    background: var(--color-accent);
+    color: var(--text-primary);
     border: none;
     font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.78rem;
@@ -2074,4 +2169,59 @@ a:not([class]):focus {
 /* Mobile — outline button stretches full-width by default for thumb reach */
 @media (max-width: 600px) {
     .btn-outline { width: 100%; justify-content: center; }
+}
+
+/* ── Mobile Touch Target Accessibility (44×44px minimum) ────────────────────── */
+@media (max-width: 768px) {
+    /* Ensure all buttons meet minimum touch target size */
+    button,
+    a[role="button"],
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    .btn-clean,
+    .btn-outline,
+    .btn-solid,
+    .cart-icon-btn,
+    .hamburger,
+    .modal-close,
+    .close-cart,
+    [class*="cta"],
+    [class*="btn"] {
+        min-width: 44px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Increase padding on smaller interactive elements */
+    a:not([class]) {
+        padding: 8px 4px;
+        min-height: 44px;
+    }
+    
+    /* Footer navigation links */
+    .sf-nav a,
+    .sf-legal a {
+        padding: 12px 4px;
+        min-height: 44px;
+    }
+    
+    /* Dropdown and menu items */
+    [class*="menu"] a,
+    [class*="dropdown"] a {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra padding on very small screens for button accessibility */
+    button,
+    a[role="button"],
+    .btn-outline,
+    .btn-solid {
+        padding: 14px 20px !important;
+    }
 }

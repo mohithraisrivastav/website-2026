@@ -1,4 +1,4 @@
-:root {
+﻿:root {
       --cream:      #F7F3ED;
       --parchment:  #EDE8DF;
       --stone:      #D5CFC7;
@@ -118,9 +118,9 @@
     .old-title {
       font-family:var(--serif); font-weight:900; text-transform:uppercase;
       letter-spacing:-.03em; font-size:clamp(2.8rem,5vw,5.5rem);
-      color:#1A1612; line-height:.9; margin-bottom:24px;
+      color:var(--text-primary); line-height:.9; margin-bottom:24px;
     }
-    .old-price { font-size:.9rem; color:#CFA246; letter-spacing:1px; border-bottom:1px solid #CFA246; padding-bottom:4px; display:inline-block; }
+    .old-price { font-size:.9rem; color:var(--color-accent); letter-spacing:1px; border-bottom:1px solid var(--color-accent); padding-bottom:4px; display:inline-block; }
     .old-desc { font-size:.88rem; color:var(--bark); line-height:1.75; margin-top:24px; max-width:400px; }
 
     .new-series-label { font-size:.62rem; letter-spacing:4px; text-transform:uppercase; color:var(--dust); margin-bottom:18px; }

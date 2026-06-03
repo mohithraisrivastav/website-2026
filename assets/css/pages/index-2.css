@@ -1,4 +1,4 @@
-.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+﻿.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
 #slineCanvas{position:absolute;top:0;left:0;}
 
         /* ── Navbar lock – identical across all pages ── */
@@ -34,7 +34,7 @@
         html { font-size: 100%; }
 
         body {
-            background-color: transparent; color: #1A1612; line-height: 1.7;
+            background-color: transparent; color: var(--text-primary); line-height: 1.7;
             overflow-x: hidden; -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             position: relative;
@@ -59,7 +59,7 @@
         .viewfinder:hover .parallax-media { filter: brightness(1); }
 
         .hero-text { position: relative; bottom: auto; right: auto; z-index: 3; opacity: 0; align-self: flex-end; padding-right: 2px; }
-        .parallax-text { font-size: 1rem; font-weight: 600; letter-spacing: 4px; color: #4A3A33; text-transform: uppercase; }
+        .parallax-text { font-size: 1rem; font-weight: 600; letter-spacing: 4px; color: var(--text-secondary); text-transform: uppercase; }
 
         .scroll-cue {
             position: absolute;
@@ -80,7 +80,7 @@
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #4A3A33;
+            color: var(--text-secondary);
         }
         .scroll-cue svg {
             animation: scrollBounce 1.8s ease-in-out infinite;
@@ -91,18 +91,18 @@
         }
 
         .about-manifesto { padding: 8vh 5%; text-align: center; max-width: 1400px; margin: 0 auto; }
-        .about-manifesto p { font-size: 2rem; font-weight: 300; color: #1A1612; letter-spacing: 1px; line-height: 1.5; }
-        .about-manifesto p + p { margin-top: 1.5em; font-size: 1.35rem; color: #4A3A33; line-height: 1.65; }
-        .manifesto-link { display: inline-block; margin-top: 30px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; text-decoration: none; transition: 0.3s; }
-        .manifesto-link:hover { color: #1A1612; }
+        .about-manifesto p { font-size: 2rem; font-weight: 300; color: var(--text-primary); letter-spacing: 1px; line-height: 1.5; }
+        .about-manifesto p + p { margin-top: 1.5em; font-size: 1.35rem; color: var(--text-secondary); line-height: 1.65; }
+        .manifesto-link { display: inline-block; margin-top: 30px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--text-secondary); text-decoration: none; transition: 0.3s; }
+        .manifesto-link:hover { color: var(--text-primary); }
 
         /* --- 6. Gallery: vertical editorial layout --- */
-        .pinned-section { height: auto; overflow: visible; background: transparent; border-top: 1px solid #CFA246; cursor: default; padding: 7vh 8vw 10vh; }
+        .pinned-section { height: auto; overflow: visible; background: transparent; border-top: 1px solid var(--color-accent); cursor: default; padding: 7vh 8vw 10vh; }
         .scroll-track { height: auto; display: block; width: 100%; padding: 0; }
         .gallery-intro { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5vh; }
-        .gallery-intro h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; margin: 0; }
-        .gallery-explore-link { display: inline-block; font-size: 0.875rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 3px; transition: color 0.25s ease, border-color 0.25s ease; white-space: nowrap; }
-        .gallery-explore-link:hover { color: #CFA246; border-color: #CFA246; }
+        .gallery-intro h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: var(--text-primary); text-transform: uppercase; margin: 0; }
+        .gallery-explore-link { display: inline-block; font-size: 0.875rem; font-weight: 600; letter-spacing: 3px; color: var(--text-secondary); text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--color-accent); padding-bottom: 3px; transition: color 0.25s ease, border-color 0.25s ease; white-space: nowrap; }
+        .gallery-explore-link:hover { color: var(--color-accent); border-color: var(--color-accent); }
         /* Each work link is a block; stagger width + position for editorial rhythm */
         a.work-link { display: block; text-decoration: none; width: 100%; margin-bottom: 3.5vw; }
         a.work-link:last-child { margin-bottom: 0; }
@@ -113,20 +113,20 @@
         .work-meta { position: absolute; bottom: 28px; left: 28px; z-index: 2; font-size: 0.8625rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,1); pointer-events: none; }
 
         /* --- 7. Shop Preview --- */
-        .shop-preview { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+        .shop-preview { padding: 80px 5vw; background: transparent; border-top: 1px solid var(--color-accent); }
         .shop-preview-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; flex-wrap: wrap; gap: 30px; }
-        .shop-preview-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; line-height: 1; }
-        .shop-preview-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 0px; color: #4A3A33; text-transform: none; margin-top: 15px; max-width: 400px; line-height: 1.8; }
-        .shop-view-all { font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #1A1612; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 6px; transition: 0.3s; }
-        .shop-view-all:hover { color: #1A1612; border-color: #1A1612; }
+        .shop-preview-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: var(--text-primary); text-transform: uppercase; line-height: 1; }
+        .shop-preview-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 0px; color: var(--text-secondary); text-transform: none; margin-top: 15px; max-width: 400px; line-height: 1.8; }
+        .shop-view-all { font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--text-primary); text-decoration: none; border-bottom: 1px solid var(--color-accent); padding-bottom: 6px; transition: 0.3s; }
+        .shop-view-all:hover { color: var(--text-primary); border-color: var(--text-primary); }
         .shop-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
         .shop-preview-card { cursor: pointer; text-decoration: none; color: inherit; }
         .shop-preview-card .img-wrap { position: relative; aspect-ratio: 1/1; overflow: hidden; background: #E0D5C7; margin-bottom: 20px; }
         .shop-preview-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.92); transition: 1.2s cubic-bezier(0.25, 1, 0.5, 1); }
         .shop-preview-card:hover img { filter: brightness(1); transform: scale(1.03); }
-        .shop-preview-card h3 { font-size: 1.06rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1A1612; margin-bottom: 8px; }
-        .shop-preview-card .cat { font-size: 0.8625rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #4A3A33; margin-bottom: 10px; }
-        .shop-preview-card .price { font-size: 1rem; font-weight: 400; letter-spacing: 1px; color: #1A1612; }
+        .shop-preview-card h3 { font-size: 1.06rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-primary); margin-bottom: 8px; }
+        .shop-preview-card .cat { font-size: 0.8625rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; }
+        .shop-preview-card .price { font-size: 1rem; font-weight: 400; letter-spacing: 1px; color: var(--text-primary); }
         @media (max-width: 1100px) {
             .shop-preview { padding: 80px 5vw; }
             .shop-preview-head h2 { font-size: 2.5rem; }
@@ -134,26 +134,26 @@
         }
 
         /* --- 8. Workshops Preview --- */
-        .workshops-preview { padding: 100px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+        .workshops-preview { padding: 100px 5vw; background: transparent; border-top: 1px solid var(--color-accent); }
         .workshops-preview-inner { max-width: 760px; margin: 0 auto; text-align: center; }
-        .workshops-eyebrow { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #7F5F10; margin-bottom: 28px; }
-        .workshops-preview-title { font-family: var(--font-accent); font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: normal; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
-        .workshops-preview-text p { font-size: 1.1875rem; font-weight: 300; color: #4A3A33; line-height: 1.8; margin-bottom: 1.5em; }
+        .workshops-eyebrow { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: var(--color-accent-text); margin-bottom: 28px; }
+        .workshops-preview-title { font-family: var(--font-accent); font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: normal; color: var(--text-primary); line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
+        .workshops-preview-text p { font-size: 1.1875rem; font-weight: 300; color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5em; }
         .workshops-preview-text p:last-child { margin-bottom: 0; }
-        .workshops-preview-text .ws-lead { font-size: clamp(1.4rem, 2vw, 1.75rem); font-weight: 300; color: #1A1612; line-height: 1.5; margin-bottom: 1.6em; }
-        .workshops-preview-text .ws-close { color: #1A1612; font-weight: 400; }
-        .workshops-cta { display: inline-block; margin-top: 52px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #1A1612; text-decoration: none; border-bottom: 1px solid #CFA246; padding-bottom: 6px; transition: 0.3s; }
-        .workshops-cta:hover { color: #1A1612; border-color: #1A1612; letter-spacing: 5px; }
+        .workshops-preview-text .ws-lead { font-size: clamp(1.4rem, 2vw, 1.75rem); font-weight: 300; color: var(--text-primary); line-height: 1.5; margin-bottom: 1.6em; }
+        .workshops-preview-text .ws-close { color: var(--text-primary); font-weight: 400; }
+        .workshops-cta { display: inline-block; margin-top: 52px; font-size: 1rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--text-primary); text-decoration: none; border-bottom: 1px solid var(--color-accent); padding-bottom: 6px; transition: 0.3s; }
+        .workshops-cta:hover { color: var(--text-primary); border-color: var(--text-primary); letter-spacing: 5px; }
         @media (max-width: 640px) {
             .workshops-preview { padding: 70px 6vw; }
             .workshops-preview-text p { font-size: 1.0625rem; }
         }
 
         /* --- 9. Testimonials --- */
-.testimonials { padding: 80px 5vw; background: transparent; border-top: 1px solid #CFA246; }
+.testimonials { padding: 80px 5vw; background: transparent; border-top: 1px solid var(--color-accent); }
 .testimonials-head { margin-bottom: 80px; }
-.testimonials-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: #1A1612; text-transform: uppercase; line-height: 1; }
-.testimonials-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 3px; color: #4A3A33; text-transform: uppercase; margin-top: 20px; }
+.testimonials-head h2 { font-size: 3.75rem; font-weight: 300; letter-spacing: 2px; color: var(--text-primary); text-transform: uppercase; line-height: 1; }
+.testimonials-head p { font-size: 0.94rem; font-weight: 600; letter-spacing: 3px; color: var(--text-secondary); text-transform: uppercase; margin-top: 20px; }
 .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
 
 /* clean, box‑free testimonial */
@@ -175,7 +175,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 1.8rem;
-  color: #CFA246;
+  color: var(--color-accent);
   line-height: 1;
   opacity: 0.5;
 }
@@ -193,7 +193,7 @@
   font-family: var(--font-accent) !important;
   font-size: clamp(1rem, 1.3vw, 1.15rem);
   font-weight: 300;
-  color: #2C1F1A;
+  color: var(--depth-dark);
   line-height: 1.9;
   letter-spacing: 0.2px;
   margin: 0 0 28px;
@@ -201,11 +201,11 @@
   border-left: 2px solid rgba(207, 162, 70, 0.35);  /* quiet orange rule */
   font-style: normal;
 }        /* --- 9. Pull Quote --- */
-        .pull-quote { padding: 80px 8vw; background: transparent; border-top: 1px solid #CFA246; text-align: center; }
+        .pull-quote { padding: 80px 8vw; background: transparent; border-top: 1px solid var(--color-accent); text-align: center; }
         .pull-quote-inner { max-width: 1100px; margin: 0 auto; }
-        .pull-quote blockquote { font-size: clamp(1.875rem, 3.2vw, 3.5rem); font-weight: 300; color: #1A1612; line-height: 1.5; letter-spacing: 0.5px; font-style: normal; position: relative; }
+        .pull-quote blockquote { font-size: clamp(1.875rem, 3.2vw, 3.5rem); font-weight: 300; color: var(--text-primary); line-height: 1.5; letter-spacing: 0.5px; font-style: normal; position: relative; }
         .pull-quote blockquote::before { content: '"'; display: block; font-size: 7.5rem; color: rgba(207, 162, 70, 0.2); line-height: 0.3; margin-bottom: 30px; font-style: normal; }
-        .pull-quote .attribution { margin-top: 50px; font-size: 0.875rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; }
+        .pull-quote .attribution { margin-top: 50px; font-size: 0.875rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--text-secondary); }
         .pull-quote .attribution::before { content: '— '; color: #FFFFFF; }
         @media (max-width: 1100px) {
             .pull-quote { padding: 100px 5vw; }
@@ -218,7 +218,7 @@
         .funnels-section {
             padding: 0 5vw;
             background: transparent;
-            border-top: 1px solid #CFA246;
+            border-top: 1px solid var(--color-accent);
         }
         .funnels-inner {
             display: grid;
@@ -251,12 +251,12 @@
             font-weight: 700;
             letter-spacing: 5px;
             text-transform: uppercase;
-            color: #CFA246;
+            color: var(--color-accent);
             margin-bottom: 16px;
         }
         .funnel-desc {
             font-size: 1.075rem;
-            color: #1A1612;
+            color: var(--text-primary);
             line-height: 1.85;
             flex: 1;
             margin-bottom: 40px;
@@ -266,11 +266,11 @@
             font-weight: 600;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: #4A3A33;
+            color: var(--text-secondary);
             transition: color 0.2s, letter-spacing 0.2s;
         }
         .funnel-card:hover .funnel-cta {
-            color: #1A1612;
+            color: var(--text-primary);
             letter-spacing: 4px;
         }
         @media (max-width: 900px) {
@@ -443,26 +443,26 @@
 
 /* ══════════════════════════════════════════════════════════════════════════════
    WCAG AA CONTRAST FIXES — index-2.css
-   Gold text on light homepage bg: #CFA246 = 2.15:1 FAIL → #7F5F10 = 5.39:1 PASS
+   Gold text on light homepage bg: var(--color-accent) = 2.15:1 FAIL → var(--color-accent-text) = 5.39:1 PASS
    ══════════════════════════════════════════════════════════════════════════════ */
 
 /* Funnels section labels on light bg */
 .funnel-num {
-    color: #7F5F10 !important;
+    color: var(--color-accent-text) !important;
 }
 .funnel-label {
-    color: #7F5F10 !important;
+    color: var(--color-accent-text) !important;
 }
 
 /* Testimonial separator dot — decorative, on light bg, at opacity 0.5 */
 .testimonial:not(:first-child)::before {
-    color: #7F5F10 !important;
+    color: var(--color-accent-text) !important;
     opacity: 0.6 !important;
 }
 
 /* Gallery explore link hover + shop-view-all hover on light bg */
 .gallery-explore-link:hover,
 .shop-view-all:hover {
-    color: #7F5F10 !important;
-    border-color: #7F5F10 !important;
+    color: var(--color-accent-text) !important;
+    border-color: var(--color-accent-text) !important;
 }

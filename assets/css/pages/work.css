@@ -1,10 +1,10 @@
-.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+﻿.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
 #slineCanvas{position:absolute;top:0;left:0;}
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { font-size: 100%; }
         body {
-            background-color: transparent; color: #1A1612; line-height: 1.7;
+            background-color: transparent; color: var(--text-primary); line-height: 1.7;
             overflow-x: hidden; -webkit-font-smoothing: antialiased;
             position: relative;
         }
@@ -142,7 +142,7 @@
             font-family: var(--font-accent) !important;
             font-size: clamp(1.05rem, 1.15vw, 1.3rem);
             font-weight: 600; font-style: normal;
-            color: #CFA246; transition: color 0.4s ease;
+            color: var(--color-accent); transition: color 0.4s ease;
         }
         .wi-card:hover .wi-cap-title { color: #F8F6F1; }
         .wi-cap-cat {
@@ -150,7 +150,7 @@
             text-transform: uppercase; color: #D4CFC3;
             transition: color 0.4s ease;
         }
-        .wi-card:hover .wi-cap-cat { color: #CFA246; }
+        .wi-card:hover .wi-cap-cat { color: var(--color-accent); }
 
         /* -- Filter bar ---------------------------------*/
         .wi-filters {
@@ -172,7 +172,7 @@
         }
         .wi-count em {
             font-style: normal;
-            color: #CFA246;
+            color: var(--color-accent);
         }
         .wi-filter {
             background: none;
@@ -186,7 +186,7 @@
             padding: 11px 22px 11px 0;
             transition: color 0.3s ease;
         }
-        .wi-filter:hover { color: #CFA246; }
+        .wi-filter:hover { color: var(--color-accent); }
         .wi-filter.active { color: #F8F6F1; }
 
         /* -- Mobile title -------------------------------*/
@@ -234,19 +234,19 @@
         }
 
         /* -- Light-mode colour corrections for liquid background ----- */
-        .work-hero h1 { color: #1A1612; }
+        .work-hero h1 { color: var(--text-primary); }
         .work-hero h1 .hero-light { color: #555; }
-        .mobile-page-title { color: #1A1612; }
+        .mobile-page-title { color: var(--text-primary); }
         .wi-count { color: #777; }
-        .wi-count em { color: #CFA246; }
-        .wi-cap-title { color: #CFA246; }
-        .wi-card:hover .wi-cap-title { color: #1A1612; }
+        .wi-count em { color: var(--color-accent); }
+        .wi-cap-title { color: var(--color-accent); }
+        .wi-card:hover .wi-cap-title { color: var(--text-primary); }
         .wi-cap-cat { color: #888; }
-        .wi-card:hover .wi-cap-cat { color: #CFA246; }
+        .wi-card:hover .wi-cap-cat { color: var(--color-accent); }
         .wi-filters { border-bottom-color: rgba(26, 22, 18,0.1); }
         .wi-filter { color: #777; }
-        .wi-filter:hover { color: #CFA246; }
-        .wi-filter.active { color: #1A1612; }
+        .wi-filter:hover { color: var(--color-accent); }
+        .wi-filter.active { color: var(--text-primary); }
         /* Mobile header fixes */
         @media (max-width: 1100px) {
             /* 1. Force hamburger to the right */

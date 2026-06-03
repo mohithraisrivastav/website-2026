@@ -1,6 +1,6 @@
-/* --- Reset --- */
+﻿/* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #F7F3ED; color: #1A1612; font-family: var(--font-main) !important; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-main) !important; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; color: inherit; }
 
 /* --- Reading progress bar --- */
@@ -9,16 +9,16 @@ a { text-decoration: none; color: inherit; }
 /* --- Back bar (sticky, below navbar) --- */
 .essay-back {
   position: sticky; top: 92px; z-index: 100;
-  background: rgba(252,250,246,0.92); backdrop-filter: blur(20px);
+
   border-bottom: 1px solid rgba(26, 22, 18,0.1);
   padding: 14px 5vw;
   display: flex; justify-content: space-between; align-items: center;
 }
 .essay-back a {
   font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px;
-  color: #4A3A33; text-transform: uppercase; transition: color 0.3s;
+  color: var(--text-secondary); text-transform: uppercase; transition: color 0.3s;
 }
-.essay-back a:hover { color: #1A1612; }
+.essay-back a:hover { color: var(--text-primary); }
 .essay-back .crumb {
   font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px;
   color: #5E6B73; text-transform: uppercase;
@@ -38,13 +38,13 @@ a { text-decoration: none; color: inherit; }
 .essay-hero h1 {
   font-family: var(--font-accent) !important;
   font-size: clamp(2.8rem, 5.5vw, 5.5rem);
-  font-weight: 400; line-height: 1.05; color: #1A1612; margin-bottom: 30px;
+  font-weight: 400; line-height: 1.05; color: var(--text-primary); margin-bottom: 30px;
 }
-.essay-hero h1 em { font-style: normal; color: #CFA246; }
+.essay-hero h1 em { font-style: normal; color: var(--color-accent); }
 .essay-hero .subtitle {
   font-family: var(--font-accent) !important;
   font-size: clamp(1.2rem, 1.8vw, 1.4rem); font-weight: 300;
-  font-style: normal; color: #4A3A33; line-height: 1.55;
+  font-style: normal; color: var(--text-secondary); line-height: 1.55;
   max-width: 640px; margin: 0 auto 40px;
 }
 .essay-hero .byline {
@@ -68,29 +68,29 @@ a { text-decoration: none; color: inherit; }
   padding: 0 5vw 80px;
   font-family: var(--font-main) !important;
   font-size: clamp(1.15rem, 1.5vw, 1.45rem);
-  font-weight: 300; line-height: 1.85; color: #1A1612;
+  font-weight: 300; line-height: 1.85; color: var(--text-primary);
 }
 .essay-body p { margin-bottom: 1.5em; }
 .essay-body p.drop::first-letter {
   float: left; font-family: var(--font-accent) !important;
   font-size: 5.2em; line-height: 0.85; font-weight: 500;
-  padding: 0.08em 0.12em 0 0; color: #1A1612;
+  padding: 0.08em 0.12em 0 0; color: var(--text-primary);
 }
 .essay-body h2 {
   font-family: var(--font-accent) !important;
   font-size: clamp(1.8rem, 2.8vw, 2.4rem);
-  font-weight: 500; font-style: normal; color: #1A1612;
+  font-weight: 500; font-style: normal; color: var(--text-primary);
   margin: 2.2em 0 0.8em; line-height: 1.2;
 }
-.essay-body em { color: #1A1612; font-style: normal; }
-.essay-body strong { color: #1A1612; font-weight: 500; }
+.essay-body em { color: var(--text-primary); font-style: normal; }
+.essay-body strong { color: var(--text-primary); font-weight: 500; }
 .essay-body blockquote {
   margin: 2.2em 0; padding: 0 0 0 2em;
   border-left: 2px solid rgba(26, 22, 18,0.2);
   font-family: var(--font-accent) !important;
   font-size: clamp(1.4rem, 2vw, 2rem);
   font-weight: 400; font-style: normal;
-  line-height: 1.35; color: #1A1612;
+  line-height: 1.35; color: var(--text-primary);
 }
 .essay-body blockquote cite {
   display: block; margin-top: 0.8em;
@@ -115,7 +115,7 @@ a { text-decoration: none; color: inherit; }
   font-family: var(--font-accent) !important;
   font-size: clamp(1.6rem, 2.5vw, 2.4rem);
   font-weight: 400; font-style: normal;
-  line-height: 1.3; color: #1A1612; text-align: center;
+  line-height: 1.3; color: var(--text-primary); text-align: center;
 }
 
 /* --- Footer of essay --- */
@@ -126,7 +126,7 @@ a { text-decoration: none; color: inherit; }
 }
 .essay-foot .signoff {
   font-family: var(--font-accent) !important;
-  font-style: normal; color: #1A1612; font-size: 1.4rem; margin-bottom: 40px;
+  font-style: normal; color: var(--text-primary); font-size: 1.4rem; margin-bottom: 40px;
 }
 .essay-foot .tags { display: flex; gap: 12px; flex-wrap: wrap; }
 .essay-foot .tag {
@@ -146,14 +146,14 @@ a { text-decoration: none; color: inherit; }
   padding: 28px; border: 1px solid rgba(26, 22, 18,0.1);
   transition: 0.35s; display: block;
 }
-.essay-nav a:hover { border-color: #1A1612; background: #0e0c0a; }
+.essay-nav a:hover { border-color: var(--text-primary); background: #0e0c0a; }
 .essay-nav .dir {
   font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px;
   color: #5E6B73; text-transform: uppercase; margin-bottom: 14px;
 }
 .essay-nav .ttl {
   font-family: var(--font-accent) !important;
-  font-size: 1.4rem; font-weight: 500; color: #1A1612; line-height: 1.25;
+  font-size: 1.4rem; font-weight: 500; color: var(--text-primary); line-height: 1.25;
 }
 .essay-nav .next { text-align: right; }
 

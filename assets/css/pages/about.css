@@ -1,4 +1,4 @@
-.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+﻿.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
 #slineCanvas{position:absolute;top:0;left:0;}
 
 
@@ -7,7 +7,7 @@
         html { font-size: 100%; }
 
         body {
-            background-color: transparent; color: #1A1612; line-height: 1.7;
+            background-color: transparent; color: var(--text-primary); line-height: 1.7;
             overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
             -moz-osx-font-smoothing: grayscale;
             position: relative;
@@ -23,7 +23,7 @@
         .about-portrait:hover img { filter: brightness(1.05); }
         
         .hero-content h1 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 40px; }
-        .bio-text { font-weight: 300; line-height: 1.8; color: #1A1612; max-width: 600px; }
+        .bio-text { font-weight: 300; line-height: 1.8; color: var(--text-primary); max-width: 600px; }
         .cv-download {
             display: inline-flex;
             align-items: center;
@@ -33,29 +33,29 @@
             font-weight: 700;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: #7F5F10;
+            color: var(--color-accent-text);
             text-decoration: none;
-            border-bottom: 1px solid #7F5F10;
+            border-bottom: 1px solid var(--color-accent-text);
             padding-bottom: 8px;
             transition: color 0.3s ease, border-color 0.3s ease;
         }
-        .cv-download:hover { color: #1A1612; border-color: #CFA246; }
+        .cv-download:hover { color: var(--text-primary); border-color: var(--color-accent); }
         .cv-download svg { transition: transform 0.3s ease; }
         .cv-download:hover svg { transform: translateY(2px); }
 
         .process-section { background: transparent; border-top: 1px solid rgba(207, 162, 70, 0.2); }
-        .section-header { font-weight: 600; letter-spacing: 5px; color: #CFA246; text-transform: uppercase; margin-bottom: 80px; }
+        .section-header { font-weight: 600; letter-spacing: 5px; color: var(--color-accent); text-transform: uppercase; margin-bottom: 80px; }
 
         .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
         .process-step { padding: 40px; border-left: 1px solid rgba(207, 162, 70, 0.25); }
-        .step-num { font-weight: 900; color: #CFA246; display: block; margin-bottom: 20px; }
+        .step-num { font-weight: 900; color: var(--color-accent); display: block; margin-bottom: 20px; }
         .process-step h2 { font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
-        .process-step p { font-weight: 300; color: #1A1612; }
+        .process-step p { font-weight: 300; color: var(--text-primary); }
 
         .listing-row { display: grid; grid-template-columns: 1fr 2fr; padding: 40px 0; border-bottom: 1px solid rgba(207, 162, 70, 0.1); }
-        .list-label { font-weight: 600; letter-spacing: 5px; color: #CFA246; text-transform: uppercase; }
-        .list-items { font-weight: 400; color: #1A1612; display: flex; flex-wrap: wrap; gap: 10px 20px; }
-        .list-items span::after { content: "/"; margin-left: 20px; color: #CFA246; }
+        .list-label { font-weight: 600; letter-spacing: 5px; color: var(--color-accent); text-transform: uppercase; }
+        .list-items { font-weight: 400; color: var(--text-primary); display: flex; flex-wrap: wrap; gap: 10px 20px; }
+        .list-items span::after { content: "/"; margin-left: 20px; color: var(--color-accent); }
         .list-items span:last-child::after { content: ""; }
 
         /* Personal Projects Grid */
@@ -69,7 +69,7 @@
         .project-info p { font-weight: 400; color: rgba(255,255,255,0.9); margin-top: 5px; }
 
         /* --- Footer --- */
-        .footer { padding: 100px 5%; text-align: center; border-top: 1px solid #CFA246; height: auto; background: transparent; }
+        .footer { padding: 100px 5%; text-align: center; border-top: 1px solid var(--color-accent); height: auto; background: transparent; }
         .footer h2 { margin-bottom: 30px; }
 
         @media (max-width: 1100px) {
@@ -122,13 +122,13 @@
 
         /* -- Marquee ---------------------------------------------- */
         .marquee-section {
-            border-top: 1px solid #CFA246;
-            border-bottom: 1px solid #CFA246;
+            border-top: 1px solid var(--color-accent);
+            border-bottom: 1px solid var(--color-accent);
             overflow: hidden;
             padding: 28px 0;
             background: rgba(247, 243, 236, 0.92);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+
+
         }
         .marquee-track {
             display: flex;
@@ -149,7 +149,7 @@
             font-weight: 700;
             letter-spacing: 5px;
             text-transform: uppercase;
-            color: #CFA246;
+            color: var(--color-accent);
             padding: 0 40px;
             white-space: nowrap;
             user-select: none;
@@ -163,7 +163,7 @@
             color: rgba(207, 162, 70, 0.5);
             font-size: 1.2em;
         }
-        .marquee-item.highlight { color: #CFA246; }
+        .marquee-item.highlight { color: var(--color-accent); }
         /* Mobile header fixes */
         @media (max-width: 1100px) {
             /* 1. Force hamburger to the right */
