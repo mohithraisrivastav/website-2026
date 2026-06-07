@@ -34,7 +34,7 @@
 
       if (reducedMotion) {
         // Skip curtain animation — just ensure it's off-screen and resume scroll
-        gsap.set(curtain, { y: '100%' });
+        if (typeof gsap !== 'undefined') gsap.set(curtain, { y: '100%' });
         resumeLenis();
       } else {
         // Start fully covering, slide up to reveal
@@ -54,7 +54,7 @@
       }
     } else {
       // Direct load — no curtain, just ensure it's off-screen
-      gsap.set(curtain, { y: '100%' });
+      if (typeof gsap !== 'undefined') gsap.set(curtain, { y: '100%' });
       resumeLenis();
     }
   }

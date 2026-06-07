@@ -5086,7 +5086,9 @@
                 var sel = document.createElement('select');
                 sel.className = 'size-select';
 
-                var cardDefaultIdx = Math.min(2, sizes.length - 1);
+                var basePrice      = parseInt(card.dataset.basePrice) || 0;
+                var cardDefaultIdx = sizes.findIndex(function(s) { return s.price === basePrice; });
+                if (cardDefaultIdx < 0) cardDefaultIdx = Math.min(2, sizes.length - 1);
                 sizes.forEach(function(s, i) {
                     var opt          = document.createElement('option');
                     opt.value        = i;
