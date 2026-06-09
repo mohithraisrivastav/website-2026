@@ -68,8 +68,42 @@
     var btn = document.querySelector('#' + MODAL_ID + ' .nl-close-btn');
     if (btn) btn.addEventListener('click', close);
 
-    // Submit is handled by site.js wireForm('sfFormModal', 'sfFormModalOk')
-    // which posts to /api/subscribe and shows the confirmation message.
+    var form = document.getElementById(FORM_ID);
+    var okEl = document.getElementById('sfFormModalOk');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var input = form.querySelector('input[type="email"]');
+        var email = input ? input.value.trim() : '';
+        if (!email) return;
+        var btn = form.querySelector('button');
+        if (btn) btn.disabled = true;
+
+        fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.ok) {
+            form.style.transition = 'opacity 0.3s ease';
+            form.style.opacity = '0';
+            setTimeout(function() {
+              form.style.display = 'none';
+              if (okEl) { okEl.style.display = 'block'; okEl.style.opacity = '1'; }
+            }, 320);
+          } else {
+            if (btn) btn.disabled = false;
+            if (okEl) { okEl.style.color = '#e07070'; okEl.style.display = 'block'; okEl.textContent = data.error || 'Something went wrong.'; }
+          }
+        })
+        .catch(function() {
+          if (btn) btn.disabled = false;
+          if (okEl) { okEl.style.color = '#e07070'; okEl.style.display = 'block'; okEl.textContent = 'Something went wrong.'; }
+        });
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
