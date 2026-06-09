@@ -4,7 +4,7 @@
 
 (function() {
   var MODAL_ID  = 'nlPopupModal';
-  var FORM_ID   = 'nlPopupForm';
+  var FORM_ID   = 'sfFormModal';
   var INPUT_ID  = 'nlPopupEmail';
   var STORE_KEY = 'nlPopupShown_v3';        // bumped: ignores stale v2 keys
   var TRIGGER   = '#shop-preview';          // section ~36% down the page
@@ -68,16 +68,8 @@
     var btn = document.querySelector('#' + MODAL_ID + ' .nl-close-btn');
     if (btn) btn.addEventListener('click', close);
 
-    var form = document.getElementById(FORM_ID);
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var email = document.getElementById(INPUT_ID).value;
-        if (!email) return;
-        close();
-        form.reset();
-      });
-    }
+    // Submit is handled by site.js wireForm('sfFormModal', 'sfFormModalOk')
+    // which posts to /api/subscribe and shows the confirmation message.
   }
 
   if (document.readyState === 'loading') {
