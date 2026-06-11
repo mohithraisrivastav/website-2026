@@ -2229,6 +2229,7 @@
             <button type="button" class="tab-btn active" data-shop-filter="all" aria-pressed="true">All</button>
             <button type="button" class="tab-btn" data-shop-filter="prints" aria-pressed="false">Prints</button>
             <button type="button" class="tab-btn" data-shop-filter="tools" aria-pressed="false">Studio Tools</button>
+            <button type="button" class="tab-btn" data-shop-filter="experiences" aria-pressed="false">Experiences</button>
         </nav>
         <div class="shop-filter-summary fade-up" id="shopFilterSummary" aria-live="polite">Showing all products</div>
         <div class="saved-actions fade-up">
@@ -2365,6 +2366,60 @@
                     <div class="product-actions">
                         <button class="action-btn" onclick="event.stopPropagation(); addToCart('The Explorer\'s Deck', 2100, 'images/explorers-deck-edition.png'); setTimeout(() => toggleCart(), 120)">Add to Cart</button>
                         <button class="action-btn buy-now-btn" onclick="event.stopPropagation(); buyNow('The Explorer\'s Deck', 2100, 'images/explorers-deck-edition.png')">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiences" class="shop-section" data-category="experiences">
+            <div class="category-header fade-up">
+                <h2>Workshops &amp; Residencies</h2>
+                <p>Hands-on creative observation sessions based in Goa. Three repeatable steps — observe, constrain, make — applied in any medium. Led by Mohith Rai Srivastav.</p>
+            </div>
+            <div class="shop-grid">
+                <div class="product-card fade-up" onclick="openProductModal('one-day-immersion')" data-product-id="one-day-immersion" data-shop-category="experiences">
+                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#1A1612;">
+                        <div style="text-align:center;padding:40px 20px;">
+                            <div style="font-size:0.7rem;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(207,162,70,0.7);margin-bottom:16px;">Format &middot; 1 Day &middot; Monthly</div>
+                            <div style="font-size:clamp(1.4rem,2vw,2rem);font-weight:300;color:#F7F3EC;letter-spacing:-0.01em;line-height:1.2;">The One-Day<br>Immersion</div>
+                            <div style="font-size:0.75rem;font-weight:400;color:rgba(247,243,236,0.5);margin-top:16px;letter-spacing:1px;">Goa, India</div>
+                        </div>
+                    </div>
+                    <div class="product-title">The One-Day Immersion</div>
+                    <div class="product-specs"><span class="spec-tag">1 Day</span><span class="spec-tag">Monthly</span><span class="spec-tag">Goa</span></div>
+                    <div class="product-price">&#8377;3,900 <span style="font-size:0.75em;font-weight:400;">+ GST</span></div>
+                    <div class="product-actions">
+                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); window.location.href='workshops.html'">Register</button>
+                    </div>
+                </div>
+                <div class="product-card fade-up" onclick="openProductModal('three-day-intensive')" data-product-id="three-day-intensive" data-shop-category="experiences">
+                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#1A1612;">
+                        <div style="text-align:center;padding:40px 20px;">
+                            <div style="font-size:0.7rem;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(207,162,70,0.7);margin-bottom:16px;">Format &middot; 3 Days &middot; Monthly</div>
+                            <div style="font-size:clamp(1.4rem,2vw,2rem);font-weight:300;color:#F7F3EC;letter-spacing:-0.01em;line-height:1.2;">The Three-Day<br>Intensive</div>
+                            <div style="font-size:0.75rem;font-weight:400;color:rgba(247,243,236,0.5);margin-top:16px;letter-spacing:1px;">Goa, India</div>
+                        </div>
+                    </div>
+                    <div class="product-title">The Three-Day Intensive</div>
+                    <div class="product-specs"><span class="spec-tag">3 Days</span><span class="spec-tag">Monthly</span><span class="spec-tag">Goa</span></div>
+                    <div class="product-price">&#8377;11,400 <span style="font-size:0.75em;font-weight:400;">+ GST</span></div>
+                    <div class="product-actions">
+                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); window.location.href='workshops.html'">Register</button>
+                    </div>
+                </div>
+                <div class="product-card fade-up" onclick="openProductModal('six-day-residency')" data-product-id="six-day-residency" data-shop-category="experiences">
+                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;background:#1A1612;">
+                        <div style="text-align:center;padding:40px 20px;">
+                            <div style="font-size:0.7rem;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:rgba(207,162,70,0.7);margin-bottom:16px;">Format &middot; 6 Days &middot; Quarterly</div>
+                            <div style="font-size:clamp(1.4rem,2vw,2rem);font-weight:300;color:#F7F3EC;letter-spacing:-0.01em;line-height:1.2;">The Six-Day<br>Residency</div>
+                            <div style="font-size:0.75rem;font-weight:400;color:rgba(247,243,236,0.5);margin-top:16px;letter-spacing:1px;">Goa, India</div>
+                        </div>
+                    </div>
+                    <div class="product-title">The Six-Day Residency</div>
+                    <div class="product-specs"><span class="spec-tag">6 Days</span><span class="spec-tag">Quarterly</span><span class="spec-tag">Goa</span></div>
+                    <div class="product-price">&#8377;23,000 <span style="font-size:0.75em;font-weight:400;">+ GST</span></div>
+                    <div class="product-actions">
+                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); window.location.href='workshops.html'">Register</button>
                     </div>
                 </div>
             </div>
@@ -2591,6 +2646,40 @@
                             '<strong>Museums and Institutions</strong> &mdash; interactive tool for engaging visitors with space and detail'
                         ]
                     }
+                ]
+            },
+            'one-day-immersion': {
+                title: 'The One-Day Immersion', price: 3900, category: 'Workshop / Experience',
+                images: ['Burnt Earth 03.webp'],
+                description: 'A single space, six to eight hours. You move through all three steps — observe, constrain, make — and leave with one finished piece in your own medium. Runs every month in Goa.',
+                specs: { Format: '1 Day', Frequency: 'Monthly', Location: 'Goa, India', Price: '&#8377;3,900 + GST per person', Includes: 'Explorer\'s Deck, field guidance, group review' },
+                details: [
+                    { heading: 'What Happens', body: 'You spend the morning in a single location with no brief and no instrument. You observe. At midday you draw a constraint card from the Explorer\'s Deck. In the afternoon you make one response in your medium. The day closes with a group review.' },
+                    { heading: 'What\'s Included', list: ['Explorer\'s Deck constraint card', 'Field guidance during observation', 'Group review after every session', 'One completed work in your medium'] },
+                    { heading: 'Who It\'s For', body: 'Photographers, architects, designers, writers, filmmakers, musicians — anyone whose work depends on reading a place before responding to it.' }
+                ]
+            },
+            'three-day-intensive': {
+                title: 'The Three-Day Intensive', price: 11400, category: 'Workshop / Experience',
+                images: ['Chromatic Rupture 01.webp'],
+                description: 'The same space, returned to across three days. Each session follows the three steps. Two group reviews and one personal mentoring conversation included. Runs every month in Goa.',
+                specs: { Format: '3 Days', Frequency: 'Monthly', Location: 'Goa, India', Price: '&#8377;11,400 + GST per person', Includes: 'Explorer\'s Deck, mentoring, group reviews' },
+                details: [
+                    { heading: 'What Happens', body: 'Three sessions in the same location. Each day follows the full sequence: observation, constraint card, output. Returning to the same space on consecutive days shows you what you missed the first time. Two group reviews and one personal mentoring conversation are included.' },
+                    { heading: 'What\'s Included', list: ['Explorer\'s Deck constraint card', 'Field guidance during observation', 'Two group reviews', 'One personal mentoring conversation', 'Short-form work in your medium'] },
+                    { heading: 'Who It\'s For', body: 'Practitioners who want more than a single session. The return visits are where the depth is.' }
+                ]
+            },
+            'six-day-residency': {
+                title: 'The Six-Day Residency', price: 23000, category: 'Residency / Experience',
+                images: ['Cosmic Return 05.webp'],
+                description: 'Multiple spaces across six days. The sequence runs start to finish daily, with a group review each evening. You close with one finished piece exhibited at the final gathering. Runs quarterly in Goa.',
+                specs: { Format: '6 Days', Frequency: 'Quarterly', Location: 'Goa, India', Price: '&#8377;23,000 + GST per person', Includes: 'Explorer\'s Deck, daily mentoring, final exhibition' },
+                details: [
+                    { heading: 'What Happens', body: 'Six days across multiple locations in Goa. The full three-step sequence runs each day. Daily group reviews track how your work develops across the week. The residency closes with a final gathering where each participant exhibits one finished work.' },
+                    { heading: 'What\'s Included', list: ['Explorer\'s Deck constraint card', 'Field guidance during observation', 'Daily group reviews', 'Personal mentoring across the week', 'Final exhibition at closing gathering', 'One finished exhibited work in your medium'] },
+                    { heading: 'Who It\'s For', body: 'Practitioners ready to commit to a week. The residency is the most complete version of the practice — enough time for the method to become habitual.' },
+                    { heading: 'Next Dates', list: ['1 to 6 October 2026 &middot; Goa', '9 to 14 January 2027 &middot; Goa', '1 to 6 April 2027 &middot; Goa'] }
                 ]
             }
         };
@@ -3039,7 +3128,7 @@
                 window.location.href = 'checkout.html';
             };
 
-            // Waitlist-only products (books & studio tools) \u2014 replace action buttons
+            // Waitlist-only products
             var waitlistNames = {
                 'matter-of-pause': 'The Matter of Pause'
             };
@@ -3047,6 +3136,13 @@
                 var wName = waitlistNames[id];
                 document.querySelector('.modal-actions').innerHTML =
                     '<button class="action-btn buy-now-btn" style="width:100%" onclick="openWaitlistForm(\'' + wName.replace(/'/g, "\\'") + '\')">Join Waitlist</button>';
+            }
+
+            // Experience products \u2014 replace action buttons with Register
+            var experienceIds = ['one-day-immersion', 'three-day-intensive', 'six-day-residency'];
+            if (experienceIds.indexOf(id) !== -1) {
+                document.querySelector('.modal-actions').innerHTML =
+                    '<button class="action-btn buy-now-btn" style="width:100%" onclick="window.location.href=\'workshops.html\'">Register</button>';
             }
 
             // Related products &mdash; same category first, cross-category fallback
