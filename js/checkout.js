@@ -44,8 +44,18 @@ const CONFIG = {
     large:    { 0: 4000, 1: 8000 },
   },
 
-  // Flat domestic rate for non-print physical items (books, card deck) — per order.
+  // Flat domestic rate for non-print physical items (books, etc.) — per order.
   NON_PRINT_DOMESTIC: { 0: 250, 1: 450 },
+
+  // Explorer's Deck: weight-based rates. Packed weight 450g, billed at 500g slab.
+  // Domestic: courier base + 18% GST on courier + packaging materials.
+  // International: India Post EMS / DHL Economy 500g from Goa.
+  DECK_PRODUCTS: ["The Explorer's Deck"],
+  DECK_SHIPPING_DOMESTIC: { 0: 149, 1: 249 },
+  DECK_SHIPPING_INTL:     { 2: 899, 3: 1299, 4: 1799, 5: 2299 },
+
+  // Products priced at MRP (tax-inclusive). GST is not added on top at checkout.
+  TAX_INCLUSIVE_PRODUCTS: ["The Explorer's Deck"],
 
   // Country → zone (used only for non-print international orders).
   // Print international shipping is always contact-for-quote.
@@ -136,6 +146,11 @@ function isDigital(title) {
   return !!CONFIG.DIGITAL_PRODUCTS[base];
 }
 
+function isDeck(title) {
+  const base = title.replace(/\s+[—\-–].+$/, '').trim();
+  return CONFIG.DECK_PRODUCTS.includes(title) || CONFIG.DECK_PRODUCTS.includes(base);
+}
+
 function isDomestic() {
   return document.getElementById('countrySelect').value === 'IN';
 }
@@ -167,8 +182,9 @@ function calculateShipping() {
   // International + any print in cart → contact-for-quote (null = blocked)
   if (international && cart.some(i => isPrint(i.title))) return null;
 
-  let printCost        = 0;
-  let hasNonPrintPhys  = false;
+  let printCost       = 0;
+  let deckCost        = 0;
+  let hasNonPrintPhys = false;
 
   for (const item of cart) {
     if (isDigital(item.title)) continue;
@@ -180,12 +196,17 @@ function calculateShipping() {
       const rates = CONFIG.PRINT_SHIPPING_RATES[tier] || CONFIG.PRINT_SHIPPING_RATES.standard;
       const rate  = (zone in rates) ? rates[zone] : rates[1];
       printCost  += rate * qty;
+    } else if (isDeck(item.title)) {
+      // Deck: weight-based (450g packed, 500g billing slab)
+      const rates    = international ? CONFIG.DECK_SHIPPING_INTL : CONFIG.DECK_SHIPPING_DOMESTIC;
+      const fallback = international ? CONFIG.DECK_SHIPPING_INTL[5] : CONFIG.DECK_SHIPPING_DOMESTIC[1];
+      deckCost += ((zone in rates) ? rates[zone] : fallback) * qty;
     } else {
       hasNonPrintPhys = true;
     }
   }
 
-  // Non-print physical items (books, decks): flat per-order rate, one box
+  // Other non-print physical items (books, etc.): flat per-order rate
   let nonPrintCost = 0;
   if (hasNonPrintPhys) {
     if (international) {
@@ -197,7 +218,7 @@ function calculateShipping() {
     }
   }
 
-  const total = printCost + nonPrintCost;
+  const total = printCost + deckCost + nonPrintCost;
   return total > 0 ? total : 0;
 }
 
@@ -256,9 +277,18 @@ function recalculate() {
   const quoteNeeded  = shipping === null;
   const domestic     = isDomestic();
 
-  // GST: composite supply — 12% on (subtotal + shipping), domestic only.
-  // When shipping is null (quote needed), we show subtotal only — no GST yet.
-  const gst   = (domestic && !quoteNeeded) ? Math.round((subtotal + shipping) * CONFIG.GST_RATE) : 0;
+  // GST: 12% on taxable portion (subtotal + shipping), domestic only.
+  // Tax-inclusive products (e.g. Explorer's Deck, priced at MRP) are excluded —
+  // their GST is already embedded in the listed price.
+  const taxInclusiveSubtotal = cart
+    .filter(i => {
+      const base = i.title.replace(/\s+[—\-–].+$/, '').trim();
+      return CONFIG.TAX_INCLUSIVE_PRODUCTS.includes(i.title) || CONFIG.TAX_INCLUSIVE_PRODUCTS.includes(base);
+    })
+    .reduce((s, i) => s + i.price * (i.qty || 1), 0);
+  const taxableSubtotal = subtotal - taxInclusiveSubtotal;
+  // No GST when everything in the cart is tax-inclusive (e.g. deck-only orders).
+  const gst   = (domestic && !quoteNeeded && taxableSubtotal > 0) ? Math.round((taxableSubtotal + shipping) * CONFIG.GST_RATE) : 0;
   const total = quoteNeeded ? subtotal : subtotal + shipping + gst;
 
   currentTotals = { subtotal, shipping: quoteNeeded ? 0 : shipping, gst, total };
@@ -276,8 +306,8 @@ function recalculate() {
   document.getElementById('gstVal').innerText   = fmt(gst);
   document.getElementById('totalVal').innerText  = quoteNeeded ? fmt(subtotal) + '*' : fmt(total);
 
-  // GST row: domestic only, and only when shipping is known
-  document.getElementById('gstRow').style.display = (domestic && !quoteNeeded) ? 'flex' : 'none';
+  // GST row: domestic only, shipping known, and there's actually taxable amount
+  document.getElementById('gstRow').style.display = (domestic && !quoteNeeded && gst > 0) ? 'flex' : 'none';
   // Shipping section: hide for digital-only carts
   document.getElementById('shippingSection').style.display = hasPhysicalItems() ? 'block' : 'none';
 
