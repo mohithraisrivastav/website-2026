@@ -2353,16 +2353,17 @@
         <section id="tools" class="shop-section" data-category="tools" style="display:none">
             <div class="category-header fade-up">
                 <h2>Studio Tools</h2>
-                <p>Used in every Lived Space workshop session. Equally useful alone. 52 constraints for slowing down and observing before you make. Works in any creative medium.</p>
+                <p>Used in every Lived Space workshop session. Equally useful alone. 63 cards across seven lenses for slowing down and observing before you make. Works in any creative medium.</p>
             </div>
             <div class="shop-grid">
                 <div class="product-card fade-up" onclick="openProductModal('explorer-deck')" data-product-id="explorer-deck" data-shop-category="tools">
                     <div class="product-image"><img loading="lazy" src="images/VISUAL_JUDGEMENT.jpg" alt="Explorer's Deck" width="1575" height="2100" onerror="this.onerror=null;this.src='images/Cracked Spectrum.jpg';"></div>
                     <div class="product-title">Explorer's Deck</div>
-                    <div class="product-specs"><span class="spec-tag">57 Cards</span><span class="spec-tag">6 Suits + Wild</span><span class="spec-tag">Matte Tactile Stock</span></div>
+                    <div class="product-specs"><span class="spec-tag">63 Cards</span><span class="spec-tag">Seven Lenses</span><span class="spec-tag">Matte Tactile Stock</span></div>
                     <div data-inr="2100" class="product-price">&#8377;2,100</div>
                     <div class="product-actions">
-                        <button class="action-btn buy-now-btn" style="width:100%" onclick="event.stopPropagation(); openWaitlistForm('The Explorer\'s Deck')">Join Waitlist</button>
+                        <button class="action-btn" onclick="event.stopPropagation(); addToCart('The Explorer\'s Deck', 2100, 'images/VISUAL_JUDGEMENT.jpg'); setTimeout(() => toggleCart(), 120)">Add to Cart</button>
+                        <button class="action-btn buy-now-btn" onclick="event.stopPropagation(); buyNow('The Explorer\'s Deck', 2100, 'images/VISUAL_JUDGEMENT.jpg')">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -2535,23 +2536,23 @@
             'explorer-deck': {
                 title: 'The Explorer\'s Deck', price: 2100, category: 'Practice Kit / Deck',
                 images: ['VISUAL_JUDGEMENT.jpg'],
-                description: 'A deck that turns noticing into your superpower. 57 cards invite you to break habit, sharpen perception, and transform everyday spaces into creative practice. Made for artists, designers, photographers, and makers who want to see differently and create with sharper eyes.',
-                specs: { Cards: '57', Players: '1&mdash;5 casual &mdash; larger groups in workshops', Size: 'Standard playing card', Finish: 'Matt tactile stock', Age: '7 and above', Shipping: 'Worldwide' },
+                description: '63 cards across seven lenses. Pick a place, draw a card, and respond to what you find. For artists, designers, photographers, writers, and anyone who makes things from what they observe. Pick a place. Look closer.',
+                specs: { Cards: '63', Lenses: 'Seven', Size: 'Standard playing card', Finish: 'Matte tactile stock', Edition: 'First Edition', Shipping: 'Worldwide' },
                 details: [
                     {
                         heading: 'What It Is',
-                        body: 'The Explorer\'s Deck is a creative observation deck of 57 cards designed to train perception, attention, and creativity through simple but powerful exercises. Each card contains three parts: a <strong>Mission</strong> &mdash; a clear task to do or find in your environment; a <strong>Why It Matters</strong> &mdash; the bigger idea behind the task, connecting observation to creativity; and a <strong>Key</strong> &mdash; a sharp question that focuses your noticing and deepens reflection. The deck is versatile. It can be used for solo practice, group play, or structured workshops. It is not about right answers or finished products. The value lies in what you notice while doing the task.'
+                        body: 'The Explorer\'s Deck is 63 cards across seven lenses: Sensation, Line &amp; Direction, Colour &amp; Value, Rhythm &amp; Balance, Use &amp; Behaviour, Form &amp; Scale, and Wild. Each card has three parts: a <strong>Mission</strong> &mdash; a specific task to carry out; a <strong>Key</strong> &mdash; a question that sharpens your focus; and a <strong>Why</strong> &mdash; the idea behind the task. Use it solo, with a group, or in a workshop. Pick a place. Draw a card. See what it surfaces.'
                     },
                     {
                         heading: "What's Inside",
                         list: [
-                            '<strong>Sensation (12 cards)</strong> &mdash; Colour, light, sound, texture',
-                            '<strong>Emotion (12 cards)</strong> &mdash; Mood of places, human traces, memory',
-                            '<strong>Energy (12 cards)</strong> &mdash; Movement, rhythm, stillness, tension',
-                            '<strong>Abstraction (12 cards)</strong> &mdash; Patterns, voids, forms, reflections',
-                            '<strong>Perception (12 cards)</strong> &mdash; Awareness, framing, interpretation',
-                            '<strong>Attention (12 cards)</strong> &mdash; Focus, duration, distraction, patience',
-                            '<strong>Wild Cards (5 cards)</strong> &mdash; Chaos agents that override the rules'
+                            '<strong>Sensation (10 cards)</strong>',
+                            '<strong>Line &amp; Direction (10 cards)</strong>',
+                            '<strong>Colour &amp; Value (10 cards)</strong>',
+                            '<strong>Rhythm &amp; Balance (10 cards)</strong>',
+                            '<strong>Use &amp; Behaviour (10 cards)</strong>',
+                            '<strong>Form &amp; Scale (10 cards)</strong>',
+                            '<strong>Wild (3 cards)</strong>'
                         ]
                     },
                     {
@@ -3040,8 +3041,7 @@
 
             // Waitlist-only products (books & studio tools) \u2014 replace action buttons
             var waitlistNames = {
-                'matter-of-pause': 'The Matter of Pause',
-                'explorer-deck':   "Explorer's Deck"
+                'matter-of-pause': 'The Matter of Pause'
             };
             if (waitlistNames[id]) {
                 var wName = waitlistNames[id];
