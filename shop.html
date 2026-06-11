@@ -5304,8 +5304,15 @@
         (function() {
             var hash = window.location.hash.replace('#', '');
             if (hash && products[hash]) {
-                /* Wait for the page to settle before opening modal */
-                setTimeout(function() { openProductModal(hash); }, 400);
+                setTimeout(function() {
+                    /* Activate the correct category tab if this product isn't a print */
+                    var card = document.querySelector('[data-product-id="' + hash + '"]');
+                    if (card && card.dataset.shopCategory) {
+                        var filterBtn = document.querySelector('[data-shop-filter="' + card.dataset.shopCategory + '"]');
+                        if (filterBtn) filterBtn.click();
+                    }
+                    openProductModal(hash);
+                }, 400);
             }
         })();
 
