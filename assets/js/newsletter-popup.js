@@ -34,7 +34,19 @@
 
   function setupTrigger() {
     var el = document.querySelector(TRIGGER);
-    if (!el) return;
+
+    if (!el) {
+      // Fallback for pages without #shop-preview: fire at 50% scroll depth
+      function scrollDepthFallback() {
+        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        if (scrollable > 0 && window.scrollY / scrollable >= 0.5) {
+          show();
+          window.removeEventListener('scroll', scrollDepthFallback);
+        }
+      }
+      window.addEventListener('scroll', scrollDepthFallback, { passive: true });
+      return;
+    }
 
     // Primary: IntersectionObserver — robust, no animation-frame dependency
     if ('IntersectionObserver' in window) {
