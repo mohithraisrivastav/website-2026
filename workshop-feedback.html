@@ -225,8 +225,13 @@
         </div>
 
         <div class="wf-field">
-            <label class="wf-label" for="wf-email">Email <span class="opt">— optional, for follow-up only</span></label>
+            <label class="wf-label" for="wf-email">Email <span class="opt">— optional</span></label>
             <input class="wf-input" type="email" id="wf-email" name="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-phone">Mobile <span class="opt">— optional</span></label>
+            <input class="wf-input" type="tel" id="wf-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel">
         </div>
 
         <div class="wf-field">
@@ -318,6 +323,7 @@
         var errEl  = document.getElementById('wfError');
         var name      = document.getElementById('wf-name').value.trim();
         var email     = document.getElementById('wf-email').value.trim();
+        var phone     = document.getElementById('wf-phone').value.trim();
         var date      = document.getElementById('wf-date').value;
         var rating    = document.querySelector('input[name="rating"]:checked');
         var card      = document.getElementById('wf-card').value.trim();
@@ -347,6 +353,7 @@
                 body: JSON.stringify({
                     name,
                     email:         email || null,
+                    phone:         phone || null,
                     workshop_date: date || null,
                     rating:        rating ? rating.value : null,
                     card:          card || null,

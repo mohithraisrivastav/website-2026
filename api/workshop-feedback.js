@@ -1,5 +1,5 @@
 // Workshop feedback handler
-// Fields: name, email (optional), workshop_date, rating, card, valuable, improve, recommend, other
+// Fields: name, email (optional), phone (optional), workshop_date, rating, card, valuable, improve, recommend, other
 // Sends notification to studio only (no acknowledgement — email is optional)
 
 const STUDIO_EMAIL = 'info@mohithraisrivastav.com';
@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
-    const { name, email, workshop_date, rating, card, valuable, improve, recommend, other } = req.body || {};
+    const { name, email, phone, workshop_date, rating, card, valuable, improve, recommend, other } = req.body || {};
 
     if (!name) {
         return res.status(400).json({ error: 'Name is required.' });
@@ -48,6 +48,7 @@ module.exports = async (req, res) => {
   <table style="width:100%;border-collapse:collapse;">
     <tr><td style="padding:8px 0;color:#888;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${name}</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Email</td><td style="padding:8px 0;">${email || '—'}</td></tr>
+    <tr><td style="padding:8px 0;color:#888;">Mobile</td><td style="padding:8px 0;">${phone || '—'}</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Rating</td><td style="padding:8px 0;font-size:1.2em;">${stars} (${rating || '?'}/5)</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Recommend?</td><td style="padding:8px 0;">${recommend || '—'}</td></tr>
     ${card ? `<tr><td style="padding:8px 0;color:#888;">Card / lens</td><td style="padding:8px 0;">${card}</td></tr>` : ''}
