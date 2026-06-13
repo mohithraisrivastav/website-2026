@@ -2,7 +2,7 @@
 // Fields: name, email (optional), phone (optional), workshop_date, rating, card, valuable, improve, recommend, other
 // Sends notification to studio only (no acknowledgement — email is optional)
 
-const STUDIO_EMAIL = 'info@mohithraisrivastav.com';
+const STUDIO_EMAIL = 'updates@mohithraisrivastav.com';
 const FROM_ADDRESS = 'studio@mohithraisrivastav.com';
 const STUDIO_NAME  = 'Mohith Rai Srivastav';
 
