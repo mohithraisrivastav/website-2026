@@ -210,11 +210,40 @@
     }
     .wf-print-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
 
+    /* ── Socials ── */
+    .wf-socials {
+        margin-top: 56px;
+        padding-top: 40px;
+        border-top: 1px solid var(--border-default);
+        text-align: center;
+    }
+    .wf-socials-label {
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--text-tertiary); margin-bottom: 16px;
+    }
+    .wf-socials-links {
+        display: flex; gap: 28px; justify-content: center; flex-wrap: wrap;
+    }
+    .wf-socials-links a {
+        font-size: 0.88rem; font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid var(--border-default);
+        padding-bottom: 2px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .wf-socials-links a:hover {
+        color: var(--text-primary);
+        border-color: var(--text-primary);
+    }
+
     /* ── Print styles ── */
     @media print {
         .wf-header, .wf-main > .wf-eyebrow,
         .wf-main > .wf-title, .wf-main > .wf-sub,
-        .wf-form, .wf-thankyou, .wf-deck-cta { display: none !important; }
+        .wf-form, .wf-thankyou, .wf-deck-cta, .wf-socials { display: none !important; }
         .wf-qr-section {
             border: none; margin: 0; padding: 40px;
             height: 100vh;
@@ -338,6 +367,15 @@
         <button class="wf-print-btn" onclick="window.print()">
             Print QR code
         </button>
+    </div>
+    <!-- Social links -->
+    <div class="wf-socials">
+        <p class="wf-socials-label">Stay connected</p>
+        <div class="wf-socials-links">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.youtube.com/@mohithraisrivastav7517" target="_blank" rel="noopener noreferrer">YouTube</a>
+        </div>
     </div>
 
 </main>
