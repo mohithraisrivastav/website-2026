@@ -289,6 +289,16 @@
         </div>
 
         <div class="wf-field">
+            <label class="wf-label">Did this workshop change the way you look at spaces?</label>
+            <div class="wf-radios" style="flex-direction:column; gap:8px;">
+                <label><input type="radio" name="shift" value="yes-cant-unsee"> Yes — I can't unsee it now</label>
+                <label><input type="radio" name="shift" value="still-processing"> I think so... still processing</label>
+                <label><input type="radio" name="shift" value="need-alone-time"> Ask me again after some alone time</label>
+                <label><input type="radio" name="shift" value="not-yet"> Honestly, not yet</label>
+            </div>
+        </div>
+
+        <div class="wf-field">
             <label class="wf-label" for="wf-other">Anything else</label>
             <textarea class="wf-textarea" id="wf-other" name="other" placeholder="Open space — whatever's on your mind." style="min-height:80px;"></textarea>
         </div>
@@ -351,6 +361,7 @@
         var deck_exp     = document.getElementById('wf-deck-exp').value.trim();
         var workshop_exp = document.getElementById('wf-workshop-exp').value.trim();
         var recommend    = document.querySelector('input[name="recommend"]:checked');
+        var shift        = document.querySelector('input[name="shift"]:checked');
         var other        = document.getElementById('wf-other').value.trim();
         var honeypot  = document.querySelector('input[name="website"]').value;
 
@@ -380,6 +391,7 @@
                     deck_experience:     deck_exp,
                     workshop_experience: workshop_exp || null,
                     recommend:           recommend ? recommend.value : null,
+                    shift:               shift ? shift.value : null,
                     other:               other || null
                 })
             });
