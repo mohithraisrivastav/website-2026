@@ -206,15 +206,15 @@
     <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav">
     <div class="wf-header-text">
         <div class="wf-header-name">Mohith Rai Srivastav</div>
-        <div class="wf-header-sub">Lived Space &middot; Workshop Feedback</div>
+        <div class="wf-header-sub">Explorer's Deck &middot; Workshop Feedback</div>
     </div>
 </header>
 
 <main class="wf-main">
 
-    <span class="wf-eyebrow">Lived Space</span>
+    <span class="wf-eyebrow">Explorer's Deck</span>
     <h1 class="wf-title">How was<br>the workshop?</h1>
-    <p class="wf-sub">Your feedback shapes the next one. Takes about two minutes.</p>
+    <p class="wf-sub">The deck only gets better with use. Your feedback shapes the next version. Takes about two minutes.</p>
 
     <form class="wf-form" id="wfForm" novalidate>
 
@@ -245,8 +245,13 @@
         </div>
 
         <div class="wf-field">
-            <label class="wf-label" for="wf-valuable">What was most valuable? <span class="req">*</span></label>
-            <textarea class="wf-textarea" id="wf-valuable" name="valuable" placeholder="What stood out, what you'll carry with you…" required></textarea>
+            <label class="wf-label" for="wf-card">Which card or lens stuck with you?</label>
+            <input class="wf-input" type="text" id="wf-card" name="card" placeholder="e.g. Card 34 — Cathedral Effect, or the Wild card…">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-valuable">What did the deck open up for you? <span class="req">*</span></label>
+            <textarea class="wf-textarea" id="wf-valuable" name="valuable" placeholder="A moment, a shift in how you saw something, a question it left you with…" required></textarea>
         </div>
 
         <div class="wf-field">
@@ -286,8 +291,8 @@
 
     <!-- QR Code for printing / display at workshop -->
     <div class="wf-qr-section" id="wfQrSection">
-        <span class="wf-qr-eyebrow">Display at your workshop</span>
-        <p class="wf-qr-title">Scan to leave feedback</p>
+        <span class="wf-qr-eyebrow">Explorer's Deck · Workshop Feedback</span>
+        <p class="wf-qr-title">Scan to share your experience with the deck</p>
         <canvas id="wf-qr-canvas"></canvas>
         <p class="wf-qr-url">mohithraisrivastav.com/workshop-feedback.html</p>
         <button class="wf-print-btn" onclick="window.print()">
@@ -322,6 +327,7 @@
         var email     = document.getElementById('wf-email').value.trim();
         var date      = document.getElementById('wf-date').value;
         var rating    = document.querySelector('input[name="rating"]:checked');
+        var card      = document.getElementById('wf-card').value.trim();
         var valuable  = document.getElementById('wf-valuable').value.trim();
         var improve   = document.getElementById('wf-improve').value.trim();
         var recommend = document.querySelector('input[name="recommend"]:checked');
@@ -350,6 +356,7 @@
                     email:         email || null,
                     workshop_date: date || null,
                     rating:        rating ? rating.value : null,
+                    card:          card || null,
                     valuable,
                     improve:       improve || null,
                     recommend:     recommend ? recommend.value : null,
