@@ -8,7 +8,6 @@
 <link rel="icon" type="image/webp" href="images/Mohith%20LOGO.webp">
 <link rel="stylesheet" href="assets/css/typo.css">
 <script src="assets/js/theme.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -165,7 +164,7 @@
         font-size: 1.4rem; font-weight: 400;
         color: var(--text-primary);
     }
-    #wf-qr-canvas { border-radius: 4px; }
+    #wf-qr-img { border-radius: 4px; display: block; width: 200px; height: 200px; }
     .wf-qr-url {
         font-size: 0.78rem; color: var(--text-tertiary);
         letter-spacing: 0.06em; margin-top: -8px;
@@ -196,7 +195,7 @@
         }
         .wf-print-btn { display: none; }
         .wf-qr-title { font-size: 2rem; }
-        #wf-qr-canvas { width: 260px !important; height: 260px !important; }
+        #wf-qr-img { width: 260px !important; height: 260px !important; }
     }
 </style>
 </head>
@@ -293,7 +292,9 @@
     <div class="wf-qr-section" id="wfQrSection">
         <span class="wf-qr-eyebrow">Explorer's Deck · Workshop Feedback</span>
         <p class="wf-qr-title">Scan to share your experience with the deck</p>
-        <canvas id="wf-qr-canvas"></canvas>
+        <img id="wf-qr-img"
+             src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fwww.mohithraisrivastav.com%2Fworkshop-feedback.html&bgcolor=FFFCF8&color=1A1612&margin=2"
+             alt="QR code — scan to leave workshop feedback">
         <p class="wf-qr-url">mohithraisrivastav.com/workshop-feedback.html</p>
         <button class="wf-print-btn" onclick="window.print()">
             Print QR code
@@ -305,16 +306,6 @@
 <script>
 (function () {
     'use strict';
-
-    // Generate QR code
-    var qrUrl = 'https://www.mohithraisrivastav.com/workshop-feedback.html';
-    if (typeof QRCode !== 'undefined') {
-        QRCode.toCanvas(document.getElementById('wf-qr-canvas'), qrUrl, {
-            width: 200,
-            margin: 2,
-            color: { dark: '#1A1612', light: '#FFFCF8' }
-        });
-    }
 
     var _loadTime = Date.now();
 
