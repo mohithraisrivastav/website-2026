@@ -148,6 +148,43 @@
     }
     .wf-thankyou p { color: var(--text-secondary); font-size: 1rem; }
 
+    /* ── Deck CTA ── */
+    .wf-deck-cta {
+        margin-top: 72px;
+        padding: 40px 32px;
+        border: 1px solid var(--border-default);
+        border-radius: 4px;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .wf-deck-cta-label {
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--text-tertiary);
+    }
+    .wf-deck-cta-price {
+        font-family: var(--font-accent);
+        font-size: 2rem; font-weight: 400;
+        color: var(--text-primary); line-height: 1;
+    }
+    .wf-deck-cta-note {
+        font-size: 0.9rem; color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+    .wf-deck-cta-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        height: 48px; padding: 0 32px;
+        background: var(--color-action);
+        color: var(--bg-primary);
+        border: none; border-radius: 3px;
+        font-family: var(--font-main);
+        font-size: 0.78rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+    .wf-deck-cta-btn:hover { background: var(--color-action-hover, #c5500a); }
+
     /* ── QR Section ── */
     .wf-qr-section {
         margin-top: 80px;
@@ -189,7 +226,7 @@
     @media print {
         .wf-header, .wf-main > .wf-eyebrow,
         .wf-main > .wf-title, .wf-main > .wf-sub,
-        .wf-form, .wf-thankyou { display: none !important; }
+        .wf-form, .wf-thankyou, .wf-deck-cta { display: none !important; }
         .wf-qr-section {
             border: none; margin: 0; padding: 40px;
             height: 100vh;
@@ -293,6 +330,14 @@
         <div class="wf-thankyou-icon">—</div>
         <h2>Thank you.</h2>
         <p>Your feedback has been sent. It means a lot.</p>
+    </div>
+
+    <!-- Deck buy section -->
+    <div class="wf-deck-cta">
+        <p class="wf-deck-cta-label">Explorer's Deck &middot; Architecture and Design Edition</p>
+        <p class="wf-deck-cta-price">&#8377;2,100</p>
+        <p class="wf-deck-cta-note">63 cards across six lenses plus Wild. Ships worldwide.</p>
+        <a class="wf-deck-cta-btn" href="https://www.mohithraisrivastav.com/explorers-deck.html">Get the deck</a>
     </div>
 
     <!-- QR Code for printing / display at workshop -->
