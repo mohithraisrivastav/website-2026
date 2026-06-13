@@ -88,18 +88,6 @@
     .wf-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
     input[type="date"].wf-input { -webkit-appearance: auto; appearance: auto; }
 
-    /* Star rating */
-    .wf-stars { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
-    .wf-stars input { display: none; }
-    .wf-stars label {
-        font-size: 2rem; cursor: pointer; color: var(--border-default);
-        transition: color 0.15s ease; line-height: 1;
-        user-select: none;
-    }
-    .wf-stars label:hover,
-    .wf-stars label:hover ~ label,
-    .wf-stars input:checked ~ label { color: var(--color-action); }
-
     /* Radio group */
     .wf-radios { display: flex; gap: 12px; flex-wrap: wrap; }
     .wf-radios label {
@@ -277,29 +265,18 @@
         </div>
 
         <div class="wf-field">
-            <label class="wf-label">Overall experience <span class="req">*</span></label>
-            <div class="wf-stars" role="radiogroup" aria-label="Rating out of 5">
-                <input type="radio" id="s5" name="rating" value="5"><label for="s5" title="5 stars">★</label>
-                <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="4 stars">★</label>
-                <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="3 stars">★</label>
-                <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="2 stars">★</label>
-                <input type="radio" id="s1" name="rating" value="1"><label for="s1" title="1 star">★</label>
-            </div>
-        </div>
-
-        <div class="wf-field">
             <label class="wf-label" for="wf-card">Which card did you receive?</label>
             <input class="wf-input" type="text" id="wf-card" name="card" placeholder="e.g. Card 34 — Cathedral Effect, or describe what it was about…">
         </div>
 
         <div class="wf-field">
-            <label class="wf-label" for="wf-valuable">What did your card open up for you? <span class="req">*</span></label>
-            <textarea class="wf-textarea" id="wf-valuable" name="valuable" placeholder="A moment, a shift in how you saw something, a question it left you with…" required></textarea>
+            <label class="wf-label" for="wf-deck-exp">How was your experience with the deck? <span class="req">*</span></label>
+            <textarea class="wf-textarea" id="wf-deck-exp" name="deck_experience" placeholder="A moment, a shift in how you saw something, a question the card left you with…" required></textarea>
         </div>
 
         <div class="wf-field">
-            <label class="wf-label" for="wf-improve">What could be better?</label>
-            <textarea class="wf-textarea" id="wf-improve" name="improve" placeholder="Anything you'd change or add…"></textarea>
+            <label class="wf-label" for="wf-workshop-exp">How was the workshop overall?</label>
+            <textarea class="wf-textarea" id="wf-workshop-exp" name="workshop_experience" placeholder="The session, the format, the facilitation — what worked, what didn't…"></textarea>
         </div>
 
         <div class="wf-field">
@@ -368,14 +345,13 @@
         var errEl  = document.getElementById('wfError');
         var name      = document.getElementById('wf-name').value.trim();
         var email     = document.getElementById('wf-email').value.trim();
-        var phone     = document.getElementById('wf-phone').value.trim();
-        var date      = document.getElementById('wf-date').value;
-        var rating    = document.querySelector('input[name="rating"]:checked');
-        var card      = document.getElementById('wf-card').value.trim();
-        var valuable  = document.getElementById('wf-valuable').value.trim();
-        var improve   = document.getElementById('wf-improve').value.trim();
-        var recommend = document.querySelector('input[name="recommend"]:checked');
-        var other     = document.getElementById('wf-other').value.trim();
+        var phone        = document.getElementById('wf-phone').value.trim();
+        var date         = document.getElementById('wf-date').value;
+        var card         = document.getElementById('wf-card').value.trim();
+        var deck_exp     = document.getElementById('wf-deck-exp').value.trim();
+        var workshop_exp = document.getElementById('wf-workshop-exp').value.trim();
+        var recommend    = document.querySelector('input[name="recommend"]:checked');
+        var other        = document.getElementById('wf-other').value.trim();
         var honeypot  = document.querySelector('input[name="website"]').value;
 
         // Bot check
@@ -385,8 +361,8 @@
 
         errEl.style.display = 'none';
 
-        if (!name) { showError('Please enter your name.'); return; }
-        if (!valuable) { showError('Please share what was most valuable.'); return; }
+        if (!name)     { showError('Please enter your full name.'); return; }
+        if (!deck_exp) { showError('Please share your experience with the deck.'); return; }
 
         btn.disabled = true;
         btn.textContent = 'Sending…';
@@ -397,15 +373,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     name,
-                    email:         email || null,
-                    phone:         phone || null,
-                    workshop_date: date || null,
-                    rating:        rating ? rating.value : null,
-                    card:          card || null,
-                    valuable,
-                    improve:       improve || null,
-                    recommend:     recommend ? recommend.value : null,
-                    other:         other || null
+                    email:               email || null,
+                    phone:               phone || null,
+                    workshop_date:       date || null,
+                    card:                card || null,
+                    deck_experience:     deck_exp,
+                    workshop_experience: workshop_exp || null,
+                    recommend:           recommend ? recommend.value : null,
+                    other:               other || null
                 })
             });
 

@@ -1,5 +1,5 @@
 // Workshop feedback handler
-// Fields: name, email (optional), phone (optional), workshop_date, rating, card, valuable, improve, recommend, other
+// Fields: name, email, phone, workshop_date, card, deck_experience, workshop_experience, recommend, other
 // Sends notification to studio only (no acknowledgement — email is optional)
 
 const STUDIO_EMAIL = 'updates@mohithraisrivastav.com';
@@ -32,13 +32,11 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
 
-    const { name, email, phone, workshop_date, rating, card, valuable, improve, recommend, other } = req.body || {};
+    const { name, email, phone, workshop_date, card, deck_experience, workshop_experience, recommend, other } = req.body || {};
 
     if (!name) {
         return res.status(400).json({ error: 'Name is required.' });
     }
-
-    const stars = '★'.repeat(parseInt(rating) || 0) + '☆'.repeat(5 - (parseInt(rating) || 0));
 
     const html = `
 <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1A1612;">
@@ -49,15 +47,13 @@ module.exports = async (req, res) => {
     <tr><td style="padding:8px 0;color:#888;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${name}</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Email</td><td style="padding:8px 0;">${email || '—'}</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Mobile</td><td style="padding:8px 0;">${phone || '—'}</td></tr>
-    <tr><td style="padding:8px 0;color:#888;">Rating</td><td style="padding:8px 0;font-size:1.2em;">${stars} (${rating || '?'}/5)</td></tr>
     <tr><td style="padding:8px 0;color:#888;">Recommend?</td><td style="padding:8px 0;">${recommend || '—'}</td></tr>
-    ${card ? `<tr><td style="padding:8px 0;color:#888;">Card / lens</td><td style="padding:8px 0;">${card}</td></tr>` : ''}
+    ${card ? `<tr><td style="padding:8px 0;color:#888;">Card received</td><td style="padding:8px 0;">${card}</td></tr>` : ''}
   </table>
   <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
-  <p style="color:#888;margin-bottom:6px;">What the deck opened up</p>
-  <p style="margin:0 0 16px;white-space:pre-wrap;">${valuable || '—'}</p>
-  <p style="color:#888;margin-bottom:6px;">What could improve</p>
-  <p style="margin:0 0 16px;white-space:pre-wrap;">${improve || '—'}</p>
+  <p style="color:#888;margin-bottom:6px;">Experience with the deck</p>
+  <p style="margin:0 0 16px;white-space:pre-wrap;">${deck_experience || '—'}</p>
+  ${workshop_experience ? `<p style="color:#888;margin-bottom:6px;">Workshop overall</p><p style="margin:0 0 16px;white-space:pre-wrap;">${workshop_experience}</p>` : ''}
   ${other ? `<p style="color:#888;margin-bottom:6px;">Other thoughts</p><p style="margin:0 0 16px;white-space:pre-wrap;">${other}</p>` : ''}
 </div>`;
 
@@ -65,7 +61,7 @@ module.exports = async (req, res) => {
         await resendSend({
             to:      STUDIO_EMAIL,
             replyTo: email || STUDIO_EMAIL,
-            subject: `Workshop Feedback — ${rating ? rating + '/5 · ' : ''}${name}`,
+            subject: `Workshop Feedback — ${name}`,
             html
         });
 
@@ -74,7 +70,7 @@ module.exports = async (req, res) => {
             await fetch(process.env.GOOGLE_SHEETS_WEBHOOK, {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, phone, workshop_date, rating, card, valuable, improve, recommend, other })
+                body: JSON.stringify({ name, email, phone, workshop_date, card, deck_experience, workshop_experience, recommend, other })
             }).catch(err => console.error('Sheets webhook error:', err.message));
         }
 
