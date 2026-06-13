@@ -68,6 +68,16 @@ module.exports = async (req, res) => {
             subject: `Workshop Feedback — ${rating ? rating + '/5 · ' : ''}${name}`,
             html
         });
+
+        // Save to Google Sheets via Apps Script web app (set GOOGLE_SHEETS_WEBHOOK in Vercel env)
+        if (process.env.GOOGLE_SHEETS_WEBHOOK) {
+            await fetch(process.env.GOOGLE_SHEETS_WEBHOOK, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone, workshop_date, rating, card, valuable, improve, recommend, other })
+            }).catch(err => console.error('Sheets webhook error:', err.message));
+        }
+
         return res.status(200).json({ ok: true });
     } catch (err) {
         console.error('Workshop feedback error:', err.message);
