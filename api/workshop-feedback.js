@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
     const { name, email, phone, workshop_date, card, deck_experience, workshop_experience, recommend, shift, other } = req.body || {};
 
     const shiftLabels = {
-        'yes-cant-unsee':  "Yes — I can't unsee it now",
+        'yes-cant-unsee':  "Yes, I can't unsee it now",
         'still-processing': 'I think so... still processing',
         'need-alone-time': 'Ask me again after some alone time',
         'not-yet':         'Honestly, not yet'
