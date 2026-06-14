@@ -513,6 +513,17 @@
 <script src="assets/js/newsletter-popup.js"></script>
 <script src="assets/js/deck-cards.js"></script>
 <script>
+function toggleMenu() {
+    var m = document.getElementById('mobileMenu');
+    var b = document.getElementById('hamburgerBtn');
+    if (!m || !b) return;
+    m.classList.toggle('active');
+    b.classList.toggle('active');
+    b.setAttribute('aria-expanded', m.classList.contains('active').toString());
+    document.body.style.overflow = m.classList.contains('active') ? 'hidden' : '';
+}
+</script>
+<script>
 (function () {
     'use strict';
     var CARDS = window.DECK_CARDS || [];
