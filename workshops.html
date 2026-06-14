@@ -562,6 +562,32 @@
     .ws-leaves-grid { grid-template-columns: 1fr; gap: 32px; }
     .ws-audience { grid-template-columns: 1fr; }
     .ws-audience-item { padding-right: 0; }
+    .ws-testimonials { grid-template-columns: 1fr; }
+}
+
+/* ── Testimonials ── */
+.ws-testimonials {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px 56px;
+    max-width: 1080px;
+}
+.ws-tq-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.15rem, 1.4vw, 1.45rem);
+    line-height: 1.65;
+    color: #1A1612;
+    margin: 0 0 18px 0;
+}
+.ws-tq-attr {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(26, 22, 18, 0.38);
 }
 </style>
 </head>
@@ -1074,6 +1100,27 @@
             </div>
         </section>
 
+
+        <!-- Testimonials -->
+        <section class="section-padding ws-testimonials-section">
+            <div class="section-header fade-up">
+                <h2>From the workshop</h2>
+            </div>
+            <div class="ws-testimonials">
+                <div class="ws-tq fade-up">
+                    <p class="ws-tq-text">I never had this kind of lecture before. Saying fabulous would be an understatement.</p>
+                    <span class="ws-tq-attr">Naman B. &middot; Architecture Student</span>
+                </div>
+                <div class="ws-tq fade-up">
+                    <p class="ws-tq-text">I actually saw the world in my own perspective. There are things consciously made for a reason. Now I need to find out what they are.</p>
+                    <span class="ws-tq-attr">Sherif K. &middot; Architecture Student</span>
+                </div>
+                <div class="ws-tq fade-up">
+                    <p class="ws-tq-text">Really got to know how spaces work. The deck kickstarted new thoughts and perspectives.</p>
+                    <span class="ws-tq-attr">Latika R. &middot; Architecture Student</span>
+                </div>
+            </div>
+        </section>
 
         <!-- CTA -->
         <section class="workshop-cta">
