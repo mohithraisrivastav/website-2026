@@ -306,10 +306,10 @@
         .footer-links a:hover { color: var(--text-primary); }
 
         /* ========= Reader Overlay ========= */
-        .reader { position: fixed; inset: 0; background: transparent; z-index: 10000; overflow-y: scroll; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; pointer-events: none; visibility: hidden; opacity: 0; transition: opacity 0.5s, visibility 0s 0.5s; }
+        /* z-index must exceed mobile-menu (15500 !important in global.css) so the reader covers the nav */
+        .reader { position: fixed; inset: 0; background: transparent; z-index: 16000; overflow-y: scroll; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; pointer-events: none; visibility: hidden; opacity: 0; transition: opacity 0.5s, visibility 0s 0.5s; }
         .reader.active { visibility: visible; opacity: 1; pointer-events: auto; transition-delay: 0s; }
-        .reader-progress { position: fixed; top: 0; left: 0; height: 2px; background: #fff; width: 0%; z-index: 10002; }
- }
+        .reader-progress { position: fixed; top: 0; left: 0; height: 2px; background: #fff; width: 0%; z-index: 16002; }
         .reader-top .crumbs { color: var(--text-primary); display: flex; gap: 14px; align-items: center; }
         .reader-top .crumbs { font-size: 0.8625rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
         .reader-top .crumbs .sep { color: var(--color-accent); }

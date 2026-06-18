@@ -85,6 +85,18 @@
                     if (burger) burger.click();
                 }
             });
+
+            /* Stop Lenis smooth-scroll while the mobile menu is open so the
+               page doesn't scroll behind the overlay on touch devices. */
+            new MutationObserver(function () {
+                var lenis = window.__lenis;
+                if (!lenis) return;
+                if (mobileMenu.classList.contains('active')) {
+                    lenis.stop();
+                } else {
+                    lenis.start();
+                }
+            }).observe(mobileMenu, { attributes: true, attributeFilter: ['class'] });
         }
     });
 })();

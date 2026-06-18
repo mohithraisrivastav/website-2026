@@ -221,7 +221,7 @@
     </div>
 </div>
 <script>
-function toggleMenu(){const m=document.getElementById('mobileMenu'),b=document.getElementById('hamburgerBtn');m.classList.toggle('active');b.classList.toggle('active');b.setAttribute('aria-expanded',m.classList.contains('active').toString());document.body.style.overflow=m.classList.contains('active')?'hidden':0;}
+function toggleMenu(){const m=document.getElementById('mobileMenu'),b=document.getElementById('hamburgerBtn');m.classList.toggle('active');b.classList.toggle('active');b.setAttribute('aria-expanded',m.classList.contains('active').toString());document.body.style.overflow=m.classList.contains('active')?'hidden':'';}
 window.addEventListener('scroll',()=>{const e=document.documentElement;document.getElementById('rProgress').style.width=(e.scrollTop/(e.scrollHeight-e.clientHeight)*100)+'%';});
 document.getElementById('sfForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('sfFormOk').style.display='block';e.target.style.display='none';});
 </script>
