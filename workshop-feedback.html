@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Workshop Feedback · Explorer's Deck</title>
+<link rel="icon" type="image/webp" href="images/Mohith%20LOGO.webp">
+<link rel="stylesheet" href="assets/css/global.css">
+<link rel="stylesheet" href="assets/css/typo.css">
+<script src="assets/js/theme.js"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    .wf-header {
+        padding: 28px 6vw 24px;
+        border-bottom: 1px solid var(--border-default);
+        display: flex; align-items: center; gap: 14px;
+    }
+    .wf-header img { height: 36px; width: auto; }
+    .wf-header-text { line-height: 1.3; }
+    .wf-header-name {
+        font-size: 0.78rem; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--text-primary);
+    }
+    .wf-header-sub {
+        font-size: 0.72rem; color: var(--text-tertiary);
+        letter-spacing: 0.06em;
+    }
+
+    /* ── Main ── */
+    .wf-main { max-width: 640px; margin: 0 auto; padding: 52px 6vw 80px; }
+
+    .wf-eyebrow {
+        font-size: 0.74rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--color-action); display: block; margin-bottom: 14px;
+    }
+    .wf-title {
+        font-family: var(--font-accent);
+        font-size: clamp(2rem, 6vw, 3rem);
+        font-weight: 400; line-height: 1.1;
+        margin-bottom: 12px;
+    }
+    .wf-sub {
+        font-size: 0.98rem; color: var(--text-secondary);
+        font-weight: 300; margin-bottom: 48px; line-height: 1.6;
+    }
+
+    /* ── Form ── */
+    .wf-form { display: flex; flex-direction: column; gap: 32px; }
+
+    .wf-field { display: flex; flex-direction: column; gap: 8px; }
+    .wf-label {
+        font-size: 0.74rem; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--text-secondary);
+    }
+    .wf-label .req { color: var(--color-action); margin-left: 2px; }
+    .wf-label .opt { color: var(--text-tertiary); font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 0.72rem; margin-left: 6px; }
+
+    .wf-input, .wf-textarea, .wf-select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--border-default);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        font-size: 1rem;
+        border-radius: 3px;
+        transition: border-color 0.2s ease;
+        -webkit-appearance: none;
+    }
+    .wf-input:focus, .wf-textarea:focus, .wf-select:focus {
+        outline: none;
+        border-color: var(--text-primary);
+    }
+    .wf-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    input[type="date"].wf-input { -webkit-appearance: auto; appearance: auto; }
+
+    /* Radio group */
+    .wf-radios { display: flex; gap: 12px; flex-wrap: wrap; }
+    .wf-radios label {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 18px;
+        border: 1px solid var(--border-default);
+        border-radius: 3px; cursor: pointer;
+        font-size: 0.88rem; font-weight: 500;
+        transition: border-color 0.2s, background 0.2s;
+        user-select: none;
+    }
+    .wf-radios input[type="radio"] { accent-color: var(--color-action); }
+    .wf-radios label:has(input:checked) {
+        border-color: var(--text-primary);
+        background: rgba(var(--text-primary-rgb, 26,22,18), 0.04);
+    }
+
+    /* Submit */
+    .wf-submit {
+        display: inline-flex; align-items: center; justify-content: center;
+        height: 52px; padding: 0 36px;
+        background: var(--color-action);
+        color: var(--bg-primary);
+        border: none; border-radius: 3px;
+        font-family: var(--font-main);
+        font-size: 0.78rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        cursor: pointer; transition: background 0.2s ease;
+        align-self: flex-start;
+    }
+    .wf-submit:hover { background: var(--color-action-hover, #c5500a); }
+    .wf-submit:disabled { opacity: 0.5; cursor: default; }
+
+    .wf-error { color: #c0392b; font-size: 0.88rem; display: none; }
+    .wf-error.visible { display: block; }
+
+    /* ── Thank you state ── */
+    .wf-thankyou {
+        display: none; text-align: center; padding: 60px 0;
+    }
+    .wf-thankyou-icon { font-size: 3rem; margin-bottom: 24px; }
+    .wf-thankyou h2 {
+        font-family: var(--font-accent);
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+        font-weight: 400; margin-bottom: 12px;
+    }
+    .wf-thankyou p { color: var(--text-secondary); font-size: 1rem; }
+
+    /* ── Deck CTA ── */
+    .wf-deck-cta {
+        margin-top: 72px;
+        padding: 40px 32px;
+        border: 1px solid var(--border-default);
+        border-radius: 4px;
+        text-align: center;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .wf-deck-cta-label {
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--text-tertiary);
+    }
+    .wf-deck-cta-price {
+        font-family: var(--font-accent);
+        font-size: 2rem; font-weight: 400;
+        color: var(--text-primary); line-height: 1;
+    }
+    .wf-deck-cta-note {
+        font-size: 0.9rem; color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+    .wf-deck-cta-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        height: 48px; padding: 0 32px;
+        background: var(--color-action);
+        color: var(--bg-primary);
+        border: none; border-radius: 3px;
+        font-family: var(--font-main);
+        font-size: 0.78rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+    .wf-deck-cta-btn:hover { background: var(--color-action-hover, #c5500a); }
+
+    /* ── QR Section ── */
+    .wf-qr-section {
+        margin-top: 80px;
+        padding-top: 48px;
+        border-top: 1px solid var(--border-default);
+        display: flex; flex-direction: column; align-items: center;
+        text-align: center; gap: 20px;
+    }
+    .wf-qr-eyebrow {
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--text-tertiary);
+    }
+    .wf-qr-title {
+        font-family: var(--font-accent);
+        font-size: 1.4rem; font-weight: 400;
+        color: var(--text-primary);
+    }
+    #wf-qr-img { border-radius: 4px; display: block; width: 200px; height: 200px; }
+    .wf-qr-url {
+        font-size: 0.78rem; color: var(--text-tertiary);
+        letter-spacing: 0.06em; margin-top: -8px;
+    }
+    .wf-print-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 22px;
+        border: 1px solid var(--border-default);
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: var(--font-main);
+        font-size: 0.72rem; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        cursor: pointer; border-radius: 3px;
+        transition: border-color 0.2s, color 0.2s;
+    }
+    .wf-print-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+
+    /* ── Socials ── */
+    .wf-socials {
+        margin-top: 56px;
+        padding-top: 40px;
+        border-top: 1px solid var(--border-default);
+        text-align: center;
+    }
+    .wf-socials-label {
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--text-tertiary); margin-bottom: 16px;
+    }
+    .wf-socials-links {
+        display: flex; gap: 28px; justify-content: center; flex-wrap: wrap;
+    }
+    .wf-socials-links a {
+        font-size: 0.88rem; font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        border-bottom: 1px solid var(--border-default);
+        padding-bottom: 2px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .wf-socials-links a:hover {
+        color: var(--text-primary);
+        border-color: var(--text-primary);
+    }
+
+    /* ── Print styles ── */
+    @media print {
+        .wf-header, .wf-main > .wf-eyebrow,
+        .wf-main > .wf-title, .wf-main > .wf-sub,
+        .wf-form, .wf-thankyou, .wf-deck-cta, .wf-socials { display: none !important; }
+        .wf-qr-section {
+            border: none; margin: 0; padding: 40px;
+            height: 100vh;
+            justify-content: center;
+        }
+        .wf-print-btn { display: none; }
+        .wf-qr-title { font-size: 2rem; }
+        #wf-qr-img { width: 260px !important; height: 260px !important; }
+    }
+</style>
+</head>
+<body>
+
+<header class="wf-header">
+    <img src="images/Mohith LOGO.webp" alt="Mohith Rai Srivastav">
+    <div class="wf-header-text">
+        <div class="wf-header-name">Mohith Rai Srivastav</div>
+        <div class="wf-header-sub">Explorer's Deck &middot; Workshop Feedback</div>
+    </div>
+</header>
+
+<main class="wf-main">
+
+    <span class="wf-eyebrow">Explorer's Deck</span>
+    <h1 class="wf-title">How was<br>the workshop?</h1>
+    <p class="wf-sub">Your card, your experience. Takes about two minutes. It shapes the next workshop.</p>
+
+    <form class="wf-form" id="wfForm" novalidate>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-name">Full Name <span class="req">*</span></label>
+            <input class="wf-input" type="text" id="wf-name" name="name" placeholder="Your full name" autocomplete="name" required>
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-email">Email</label>
+            <input class="wf-input" type="email" id="wf-email" name="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-phone">Mobile</label>
+            <input class="wf-input" type="tel" id="wf-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-date">Workshop date</label>
+            <input class="wf-input" type="date" id="wf-date" name="workshop_date">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-card">Which card did you receive?</label>
+            <input class="wf-input" type="text" id="wf-card" name="card" placeholder="e.g. Card 34, Cathedral Effect, or describe what it was about…">
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-deck-exp">How was your experience with the deck? <span class="req">*</span></label>
+            <textarea class="wf-textarea" id="wf-deck-exp" name="deck_experience" placeholder="A moment, a shift in how you saw something, a question the card left you with…" required></textarea>
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-workshop-exp">How was the workshop overall?</label>
+            <textarea class="wf-textarea" id="wf-workshop-exp" name="workshop_experience" placeholder="The session, the format, the facilitation. What worked, what didn't…"></textarea>
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label">Would you recommend this to someone?</label>
+            <div class="wf-radios">
+                <label><input type="radio" name="recommend" value="Yes"> Yes</label>
+                <label><input type="radio" name="recommend" value="Maybe"> Maybe</label>
+                <label><input type="radio" name="recommend" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label">Did this workshop change the way you look at spaces?</label>
+            <div class="wf-radios" style="flex-direction:column; gap:8px;">
+                <label><input type="radio" name="shift" value="yes-cant-unsee"> Yes, I can't unsee it now</label>
+                <label><input type="radio" name="shift" value="still-processing"> I think so... still processing</label>
+                <label><input type="radio" name="shift" value="need-alone-time"> Ask me again after some alone time</label>
+                <label><input type="radio" name="shift" value="not-yet"> Honestly, not yet</label>
+            </div>
+        </div>
+
+        <div class="wf-field">
+            <label class="wf-label" for="wf-other">Anything else</label>
+            <textarea class="wf-textarea" id="wf-other" name="other" placeholder="Open space. Whatever's on your mind." style="min-height:80px;"></textarea>
+        </div>
+
+        <div>
+            <button type="submit" class="wf-submit" id="wfSubmit">Send feedback</button>
+            <p class="wf-error" id="wfError"></p>
+        </div>
+
+        <!-- Honeypot -->
+        <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+
+    </form>
+
+    <div class="wf-thankyou" id="wfThankyou">
+        <div class="wf-thankyou-icon">✓</div>
+        <h2>Thank you.</h2>
+        <p>Your feedback has been sent. It means a lot.</p>
+    </div>
+
+    <!-- Deck buy section -->
+    <div class="wf-deck-cta">
+        <p class="wf-deck-cta-label">Explorer's Deck &middot; Architecture and Design Edition</p>
+        <p class="wf-deck-cta-price">&#8377;2,100</p>
+        <p class="wf-deck-cta-note">63 cards across six lenses plus Wild. Ships worldwide.</p>
+        <a class="wf-deck-cta-btn" href="https://www.mohithraisrivastav.com/explorers-deck.html">Get the deck</a>
+    </div>
+
+    <!-- QR Code for printing / display at workshop -->
+    <div class="wf-qr-section" id="wfQrSection">
+        <span class="wf-qr-eyebrow">Explorer's Deck · Workshop Feedback</span>
+        <p class="wf-qr-title">Scan to share your experience with the deck</p>
+        <img id="wf-qr-img"
+             src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https%3A%2F%2Fwww.mohithraisrivastav.com%2Fworkshop-feedback.html&bgcolor=FFFCF8&color=1A1612&margin=2"
+             alt="QR code to leave workshop feedback">
+        <p class="wf-qr-url">mohithraisrivastav.com/workshop-feedback.html</p>
+        <button class="wf-print-btn" onclick="window.print()">
+            Print QR code
+        </button>
+    </div>
+    <!-- Social links -->
+    <div class="wf-socials">
+        <p class="wf-socials-label">Stay connected</p>
+        <div class="wf-socials-links">
+            <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.youtube.com/@mohithraisrivastav7517" target="_blank" rel="noopener noreferrer">YouTube</a>
+        </div>
+    </div>
+
+</main>
+
+<script>
+(function () {
+    'use strict';
+
+    var _loadTime = Date.now();
+
+    document.getElementById('wfForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        var btn    = document.getElementById('wfSubmit');
+        var errEl  = document.getElementById('wfError');
+        var name      = document.getElementById('wf-name').value.trim();
+        var email     = document.getElementById('wf-email').value.trim();
+        var phone        = document.getElementById('wf-phone').value.trim();
+        var date         = document.getElementById('wf-date').value;
+        var card         = document.getElementById('wf-card').value.trim();
+        var deck_exp     = document.getElementById('wf-deck-exp').value.trim();
+        var workshop_exp = document.getElementById('wf-workshop-exp').value.trim();
+        var recommend    = document.querySelector('input[name="recommend"]:checked');
+        var shift        = document.querySelector('input[name="shift"]:checked');
+        var other        = document.getElementById('wf-other').value.trim();
+        var honeypot  = document.querySelector('input[name="website"]').value;
+
+        // Bot check
+        if (honeypot || (Date.now() - _loadTime < 2500)) {
+            showThankyou(); return;
+        }
+
+        errEl.style.display = 'none';
+
+        if (!name)     { showError('Please enter your full name.'); return; }
+        if (!deck_exp) { showError('Please share your experience with the deck.'); return; }
+
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+
+        try {
+            var res = await fetch('/api/workshop-feedback', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email:               email || null,
+                    phone:               phone || null,
+                    workshop_date:       date || null,
+                    card:                card || null,
+                    deck_experience:     deck_exp,
+                    workshop_experience: workshop_exp || null,
+                    recommend:           recommend ? recommend.value : null,
+                    shift:               shift ? shift.value : null,
+                    other:               other || null
+                })
+            });
+
+            var data = await res.json();
+            if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong.');
+            showThankyou();
+
+        } catch (err) {
+            btn.disabled = false;
+            btn.textContent = 'Send feedback';
+            showError(err.message || 'Something went wrong. Please try again.');
+        }
+    });
+
+    function showError(msg) {
+        var el = document.getElementById('wfError');
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    function showThankyou() {
+        document.getElementById('wfForm').style.display = 'none';
+        document.getElementById('wfThankyou').style.display = 'block';
+        document.querySelector('.wf-eyebrow').style.display = 'none';
+        document.querySelector('.wf-title').style.display = 'none';
+        document.querySelector('.wf-sub').style.display = 'none';
+    }
+})();
+</script>
+</body>
+</html>

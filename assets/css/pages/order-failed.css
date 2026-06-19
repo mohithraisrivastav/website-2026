@@ -1,4 +1,4 @@
-﻿.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
+.sline-stage{position:fixed;top:120px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
 #slineCanvas{position:absolute;top:0;left:0;}
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,36 +11,32 @@
 
         .fail-wrap { max-width: 700px; margin: 0 auto; padding: 20px 5vw 100px; text-align: center; }
 
-        .x-icon { width: 80px; height: 80px; border: 1px solid rgba(255,100,100,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; }
-        .x-icon svg { width: 32px; height: 32px; fill: #ff6b6b; }
+        .x-icon { width: 72px; height: 72px; border: 1px solid rgba(179,74,58,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 36px; }
+        .x-icon svg { width: 28px; height: 28px; fill: #B34A3A; }
 
-        .fail-label { font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #ff6b6b; text-transform: uppercase; margin-bottom: 20px; }
-        h1 { font-size: clamp(3.125rem, 6vw, 5.625rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 0.95; margin-bottom: 30px; }
-        .fail-msg { font-size: 1.25rem; font-weight: 300; color: #aaa; line-height: 1.8; max-width: 520px; margin: 0 auto 20px; }
+        .fail-label { font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; color: #B34A3A; text-transform: uppercase; margin-bottom: 20px; }
+        h1 { font-size: clamp(2.2rem, 3.5vw, 3rem); font-weight: 300; font-style: normal; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 28px; }
+        .fail-msg { font-size: 1.125rem; font-weight: 300; color: #4A3A33; line-height: 1.8; max-width: 520px; margin: 0 auto 20px; }
 
-        .reason-box { background: #0f0f0f; border: 1px solid #222; padding: 25px; margin: 30px auto; text-align: left; font-size: 1rem; color: #888; max-width: 520px; }
-        .reason-box .label { display: block; font-size: 0.8625rem; color: #555; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; }
+        .reason-box { background: rgba(179,74,58,0.05); border: none; border-left: 2px solid rgba(179,74,58,0.35); padding: 20px 24px; margin: 28px auto; text-align: left; font-size: 1rem; color: #4A3A33; max-width: 520px; }
+        .reason-box .label { display: block; font-size: 0.8625rem; color: #B34A3A; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; }
 
-        .reassure { font-size: 1.063rem; color: #666; line-height: 1.8; margin: 40px auto 50px; max-width: 520px; }
+        .reassure { font-size: 1rem; color: #5C4A3F; line-height: 1.8; margin: 36px auto 50px; max-width: 520px; }
 
         .cta-row { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-        .cta-btn { padding: 18px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
-        .cta-btn:hover { background: #fff; color: #000; border-color: #fff; }
-        .cta-btn.primary { background: #fff; color: #000; border-color: #fff; }
-        .cta-btn.primary:hover { background: transparent; color: #fff; }
+        .cta-btn { padding: 18px 40px; border: 1px solid rgba(26,22,18,0.2); color: var(--text-primary); text-decoration: none; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
+        .cta-btn:hover { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+        .cta-btn.primary { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
+        .cta-btn.primary:hover { background: var(--text-primary); border-color: var(--text-primary); }
 
         @media (max-width: 700px) { .fail-wrap { padding-top: 20px; } }
 
-        /* -- Liquid background light-mode overrides ------------------- */
         body { background: transparent !important; color: var(--text-primary) !important; position: relative; }
         body > * { position: relative; z-index: 1; }
-        .x-icon { border-color: rgba(255,100,100,0.35) !important; }
-        .fail-label { color: #cc4444 !important; }
-        .fail-msg { color: #555 !important; }
- }
-        .reason-box .label { color: #595959 !important; } /* was #888 = 3.5:1 FAIL — #595959 = 5.9:1 PASS */
-        .reassure { color: #666 !important; }
-        .cta-btn { border-color: rgba(26, 22, 18,0.2) !important; color: var(--text-primary) !important; }
-        .cta-btn:hover { background: var(--text-primary) !important; color: var(--bg-primary) !important; border-color: var(--text-primary) !important; }
-        .cta-btn.primary { background: var(--color-accent) !important; color: #fff !important; border-color: var(--color-accent) !important; }
-        .cta-btn.primary:hover { background: var(--text-primary) !important; border-color: var(--text-primary) !important; }
+        .x-icon { border-color: rgba(179,74,58,0.3) !important; }
+        .x-icon svg { fill: #B34A3A !important; }
+        .fail-label { color: #B34A3A !important; }
+        .fail-msg { color: #4A3A33 !important; }
+        .reason-box { background: rgba(179,74,58,0.05) !important; border-left-color: rgba(179,74,58,0.35) !important; color: #4A3A33 !important; }
+        .reason-box .label { color: #B34A3A !important; }
+        .reassure { color: #5C4A3F !important; }
