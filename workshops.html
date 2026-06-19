@@ -696,7 +696,7 @@
                     </button>
                     <div class="edeck-meta">
                       <span>Drawn: <em id="edeckCount">0</em></span>
-                      <span>57 available</span>
+                      <span>63 available</span>
                     </div>
                   </div>
                 </div>
@@ -1461,8 +1461,8 @@
             } else {
               note.textContent=c.n;
             }
-            num.textContent=override?'—':n+' / 57';
-            fill.style.width=(count/57*100)+'%';
+            num.textContent=override?'—':n+' / 63';
+            fill.style.width=(count/63*100)+'%';
             cntEl.textContent=count;
             if(why) why.textContent=c.w||'';
           }
@@ -1476,7 +1476,7 @@
           btn.addEventListener('click',()=>{
             if(busy) return;
             busy=true; btn.disabled=true;
-            let idx, useCTA=(count===57);
+            let idx, useCTA=(count===63);
             if(!useCTA){
               do{ idx=Math.floor(Math.random()*CARDS.length); }
               while(idx===last&&CARDS.length>1);
