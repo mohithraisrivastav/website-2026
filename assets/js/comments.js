@@ -74,23 +74,14 @@
       <div class="cn-list" id="cn-list"></div>
       <form class="cn-form" id="cn-form" novalidate>
         <div class="cn-row">
-          <div class="cn-field">
-            <label for="cn-name">Name</label>
-            <input class="cn-name" id="cn-name" type="text" placeholder="Your name" required>
-          </div>
-          <div class="cn-field">
-            <label for="cn-email">Email <span class="cn-optional">(optional, not published)</span></label>
-            <input class="cn-email" id="cn-email" type="email" placeholder="your@email.com">
-          </div>
+          <label for="cn-name" class="sr-only">Name</label>
+          <input class="cn-name" id="cn-name" type="text" placeholder="Name" required>
+          <label for="cn-email" class="sr-only">Email</label>
+          <input class="cn-email" id="cn-email" type="email" placeholder="Email (optional)">
         </div>
-        <div class="cn-field cn-field--full">
-          <label for="cn-body">Response</label>
-          <textarea class="cn-body" id="cn-body" rows="5" placeholder="Write something…" required></textarea>
-        </div>
-        <div class="cn-actions">
-          <button class="cn-submit" type="submit">Send</button>
-          <span class="cn-moderation">Comments are moderated before they appear.</span>
-        </div>
+        <label for="cn-body" class="sr-only">Response</label>
+        <textarea class="cn-body" id="cn-body" rows="4" placeholder="Leave a response…" required></textarea>
+        <button class="cn-submit" type="submit">Send &#8594;</button>
         <p class="cn-error" style="display:none">Something went wrong. Please try again.</p>
       </form>
     `;
