@@ -4,7 +4,7 @@
 
 (function() {
   var MODAL_ID  = 'nlPopupModal';
-  var FORM_ID   = 'sfFormModal';
+  var FORM_ID   = 'nlForm';
   var INPUT_ID  = 'nlPopupEmail';
   var STORE_KEY = 'nlPopupShown_v3';        // bumped: ignores stale v2 keys
   var TRIGGER   = '#shop-preview';          // section ~36% down the page
@@ -81,7 +81,7 @@
     if (btn) btn.addEventListener('click', close);
 
     var form = document.getElementById(FORM_ID);
-    var okEl = document.getElementById('sfFormModalOk');
+    var okEl = document.getElementById('nlFormOk');
     if (form) {
       form.addEventListener('submit', function(e) {
         e.preventDefault();
