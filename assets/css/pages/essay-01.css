@@ -9,6 +9,7 @@ a{text-decoration:none;color:inherit;}
 .essay-back .crumb{font-size:0.8625rem;font-weight:600;letter-spacing:3px;color:#5E6B73;text-transform:uppercase;}
 }
 .essay-hero{padding:90px 5vw 60px;}
+body .essay-hero{padding-left:5vw !important;padding-right:5vw !important;}
 .essay-hero::before{content: '';display:none;}
 .essay-hero::after{content: '';display:none;}
 .essay-hero .date{font-size:0.8625rem;font-weight:600;letter-spacing:5px;color:#5E6B73;text-transform:uppercase;margin-bottom:18px;display:block;position:relative;z-index:1;}
