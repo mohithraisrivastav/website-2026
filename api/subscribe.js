@@ -8,6 +8,7 @@ const STUDIO_EMAIL  = 'info@mohithraisrivastav.com';
 const UPDATES_EMAIL = 'updates@mohithraisrivastav.com';
 const FROM_ADDRESS  = 'updates@mohithraisrivastav.com';
 const STUDIO_NAME   = 'Mohith Rai Srivastav';
+const AUDIENCE_ID   = process.env.RESEND_AUDIENCE_ID; // set in Vercel env vars
 
 async function resendSend({ to, subject, html, replyTo }) {
     const res = await fetch('https://api.resend.com/emails', {
@@ -31,6 +32,25 @@ async function resendSend({ to, subject, html, replyTo }) {
     return res.json();
 }
 
+// Save the subscriber to a Resend Audience (the mailing list).
+// Best-effort: if no audience is configured or the call fails, signup still succeeds.
+async function resendAddContact(email) {
+    if (!AUDIENCE_ID) return; // audience not set up yet — skip silently
+    const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+        method:  'POST',
+        headers: {
+            'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+            'Content-Type':  'application/json'
+        },
+        body: JSON.stringify({ email, unsubscribed: false })
+    });
+    if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`Resend audience ${res.status}: ${err}`);
+    }
+    return res.json();
+}
+
 module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST')    return res.status(405).json({ error: 'Method not allowed' });
@@ -43,6 +63,9 @@ module.exports = async (req, res) => {
     if (!emailRegex.test(email)) return res.status(400).json({ error: 'Invalid email address.' });
 
     try {
+        // 0. Save subscriber to the mailing list (best-effort — never blocks signup)
+        await resendAddContact(email).catch(e => console.error('Audience add failed:', e.message));
+
         await Promise.all([
             // 1. Thank-you to subscriber
             resendSend({
