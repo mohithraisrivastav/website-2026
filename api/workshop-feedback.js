@@ -5,6 +5,7 @@
 const STUDIO_EMAIL = 'updates@mohithraisrivastav.com';
 const FROM_ADDRESS = 'studio@mohithraisrivastav.com';
 const STUDIO_NAME  = 'Mohith Rai Srivastav';
+const AUDIENCE_ID  = process.env.RESEND_AUDIENCE_ID; // same mailing list as the newsletter
 
 async function resendSend({ to, subject, html, replyTo }) {
     const res = await fetch('https://api.resend.com/emails', {
@@ -24,6 +25,25 @@ async function resendSend({ to, subject, html, replyTo }) {
     if (!res.ok) {
         const err = await res.text();
         throw new Error(`Resend ${res.status}: ${err}`);
+    }
+    return res.json();
+}
+
+// Save the feedback submitter to the Resend Audience (mailing list).
+// Best-effort: only when a valid email is given; never blocks the feedback submit.
+async function resendAddContact(email) {
+    if (!AUDIENCE_ID || !email) return;
+    const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+        method:  'POST',
+        headers: {
+            'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+            'Content-Type':  'application/json'
+        },
+        body: JSON.stringify({ email, unsubscribed: false })
+    });
+    if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`Resend audience ${res.status}: ${err}`);
     }
     return res.json();
 }
@@ -72,6 +92,11 @@ module.exports = async (req, res) => {
             subject: `Workshop Feedback — ${name}`,
             html
         });
+
+        // Save the submitter to the mailing list (best-effort, only if a valid email)
+        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            await resendAddContact(email).catch(e => console.error('Audience add failed:', e.message));
+        }
 
         // Save to Google Sheets via Apps Script web app (set GOOGLE_SHEETS_WEBHOOK in Vercel env)
         if (process.env.GOOGLE_SHEETS_WEBHOOK) {
