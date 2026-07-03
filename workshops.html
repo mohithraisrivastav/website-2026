@@ -555,6 +555,11 @@
     line-height: 1.8;
     margin: 0;
 }
+.ws-inst-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+}
 
 @media (max-width: 768px) {
     .ws-step { grid-template-columns: 44px 1fr; gap: 0 16px; }
@@ -563,6 +568,7 @@
     .ws-audience { grid-template-columns: 1fr; }
     .ws-audience-item { padding-right: 0; }
     .ws-testimonials { grid-template-columns: 1fr; }
+    .ws-inst-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
 /* ── Testimonials ── */
@@ -1050,7 +1056,7 @@
             <div class="section-header fade-up">
                 <h2>For Institutions &amp; Collaborations</h2>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px;">
+            <div class="ws-inst-grid">
                 <div class="fade-up">
                     <span class="ws-inst-label">Bring the workshop to your institution</span>
                     <p style="font-size: clamp(1.5rem, 1.9vw, 2.2rem); font-weight: 300; color: #1A1612; line-height: 1.55; margin-bottom: 36px;">All three formats are available for institutional delivery.</p>
@@ -1343,9 +1349,22 @@
         function tierNotifySubmit(e, form) {
           e.preventDefault();
           var ok = form.nextElementSibling;
+          var emailEl = form.querySelector('input[type="email"]');
+          var email = emailEl ? emailEl.value.trim() : '';
+          var tag = form.getAttribute('data-tag') || '';
+          var tierName = ({ '1day': 'One-Day Immersion', '3day': 'Three-Day Intensive', '7day': 'Six-Day Residency' })[tag] || tag;
+          // Actually record the lead — email the studio via the contact endpoint.
+          if (email) {
+            fetch('/api/contact', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: email, email: email, inquiry_type: 'Workshop Notify', message: 'Wants to be notified about the ' + tierName + ' workshop.' })
+            }).catch(function(){});
+          }
           form.style.display = 'none';
           if (ok) ok.style.display = 'block';
         }
+
 
         let jIndex = 0;
         const jDetail = document.getElementById('journeyDetail');

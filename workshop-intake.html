@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Before we begin — Lived Space</title>
+    <link rel="icon" type="image/webp" href="images/Mohith%20LOGO.webp">
+    <script src="assets/js/theme.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #F7F3ED;
+            color: #1A1612;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .wi-header {
+            padding: 28px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(26,22,18,0.08);
+        }
+        .wi-logo {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #1A1612;
+            text-decoration: none;
+        }
+        .wi-logo span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(26,22,18,0.35);
+            font-family: 'Inter', sans-serif;
+            margin-left: 16px;
+        }
+
+        /* ── Main ── */
+        .wi-main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 72px 48px 96px;
+        }
+
+        /* Booking tag */
+        .wi-booking-tag {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #CFA246;
+            border: 1px solid rgba(207,162,70,0.35);
+            padding: 5px 12px;
+            margin-bottom: 36px;
+        }
+
+        /* Intro */
+        .wi-heading {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 300;
+            line-height: 1.15;
+            color: #1A1612;
+            margin-bottom: 28px;
+        }
+        .wi-intro {
+            font-size: 1.0625rem;
+            line-height: 1.85;
+            color: rgba(26,22,18,0.65);
+            margin-bottom: 16px;
+        }
+        .wi-sign {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: rgba(26,22,18,0.45);
+            margin-bottom: 64px;
+        }
+
+        /* ── Form ── */
+        .wi-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .wi-field {
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(26,22,18,0.08);
+        }
+        .wi-field:first-child {
+            border-top: 1px solid rgba(26,22,18,0.08);
+        }
+
+        .wi-label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(26,22,18,0.38);
+            margin-bottom: 12px;
+        }
+        .wi-label-req::after {
+            content: ' *';
+            color: #CFA246;
+        }
+
+        .wi-question {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #1A1612;
+            margin-bottom: 14px;
+        }
+
+        .wi-input,
+        .wi-textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid rgba(26,22,18,0.15);
+            padding: 10px 0;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #1A1612;
+            outline: none;
+            transition: border-color 0.2s;
+            resize: none;
+            line-height: 1.7;
+        }
+        .wi-input:focus,
+        .wi-textarea:focus {
+            border-bottom-color: #CFA246;
+        }
+        .wi-input::placeholder,
+        .wi-textarea::placeholder {
+            color: rgba(26,22,18,0.22);
+            font-style: italic;
+        }
+        .wi-textarea {
+            min-height: 80px;
+            overflow: hidden;
+        }
+
+        /* ── Submit ── */
+        .wi-submit-wrap {
+            padding-top: 52px;
+        }
+        .wi-submit {
+            background: #1A1612;
+            color: #F7F3ED;
+            border: none;
+            padding: 18px 44px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+        .wi-submit:hover { background: #2e2620; }
+        .wi-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+        .wi-note {
+            margin-top: 16px;
+            font-size: 0.8125rem;
+            color: rgba(26,22,18,0.38);
+            line-height: 1.7;
+        }
+
+        /* ── Success ── */
+        .wi-success {
+            display: none;
+            padding-top: 72px;
+        }
+        .wi-success-heading {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-weight: 300;
+            color: #1A1612;
+            margin-bottom: 20px;
+        }
+        .wi-success-body {
+            font-size: 1.0625rem;
+            line-height: 1.85;
+            color: rgba(26,22,18,0.6);
+            max-width: 480px;
+        }
+
+        @media (max-width: 600px) {
+            .wi-header { padding: 20px 24px; }
+            .wi-main { padding: 48px 24px 72px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="wi-header">
+        <a href="workshops.html" class="wi-logo">
+            Mohith Rai Srivastav
+            <span>Lived Space</span>
+        </a>
+    </header>
+
+    <main class="wi-main">
+
+        <!-- Booking confirmed tag (shown if bookingId in URL) -->
+        <div class="wi-booking-tag" id="bookingTag" style="display:none"></div>
+
+        <!-- Intro -->
+        <h1 class="wi-heading">Before we begin.</h1>
+        <p class="wi-intro">Before the workshop, I like to understand who is coming and how you already see. A few short questions, nothing formal. It helps me shape the session around the people in the room.</p>
+        <p class="wi-sign">— Mohith</p>
+
+        <!-- Form -->
+        <form class="wi-form" id="intakeForm" novalidate>
+
+            <div class="wi-field">
+                <label class="wi-label wi-label-req" for="name">Your name</label>
+                <input class="wi-input" type="text" id="name" name="name" required autocomplete="name" placeholder="First and last name">
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label wi-label-req" for="email">Your email</label>
+                <p class="wi-question">So I can reach you off Instagram.</p>
+                <input class="wi-input" type="email" id="email" name="email" required autocomplete="email" placeholder="your@email.com">
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="practice">What you do</label>
+                <p class="wi-question">Your practice or role.</p>
+                <input class="wi-input" type="text" id="practice" name="practice" placeholder="Architect, photographer, writer…">
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="location">Where you're based</label>
+                <input class="wi-input" type="text" id="location" name="location" placeholder="City, country">
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="medium">Your medium</label>
+                <p class="wi-question">How do you usually make things — sketch, photograph, film, writing, set and space, sound, something else?</p>
+                <textarea class="wi-textarea" id="medium" name="medium" placeholder="Tell me how you work…"></textarea>
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="drewYou">What drew you to Lived Space</label>
+                <textarea class="wi-textarea" id="drewYou" name="drewYou" placeholder="What made you decide to come…"></textarea>
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="hoping">What you're hoping to take from it</label>
+                <textarea class="wi-textarea" id="hoping" name="hoping" placeholder="What you're looking for…"></textarea>
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="whenGoa">When you're thinking of being in Goa</label>
+                <input class="wi-input" type="text" id="whenGoa" name="whenGoa" placeholder="Dates or rough window">
+            </div>
+
+            <div class="wi-field">
+                <label class="wi-label" for="anything">Anything you'd like me to know</label>
+                <textarea class="wi-textarea" id="anything" name="anything" placeholder="Anything at all…"></textarea>
+            </div>
+
+            <div class="wi-submit-wrap">
+                <button class="wi-submit" type="submit" id="submitBtn">Send this to Mohith</button>
+                <p class="wi-note">None of this is graded. There are no wrong answers. I read every one.</p>
+            </div>
+
+        </form>
+
+        <!-- Success state -->
+        <div class="wi-success" id="successState">
+            <h2 class="wi-success-heading">Got it. See you there.</h2>
+            <p class="wi-success-body">I'll read this before we meet. If anything changes or you want to add something, just email me at <a href="mailto:info@mohithraisrivastav.com" style="color:#1A1612;">info@mohithraisrivastav.com</a>.</p>
+        </div>
+
+    </main>
+
+    <script>
+        // Pre-fill from URL params
+        const params = new URLSearchParams(window.location.search);
+
+        const nameVal    = params.get('name');
+        const emailVal   = params.get('email');
+        const bookingVal = params.get('booking');
+
+        if (nameVal)  document.getElementById('name').value  = decodeURIComponent(nameVal);
+        if (emailVal) document.getElementById('email').value = decodeURIComponent(emailVal);
+
+        if (bookingVal) {
+            const tag = document.getElementById('bookingTag');
+            tag.textContent = 'Booking confirmed · ' + decodeURIComponent(bookingVal);
+            tag.style.display = 'inline-block';
+        }
+
+        // Auto-grow textareas
+        document.querySelectorAll('.wi-textarea').forEach(function(ta) {
+            ta.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+        // Form submission
+        document.getElementById('intakeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+
+            const body = {
+                name:      document.getElementById('name').value.trim(),
+                email:     document.getElementById('email').value.trim(),
+                practice:  document.getElementById('practice').value.trim(),
+                location:  document.getElementById('location').value.trim(),
+                medium:    document.getElementById('medium').value.trim(),
+                drewYou:   document.getElementById('drewYou').value.trim(),
+                hoping:    document.getElementById('hoping').value.trim(),
+                whenGoa:   document.getElementById('whenGoa').value.trim(),
+                anything:  document.getElementById('anything').value.trim(),
+                bookingId: bookingVal ? decodeURIComponent(bookingVal) : ''
+            };
+
+            if (!body.name || !body.email) {
+                btn.disabled = false;
+                btn.textContent = 'Send this to Mohith';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/workshop-intake', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (res.ok) {
+                    document.getElementById('intakeForm').style.display = 'none';
+                    document.getElementById('successState').style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Try again';
+                btn.style.background = '#8B2500';
+                setTimeout(function() {
+                    btn.textContent = 'Send this to Mohith';
+                    btn.style.background = '';
+                }, 3000);
+            }
+        });
+    </script>
+
+</body>
+</html>

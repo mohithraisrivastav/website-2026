@@ -110,6 +110,12 @@ module.exports = async (req, res) => {
         </table>
     </td></tr>
 
+    <tr><td style="padding:28px 50px;border-top:1px solid #eee;background:#fafafa;">
+        <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#999;font-weight:700;">One more thing</p>
+        <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:15px;color:#222;line-height:1.75;">Before the workshop, I like to understand who is coming and how you already see. A few short questions, nothing formal.</p>
+        <a href="https://mohithraisrivastav.com/workshop-intake.html?name=${encodeURIComponent(customer.name)}&email=${encodeURIComponent(customer.email)}&booking=${bookingId}" style="display:inline-block;background:#1A1612;color:#F7F3ED;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;text-decoration:none;padding:14px 28px;">Before we begin &rarr;</a>
+    </td></tr>
+
     <tr><td style="padding:20px 50px 40px;border-top:1px solid #eee;">
         <p style="margin:0;font-family:Georgia,serif;font-size:14px;color:#444;line-height:1.7;">Location details and the pre-workshop brief will come closer to the start date. If you have any questions before then, just reply to this email.</p>
     </td></tr>

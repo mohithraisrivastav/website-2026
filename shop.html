@@ -5363,15 +5363,18 @@
             var name  = document.getElementById('wlName').value.trim();
             var email = document.getElementById('wlEmail').value.trim();
             var phone = document.getElementById('wlPhone').value.trim();
-            // Build contact URL as fallback record (fires in background)
             var msg = 'Waitlist request for ' + _wlProductName + '.'
-                    + ' Name: ' + name + '.'
-                    + (phone ? ' Mobile: ' + phone + '.' : '');
-            // Show success after brief delay
-            setTimeout(function() {
+                    + (phone ? ' Phone: ' + phone + '.' : '');
+            function done() {
                 document.getElementById('wlFormView').style.display = 'none';
                 document.getElementById('wlSuccessView').style.display = 'block';
-            }, 600);
+            }
+            // Actually record the lead — email the studio via the contact endpoint.
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, email: email, inquiry_type: 'Product Waitlist', message: msg })
+            }).then(done).catch(done);
         }
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && document.getElementById('waitlistModal').classList.contains('wl-active')) {
