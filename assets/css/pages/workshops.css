@@ -945,7 +945,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 32px;
-    background: var(--text-primary);
+    background: transparent;
     border: 1px solid rgba(207,162,70,0.35);
     border-top: none;
 }
@@ -959,14 +959,14 @@
     font-weight: 700;
     letter-spacing: 3.5px;
     text-transform: uppercase;
-    color: rgba(207,162,70,0.6);
+    color: rgba(207,162,70,0.75);
 }
 .edeck-shop-tagline {
     font-family: var(--font-accent);
     font-size: 1.15rem;
     font-weight: 400;
     font-style: italic;
-    color: rgba(247,243,237,0.88);
+    color: var(--text-primary);
     letter-spacing: 0.01em;
 }
 .edeck-shop-link {
