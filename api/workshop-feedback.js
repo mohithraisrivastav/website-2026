@@ -15,7 +15,7 @@ async function resendSend({ to, subject, html, replyTo }) {
             'Content-Type':  'application/json'
         },
         body: JSON.stringify({
-            from:     `${STUDIO_NAME} Studio <${FROM_ADDRESS}>`,
+            from:     `${STUDIO_NAME} <${FROM_ADDRESS}>`,
             to:       Array.isArray(to) ? to : [to],
             subject,
             html,
@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
 
     const html = `
 <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1A1612;">
-  <h2 style="color:#E2660F;margin-bottom:4px;">Explorer's Deck — Workshop Feedback</h2>
+  <h2 style="color:#E2660F;margin-bottom:4px;">Lived Space — Workshop Feedback</h2>
   <p style="color:#888;margin-top:0;">${workshop_date || 'Date not specified'}</p>
   <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
   <table style="width:100%;border-collapse:collapse;">
