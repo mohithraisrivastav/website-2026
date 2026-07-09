@@ -21,6 +21,31 @@
       "source": "/essay-05.html",
       "destination": "/what-architectural-photography-taught-me-about-space.html",
       "permanent": true
+    },
+    {
+      "source": "/essay-01.html",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/essay-02.html",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/essay-03.html",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/essay-04.html",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/journal.html",
+      "destination": "/blog.html",
+      "permanent": true
     }
   ],
   "rewrites": [
