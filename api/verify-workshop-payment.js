@@ -10,6 +10,78 @@ const STUDIO_EMAIL = 'info@mohithraisrivastav.com';
 const STUDIO_NAME  = 'Mohith Rai Srivastav';
 const FROM_ADDRESS = 'orders@mohithraisrivastav.com';
 
+// ── Airtable sync (Mohith OS) ───────────────────────────────────
+// After a verified payment: increment Seats_Sold on the matching
+// open batch and log the registrant into Alumni. Requires the
+// AIRTABLE_TOKEN env var in Vercel; without it this is a no-op so
+// payments always succeed regardless.
+const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || 'app8BNPNBAoISPWO3';
+
+const TYPE_TO_DURATION = {
+    '1day': '1-Day Intensive',
+    '3day': '3-Day Workshop',
+    '7day': '6-Day Residency'
+};
+
+async function airtable(path, options = {}) {
+    const res = await fetch('https://api.airtable.com/v0/' + AIRTABLE_BASE_ID + '/' + path, {
+        ...options,
+        headers: {
+            'Authorization': 'Bearer ' + process.env.AIRTABLE_TOKEN,
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        }
+    });
+    if (!res.ok) throw new Error('Airtable ' + res.status + ': ' + (await res.text()).slice(0, 300));
+    return res.json();
+}
+
+async function syncRegistrationToAirtable({ workshopType, customer, medium, bookingId }) {
+    if (!process.env.AIRTABLE_TOKEN) {
+        console.warn('Airtable sync skipped: AIRTABLE_TOKEN not set');
+        return;
+    }
+    const duration = TYPE_TO_DURATION[workshopType];
+
+    // Find the nearest future open batch of this duration
+    const today = new Date().toISOString().slice(0, 10);
+    const data = await airtable('Workshops?pageSize=100');
+    const batch = (data.records || [])
+        .filter(r => r.fields
+            && r.fields.Status === 'Open'
+            && r.fields.Duration === duration
+            && r.fields.Date >= today)
+        .sort((a, b) => a.fields.Date.localeCompare(b.fields.Date))[0];
+
+    if (batch) {
+        await airtable('Workshops/' + batch.id, {
+            method: 'PATCH',
+            body: JSON.stringify({ fields: { Seats_Sold: (batch.fields.Seats_Sold || 0) + 1 } })
+        });
+    } else {
+        console.warn('Airtable sync: no open ' + duration + ' batch found for registration ' + bookingId);
+    }
+
+    // Log the registrant so the OS agents can see them
+    await airtable('Alumni', {
+        method: 'POST',
+        body: JSON.stringify({
+            fields: {
+                Name:              customer.name || '',
+                Email:             customer.email || '',
+                Phone:             customer.phone || '',
+                Workshop_Batch:    batch ? (batch.fields.Batch_Name || batch.fields.Date) : (duration + ' (batch unmatched)'),
+                Medium:            medium || '',
+                City:              customer.city || '',
+                Country:           customer.country || '',
+                Status:            'Registered',
+                Last_Contact_Date: today,
+                Notes:             'Auto-logged from paid registration ' + bookingId
+            }
+        })
+    });
+}
+
 async function sendEmail({ to, subject, html, replyTo }) {
     const res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -170,6 +242,14 @@ module.exports = async (req, res) => {
             ]);
         } catch (emailErr) {
             console.error('Workshop email failed (non-fatal):', emailErr);
+        }
+
+        // Sync to Mohith OS (Airtable): Seats_Sold + Alumni record.
+        // Non-fatal — payment confirmation never depends on this.
+        try {
+            await syncRegistrationToAirtable({ workshopType, customer, medium, bookingId });
+        } catch (syncErr) {
+            console.error('Airtable sync failed (non-fatal):', syncErr);
         }
 
         return res.status(200).json({ success: true, bookingId });
