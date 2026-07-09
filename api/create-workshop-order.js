@@ -7,9 +7,9 @@ const Razorpay = require('razorpay');
 
 // Workshop fees in paise (INR × 100) — keep in sync with frontend
 const WORKSHOP_FEES = {
-    '1day': 360000,   // ₹3,600
+    '1day':  390000,  // ₹3,900
     '3day': 1140000,  // ₹11,400
-    '7day': 2400000   // ₹24,000
+    '7day': 2300000   // ₹23,000
 };
 
 module.exports = async (req, res) => {
