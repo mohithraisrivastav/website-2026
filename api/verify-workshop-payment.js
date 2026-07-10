@@ -244,12 +244,32 @@ module.exports = async (req, res) => {
             console.error('Workshop email failed (non-fatal):', emailErr);
         }
 
-        // Sync to Mohith OS (Airtable): Seats_Sold + Alumni record.
-        // Non-fatal — payment confirmation never depends on this.
+        // Sync to Mohith OS: Seats_Sold + Alumni record. Two paths, both
+        // non-fatal and idempotent (booking ID processed exactly once):
+        //   1. GAS webhook (preferred — no Airtable token needed in Vercel)
+        //   2. Direct Airtable write (only if AIRTABLE_TOKEN is set here)
         try {
-            await syncRegistrationToAirtable({ workshopType, customer, medium, bookingId });
+            if (process.env.GAS_WEBHOOK_URL) {
+                await fetch(process.env.GAS_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        bookingId,
+                        name:         customer.name || '',
+                        email:        customer.email || '',
+                        phone:        customer.phone || '',
+                        city:         customer.city || '',
+                        country:      customer.country || '',
+                        workshopType,
+                        medium:       medium || ''
+                    }),
+                    redirect: 'follow'
+                });
+            } else {
+                await syncRegistrationToAirtable({ workshopType, customer, medium, bookingId });
+            }
         } catch (syncErr) {
-            console.error('Airtable sync failed (non-fatal):', syncErr);
+            console.error('Mohith OS sync failed (non-fatal):', syncErr);
         }
 
         return res.status(200).json({ success: true, bookingId });
