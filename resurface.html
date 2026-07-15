@@ -966,12 +966,17 @@
             .chapter-divider .ch-count { margin-left: 0; width: 100%; }
             .entry-title { font-size: clamp(4rem, 15vw, 7rem); }
             .views-narrative { padding-left: 18px; }
+            /* Slimmer frame — 18px reads too thick on a phone-width print */
+            .print-frame { padding: 11px; }
+            .print-frame::after { inset: 10px; }
         }
         @media (max-width: 480px) {
             .views-mosaic { columns: 1; }
             .gallery-station { padding: 12vh 6vw; }
             .station-figure.landscape,
             .station-figure.portrait { width: 92vw; }
+            .print-frame { padding: 8px; }
+            .print-frame::after { inset: 7px; }
         }
     </style>
 </head>
