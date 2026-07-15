@@ -1143,9 +1143,12 @@ body { top: 0 !important; }
     .nav-links     { display: none; }
     .hamburger     { display: flex; }
     .logo          { height: 60px; }
-    .nav-brand     { flex: 1 !important; text-align: center !important; }
-    .nav-brand .name { font-size: 1.125rem !important; letter-spacing: 1.6px !important; }
+    .nav-brand     { flex: 1 1 auto !important; text-align: center !important; padding: 0 8px !important; min-width: 0; }
+    /* Brand name always on one line — the hamburger group must not steal the row */
+    .nav-brand .name { font-size: 1.125rem !important; letter-spacing: 1.6px !important; white-space: nowrap !important; }
     .nav-brand .sub  { display: none !important; }
+    /* Hamburger group sizes to its content only (some pages set flex:1 inline, which starved the brand) */
+    .nav-links-container { flex: 0 0 auto !important; }
     .nav-cart,
     .navbar .cart-icon { display: none !important; }
 
