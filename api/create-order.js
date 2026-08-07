@@ -58,6 +58,60 @@ const NON_PRINT_INTL = { 2: 1500, 3: 2000, 4: 2800, 5: 3500 };
 // Digital products (no shipping)
 const DIGITAL_PRODUCTS = { 'The Matter of Pause (Digital)': true };
 
+// ============================================================
+// PRICE CATALOGUE — the single source of truth for what things cost.
+// The server NEVER trusts the price the browser sends; it rebuilds the
+// correct price here and rejects the order if they disagree. Mirrors
+// calcPrintSizes() and product data in shop.html — keep in sync.
+// ============================================================
+
+// Every fine art print sells at exactly these four price points, keyed by
+// the longest edge in inches (18=Small, 24=Medium, 32=Standard, 42=Large).
+const PRINT_SIZE_PRICE = { 18: 30000, 24: 50000, 32: 85000, 42: 125000 };
+
+// Fixed-price non-print catalogue items (title with size suffix stripped → price).
+const FIXED_PRICES = {
+    "The Explorer's Deck": 2100,
+    // The Matter of Pause is waitlist-only today; allow-listed so a future
+    // enablement doesn't get blocked. Remove if the SKU is retired.
+    'The Matter of Pause (Monograph)': 1500,
+    'The Matter of Pause (Digital)':   999,
+    'The Matter of Pause (Paperback)': 2499,
+};
+
+// Returns the price this item MUST have, or null if the product is unknown.
+function catalogPrice(title) {
+    const base = (title || '').replace(/\s+[—\-–].+$/, '').trim();
+    // Fixed-price items (deck, book) — match full title or base name
+    if (FIXED_PRICES[title] !== undefined) return FIXED_PRICES[title];
+    if (FIXED_PRICES[base]  !== undefined) return FIXED_PRICES[base];
+    // Fine art print — price is set by the largest dimension in the title
+    if (PRINT_SIZE_TIERS[base] !== undefined) {
+        const nums = (title.match(/\d+(?:\.\d+)?/g) || []).map(Number);
+        if (nums.length) {
+            const longest = Math.round(Math.max(...nums));
+            if (PRINT_SIZE_PRICE[longest] !== undefined) return PRINT_SIZE_PRICE[longest];
+        }
+        return null; // print with an unrecognisable size — reject rather than guess
+    }
+    return null; // unknown product
+}
+
+// Throws if any cart item's price does not match the catalogue.
+function assertPricesValid(items) {
+    for (const item of items) {
+        const expected = catalogPrice(item.title);
+        if (expected === null) {
+            const e = new Error('UNKNOWN_PRODUCT'); e.detail = item.title; throw e;
+        }
+        if (Number(item.price) !== expected) {
+            const e = new Error('PRICE_MISMATCH');
+            e.detail = `${item.title}: sent ${item.price}, expected ${expected}`;
+            throw e;
+        }
+    }
+}
+
 function getItemTier(title) {
     // 1. Size name in suffix e.g. "Burnt Earth — Small (46×35 cm)" → 'small'
     const sizeMatch = (title || '').match(/[—\-–]\s*(Small|Medium|Standard|Large)\s*\(/i);
@@ -172,6 +226,18 @@ module.exports = async (req, res) => {
         }
         if (!customer || !customer.email || !customer.name) {
             return res.status(400).json({ error: 'Missing customer details' });
+        }
+
+        // Reject any item whose price does not match the server catalogue.
+        // This is the guard against a tampered cart (e.g. a ₹1 print).
+        try {
+            assertPricesValid(items);
+        } catch (e) {
+            if (e.message === 'PRICE_MISMATCH' || e.message === 'UNKNOWN_PRODUCT') {
+                console.error('create-order rejected:', e.message, e.detail);
+                return res.status(400).json({ error: 'Item pricing could not be verified. Please refresh the shop and try again.' });
+            }
+            throw e;
         }
 
         // Recompute amount server-side (never trust frontend)
