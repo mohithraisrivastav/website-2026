@@ -224,9 +224,19 @@ body { top: 0 !important; }
 
 /* ── Logo ────────────────────────────────────────────────────────────────── */
 
+/* Logo must never be compressed by a tight flex row — keep it square.
+   (Without flex-shrink:0 + max-width:none the img's max-width:100% lets a
+   shrunk parent squash the square monogram into a tall sliver.) */
+.logo-link {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+}
 .logo {
     height: 80px;
     width: auto;
+    flex-shrink: 0;
+    max-width: none;
     opacity: 1;
     transition: opacity 0.3s ease, transform 0.3s ease;
     cursor: pointer;
