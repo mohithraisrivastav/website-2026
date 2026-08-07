@@ -128,8 +128,9 @@
             '.currency-drop.dark .currency-opt:hover{background:rgba(184,92,56,0.1);color:#F5F1E8;}',
             /* On phones the currency picker + hamburger leave no room for the */
             /* centred wordmark, so it overflowed into the picker. The logo    */
-            /* already brands the page — hide the wordmark here.               */
-            '@media (max-width:600px){.navbar .nav-brand{display:none !important;}}',
+            /* already brands the page — hide the wordmark but keep it as a     */
+            /* flex spacer so the picker + menu stay pinned to the right.       */
+            '@media (max-width:600px){.navbar .nav-brand{visibility:hidden !important;}}',
         ].join('');
         document.head.appendChild(style);
 
