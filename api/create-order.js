@@ -31,8 +31,16 @@ const PRINT_SHIPPING_RATES = {
     large:    { 0: 4000, 1: 8000 },
 };
 
-// Non-print domestic (books, decks) — flat per order
+// Non-print domestic (books, etc.) — flat per order
 const NON_PRINT_DOMESTIC = { 0: 250, 1: 450 };
+
+// Explorer's Deck — weight-based rates (must match checkout.js CONFIG)
+const DECK_PRODUCTS = ["The Explorer's Deck"];
+const DECK_SHIPPING_DOMESTIC = { 0: 149, 1: 249 };
+const DECK_SHIPPING_INTL     = { 2: 899, 3: 1299, 4: 1799, 5: 2299 };
+
+// Products priced at MRP (tax-inclusive) — GST is not added on top (must match checkout.js)
+const TAX_INCLUSIVE_PRODUCTS = ["The Explorer's Deck"];
 
 // Country → zone (non-print international only; prints require quote)
 const COUNTRY_ZONES = {
@@ -72,6 +80,16 @@ function isDigital(title) {
     return !!DIGITAL_PRODUCTS[(title || '').replace(/\s+[—\-–].+$/, '').trim()];
 }
 
+function isDeck(title) {
+    const base = (title || '').replace(/\s+[—\-–].+$/, '').trim();
+    return DECK_PRODUCTS.includes(title) || DECK_PRODUCTS.includes(base);
+}
+
+function isTaxInclusive(title) {
+    const base = (title || '').replace(/\s+[—\-–].+$/, '').trim();
+    return TAX_INCLUSIVE_PRODUCTS.includes(title) || TAX_INCLUSIVE_PRODUCTS.includes(base);
+}
+
 function resolveZone(customer) {
     const country = (customer.country || 'IN').toUpperCase();
     if (country === 'IN') {
@@ -97,8 +115,9 @@ function computeTotal(items, customer) {
 
     const subtotal = items.reduce((s, i) => s + Number(i.price) * (i.qty || 1), 0);
 
-    // Shipping: fixed rate per crate tier for prints; flat per-order for non-prints
+    // Shipping: per-crate tier for prints; weight-based for the deck; flat per-order for other non-prints
     let printCost       = 0;
+    let deckCost        = 0;
     let hasNonPrintPhys = false;
 
     for (const item of items) {
@@ -108,6 +127,10 @@ function computeTotal(items, customer) {
         if (tier) {
             const rates = PRINT_SHIPPING_RATES[tier] || PRINT_SHIPPING_RATES.standard;
             printCost  += (rates[zone] !== undefined ? rates[zone] : rates[1]) * qty;
+        } else if (isDeck(item.title)) {
+            const rates    = international ? DECK_SHIPPING_INTL : DECK_SHIPPING_DOMESTIC;
+            const fallback = international ? DECK_SHIPPING_INTL[5] : DECK_SHIPPING_DOMESTIC[1];
+            deckCost += ((zone in rates) ? rates[zone] : fallback) * qty;
         } else {
             hasNonPrintPhys = true;
         }
@@ -120,9 +143,18 @@ function computeTotal(items, customer) {
             : (NON_PRINT_DOMESTIC[zone] !== undefined ? NON_PRINT_DOMESTIC[zone] : NON_PRINT_DOMESTIC[1]);
     }
 
-    const shipping = printCost + nonPrintCost;
-    const gst      = !international ? Math.round((subtotal + shipping) * GST_RATE) : 0;
-    const total    = subtotal + shipping + gst;
+    const shipping = printCost + deckCost + nonPrintCost;
+
+    // GST: 12% on taxable portion (subtotal + shipping), domestic only.
+    // Tax-inclusive products (e.g. Explorer's Deck, priced at MRP) are excluded.
+    const taxInclusiveSubtotal = items
+        .filter(i => isTaxInclusive(i.title))
+        .reduce((s, i) => s + Number(i.price) * (i.qty || 1), 0);
+    const taxableSubtotal = subtotal - taxInclusiveSubtotal;
+    const gst   = (!international && taxableSubtotal > 0)
+        ? Math.round((taxableSubtotal + shipping) * GST_RATE)
+        : 0;
+    const total = subtotal + shipping + gst;
 
     return { subtotal, shipping, gst, total };
 }
