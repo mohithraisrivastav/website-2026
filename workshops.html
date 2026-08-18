@@ -36,7 +36,9 @@
     <meta name="twitter:title" content="Lived Space Workshop | Goa &amp; India | Mohith Rai Srivastav">
     <meta name="twitter:description" content="Open to photographers, architects, writers, and filmmakers. 1-day, 3-day, and 7-day formats. Led by Mohith Rai Srivastav. Runs across Goa, Hyderabad, and India.">
     <meta name="twitter:image" content="https://www.mohithraisrivastav.com/images/Burnt%20Earth.webp">
-    <script type="application/ld+json">
+    <!-- Course instances are rewritten at runtime from
+         assets/js/workshop-cohorts.js; the dates below are the no-JS fallback. -->
+    <script type="application/ld+json" id="workshopSchema">
     {
       "@context": "https://schema.org",
       "@type": "Course",
@@ -896,37 +898,20 @@
             <div class="section-header fade-up"><h2>2026 &ndash; 2027 Schedule</h2></div>
             <p class="fade-up" style="font-size: 1.075rem; color: #1A1612; line-height: 1.9; max-width: 720px; margin-bottom: 48px;">All sessions are held in Goa, India, with a group size max of 12–15. Apply early; cohorts fill in order.</p>
 
+            <!-- Dates are filled from assets/js/workshop-cohorts.js so past
+                 cohorts drop off on their own. Add new dates in that file. -->
             <div class="ws-trio fade-up" style="align-items:start;">
                 <div class="ws-trio-item">
                     <span class="ws-trio-label">One-Day Immersion &middot; &#8377;3,900 + GST</span>
-                    <p class="ws-trio-text" style="line-height:2.1;">
-                        9 August 2026<br>
-                        2 September 2026<br>
-                        9 November 2026<br>
-                        5 December 2026<br>
-                        1 February 2027<br>
-                        3 March 2027
-                    </p>
+                    <p class="ws-trio-text" style="line-height:2.1;" data-cohort-list="1day"></p>
                 </div>
                 <div class="ws-trio-item">
                     <span class="ws-trio-label">Three-Day Intensive &middot; &#8377;11,400 + GST</span>
-                    <p class="ws-trio-text" style="line-height:2.1;">
-                        20 &ndash; 22 July 2026<br>
-                        5 &ndash; 7 August 2026<br>
-                        4 &ndash; 6 September 2026<br>
-                        11 &ndash; 13 November 2026<br>
-                        6 &ndash; 8 December 2026<br>
-                        3 &ndash; 5 February 2027<br>
-                        5 &ndash; 7 March 2027
-                    </p>
+                    <p class="ws-trio-text" style="line-height:2.1;" data-cohort-list="3day"></p>
                 </div>
                 <div class="ws-trio-item">
                     <span class="ws-trio-label">Six-Day Residency &middot; &#8377;23,000 + GST</span>
-                    <p class="ws-trio-text" style="line-height:2.1;">
-                        1 &ndash; 6 October 2026<br>
-                        9 &ndash; 14 January 2027<br>
-                        1 &ndash; 6 April 2027
-                    </p>
+                    <p class="ws-trio-text" style="line-height:2.1;" data-cohort-list="7day"></p>
                 </div>
             </div>
         </section>
@@ -1135,7 +1120,7 @@
     <button class="wcta-btn" style="font-size: 1rem; padding: 22px 48px; cursor: pointer;" onclick="window.location.href='workshop-register.html?type=1day'">Apply now →</button>
     <p style="margin-top: 16px; font-size: 0.9rem; color: rgba(252,250,246,0.6);">Payment is taken securely at checkout. The location is confirmed 48 hours before.</p>
     <p class="wcta-availability" style="margin-top: 28px;">
-        <span class="wcta-dot"></span> Next dialogue · 20 to 22 July 2026 · Goa
+        <span class="wcta-dot"></span> Next dialogue · <span id="wctaNextDate">20 to 22 July 2026 · Goa</span>
     </p>
     <p style="margin-top: 36px; font-size: 0.9rem; color: rgba(252,250,246,0.5);">
         Running a programme or institution?<br>
@@ -1208,6 +1193,7 @@
         </div>
     </div></main>
 
+    <script src="assets/js/workshop-cohorts.js"></script>
     <script>
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -1297,6 +1283,99 @@
     href: 'workshop-register.html?type=7day'
   }
 ];
+
+        /* --- Cohort dates -------------------------------------------------
+           Every date on this page comes from assets/js/workshop-cohorts.js.
+           Past cohorts drop off on their own, so the schedule, the "Next Date"
+           panel, and the schema stay current without being edited. Add new
+           dates in that file and nowhere else. */
+        (function syncCohortDates() {
+          var WC = window.WorkshopCohorts;
+          if (!WC) return;
+
+          var NONE = 'New dates announced soon';
+
+          /* "Next Date" on each format panel, and the tier strip cards. A
+             format with no dates left falls back to the existing TBA card. */
+          journeyData.forEach(function (t) {
+            var next = WC.next(t.notifyTag);
+            if (next) {
+              t.date = WC.stripPlace(next.label) + ' · Goa';
+              t.confirmed = true;
+            } else {
+              t.date = NONE;
+              t.confirmed = false;
+            }
+          });
+
+          /* The format panel only re-renders on click or hover, so its opening
+             state is the markup itself. Point it at the first format's date. */
+          var initialDate = document.getElementById('jdtDate');
+          if (initialDate && journeyData[0]) initialDate.textContent = journeyData[0].date;
+
+          /* Closing banner shows the soonest cohort of any format. */
+          var soonest = ['1day', '3day', '7day']
+            .map(function (k) { return WC.next(k); })
+            .filter(Boolean)
+            .sort(function (a, b) { return a.start < b.start ? -1 : 1; })[0];
+          var wctaNext = document.getElementById('wctaNextDate');
+          if (wctaNext) wctaNext.textContent = soonest ? WC.stripPlace(soonest.label) + ' · Goa' : NONE;
+
+          /* The three schedule columns. */
+          document.querySelectorAll('[data-cohort-list]').forEach(function (el) {
+            var list = WC.upcoming(el.getAttribute('data-cohort-list'));
+            if (!list.length) {
+              el.textContent = NONE;
+              return;
+            }
+            el.innerHTML = list.map(function (c) {
+              return WC.stripPlace(c.label);
+            }).join('<br>');
+          });
+
+          /* Rebuild the course schema so search engines only ever see cohorts
+             that are still open. The markup in <head> is the no-JS fallback. */
+          (function refreshSchema() {
+            var tag = document.getElementById('workshopSchema');
+            if (!tag) return;
+            var data;
+            try { data = JSON.parse(tag.textContent); } catch (e) { return; }
+
+            var NAMES = {
+              '1day': 'The One-Day Immersion',
+              '3day': 'The Three-Day Intensive',
+              '7day': 'The Six-Day Residency'
+            };
+            var PRICES = { '1day': '3900', '3day': '11400', '7day': '23000' };
+            var byName = {};
+            (data.hasCourseInstance || []).forEach(function (i) { byName[i.name] = i; });
+
+            var instances = [];
+            Object.keys(NAMES).forEach(function (key) {
+              var template = byName[NAMES[key]];
+              WC.upcoming(key).forEach(function (c) {
+                var inst = template
+                  ? JSON.parse(JSON.stringify(template))
+                  : {
+                      '@type': 'CourseInstance',
+                      name: NAMES[key],
+                      courseMode: 'onsite',
+                      location: { '@type': 'Place', name: 'Goa, India', address: { '@type': 'PostalAddress', addressLocality: 'Goa', addressCountry: 'IN' } },
+                      instructor: { '@type': 'Person', name: 'Mohith Rai Srivastav', url: 'https://www.mohithraisrivastav.com/' },
+                      offers: { '@type': 'Offer', price: PRICES[key], priceCurrency: 'INR', availability: 'https://schema.org/InStock', url: 'https://www.mohithraisrivastav.com/workshops.html' }
+                    };
+                inst.startDate = c.start;
+                inst.endDate = c.end;
+                instances.push(inst);
+              });
+            });
+
+            if (!instances.length) return;
+            data.hasCourseInstance = instances;
+            tag.textContent = JSON.stringify(data, null, 2);
+          })();
+        })();
+
         /* --- Tier Strip Builder --- */
         (function buildTierStrip() {
           var calSvg = '<svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="0.5" y="1.5" width="10" height="10" rx="1.5" stroke="#CFA246"/><path d="M3 0.5V2.5M8 0.5V2.5M0.5 4.5H10.5" stroke="#CFA246" stroke-linecap="round"/></svg>';

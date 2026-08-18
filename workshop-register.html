@@ -346,6 +346,7 @@
         <a href="checkout.html" class="checkout-btn">Proceed to Checkout</a>
     </div>
 </div>
+<script src="assets/js/workshop-cohorts.js"></script>
 <script src="assets/js/currency.js"></script>
 <script src="assets/js/cart.js"></script>
 <script src="assets/js/site.js"></script>
@@ -388,36 +389,11 @@
         }
     };
 
-    const COHORTS = {
-        '1day': [
-            { start: '2026-08-09', label: '9 August 2026 – Goa' },
-            { start: '2026-09-02', label: '2 September 2026 – Goa' },
-            { start: '2026-11-09', label: '9 November 2026 – Goa' },
-            { start: '2026-12-05', label: '5 December 2026 – Goa' },
-            { start: '2027-02-01', label: '1 February 2027 – Goa' },
-            { start: '2027-03-03', label: '3 March 2027 – Goa' }
-        ],
-        '3day': [
-            { start: '2026-07-20', label: '20‑22 July 2026 – Goa' },
-            { start: '2026-08-05', label: '5‑7 August 2026 – Goa' },
-            { start: '2026-09-04', label: '4‑6 September 2026 – Goa' },
-            { start: '2026-11-11', label: '11‑13 November 2026 – Goa' },
-            { start: '2026-12-06', label: '6‑8 December 2026 – Goa' },
-            { start: '2027-02-03', label: '3‑5 February 2027 – Goa' },
-            { start: '2027-03-05', label: '5‑7 March 2027 – Goa' }
-        ],
-        '7day': [
-            { start: '2026-10-01', label: '1‑6 October 2026 – Goa' },
-            { start: '2027-01-09', label: '9‑14 January 2027 – Goa' },
-            { start: '2027-04-01', label: '1‑6 April 2027 – Goa' }
-        ]
-    };
-
+    // Cohort dates live in assets/js/workshop-cohorts.js, so one edit there
+    // updates this dropdown, the schedule on workshops.html, and the schema.
     // Only offer cohorts whose start date has not passed.
     function upcomingCohorts(type) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return (COHORTS[type] || []).filter(c => new Date(c.start + 'T00:00:00') >= today);
+        return window.WorkshopCohorts ? window.WorkshopCohorts.upcoming(type) : [];
     }
 
     /* ── State ────────────────────────────────────────────── */
