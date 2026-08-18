@@ -90,7 +90,8 @@
             min-height: calc(100vh - var(--nav-height));
             display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
             align-items: center; gap: 4vw;
-            padding: calc(var(--nav-height) + 4vh) 6vw 8vh;
+            /* body already offsets the fixed navbar, so only breathing room here */
+            padding: 4vh 6vw 8vh;
             background-image: var(--contour);
             position: relative;
         }
@@ -264,7 +265,7 @@
 
         /* ── Responsive ──────────────────────────────────────────────────── */
         @media (max-width: 980px) {
-            .ed-hero { grid-template-columns: 1fr; padding-top: calc(var(--nav-height) + 2vh); min-height: 0; }
+            .ed-hero { grid-template-columns: 1fr; padding-top: 2vh; min-height: 0; }
             .ed-hero-right { height: 300px; margin-top: 5vh; }
             .ed-lens { grid-template-columns: 10px 1fr auto; gap: 16px; padding: 22px 0; }
             .ed-lens .ln-count { justify-self: end; }
