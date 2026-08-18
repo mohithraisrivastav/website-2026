@@ -10,3 +10,11 @@ showreel/.cache/
 showreel/out/
 GOAF-For Catalog/.claude/worktrees/
 .backup/
+
+# Digital products offering — kept in the repo, not deployed.
+# api/subscribe.js is the NEWSLETTER handler and must stay deployed.
+assets.html
+membership.html
+shop-digital.html
+api/create-subscription.js
+api/verify-subscription.js
