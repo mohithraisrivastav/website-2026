@@ -234,14 +234,20 @@
     });
 
     /* ── Init ────────────────────────────────────────────────────────────── */
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () {
+    /* The picker builds only where <body data-currency-picker> opts in, so this
+       module can load sitewide to keep cart totals in the visitor's currency
+       without adding a picker to every navbar. */
+    function _init() {
+        if (document.body && document.body.hasAttribute('data-currency-picker')) {
             _buildPicker();
-            _updateStaticPrices();
-        });
-    } else {
-        _buildPicker();
+        }
         _updateStaticPrices();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _init);
+    } else {
+        _init();
     }
 
 }());
