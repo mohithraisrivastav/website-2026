@@ -8,7 +8,7 @@ node_modules/
 showreel/node_modules/
 showreel/.cache/
 showreel/out/
-GOAF-For Catalog/.claude/worktrees/
+GOAF-For Catalog/
 .backup/
 
 # Digital products offering — kept in the repo, not deployed.

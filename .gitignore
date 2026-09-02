@@ -7,3 +7,9 @@ node_modules/
 
 .vercel
 .env*.local
+
+# Project archives and agent/tooling output do not belong in the website repo.
+GOAF-For Catalog/
+
+# Local junction to .agents/skills. Tracking it duplicates every skill file.
+.claude/skills/
