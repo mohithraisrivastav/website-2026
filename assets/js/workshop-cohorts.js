@@ -16,6 +16,7 @@
         '1day': [
             { start: '2026-08-09', end: '2026-08-09', label: '9 August 2026 – Goa' },
             { start: '2026-09-02', end: '2026-09-02', label: '2 September 2026 – Goa' },
+            { start: '2026-09-11', end: '2026-09-11', label: '11 September 2026 – Goa' },
             { start: '2026-11-09', end: '2026-11-09', label: '9 November 2026 – Goa' },
             { start: '2026-12-05', end: '2026-12-05', label: '5 December 2026 – Goa' },
             { start: '2027-02-01', end: '2027-02-01', label: '1 February 2027 – Goa' },
@@ -25,6 +26,7 @@
             { start: '2026-07-20', end: '2026-07-22', label: '20‑22 July 2026 – Goa' },
             { start: '2026-08-05', end: '2026-08-07', label: '5‑7 August 2026 – Goa' },
             { start: '2026-09-04', end: '2026-09-06', label: '4‑6 September 2026 – Goa' },
+            { start: '2026-09-22', end: '2026-09-24', label: '22‑24 September 2026 – Goa' },
             { start: '2026-11-11', end: '2026-11-13', label: '11‑13 November 2026 – Goa' },
             { start: '2026-12-06', end: '2026-12-08', label: '6‑8 December 2026 – Goa' },
             { start: '2027-02-03', end: '2027-02-05', label: '3‑5 February 2027 – Goa' },
