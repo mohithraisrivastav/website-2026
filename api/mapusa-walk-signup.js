@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
         </table>
     </td></tr>
     <tr><td style="padding:18px 40px;background:#fafafa;border-top:1px solid #eee;">
-        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#bbb;letter-spacing:1px;">Questions? Reply directly to this email or write to info@mohithraisrivastav.com</p>
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#bbb;letter-spacing:1px;">Questions? Reply directly to this email or write to updates@mohithraisrivastav.com</p>
     </td></tr>
 </table>
 </body></html>`;
