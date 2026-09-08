@@ -53,6 +53,25 @@ module.exports = async (req, res) => {
 
         const subject = `Mapusa Market Walk · ${day} · ${name}`;
 
+        const participantHtml = `
+<!DOCTYPE html><html><body style="margin:0;padding:30px 20px;background:#F7F3ED;font-family:Georgia,serif;">
+<table cellpadding="0" cellspacing="0" width="560" style="margin:0 auto;background:#fff;border:1px solid #eee;">
+    <tr><td style="padding:36px 40px 28px;">
+        <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#CFA246;font-weight:700;">Mapusa Market Walk</p>
+        <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:26px;font-weight:400;color:#1A1612;">You're in.</h2>
+        <p style="margin:0 0 14px;font-size:15px;line-height:1.8;color:#333;">I'll send you the meeting details and anything else you need before the walk.</p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.8;color:#333;">See you at Mapusa Market.</p>
+        <table cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #eee;padding-top:20px;margin-top:4px;">
+            ${row('Day', day)}
+            ${row('Where', 'Mapusa Market, Goa')}
+        </table>
+    </td></tr>
+    <tr><td style="padding:18px 40px;background:#fafafa;border-top:1px solid #eee;">
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#bbb;letter-spacing:1px;">Questions? Reply directly to this email or write to info@mohithraisrivastav.com</p>
+    </td></tr>
+</table>
+</body></html>`;
+
         const studioHtml = `
 <!DOCTYPE html><html><body style="margin:0;padding:30px 20px;background:#f5f5f5;font-family:Arial,sans-serif;">
 <table cellpadding="0" cellspacing="0" width="620" style="margin:0 auto;background:#fff;border:1px solid #ddd;">
@@ -74,12 +93,20 @@ module.exports = async (req, res) => {
 </table>
 </body></html>`;
 
-        await sendEmail({
-            to: STUDIO_EMAIL,
-            subject,
-            html: studioHtml,
-            replyTo: email
-        });
+        await Promise.all([
+            sendEmail({
+                to: email,
+                subject: `You're in · Mapusa Market Walk · ${day}`,
+                html: participantHtml,
+                replyTo: STUDIO_EMAIL
+            }),
+            sendEmail({
+                to: STUDIO_EMAIL,
+                subject,
+                html: studioHtml,
+                replyTo: email
+            })
+        ]);
 
         return res.status(200).json({ success: true });
 
