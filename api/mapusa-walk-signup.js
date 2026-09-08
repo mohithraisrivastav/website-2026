@@ -4,7 +4,7 @@
 // studio as a formatted brief. Free event — no payment involved.
 // ============================================================
 
-const STUDIO_EMAIL = 'info@mohithraisrivastav.com';
+const STUDIO_EMAIL = 'updates@mohithraisrivastav.com';
 const STUDIO_NAME  = 'Mohith Rai Srivastav';
 const FROM_ADDRESS = 'orders@mohithraisrivastav.com';
 
