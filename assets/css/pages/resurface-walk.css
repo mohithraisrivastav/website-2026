@@ -229,3 +229,38 @@ html.gw-on .back-to-top, html.gw-on #backToTop { display: none !important; }
 #gw.gw-narrow .gw-link { white-space: nowrap; letter-spacing: 2.5px; }
 #gw.gw-narrow .gw-hud .gw-closer { letter-spacing: 2.5px !important; white-space: nowrap; }
 #gw.gw-narrow .gw-note { margin-right: -150px; }
+
+/* ── Phones: the room holds still, no scroll; swipe, buttons and strip move you ── */
+html.gw-on.gw-fixed-on { scroll-snap-type: none; }
+html.gw-on #gw.gw-fixed { height: 100vh; height: 100svh; }
+html.gw-on #gw.gw-fixed .gw-snap { display: none; }
+html.gw-on #gw.gw-fixed #gw-canvas { touch-action: none; }
+
+/* ── Narrow screens: type sized and weighted to be read on a phone ── */
+#gw.gw-narrow .gw-hud .gw-eyebrow { font-size: 0.75rem !important; letter-spacing: 2.5px !important; color: rgba(26,22,18,0.72); }
+#gw.gw-narrow .gw-hud .gw-title { font-size: 1.75rem !important; font-weight: 400; }
+#gw.gw-narrow .gw-hud .gw-ed { font-size: 0.75rem !important; letter-spacing: 1.5px !important; color: rgba(26,22,18,0.72); }
+#gw.gw-narrow .gw-hud .gw-note { font-size: 0.9375rem !important; color: rgba(26,22,18,0.8); }
+#gw.gw-narrow .gw-link { font-size: 0.8125rem; letter-spacing: 1.5px; color: #1A1612; }
+#gw.gw-narrow .gw-hud .gw-closer { font-size: 0.8125rem !important; letter-spacing: 1.5px !important; color: rgba(26,22,18,0.78); }
+#gw.gw-narrow .gw-hud .gw-readbtn {
+    height: 40px; padding: 0 16px !important; border: 1px solid rgba(26,22,18,0.35); border-radius: 20px; color: #1A1612;
+}
+#gw.gw-narrow .gw-hud .gw-planbtn { font-size: 0.75rem; letter-spacing: 1.5px !important; height: 40px; }
+#gw.gw-narrow .gw-btn svg { width: 22px; height: 22px; stroke-width: 1.6; }
+#gw.gw-narrow .gw-tile { height: 48px; }
+#gw.gw-narrow .gw-tile:has(img) { width: 56px; }
+#gw.gw-narrow .gw-hud .gw-tile-txt { font-size: 0.6875rem; letter-spacing: 1px !important; color: rgba(26,22,18,0.8); }
+#gw.gw-narrow .gw-tile { opacity: .88; }
+#gw.gw-narrow .gw-hint { font-size: 0.8125rem; letter-spacing: 2.5px; color: rgba(26,22,18,0.75); }
+#gw.gw-narrow .gw-close { font-size: 0.75rem; letter-spacing: 1.5px; color: rgba(26,22,18,0.8); }
+#gw.gw-narrow .gw-hud .gw-plan-eyebrow { font-size: 0.6875rem !important; letter-spacing: 2px; color: rgba(26,22,18,0.65); }
+#gw.gw-narrow .gw-plan-svg .mark .lbl { font-size: 13px; fill: rgba(26,22,18,0.85); }
+#gw.gw-narrow .gw-plan-svg .mark .lbl .num { fill: rgba(26,22,18,0.5); }
+#gw.gw-narrow .gw-plan-svg .entrance, #gw.gw-narrow .gw-plan-svg .scale-t { font-size: 11px; fill: rgba(26,22,18,0.65); }
+#gw.gw-narrow .gw-hud .gw-read-body p { font-size: 1.3rem !important; color: rgba(26,22,18,0.9); }
+#gw.gw-narrow .gw-hud .gw-read-body .gw-r-eyebrow, #gw.gw-narrow .gw-hud .gw-read-body .gw-r-small { font-size: 0.75rem !important; letter-spacing: 1.5px; color: rgba(26,22,18,0.65); }
+#gw.gw-narrow .gw-r-specs dt { font-size: 0.75rem; letter-spacing: 1.5px; color: rgba(26,22,18,0.62); }
+#gw.gw-narrow .gw-r-specs dd { font-size: 1rem; }
+#gw.gw-narrow .gw-cap { padding-right: 160px; }
+#gw.gw-narrow .gw-hud .gw-eyebrow { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

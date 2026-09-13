@@ -159,7 +159,23 @@ async function main() {
         return lines.length * lh;
     }
 
+    /* Phones in portrait: text walls are typeset as a narrow column with larger lettering */
+    const COLUMN = innerWidth / innerHeight < 0.9;
+    const COLUMN_W = 1.3;
+
     function panel(widthM, blocks) {
+        if (COLUMN && widthM > COLUMN_W) {
+            const f = Math.max(0.42, COLUMN_W / widthM);
+            const small = b => ({ ...b, size: b.size * 1.45 });                 // captions and labels up
+            blocks = blocks.map(b => {
+                if (b.kind === 'row') return { ...b, label: small(b.label), value: { ...b.value, size: b.value.size * 1.25 } };
+                if (!b.size) return b;
+                if (b.size > 0.1) return { ...b, size: Math.max(b.size * f, 0.1) };
+                if (b.size < 0.035) return small(b);
+                return b.size < 0.05 ? { ...b, size: b.size * 1.25 } : b;   // body copy set small on the wide wall
+            });
+            widthM = COLUMN_W;
+        }
         const Wpx = Math.round(widthM * PPM);
         const cv = document.createElement('canvas');
         cv.width = Wpx; cv.height = 8;
@@ -321,7 +337,7 @@ async function main() {
         const top = 2.5;
         wall.place(p.mesh, -p.w / 2, top, 0.006);
         lightPool(wall, 0, top - p.h / 2 + 0.3, p.w + 2.2, 3.4);
-        stations.push({ key: 'entry', label: 'Entry', short: 'Entry', name: e.title, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: e.series });
+        stations.push({ key: 'entry', label: 'Entry', short: 'Entry', name: e.title, text: true, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: e.series });
     }
 
     /* On the Work */
@@ -337,7 +353,7 @@ async function main() {
         const top = Math.max(EYE + p.h / 2, p.h + 0.55);
         wall.place(p.mesh, -p.w / 2, top, 0.006);
         lightPool(wall, 0, top - p.h / 2 + 0.3, p.w + 2, p.h + 2);
-        stations.push({ key: 'intro', label: 'On the Work', short: 'Statement', name: i.label, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: i.label });
+        stations.push({ key: 'intro', label: 'On the Work', short: 'Statement', name: i.label, text: true, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: i.label });
     }
 
     /* Print Decisions */
@@ -355,13 +371,24 @@ async function main() {
             { kind: 'gap', h: 0.07 },
             ...m.notes.map(sg => ({ segs: sg, family: 'serif', weight: 300, size: 0.046, lh: 1.5, color: INK(0.74), mb: 0.04 })),
         ]);
-        const total = head.w + 0.4 + body.w;
-        const span = total + 1.2, wall = nextWall(span);
-        const top = Math.max(EYE + body.h / 2, body.h + 0.55);
-        wall.place(head.mesh, -total / 2, top, 0.006);
-        wall.place(body.mesh, -total / 2 + head.w + 0.4, top, 0.006);
-        lightPool(wall, 0, top - body.h / 2 + 0.3, total + 2, body.h + 2);
-        stations.push({ key: 'material', label: 'Print Decisions', short: 'Print', name: 'Print Decisions', wall, cu: 0, cy: top - body.h / 2, bw: total, bh: body.h, eyebrow: 'Print Decisions' });
+        if (COLUMN) {
+            /* heading above the specs and notes */
+            const bh = head.h + 0.12 + body.h;
+            const wall = nextWall(body.w + 1.2);
+            const top = Math.max(EYE + bh / 2, bh + 0.55);
+            wall.place(head.mesh, -body.w / 2, top, 0.006);
+            wall.place(body.mesh, -body.w / 2, top - head.h - 0.12, 0.006);
+            lightPool(wall, 0, top - bh / 2 + 0.3, body.w + 2, bh + 2);
+            stations.push({ key: 'material', label: 'Print Decisions', short: 'Print', name: 'Print Decisions', text: true, wall, cu: 0, cy: top - bh / 2, bw: body.w, bh, eyebrow: 'Print Decisions' });
+        } else {
+            const total = head.w + 0.4 + body.w;
+            const span = total + 1.2, wall = nextWall(span);
+            const top = Math.max(EYE + body.h / 2, body.h + 0.55);
+            wall.place(head.mesh, -total / 2, top, 0.006);
+            wall.place(body.mesh, -total / 2 + head.w + 0.4, top, 0.006);
+            lightPool(wall, 0, top - body.h / 2 + 0.3, total + 2, body.h + 2);
+            stations.push({ key: 'material', label: 'Print Decisions', short: 'Print', name: 'Print Decisions', text: true, wall, cu: 0, cy: top - body.h / 2, bw: total, bh: body.h, eyebrow: 'Print Decisions' });
+        }
     }
 
     /* Exhibition narrative, then the exhibition views on the same wall */
@@ -381,7 +408,7 @@ async function main() {
         const top = Math.max(EYE + p.h / 2, p.h + 0.5);
         wall.place(p.mesh, -p.w / 2, top, 0.006);
         lightPool(wall, 0, top - p.h / 2 + 0.3, p.w + 2, p.h + 2);
-        stations.push({ key: 'story', label: v.title, short: 'GOAF', name: v.title, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: v.eyebrow });
+        stations.push({ key: 'story', label: v.title, short: 'GOAF', name: v.title, text: true, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: v.eyebrow });
     }
     {
         /* salon hang: justified rows */
@@ -431,7 +458,7 @@ async function main() {
         const top = Math.max(EYE + p.h / 2, p.h + 0.55);
         wall.place(p.mesh, -p.w / 2, top, 0.006);
         lightPool(wall, 0, top - p.h / 2 + 0.3, p.w + 2, p.h + 2);
-        stations.push({ key: 'chapter', label: c.num, short: 'Ch. I', name: `${c.num} · ${c.name}`, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: `${c.num} · ${c.name}` });
+        stations.push({ key: 'chapter', label: c.num, short: 'Ch. I', name: `${c.num} · ${c.name}`, text: true, wall, cu: 0, cy: top - p.h / 2, bw: p.w, bh: p.h, eyebrow: `${c.num} · ${c.name}` });
     }
 
     /* The nine works */
@@ -475,7 +502,7 @@ async function main() {
         endWall.place(ch2P.mesh, -ch2P.w / 2, chTop, 0.006);
         const pool = softPlane(POOL, 5, 3.6, 0.45); pool.renderOrder = 1;
         endWall.place(pool, 0, EYE + 0.3, 0.004);
-        stations.push({ key: 'ch2', label: c2.num, short: 'Ch. II', name: c2.num, wall: endWall, cu: 0, cy: chTop - ch2P.h / 2, bw: ch2P.w, bh: ch2P.h, eyebrow: c2.num, maxD: 9 });
+        stations.push({ key: 'ch2', label: c2.num, short: 'Ch. II', name: c2.num, text: true, wall: endWall, cu: 0, cy: chTop - ch2P.h / 2, bw: ch2P.w, bh: ch2P.h, eyebrow: c2.num, maxD: 9 });
     }
 
     /* Architecture of the corridor */
@@ -542,6 +569,12 @@ async function main() {
         const bw = work && narrow ? st.pw : st.bw;
         let cu = work && narrow ? st.pu : st.cu, cy = st.cy;
         let D = Math.max((bw * 0.5 * 1.16) / tH, (st.bh * 0.5 * 1.14) / tV);
+        if (narrow && st.text) {
+            /* fill the width so the lettering is readable; a tall wall is framed from its top */
+            D = (st.bw * 0.5 * 1.1) / tH;
+            const visH = 2 * D * tV;
+            if (st.bh > visH * 0.94) cy = st.cy + st.bh / 2 - visH * 0.47;
+        }
         if (work && zoom > 0.001) {
             const Dc = Math.max((st.pw * 0.5 * 1.05) / tH, (st.ph * 0.5 * 1.05) / tV);
             D = lerp(D, Dc, zoom); cu = lerp(cu, st.pu, zoom); cy = lerp(cy, st.py, zoom);
@@ -572,7 +605,10 @@ async function main() {
     const zooms = new Float32Array(N);
     const mouse = { x: 0, y: 0, sx: 0, sy: 0 };
 
+    /* On phones the room holds still on screen: no scroll, only swipe, buttons and the strip */
+    let fixed = false;
     function readScroll() {
+        if (fixed) return;
         const t = clamp(-root.getBoundingClientRect().top / stepPx, 0, POSITIONS - 1) - 1;
         if (jump) {
             if (Math.abs(t - jump.to) < 0.05) return;
@@ -590,7 +626,7 @@ async function main() {
         setZoom(-1);
         const dist = Math.abs(i - p);
         jump = null;
-        scrollTo({ top: stationTop(i), behavior: 'instant' });
+        if (!fixed) scrollTo({ top: stationTop(i), behavior: 'instant' });
         pTarget = i;
         if (REDUCED) { p = i; return; }
         if (dist <= 1.05) return;
@@ -599,8 +635,10 @@ async function main() {
     }
     const step = d => goTo(Math.round(jump ? jump.to : pTarget) + d);
 
+    let lastW = 0;
     function resize() {
         const keep = Math.round(jump ? jump.to : pTarget);
+        const widthChanged = innerWidth !== lastW; lastW = innerWidth;
         const r = root.getBoundingClientRect();
         const inWalk = r.top <= 1 && r.bottom >= innerHeight - 1;
         const w = stage.clientWidth, h = stage.clientHeight;
@@ -610,12 +648,20 @@ async function main() {
         cam.fov = cam.aspect < 0.62 ? 60 : cam.aspect < 0.9 ? 52 : 40;
         cam.updateProjectionMatrix();
         root.classList.toggle('gw-narrow', narrow);
+        fixed = COARSE_PTR && Math.min(innerWidth, innerHeight) <= 600;
+        root.classList.toggle('gw-fixed', fixed);
+        document.documentElement.classList.toggle('gw-fixed-on', fixed);
         reserve.top = ($('.navbar')?.offsetHeight || 70) + 8;
         reserve.bottom = reserve.bottomTarget = (bottom.offsetHeight || 150) + 12;
         measureStep();
-        if (inWalk) { jump = null; scrollTo({ top: stationTop(keep), behavior: 'instant' }); pTarget = keep; p = keep; }
+        /* phone toolbars resize the viewport while you move; only re-seat the camera when the width really changed */
+        if (widthChanged && (inWalk || fixed)) {
+            jump = null; pTarget = keep; p = keep;
+            if (!fixed) scrollTo({ top: stationTop(keep), behavior: 'instant' });
+        }
         readScroll();
         if (!plan.hidden) drawPlan();
+        setHint?.();
     }
     addEventListener('resize', resize);
 
@@ -672,6 +718,7 @@ async function main() {
         if (swipe && touches.size === 1 && e.type === 'pointerup') {
             const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y, dt = performance.now() - swipe.t;
             if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 800) { step(dx < 0 ? 1 : -1); swallowClick = true; }
+            else if (fixed && Math.abs(dy) > 45 && Math.abs(dy) > Math.abs(dx) * 1.4 && dt < 800) { step(dy < 0 ? 1 : -1); swallowClick = true; }
         }
         touches.delete(e.pointerId);
         if (touches.size < 2) pinch = null;
@@ -701,7 +748,7 @@ async function main() {
     $('#gwRail')?.remove();
     const cap = $('#gwCap'), hint = $('#gwHint');
     const COARSE = matchMedia('(pointer: coarse)').matches;
-    hint.textContent = COARSE ? 'Swipe or scroll to walk' : 'Scroll or use the arrow keys to walk';
+    const setHint = () => { hint.textContent = fixed ? 'Swipe to walk' : COARSE ? 'Swipe or scroll to walk' : 'Scroll or use the arrow keys to walk'; };
 
     const bottom = el('div', 'gw-bottom');
     const bar = el('div', 'gw-bar');
@@ -926,7 +973,7 @@ async function main() {
                 cap.appendChild(el('p', 'gw-note', `${COARSE ? 'Tap' : 'Click'} a photograph to enlarge`));
             }
             if (READ[st.key]) {
-                const rb = el('button', 'gw-closer', 'Read'); rb.type = 'button';
+                const rb = el('button', 'gw-closer gw-readbtn', narrow ? 'Read the text' : 'Read'); rb.type = 'button';
                 rb.addEventListener('click', () => openRead(st.key));
                 act.appendChild(rb);
             }
