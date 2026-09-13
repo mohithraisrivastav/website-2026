@@ -10,6 +10,8 @@ showreel/.cache/
 showreel/out/
 GOAF-For Catalog/
 .backup/
+Work/Projects/Scape Living/
+ar-files.zip
 
 # Digital products offering — kept in the repo, not deployed.
 # api/subscribe.js is the NEWSLETTER handler and must stay deployed.
@@ -18,3 +20,10 @@ membership.html
 shop-digital.html
 api/create-subscription.js
 api/verify-subscription.js
+
+# Mapusa Market Walk — both dates have happened. Taken offline while
+# the archive is rebuilt (pin-up-wall redesign in progress).
+# Registration is pointless now too. Remove both lines below to
+# bring the pages back once the archive is ready.
+mapusa-market-walk.html
+mapusa-market-walk-register.html
