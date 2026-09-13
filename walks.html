@@ -144,12 +144,37 @@
             transition: background 0.2s;
         }
         .wk-card-cta:hover { background: #2e2620; }
+        .wk-card-cta--ghost {
+            background: transparent;
+            color: #1A1612;
+            border: 1.5px solid rgba(26,22,18,0.25);
+        }
+        .wk-card-cta--ghost:hover { background: rgba(26,22,18,0.04); border-color: rgba(26,22,18,0.4); }
 
         .wk-empty-note {
-            margin-top: 40px;
-            font-size: 0.875rem;
-            line-height: 1.7;
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            color: rgba(26,22,18,0.45);
+        }
+
+        .wk-group + .wk-group {
+            margin-top: 72px;
+        }
+        .wk-group-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
             color: rgba(26,22,18,0.4);
+            margin-bottom: 24px;
+        }
+        .wk-group-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .wk-card--past {
+            opacity: 0.92;
         }
 
         @media (max-width: 600px) {
@@ -231,18 +256,41 @@
         <h1 class="wk-heading">Walks</h1>
         <p class="wk-intro">I occasionally organise walks. Come join me, explore a place together, and see what we find.</p>
 
-        <div class="wk-card">
-            <div class="wk-card-label">Upcoming</div>
-            <h2 class="wk-card-title">Mapusa Market Walk</h2>
-            <p class="wk-card-body">This time, we're meeting at Mapusa Market. Come spend a morning exploring the market, noticing what catches your attention, and seeing where it takes you.</p>
-            <div class="wk-card-meta">
-                <span class="wk-card-meta-item"><strong>When</strong> — 9:00 to 11:30 AM (approx.), Fri 11 or Sun 13 September</span>
-                <span class="wk-card-meta-item"><strong>Where</strong> — Mapusa Market, Goa</span>
+        <!-- ══════════════════════════════════════════════════════════════
+             UPCOMING — add a new .wk-card inside .wk-group-cards for each
+             walk that's still open to join. Remove this whole .wk-group
+             if nothing is currently scheduled — the empty note below
+             stands in for it.
+        ══════════════════════════════════════════════════════════════ -->
+        <div class="wk-group">
+            <div class="wk-group-label">Upcoming</div>
+            <div class="wk-group-cards">
+                <p class="wk-empty-note">Nothing scheduled right now. Check back soon, or follow along on <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener noreferrer" style="color:#1A1612;">Instagram</a> for the next one.</p>
             </div>
-            <a href="mapusa-market-walk.html" class="wk-card-cta">Join the walk</a>
         </div>
 
-        <p class="wk-empty-note">More walks will be listed here as they're scheduled.</p>
+        <!-- ══════════════════════════════════════════════════════════════
+             PAST WALKS — add a new .wk-card.wk-card--past per completed
+             walk, CTA reads "Explore the walk" and links to that walk's
+             detail/archive page.
+        ══════════════════════════════════════════════════════════════ -->
+        <div class="wk-group">
+            <div class="wk-group-label">Past walks</div>
+            <div class="wk-group-cards">
+
+                <div class="wk-card wk-card--past">
+                    <div class="wk-card-label">Mapusa Market</div>
+                    <h2 class="wk-card-title">Mapusa Market Walk</h2>
+                    <p class="wk-card-body">A free creative walk through Mapusa Market, open to anyone who makes things in their own medium.</p>
+                    <div class="wk-card-meta">
+                        <span class="wk-card-meta-item"><strong>When</strong> — 9:00 to 11:30 AM (approx.), Fri 11 or Sun 13 September</span>
+                        <span class="wk-card-meta-item"><strong>Where</strong> — Mapusa Market, Goa</span>
+                    </div>
+                    <a href="mapusa-market-walk.html" class="wk-card-cta wk-card-cta--ghost">Explore the walk</a>
+                </div>
+
+            </div>
+        </div>
 
     </main>
 

@@ -17,13 +17,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#CFA246">
     <meta name="robots" content="index, follow">
-    <title>Join the Mapusa Market Walk — Mohith Rai Srivastav</title>
-    <meta name="description" content="A free creative walk through Mapusa Market, Goa. Choose Friday or Sunday.">
+    <title>Mapusa Market Walk — Mohith Rai Srivastav</title>
+    <meta name="description" content="A free creative walk through Mapusa Market, Goa. What it is, and what came out of it.">
     <meta name="author" content="Mohith Rai Srivastav">
     <link rel="canonical" href="https://www.mohithraisrivastav.com/mapusa-market-walk.html">
     <meta property="og:site_name" content="Mohith Rai Srivastav">
-    <meta property="og:title" content="Join the Mapusa Market Walk">
-    <meta property="og:description" content="A free creative walk through Mapusa Market, Goa. Choose Friday or Sunday.">
+    <meta property="og:title" content="Mapusa Market Walk">
+    <meta property="og:description" content="A free creative walk through Mapusa Market, Goa. What it is, and what came out of it.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.mohithraisrivastav.com/mapusa-market-walk.html">
     <meta property="og:locale" content="en_US">
@@ -45,9 +45,9 @@
 
         /* ── Main ── */
         .mw-main {
-            max-width: 680px;
+            max-width: 780px;
             margin: 0 auto;
-            padding: 48px 48px 96px;
+            padding: 48px 48px 120px;
         }
 
         .mw-meta {
@@ -91,206 +91,185 @@
             font-size: 1.0625rem;
             line-height: 1.85;
             color: rgba(26,22,18,0.65);
+            max-width: 560px;
             margin-bottom: 16px;
         }
         .mw-intro:last-of-type {
-            margin-bottom: 64px;
+            margin-bottom: 40px;
         }
 
-        /* ── Form ── */
-        .mw-form {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .mw-field {
-            padding: 28px 0;
-        }
-        .mw-field:first-child {
-            border-top: 1px solid rgba(26,22,18,0.08);
-        }
-        .mw-field + .mw-field {
-            border-top: none;
-        }
-
-        .mw-label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: rgba(26,22,18,0.38);
-            margin-bottom: 12px;
-        }
-        .mw-label-req::after {
-            content: ' *';
-            color: #CFA246;
-        }
-
-        .mw-question {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 1.2rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #1A1612;
-            margin-bottom: 14px;
-        }
-
-        .mw-input {
-            display: block;
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1.5px solid rgba(26,22,18,0.15);
-            border-radius: 0;
-            -webkit-appearance: none;
-            appearance: none;
-            padding: 10px 2px;
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 16px;
-            line-height: 1.5;
-            font-weight: 300;
-            color: #1A1612;
-            outline: none;
-            caret-color: #CFA246;
-            transition: border-color 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .mw-input:focus {
-            border-bottom-color: #CFA246;
-        }
-        .mw-input::placeholder {
-            color: rgba(26,22,18,0.22);
-            font-style: italic;
-        }
-        .mw-input:-webkit-autofill,
-        .mw-input:-webkit-autofill:hover,
-        .mw-input:-webkit-autofill:focus {
-            -webkit-text-fill-color: #1A1612;
-            -webkit-box-shadow: 0 0 0px 1000px #F7F3ED inset;
-            box-shadow: 0 0 0px 1000px #F7F3ED inset;
-            transition: background-color 9999s ease-in-out 0s;
-        }
-        @media (min-width: 601px) {
-            .mw-input { font-size: 1.1rem; }
-        }
-
-        /* Day selection */
-        .mw-days {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 4px;
-        }
-        .mw-day-option {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            border: 1.5px solid rgba(26,22,18,0.15);
-            padding: 16px 18px;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .mw-day-option:hover {
-            border-color: rgba(207,162,70,0.5);
-        }
-        .mw-day-option.selected {
-            border-color: #CFA246;
-            background: rgba(207,162,70,0.06);
-        }
-        .mw-day-option input[type="radio"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(26,22,18,0.3);
-            position: relative;
-            cursor: pointer;
-            margin: 0;
-        }
-        .mw-day-option input[type="radio"]:checked {
-            border-color: #CFA246;
-        }
-        .mw-day-option input[type="radio"]:checked::after {
-            content: '';
-            position: absolute;
-            top: 3px; left: 3px;
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: #CFA246;
-        }
-        .mw-day-text {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: #1A1612;
-        }
-        .mw-day-time {
-            font-size: 0.95rem;
-            font-weight: 300;
-            font-style: italic;
-            color: rgba(26,22,18,0.5);
-        }
-        .mw-days-note {
-            margin-top: 14px;
-            font-size: 0.875rem;
-            line-height: 1.7;
-            color: rgba(26,22,18,0.5);
-        }
-
-        /* ── Submit ── */
-        .mw-submit-wrap {
-            padding-top: 52px;
-        }
-        .mw-submit {
+        .mw-cta {
+            display: inline-block;
             background: #1A1612;
             color: #F7F3ED;
             border: none;
-            padding: 18px 44px;
+            padding: 16px 36px;
             font-family: 'Inter', sans-serif;
             font-size: 0.8125rem;
             font-weight: 600;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: background 0.2s, opacity 0.2s;
+            text-decoration: none;
+            transition: background 0.2s;
         }
-        .mw-submit:hover { background: #2e2620; }
-        .mw-submit:disabled { opacity: 0.45; cursor: not-allowed; }
-        .mw-note {
-            margin-top: 16px;
-            font-size: 0.8125rem;
-            color: rgba(26,22,18,0.38);
-            line-height: 1.7;
-        }
+        .mw-cta:hover { background: #2e2620; }
 
-        /* ── Success ── */
-        .mw-success {
-            display: none;
-            padding-top: 72px;
+        /* ── From the Walk ── */
+        .mw-archive {
+            margin-top: 96px;
+            padding-top: 56px;
+            border-top: 1px solid rgba(26,22,18,0.12);
         }
-        .mw-success-heading {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: clamp(2rem, 3.5vw, 2.8rem);
-            font-weight: 300;
-            color: #1A1612;
+        .mw-archive-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #CFA246;
             margin-bottom: 20px;
         }
-        .mw-success-body {
+        .mw-archive-intro {
             font-size: 1.0625rem;
             line-height: 1.85;
-            color: rgba(26,22,18,0.6);
-            max-width: 480px;
+            color: rgba(26,22,18,0.65);
+            max-width: 600px;
+            margin-bottom: 64px;
         }
-        .mw-success-body + .mw-success-body {
-            margin-top: 12px;
+
+        .mw-date-block + .mw-date-block {
+            margin-top: 88px;
+        }
+        .mw-date-heading {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(1.6rem, 2.6vw, 2rem);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #1A1612;
+            margin-bottom: 14px;
+        }
+        .mw-date-intro {
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            color: rgba(26,22,18,0.55);
+            max-width: 560px;
+            margin-bottom: 44px;
+        }
+
+        /* ── Pin-up board ── */
+        .mw-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 36px 28px;
+        }
+
+        .mw-entry {
+            position: relative;
+            background: #fff;
+            border: 1px solid rgba(26,22,18,0.1);
+            padding: 22px 22px 26px;
+            box-shadow: 0 3px 10px rgba(26,22,18,0.06);
+        }
+        .mw-entry:nth-child(3n+1) { transform: rotate(-0.6deg); }
+        .mw-entry:nth-child(3n+2) { transform: rotate(0.5deg); }
+        .mw-entry:nth-child(3n)   { transform: rotate(-0.3deg); }
+
+        .mw-entry-media {
+            width: 100%;
+            margin-bottom: 16px;
+            overflow: hidden;
+            background: rgba(26,22,18,0.04);
+        }
+        .mw-entry-media img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .mw-entry-media.mw-entry-media--empty {
+            aspect-ratio: 4 / 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6875rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(26,22,18,0.28);
+        }
+
+        .mw-entry-name {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1A1612;
+            margin-bottom: 4px;
+        }
+        .mw-entry-role {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(26,22,18,0.4);
+            margin-bottom: 14px;
+        }
+
+        .mw-entry-quote {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: #1A1612;
+            border-left: 2px solid #CFA246;
+            padding-left: 14px;
+            margin-bottom: 18px;
+        }
+
+        /* Audio — primary, prominent */
+        .mw-entry-audio {
+            margin-bottom: 14px;
+        }
+        .mw-entry-audio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #1A1612;
+            margin-bottom: 8px;
+        }
+        .mw-entry-audio-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #CFA246;
+            flex-shrink: 0;
+        }
+        .mw-entry-audio audio {
+            width: 100%;
+            height: 38px;
+            accent-color: #CFA246;
+        }
+
+        .mw-entry-extra {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed rgba(26,22,18,0.12);
+        }
+        .mw-entry-extra a {
+            font-size: 0.8125rem;
+            color: #1A1612;
+            text-decoration: underline;
+            text-decoration-color: rgba(207,162,70,0.5);
+            text-underline-offset: 3px;
         }
 
         @media (max-width: 600px) {
-            .mw-main { padding: 28px 24px 72px; }
+            .mw-main { padding: 28px 24px 96px; }
+            .mw-archive { margin-top: 64px; padding-top: 40px; }
+            .mw-date-block + .mw-date-block { margin-top: 64px; }
+            .mw-entry:nth-child(n) { transform: none; }
         }
     </style>
 </head>
@@ -365,67 +344,56 @@
 
         <div class="mw-tag">Free · Open to all creatives</div>
 
-        <h1 class="mw-heading">Join the Mapusa Market Walk</h1>
+        <h1 class="mw-heading">Mapusa Market Walk</h1>
         <p class="mw-intro">Explore, observe, and find stories, details, rhythms and moments. Respond to what you find through your own medium.</p>
-        <p class="mw-intro">Friday and Sunday are separate walks. Choose the day you'd like to join.</p>
+        <p class="mw-intro">Friday and Sunday are separate walks, same format.</p>
 
         <div class="mw-meta">
             <span class="mw-meta-item"><strong>When</strong> — 9:00 to 11:30 AM (approx.), Fri 11 or Sun 13 September</span>
             <span class="mw-meta-item"><strong>Where</strong> — Mapusa Market, Goa</span>
         </div>
 
-        <!-- Form -->
-        <form class="mw-form" id="mwForm" novalidate>
+        <a href="mapusa-market-walk-register.html" class="mw-cta">Join the walk</a>
 
-            <div class="mw-field">
-                <label class="mw-label mw-label-req" for="name">Name</label>
-                <input class="mw-input" type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
-            </div>
+        <!-- ══════════════════════════════════════════════════════════════
+             FROM THE WALK — the archive.
+             Add a new .mw-date-block for each date once material exists.
+             Add a new .mw-entry inside a board for each participant.
+             Nothing here reveals the exercises, timing or cards used —
+             keep it that way for future participants.
+        ══════════════════════════════════════════════════════════════ -->
+        <section class="mw-archive">
+            <div class="mw-archive-label">From the walk</div>
+            <p class="mw-archive-intro">Participants moved through Mapusa Market on their own, working in their own medium, responding to whatever caught their attention. What's below is what came out of it.</p>
 
-            <div class="mw-field">
-                <label class="mw-label mw-label-req" for="mobile">Mobile number</label>
-                <input class="mw-input" type="tel" id="mobile" name="mobile" required autocomplete="tel" placeholder="+91 XXXXX XXXXX">
-            </div>
+            <!-- ── Date block: duplicate this whole <div class="mw-date-block"> for each session ── -->
+            <div class="mw-date-block">
+                <h2 class="mw-date-heading">Friday, 11 September 2026</h2>
+                <p class="mw-date-intro">The first walk. A small group, spread out through the market on their own for a couple of hours.</p>
 
-            <div class="mw-field">
-                <label class="mw-label mw-label-req" for="email">Email</label>
-                <input class="mw-input" type="email" id="email" name="email" required autocomplete="email" placeholder="Your email address">
-            </div>
+                <div class="mw-board">
 
-            <div class="mw-field">
-                <label class="mw-label" for="practice">What do you do?</label>
-                <p class="mw-question">Your profession, medium or practice</p>
-                <input class="mw-input" type="text" id="practice" name="practice" placeholder="Architect, photographer, sound designer, poet, ceramicist, student, or I just like making things">
-            </div>
+                    <!-- ── Participant entry — copy this whole <article> block per person ── -->
+                    <article class="mw-entry">
+                        <div class="mw-entry-media mw-entry-media--empty">Photograph pending</div>
+                        <div class="mw-entry-name">Participant Name</div>
+                        <div class="mw-entry-role">Photographer</div>
+                        <blockquote class="mw-entry-quote">A short line in their own words goes here, exactly as they said or wrote it.</blockquote>
+                        <div class="mw-entry-audio">
+                            <div class="mw-entry-audio-label">Voice note</div>
+                            <audio controls preload="none" src=""></audio>
+                        </div>
+                        <div class="mw-entry-extra">
+                            <a href="#">Additional work &rarr;</a>
+                        </div>
+                    </article>
+                    <!-- ── End participant entry — this one is a placeholder. Replace name, photo, quote and audio src with real material. ── -->
 
-            <div class="mw-field">
-                <label class="mw-label mw-label-req">Which walk would you like to join?</label>
-                <div class="mw-days" id="dayOptions">
-                    <label class="mw-day-option" data-day="Friday, 11 September 2026">
-                        <input type="radio" name="day" value="Friday, 11 September 2026 · 9:00–11:30 AM" required>
-                        <span class="mw-day-text">Friday, 11 September <span class="mw-day-time">· 9:00 – 11:30 AM (approx.)</span></span>
-                    </label>
-                    <label class="mw-day-option" data-day="Sunday, 13 September 2026">
-                        <input type="radio" name="day" value="Sunday, 13 September 2026 · 9:00–11:30 AM">
-                        <span class="mw-day-text">Sunday, 13 September <span class="mw-day-time">· 9:00 – 11:30 AM (approx.)</span></span>
-                    </label>
                 </div>
-                <p class="mw-days-note">Both walks are the same format but completely separate. You don't need to attend both.</p>
             </div>
+            <!-- ── End date block ── -->
 
-            <div class="mw-submit-wrap">
-                <button class="mw-submit" type="submit" id="submitBtn">Join the walk</button>
-            </div>
-
-        </form>
-
-        <!-- Success state -->
-        <div class="mw-success" id="successState">
-            <h2 class="mw-success-heading">You're in.</h2>
-            <p class="mw-success-body">I'll send you the meeting details and anything else you need before the walk.</p>
-            <p class="mw-success-body">See you at Mapusa Market.</p>
-            <p class="mw-success-body">Questions? <a href="https://wa.me/919014753403" target="_blank" rel="noopener noreferrer" style="color:#1A1612;">Send me a message</a>.</p>
-        </div>
+        </section>
 
     </main>
 
@@ -486,73 +454,16 @@
 <script src="assets/js/preloader.js"></script>
 <script src="assets/js/transitions.js"></script>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.getElementById('hamburgerBtn');
-            menu.classList.toggle('active');
-            burger.classList.toggle('active');
-            burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
-            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
-        }
-        // Highlight selected day option
-        document.querySelectorAll('.mw-day-option').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                document.querySelectorAll('.mw-day-option').forEach(function(o) { o.classList.remove('selected'); });
-                opt.classList.add('selected');
-            });
-        });
-
-        // Form submission
-        document.getElementById('mwForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const form = document.getElementById('mwForm');
-            const btn = document.getElementById('submitBtn');
-
-            const name     = document.getElementById('name').value.trim();
-            const mobile   = document.getElementById('mobile').value.trim();
-            const email    = document.getElementById('email').value.trim();
-            const practice = document.getElementById('practice').value.trim();
-            const dayEl    = form.querySelector('input[name="day"]:checked');
-
-            if (!name || !mobile || !email || !dayEl) {
-                if (!dayEl) {
-                    document.getElementById('dayOptions').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Sending…';
-
-            const body = { name, mobile, email, practice, day: dayEl.value };
-
-            try {
-                const res = await fetch('/api/mapusa-walk-signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-
-                if (res.ok) {
-                    document.getElementById('mwForm').style.display = 'none';
-                    document.getElementById('successState').style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    throw new Error('Server error');
-                }
-            } catch (err) {
-                btn.disabled = false;
-                btn.textContent = 'Try again';
-                btn.style.background = '#8B2500';
-                setTimeout(function() {
-                    btn.textContent = 'Join the walk';
-                    btn.style.background = '';
-                }, 3000);
-            }
-        });
-    </script>
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const burger = document.getElementById('hamburgerBtn');
+        menu.classList.toggle('active');
+        burger.classList.toggle('active');
+        burger.setAttribute('aria-expanded', menu.classList.contains('active').toString());
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+</script>
 
 </body>
 </html>
