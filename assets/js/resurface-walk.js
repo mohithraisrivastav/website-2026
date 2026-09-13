@@ -31,7 +31,7 @@ async function main() {
     const orig = $('#gw-original');
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, COARSE_PTR ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(devicePixelRatio, COARSE_PTR ? 2.5 : 2));   // phone screens are ~3x; lettering needs the density
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
     const MAX_ANISO = renderer.capabilities.getMaxAnisotropy();
@@ -114,7 +114,11 @@ async function main() {
     ]);
 
     /* ── Wall text: typeset onto canvas at print resolution ── */
-    const PPM = COARSE_PTR ? 540 : 720;   // lighter wall-text textures on phones and tablets
+    /* Phones in portrait: text walls are typeset as a narrow column with larger lettering */
+    const COLUMN = innerWidth / innerHeight < 0.9;
+    const COLUMN_W = 1.3;
+    /* wall lettering is painted at the density it is seen at: a column filling a phone needs ~1000 px per metre */
+    const PPM = COLUMN ? 1000 : 720;
     const SERIF = '"Cormorant Garamond", Georgia, serif', SANS = 'Inter, system-ui, sans-serif';
     const INK = a => `rgba(26,22,18,${a})`;
 
@@ -158,10 +162,6 @@ async function main() {
         }
         return lines.length * lh;
     }
-
-    /* Phones in portrait: text walls are typeset as a narrow column with larger lettering */
-    const COLUMN = innerWidth / innerHeight < 0.9;
-    const COLUMN_W = 1.3;
 
     function panel(widthM, blocks) {
         if (COLUMN && widthM > COLUMN_W) {

@@ -264,3 +264,16 @@ html.gw-on #gw.gw-fixed #gw-canvas { touch-action: none; }
 #gw.gw-narrow .gw-r-specs dd { font-size: 1rem; }
 #gw.gw-narrow .gw-cap { padding-right: 160px; }
 #gw.gw-narrow .gw-hud .gw-eyebrow { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Phones: the bottom bar is solid enough that wall text never reads through it */
+#gw.gw-narrow .gw-bottom {
+    background: linear-gradient(to top, rgba(233,228,219,0.99) 0%, rgba(233,228,219,0.97) 82%, rgba(233,228,219,0) 100%);
+}
+/* Read panel: emphasis stays in the text face (global styles were swapping it for a sans) */
+.gw-hud .gw-read-body em {
+    font-family: 'Cormorant Garamond', Georgia, serif !important; font-size: inherit !important;
+    font-weight: inherit !important; letter-spacing: inherit !important; font-style: italic !important;
+}
+#gw.gw-narrow .gw-hud .gw-read-body .gw-r-title { font-size: 2.1rem !important; line-height: 1.02 !important; font-weight: 300; color: #1A1612; }
+#gw.gw-narrow .gw-hud .gw-read-body .gw-r-pull { font-size: 1.5rem !important; line-height: 1.35 !important; color: #1A1612; }
+#gw.gw-narrow .gw-hud .gw-read-body .gw-r-price { font-size: 1.5rem !important; }
