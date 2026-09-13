@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
@@ -13,11 +13,12 @@
 
     <meta charset="UTF-8">
     <script src="assets/js/theme.js"></script>
+    <script>try{var c=document.createElement("canvas");if(c.getContext("webgl2")||c.getContext("webgl"))document.documentElement.classList.add("gw-on")}catch(e){}</script>
     <link rel="icon" type="image/webp" href="images/Mohith%20LOGO.webp">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#CFA246">
-    <title>Resurface — Photographic Series | Mohith Rai Srivastav</title>
-    <meta name="description" content="Resurface is a photographic enquiry into how the built world remains active through surface, erosion, and light. Archival pigment prints on etching rag by Mohith Rai Srivastav. Exhibited at Goa Open Arts Festival 2026.">
+    <title>Resurface | Fine Art Prints by Mohith Rai Srivastav, Goa</title>
+    <meta name="description" content="Resurface follows how the built world stays active through surface, erosion, and light. Archival pigment prints on etching rag by Mohith Rai Srivastav, exhibited at Goa Open Arts Festival 2026.">
     <meta name="keywords" content="Resurface series, architectural photography, fine art prints, Mohith Rai Srivastav, Goa Open Arts Festival 2026, archival pigment prints, etching rag">
     <meta name="author" content="Mohith Rai Srivastav">
     <meta name="robots" content="index, follow">
@@ -61,6 +62,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/pages/resurface-walk.css">
 
     <style>
 
@@ -984,8 +986,6 @@
 </head>
 <body>
 
-<!-- Demo indicator -->
-<div class="demo-banner">Demo Concept</div>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <div id="page-curtain"></div>
@@ -1056,6 +1056,19 @@
 </div>
 
 
+<section id="gw">
+    <div class="gw-stage">
+        <canvas id="gw-canvas" aria-hidden="true"></canvas>
+        <div class="gw-hud">
+            <div class="gw-cap" id="gwCap" aria-live="polite"></div>
+            <ol class="gw-rail" id="gwRail" aria-label="Walk to"></ol>
+            <div class="gw-hint" id="gwHint" aria-hidden="true">Scroll to walk through the exhibition</div>
+            <div class="gw-loader" aria-hidden="true"><span>Preparing the room</span><i></i></div>
+        </div>
+    </div>
+</section>
+
+<div id="gw-original">
 <!-- ═══════════════════════════════════════════════════
      EXHIBITION ENTRY — title card
 ════════════════════════════════════════════════════ -->
@@ -1331,27 +1344,6 @@
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════
-     BOOK SECTION — The Matter of Pause
-════════════════════════════════════════════════════ -->
-<section class="book-section reveal">
-    <div class="book-cover">
-        <div class="book-placeholder">
-            <span class="book-placeholder-label">Coming Soon</span>
-        </div>
-    </div>
-    <div class="book-info">
-        <p class="book-label" aria-hidden="true">The Monograph</p>
-        <h2 class="book-title">The Matter<br>of Pause</h2>
-        <div class="book-rule"></div>
-        <p class="book-desc">176 pages of photographs, notes, and fieldwork drawn from years of sustained looking. An enquiry into duration, stillness, and the gradual unfolding of perception — available in digital and softcover editions.</p>
-        <div class="book-meta">
-            <span class="book-price">— Add price —</span>
-            <span class="book-specs-inline">176 Pages &nbsp;&middot;&nbsp; Softcover &nbsp;&middot;&nbsp; Digital Edition Available</span>
-        </div>
-        <a href="shop.html#matter-of-pause" class="book-cta">Order the book &nbsp;&rarr;</a>
-    </div>
-</section>
 
 
 <!-- ═══════════════════════════════════════════════════
@@ -1361,13 +1353,9 @@
     <p class="ch-num">Chapter II</p>
     <h2 class="ch-name">The series<br>continues.</h2>
     <p class="ch-note">New works are in progress.</p>
-    <div class="works-coming">
-        <span class="work-tag">Universal Spill</span>
-        <span class="work-tag">Rootscape</span>
-        <span class="work-tag">After The Tide</span>
-        <span class="work-tag">Entangled Line</span>
-    </div>
 </section>
+</div>
+
 
 
 <!-- ═══════════════════════════════════════════════════
@@ -1581,5 +1569,7 @@
     }, { threshold: 0.08 });
     stations.forEach(s => stationReveal.observe(s));
 </script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"}}</script>
+<script type="module" src="assets/js/resurface-walk.js"></script>
 </body>
 </html>
