@@ -467,7 +467,7 @@ async function main() {
         const a = tex.image.width / tex.image.height;
         const L = longSideM(wk.title);
         const w = a >= 1 ? L : L * a, h = a >= 1 ? L / a : L;
-        const FT = 0.026;
+        const FT = 0.013;                          // slim matte black frame
         const label = panel(0.7, [
             { text: wk.title, family: 'serif', weight: 300, size: 0.062, lh: 1.08, color: INK(1), mb: 0.02 },
             { text: wk.meta, family: 'sans', weight: 500, size: 0.019, ls: 0.16, upper: true, lh: 1.75, color: INK(0.44), mb: 0.022 },
