@@ -18,6 +18,11 @@
       "permanent": true
     },
     {
+      "source": "/work/eleve-eco-resort-controlled-masonry.html",
+      "destination": "/work/eleve-eco-resort.html",
+      "permanent": true
+    },
+    {
       "source": "/essay-05.html",
       "destination": "/what-architectural-photography-taught-me-about-space.html",
       "permanent": true
