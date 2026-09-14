@@ -59,7 +59,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/fonts.css">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/pages/resurface-walk.css">
@@ -95,7 +97,7 @@
             font-family: var(--font-main) !important;
         }
         .entry-title {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(5.5rem, 11vw, 14rem);
@@ -164,7 +166,7 @@
         }
         .intro-text {
             max-width: 680px;
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-editorial) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1.15rem, 1.7vw, 1.45rem);
@@ -206,10 +208,10 @@
             font-family: var(--font-main) !important;
         }
         .material-heading {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
-            font-size: clamp(3rem, 5vw, 6.5rem);
+            font-size: clamp(2.6rem, 4.3vw, 5.6rem);   /* x0.86: Switzer sets ~15% wider than Cormorant */
             line-height: 0.92;
             letter-spacing: -0.02em;
             color: #1A1612;
@@ -250,7 +252,7 @@
             line-height: 1.6;
         }
         .material-note {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1rem, 1.3vw, 1.2rem);
@@ -309,7 +311,7 @@
             letter-spacing: 4px;
             text-transform: uppercase;
             color: rgba(26, 22, 18, 0.28);
-            font-family: var(--font-main, 'Inter'), sans-serif;
+            font-family: var(--font-main);
         }
         .book-info { display: flex; flex-direction: column; gap: 0; }
         .book-label {
@@ -322,7 +324,7 @@
             font-family: var(--font-main) !important;
         }
         .book-title {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(2.4rem, 3.8vw, 5rem);
@@ -337,7 +339,7 @@
             margin-bottom: 36px;
         }
         .book-desc {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1rem, 1.3vw, 1.2rem);
@@ -411,7 +413,7 @@
             font-family: var(--font-main) !important;
         }
         .ch-name {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(2.2rem, 3.5vw, 4rem);
@@ -437,7 +439,7 @@
         }
         .chapter-intro-text {
             max-width: 600px;
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-editorial) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1.05rem, 1.5vw, 1.3rem);
@@ -584,7 +586,7 @@
             width: 100%;
         }
         .label-title {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1.5rem, 2.2vw, 2.6rem);
@@ -672,7 +674,7 @@
             font-family: var(--font-main) !important;
         }
         .views-title {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(2rem, 3.5vw, 4.5rem);
@@ -689,7 +691,7 @@
             border-left: 1px solid rgba(207, 162, 70, 0.35);
         }
         .narrative-pull {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-editorial) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(1.4rem, 2.2vw, 2.2rem);
@@ -698,7 +700,7 @@
             margin-bottom: 28px;
         }
         .narrative-body {
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-editorial) !important;
             font-weight: 300;
             font-style: normal;
             font-size: clamp(0.95rem, 1.3vw, 1.15rem);
@@ -759,7 +761,7 @@
         }
         .ch-note {
             max-width: 420px;
-            font-family: 'Cormorant Garamond', var(--font-accent), Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-weight: 300;
             font-style: normal;
             font-size: 1.0625rem;
@@ -948,7 +950,7 @@
             text-transform: uppercase;
             padding: 8px 14px;
             border-radius: 3px;
-            font-family: var(--font-main, 'Inter'), sans-serif;
+            font-family: var(--font-main);
             pointer-events: none;
         }
 

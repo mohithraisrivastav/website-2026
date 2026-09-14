@@ -124,12 +124,14 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link rel="dns-prefetch" href="https://player.vimeo.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
     <style>
         /* Ensure special characters render with system font fallback */
         body { font-variant-numeric: tabular-nums; }
         * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     </style>
+<link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -263,7 +265,7 @@
         .workshops-preview { padding: 100px 5vw; background: transparent; border-top: 1px solid #CFA246; }
         .workshops-preview-inner { max-width: 760px; margin: 0 auto; text-align: center; }
         .workshops-eyebrow { display: block; font-size: 0.8625rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #7F5F10; margin-bottom: 28px; }
-        .workshops-preview-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: normal; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
+        .workshops-preview-title { font-family: var(--font-primary); font-size: clamp(2rem, 3.2vw, 3rem); font-weight: 400; font-style: normal; color: #1A1612; line-height: 1.15; margin-bottom: 44px; letter-spacing: 0; }
         .workshops-preview-text p { font-size: 1.1875rem; font-weight: 300; color: #4A3A33; line-height: 1.8; margin-bottom: 1.5em; }
         .workshops-preview-text p:last-child { margin-bottom: 0; }
         .workshops-preview-text .ws-lead { font-size: clamp(1.4rem, 2vw, 1.75rem); font-weight: 300; color: #1A1612; line-height: 1.5; margin-bottom: 1.6em; }
@@ -329,7 +331,7 @@
 }        /* --- 9. Pull Quote --- */
         .pull-quote { padding: 10vh 8vw; background: transparent; border-top: 1px solid #CFA246; text-align: center; }
         .pull-quote-inner { max-width: 860px; margin: 0 auto; }
-        .pull-quote blockquote { font-family: 'Cormorant Garamond', Georgia, serif !important; font-size: clamp(1.375rem, 1.9vw, 2.125rem); font-weight: 300; color: #1A1612; line-height: 1.6; letter-spacing: 0.2px; font-style: normal; }
+        .pull-quote blockquote { font-family: var(--font-editorial) !important; font-size: clamp(1.375rem, 1.9vw, 2.125rem); font-weight: 300; color: #1A1612; line-height: 1.6; letter-spacing: 0.2px; font-style: normal; }
         .pull-quote blockquote::before { display: none; }
         .pull-quote .attribution { margin-top: 28px; font-size: 0.8125rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #4A3A33; }
         .pull-quote .attribution::before { content: '— '; color: #8B6914; }
@@ -475,6 +477,7 @@
             .hero-text { position: relative; bottom: 0; right: 0; margin-top: 20px; }
             .viewfinder { width: 100%; margin: 0; }
             .gallery-intro { width: 70vw; }
+            .gallery-intro h2 { font-size: min(3.75rem, 17.5vw); }   /* keeps "Selected" whole below 343px */
             .work-item { width: 100%; }
         }
         /* Mobile header fixes */
@@ -553,7 +556,7 @@
             text-transform: uppercase;
             color: #CFA246;
             margin-bottom: 10px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
         }
 
         .nl-modal-content p {
@@ -575,7 +578,7 @@
             padding: 10px 0;
             border: none;
             background: transparent;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.88rem;
             color: #1A1612;
             outline: none;

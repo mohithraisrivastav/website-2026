@@ -46,7 +46,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 
 <style>
   :root { color-scheme: dark; }
@@ -54,7 +56,7 @@
   html, body { width: 100%; height: 100%; overflow: hidden; touch-action: none; }
   body {
     background: #14110d; color: #f7f3ec;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-primary);
     -webkit-tap-highlight-color: transparent;
   }
   /* During AR session, body background must NOT be visible — the
@@ -84,13 +86,13 @@
     z-index: 100;
   }
   #launchScreen h1 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-primary);
     font-style: normal; font-weight: 300;
     font-size: 2.4rem; letter-spacing: 0.5px;
     color: #f7f3ec; margin-bottom: 8px;
   }
   #launchScreen .dims {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.72rem; font-weight: 700;
     letter-spacing: 3px; text-transform: uppercase;
     color: #CFA246; margin-bottom: 56px;
@@ -98,7 +100,7 @@
   #startBtn {
     background: #CFA246; color: #14110d;
     border: none; padding: 18px 42px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.78rem; font-weight: 800;
     letter-spacing: 4px; text-transform: uppercase;
     cursor: pointer;
@@ -149,14 +151,14 @@
     white-space: nowrap;
   }
   #hudTitle {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-primary);
     font-style: normal; font-weight: 300;
     font-size: 1rem; line-height: 1.15;
     color: rgba(247,243,236,0.95);
     margin-bottom: 4px;
   }
   #hudDims {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.62rem; font-weight: 700;
     letter-spacing: 2.5px; text-transform: uppercase;
     color: #CFA246;
@@ -180,7 +182,7 @@
   }
   #statusPill svg { flex-shrink: 0; }
   #statusText {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.85rem; font-weight: 400;
     color: rgba(247,243,236,0.92);
   }
@@ -198,7 +200,7 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(207,162,70,0.48);
     color: #CFA246;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.62rem;
     font-weight: 800;
     letter-spacing: 2.6px;
@@ -241,7 +243,7 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(247,243,236,0.2);
     color: rgba(247,243,236,0.78);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.66rem; font-weight: 700;
     letter-spacing: 1.5px;
     padding: 9px 16px; border-radius: 40px;
@@ -258,7 +260,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.56rem; font-weight: 700;
     letter-spacing: 3px; text-transform: uppercase;
     color: rgba(247,243,236,0.4);
@@ -295,7 +297,7 @@
     border-radius: 14px;
     background: rgba(20,17,13,0.74);
     color: rgba(247,243,236,0.88);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0;
@@ -334,7 +336,7 @@
     background: transparent;
     border: none;
     color: rgba(247,243,236,0.85);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.62rem;
     font-weight: 800;
     letter-spacing: 0.5px;
@@ -349,7 +351,7 @@
   }
   /* Sandwich the offset readout between the +/- buttons */
   #floorOffsetLabel {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.58rem;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -366,7 +368,7 @@
     right: max(16px, env(safe-area-inset-right, 0px) + 16px);
     bottom: max(106px, env(safe-area-inset-bottom, 0px) + 106px);
     display: none;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.5rem;
     font-weight: 800;
     letter-spacing: 2px;
@@ -405,7 +407,7 @@
     top: calc(50% + 36px);
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.66rem; font-weight: 800;
     letter-spacing: 5px; text-transform: uppercase;
     color: #CFA246;
@@ -462,7 +464,7 @@
     border: 1px solid rgba(247,243,236,0.18);
     border-radius: 24px;
     padding: 14px 24px;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-primary);
     font-style: normal;
     color: rgba(247,243,236,0.85);
     z-index: 200;
@@ -1078,7 +1080,7 @@ function showLoadingError(msg) {
     loadingPill.classList.add('show');
     loadingPill.style.color = '#e88c8c';
     loadingPill.style.maxWidth = '320px';
-    loadingPill.style.fontFamily = 'Inter, sans-serif';
+    loadingPill.style.fontFamily = 'var(--font-primary)';
     loadingPill.style.fontStyle = 'normal';
     loadingPill.style.fontSize = '0.78rem';
     loadingPill.style.lineHeight = '1.5';
@@ -1908,7 +1910,7 @@ function drawTapeLabel(text) {
     ctx.lineWidth = 4;
     ctx.strokeRect(2, 22, tapeLabelCanvas.width - 4, 100);
     ctx.fillStyle = '#CFA246';
-    ctx.font = '700 34px Inter, Arial, sans-serif';
+    ctx.font = '700 34px Switzer, Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, tapeLabelCanvas.width / 2, 74);

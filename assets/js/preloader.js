@@ -50,7 +50,7 @@
             transform: translateY(0);
         }
         .pl-counter {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary, sans-serif);
             font-size: clamp(10px, 1.1vw, 11px);
             font-weight: 700;
             letter-spacing: 6px;

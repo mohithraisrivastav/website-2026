@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Typefaces
+   Switzer    — primary. Navigation, headings, body, metadata, forms, shop UI.
+                Self-hosted, Indian Type Foundry (Fontshare), ITF Free Font License,
+                files unmodified: assets/fonts/switzer/
+   Newsreader — editorial accent. Pull quotes, essay titles, literary passages.
+                Loaded from Google Fonts (SIL OFL) in each page <head>.
+   Every font-family on the site should resolve to one of the two tokens below.
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Switzer';
+    src: url('../fonts/switzer/Switzer-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Switzer';
+    src: url('../fonts/switzer/Switzer-VariableItalic.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* Metric-matched fallbacks: keep line breaks close while the real fonts load */
+@font-face {
+    font-family: 'Switzer Fallback';
+    src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+    size-adjust: 99.9%;
+    ascent-override: 98.1%;
+    descent-override: 25%;
+    line-gap-override: 9%;
+}
+
+@font-face {
+    font-family: 'Newsreader Fallback';
+    src: local('Georgia'), local('Times New Roman');
+    size-adjust: 91.5%;
+    ascent-override: 80.3%;
+    descent-override: 29%;
+    line-gap-override: 0%;
+}
+
+:root {
+    /* Switzer has no ₹ or arrow glyphs; those fall through to the system faces below */
+    --font-primary: 'Switzer', 'Switzer Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-editorial: 'Newsreader', 'Newsreader Fallback', Georgia, 'Times New Roman', serif;
+}

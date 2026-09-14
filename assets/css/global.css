@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Instrument+Serif:ital,wght@0,400;1,400&family=Inter:wght@400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
 /* ── Skip to main content ────────────────────────────────────────────────── */
 .skip-link {
@@ -145,8 +145,8 @@ body { top: 0 !important; }
 
     /* ── Typography Scale ────────────────────────────────────────────────── */
 
-    --font-accent:  'Cormorant Garamond', Georgia, serif;
-    --font-main:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-accent:  var(--font-editorial);   /* tokens defined in fonts.css */
+    --font-main:    var(--font-primary);
     --font-mono:    'Courier New', monospace;
 
     --text-xs:      0.75rem;   /* 12px */
@@ -260,7 +260,7 @@ body { top: 0 !important; }
     letter-spacing: 0 !important;
     text-transform: none !important;
     line-height: 1.3 !important;
-    font-family: var(--font-accent) !important;
+    font-family: var(--font-primary) !important;
     font-style: normal !important;
 }
 .nav-brand .sub {
@@ -270,7 +270,7 @@ body { top: 0 !important; }
     letter-spacing: 0.5px !important;
     color: var(--text-secondary) !important;
     text-transform: none !important;
-    font-family: var(--font-accent) !important;
+    font-family: var(--font-primary) !important;
     margin-top: 4px !important;
 }
 
@@ -708,7 +708,7 @@ body { top: 0 !important; }
     line-height: 1;
     padding: 8px;
     transition: color 0.3s ease;
-    font-family: var(--font-accent);
+    font-family: var(--font-primary);
 }
 .mobile-menu-close:hover { color: var(--color-accent); }
 .mobile-menu a {
@@ -864,7 +864,7 @@ body { top: 0 !important; }
     background: var(--color-action);
     color: var(--bg-primary);
     border: none;
-    font-family: var(--font-accent) !important;
+    font-family: var(--font-primary) !important;
     font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -899,7 +899,7 @@ body { top: 0 !important; }
    Same HTML as before; only the visual treatment changed:
      · No hard horizontal dividers between sections (removed border-top on
        footer + border-bottom on body and CTA)
-     · Tagline in Cormorant italic instead of dense uppercase
+     · Tagline in the editorial face instead of dense uppercase
      · Category labels (PAGES / LEGAL / FIELD NOTES) stay small-caps but
        at gentler 2 px letter-spacing — recognisable as section labels
        without screaming
@@ -909,7 +909,7 @@ body { top: 0 !important; }
      · Submit button = bare arrow in gold, no fill
      · Brand gold (var(--color-accent)) used consistently — terracotta orange dropped
      · Homepage CTA: heading scaled down from 9rem all-caps black to
-       Cormorant italic editorial. Filled orange button replaced with a
+       editorial face. Filled orange button replaced with a
        gold-link CTA matching .btn-clean
      · Copyright + social: sentence case, smaller weight, gold on hover
    Accessibility contrast preserved (var(--text-secondary) on cream = 7:1 PASS).
@@ -941,7 +941,7 @@ body { top: 0 !important; }
     color: var(--text-tertiary);
 }
 .sf-heading {
-    font-family: var(--font-accent) !important;
+    font-family: var(--font-primary) !important;
     font-weight: 300;
     font-style: normal;
     font-size: clamp(2.2rem, 5.5vw, 4.2rem);
@@ -1087,7 +1087,7 @@ body { top: 0 !important; }
 }
 .sf-form-ok {
     display: none;
-    font-family: var(--font-accent), Georgia, serif !important;
+    font-family: var(--font-primary) !important;
     font-style: normal;
     font-weight: 300;
     font-size: 0.92rem;
@@ -1355,16 +1355,15 @@ body .reader-hero {
 }
 
 /* ------------------------------------------------------------------
-   Global typography direction
-   Main: Inter (UI chrome, labels, buttons)
-   Accent: Instrument Serif (editorial italics, pull quotes)
-   Heading: Cormorant Garamond (display headings)
+   Global typography direction (faces + tokens live in fonts.css)
+   Main / Body / Heading: Switzer (--font-primary)
+   Accent: Newsreader (--font-editorial): pull quotes, essay titles, literary passages
 ------------------------------------------------------------------- */
 :root {
-    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-accent: 'Instrument Serif', Georgia, 'Times New Roman', serif;  /* italic quotes & editorial flourishes */
-    --font-heading: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-main: var(--font-primary);
+    --font-accent: var(--font-editorial);  /* editorial accent only */
+    --font-heading: var(--font-primary);
+    --font-body: var(--font-primary);
     /* Type scale — 10 steps: micro · small · body · body-lg · h6 · h5 · h4 · h3 · h2 · h1 */
     --type-micro:   0.75rem;                           /* 12px — metadata, tags */
     --type-small:   0.875rem;                          /* 14px — labels, captions, UI chrome */
@@ -1418,9 +1417,24 @@ h1, h2, h3, h4, h5, h6,
 .fail-wrap h1,
 .mem-title {
     font-family: var(--font-heading) !important;
-    font-weight: 600 !important;
-    letter-spacing: var(--tracking-heading) !important;
+    font-weight: 300 !important;              /* Switzer Light: 600 read as bold at display sizes */
+    letter-spacing: -0.01em !important;       /* grotesk display tightening */
     text-transform: none !important;
+}
+h3 {
+    font-weight: 400 !important;              /* mid-size headings: Light gets thin below ~30px */
+}
+h4, h5, h6 {
+    font-weight: 500 !important;              /* small headings keep a step of weight over body */
+    letter-spacing: var(--tracking-heading) !important;
+}
+/* Editorial headings set in Newsreader: Regular, Light is too spindly in the serif */
+.essay-hero h1,
+.essay-body h2,
+.reader-hero h1,
+.reader-body h2,
+.concept h2 {
+    font-weight: 400 !important;
 }
 
 /* Heading sizes — variables drive defaults; component rules override via specificity */
@@ -1547,7 +1561,7 @@ b,
 
 /* ── Component overrides — must follow TYPOGRAPHY SYSTEM to win !important cascade ── */
 
-/* Essence box — Instrument Serif italic with brand accent colour */
+/* Essence box — editorial face with brand accent colour */
 .essence-box p {
     font-family: var(--font-accent), Georgia, serif !important;
     font-weight: 400 !important;
@@ -1714,7 +1728,7 @@ a.hero-cta:hover, a.cta-link:hover, .action-btn:hover {
     flex: 0 0 14px !important;
 }
 
-/* Strict site font contract: Inter (UI chrome), Instrument Serif (editorial italics), Cormorant Garamond (display headings) */
+/* Strict site font contract: Switzer (UI, body, headings), Newsreader (editorial accent); see fonts.css */
 * {
     font-family: inherit;
 }
@@ -1739,14 +1753,14 @@ body {
     font-family: var(--font-body), Georgia, serif !important;
 }
 
-/* Display / editorial headings — Cormorant Garamond */
+/* Headings — Switzer */
 h1, h2, h3, h4, h5, h6,
 .hero-title,
 .page-title {
     font-family: var(--font-heading) !important;
 }
 
-/* UI chrome — Inter */
+/* UI chrome — Switzer */
 button,
 .btn,
 [role="button"],
@@ -2289,7 +2303,7 @@ a:not([class]):focus {
     text-transform: uppercase;
     color: #CFA246;
     margin-bottom: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
 }
 
 .nl-modal-content p {
@@ -2311,7 +2325,7 @@ a:not([class]):focus {
     padding: 10px 0;
     border: none;
     background: transparent;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-size: 0.88rem;
     color: #1A1612;
     outline: none;

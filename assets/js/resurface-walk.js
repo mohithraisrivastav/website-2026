@@ -103,9 +103,9 @@ async function main() {
     }, undefined, e => { tick(); rej(e); }));
 
     await Promise.all([
-        document.fonts.load('300 64px "Cormorant Garamond"'),
-        document.fonts.load('italic 300 64px "Cormorant Garamond"'),
-        document.fonts.load('300 32px Inter'), document.fonts.load('500 32px Inter'), document.fonts.load('700 32px Inter'),
+        document.fonts.load('300 64px Newsreader'),
+        document.fonts.load('italic 300 64px Newsreader'),
+        document.fonts.load('300 32px Switzer'), document.fonts.load('500 32px Switzer'), document.fonts.load('700 32px Switzer'),
     ]).catch(() => {});
 
     const [workTex, photoTex] = await Promise.all([
@@ -125,7 +125,7 @@ async function main() {
     const MAX_TEX = Math.min(renderer.capabilities.maxTextureSize, 8192);
     const BASE_PPM = COLUMN ? 1000 : 720;
     let PPM = BASE_PPM;
-    const SERIF = '"Cormorant Garamond", Georgia, serif', SANS = 'Inter, system-ui, sans-serif';
+    const SERIF = 'Newsreader, Georgia, serif', SANS = 'Switzer, system-ui, sans-serif';
     const INK = a => `rgba(26,22,18,${a})`;
 
     function setFont(ctx, b, em) {

@@ -13,6 +13,8 @@
 
     <meta charset="UTF-8">
     <script src="../assets/js/theme.js"></script>
+<link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/fonts.css">
 <link rel="stylesheet" href="../assets/css/typo.css">
 <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="icon" type="image/webp" href="../images/Mohith LOGO.webp">
@@ -40,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="Projects/Sawantwadi Palace/_DSC3062.webp" fetchpriority="high">
 <style>
 .sline-stage{position:fixed;top:92px;left:0;width:100%;height:60px;z-index:199;pointer-events:none;}
@@ -95,7 +97,7 @@ body { background-color: #F2EAD8; color: #1A1612; overflow-x: hidden; }
   padding: clamp(16px, 2.5vh, 28px) 5vw clamp(28px, 4.5vh, 48px);
   gap: 0.6vh 2vw; position: relative; }
 .project-num { font-size: 0.8625rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #6F7A82; white-space: nowrap; padding-bottom: 4px; }
-.project-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; line-height: 0.88; letter-spacing: -0.02em; text-align: left; }
+.project-title { font-family: var(--font-primary); font-weight: 300; line-height: 0.88; letter-spacing: -0.02em; text-align: left; }
 .title-line { display: block; overflow: hidden; } .title-inner { display: block; } .title-main { font-size: clamp(3.8rem, 6.8vw, 9rem); }
 .project-meta-inline { font-size: 0.8625rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #6F7A82; white-space: nowrap; text-align: right; padding-bottom: 4px; }
 .scroll-cue { position: absolute; bottom: -3.5vh; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -164,7 +166,7 @@ body { background-color: #F2EAD8; color: #1A1612; overflow-x: hidden; }
 .next-text { position:absolute; bottom:0; left:0; right:0; padding:5vh 5vw; display:flex; align-items:flex-end; justify-content:space-between; gap:4vw; }
 .next-text-left { display:flex; flex-direction:column; gap:1.4vh; min-width:0; }
 .next-title-clip { overflow:hidden; }
-.next-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,6vw,6rem); font-weight:300; line-height:0.9; letter-spacing:-0.02em; display:block; color:#fff; }
+.next-title { font-family:var(--font-primary); font-size:clamp(2.8rem,6vw,6rem); font-weight:300; line-height:0.9; letter-spacing:-0.02em; display:block; color:#fff; }
 .next-sub { font-size:0.8625rem; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.45); }
 .next-cta { flex-shrink:0; font-size:0.8625rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.45); border:1px solid rgba(255,255,255,0.16); padding:14px 28px; transition:border-color 0.4s,color 0.4s; align-self:flex-end; white-space:nowrap; }
 .next-link:hover .next-cta { border-color:rgba(255,255,255,0.65); color:#fff; }

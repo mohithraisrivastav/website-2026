@@ -21,7 +21,9 @@
     <meta name="description" content="Register for the Mapusa Market Walk.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/fonts.css">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
     <script src="assets/js/translate.js" defer></script>
@@ -31,7 +33,7 @@
         body {
             background: #F7F3ED;
             color: #1A1612;
-            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            font-family: var(--font-primary);
             min-height: 100vh;
         }
 
@@ -84,7 +86,7 @@
 
         /* Intro */
         .mw-heading {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(2.2rem, 4vw, 3.2rem);
             font-weight: 300;
             line-height: 1.15;
@@ -133,7 +135,7 @@
         }
 
         .mw-question {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: 1.2rem;
             font-weight: 400;
             line-height: 1.5;
@@ -151,7 +153,7 @@
             -webkit-appearance: none;
             appearance: none;
             padding: 10px 2px;
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: 16px;
             line-height: 1.5;
             font-weight: 300;
@@ -227,7 +229,7 @@
             background: #CFA246;
         }
         .mw-day-text {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: 1.15rem;
             font-weight: 400;
             color: #1A1612;
@@ -254,7 +256,7 @@
             color: #F7F3ED;
             border: none;
             padding: 18px 44px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.8125rem;
             font-weight: 600;
             letter-spacing: 0.14em;
@@ -277,7 +279,7 @@
             padding-top: 72px;
         }
         .mw-success-heading {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(2rem, 3.5vw, 2.8rem);
             font-weight: 300;
             color: #1A1612;

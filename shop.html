@@ -318,7 +318,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
 
@@ -358,9 +360,9 @@
             display: none !important;
         }
 
-        /* 3. Title: Cormorant italic, not uppercase */
+        /* 3. Title: Switzer light, not uppercase */
         .product-title {
-            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-style: normal !important;
             font-weight: 300 !important;
             font-size: clamp(1.5rem, 2vw, 2.2rem) !important;
@@ -433,12 +435,12 @@
             display: none !important;
         }
 
-        /* 10. Category header: faded Cormorant label + clean prose */
+        /* 10. Category header: faded light label + clean prose */
         .category-header {
             margin-bottom: 56px !important;
         }
         .category-header h2 {
-            font-family: 'Cormorant Garamond', Georgia, serif !important;
+            font-family: var(--font-primary) !important;
             font-style: normal !important;
             font-weight: 300 !important;
             font-size: clamp(1.3rem, 1.8vw, 2rem) !important;
@@ -964,7 +966,7 @@
             color: #CFA246; margin-bottom: 8px;
         }
         .wl-heading {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: var(--font-primary);
             font-size: clamp(1.6rem, 4vw, 2.1rem);
             font-weight: 300; line-height: 1.1;
             color: #1A1612; margin-bottom: 6px;
@@ -1031,7 +1033,7 @@
         }
         .wl-success-icon svg { width: 20px; height: 20px; }
         .wl-success h3 {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: var(--font-primary);
             font-size: 1.7rem; font-weight: 300;
             color: #1A1612; margin-bottom: 10px;
         }
@@ -1069,7 +1071,7 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
         }
         .ar-bar-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-style: normal; font-weight: 300;
             font-size: 1.15rem; color: rgba(247,243,236,0.88);
         }
@@ -1137,7 +1139,7 @@
             pointer-events: none;
         }
         .ar-dim {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-style: normal; font-weight: 300;
             font-size: clamp(1rem, 3.4vw, 1.35rem);
             color: rgba(247,243,236,0.7); letter-spacing: 0.02em;
@@ -1271,8 +1273,8 @@
 
         /* ── Measurement HUD (item #1) ──
            Pill at the top of the AR view. Two lines:
-             1. Print title in Cormorant italic (brand voice)
-             2. Dimensions in Inter, both inches AND centimetres */
+             1. Print title in Switzer light
+             2. Dimensions in Switzer, both inches AND centimetres */
         #arDimHud {
             position: fixed;
             top: 56px;
@@ -1291,7 +1293,7 @@
             z-index: 10;
         }
         #arDimHudTitle {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-style: normal; font-weight: 300;
             font-size: 0.95rem; line-height: 1.15;
             color: rgba(247,243,236,0.94);
@@ -1299,7 +1301,7 @@
             display: block; margin-bottom: 3px;
         }
         #arDimHudMeasure {
-            font-family: Inter, sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.62rem; font-weight: 700;
             letter-spacing: 2px;
             color: rgba(207,162,70,0.92);
@@ -1342,7 +1344,7 @@
         #arTapHint {
             position: fixed; top: calc(50% + 30px); left: 50%;
             transform: translateX(-50%);
-            font-family: Inter, sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.62rem; font-weight: 800;
             letter-spacing: 5px; text-transform: uppercase;
             color: #CFA246;
@@ -1384,7 +1386,7 @@
             background: rgba(20,17,13,0.78);
             border: 1px solid rgba(207,162,70,0.45);
             color: #CFA246;
-            font-family: Inter, sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.65rem; font-weight: 700;
             letter-spacing: 2px; text-transform: uppercase;
             padding: 5px 12px; border-radius: 30px;
@@ -1414,7 +1416,7 @@
             z-index: 10;
         }
         #arWallPromptText {
-            font-family: Inter, sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.87rem;
             color: rgba(247,243,236,0.92);
             letter-spacing: 0.01em;
@@ -1441,7 +1443,7 @@
             background: rgba(10,10,10,0.65);
             border: 1px solid rgba(247,243,236,0.18);
             color: rgba(247,243,236,0.78);
-            font-family: Inter, sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px;
             padding: 7px 13px; border-radius: 40px;
             cursor: pointer;
@@ -1463,7 +1465,7 @@
             position: absolute; inset: 0; z-index: 2;
             display: flex; align-items: center; justify-content: center;
             color: rgba(247,243,236,0.35);
-            font-family: 'Cormorant Garamond', serif; font-style: normal;
+            font-family: var(--font-primary); font-style: normal;
             font-size: 1.05rem; letter-spacing: 0.5px;
             pointer-events: none; transition: opacity 0.4s;
         }
@@ -1576,7 +1578,7 @@
             max-width: min(58vw, 460px);
         }
         .rv-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(1.3rem, 4vw, 2rem);
             font-style: normal;
             font-weight: 300;
@@ -1613,7 +1615,7 @@
 
         /* Size dimension — editorial */
         .rv-dim {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(1.1rem, 3.5vw, 1.5rem);
             font-style: normal; font-weight: 300;
             color: rgba(255,255,255,0.85);
@@ -1969,7 +1971,7 @@
         }
         #rvNoCam svg { color: rgba(207,162,70,0.3); }
         #rvNoCam p {
-            font-family: 'Cormorant Garamond', serif; font-style: normal;
+            font-family: var(--font-primary); font-style: normal;
             font-size: 1.15rem; font-weight: 300;
             color: rgba(247,243,236,0.65); max-width: 260px; line-height: 1.8;
         }
@@ -1999,7 +2001,7 @@
             width: 56px; height: 56px; color: rgba(207,162,70,0.75);
         }
         .rv-hint-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(1.4rem, 5vw, 2.1rem);
             font-style: normal; font-weight: 300;
             color: rgba(255,255,255,0.92); letter-spacing: 0.01em;
@@ -3269,8 +3271,8 @@
                     load.classList.remove('ar-gone');
                     load.innerHTML =
                         '<div style="max-width:300px;text-align:center;">'
-                      + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:normal;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
-                      + '<div style="font-family:Inter,sans-serif;font-size:0.82rem;line-height:1.75;color:rgba(247,243,236,0.5);">AR needs Safari on your iPhone or iPad. Tap below to copy the link and open Safari.</div>'
+                      + '<div style="font-family:var(--font-primary);font-style:normal;font-size:1.4rem;color:rgba(247,243,236,0.92);margin-bottom:12px;">View on your wall in AR</div>'
+                      + '<div style="font-family:var(--font-primary);font-size:0.82rem;line-height:1.75;color:rgba(247,243,236,0.5);">AR needs Safari on your iPhone or iPad. Tap below to copy the link and open Safari.</div>'
                       + '</div>';
                     launch.innerHTML =
                         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link &amp; Open Safari';
@@ -3285,8 +3287,8 @@
                     load.classList.remove('ar-gone');
                     load.innerHTML =
                         '<div style=”max-width:300px;text-align:center;”>'
-                      + '<div style=”font-family:\'Cormorant Garamond\',serif;font-style:normal;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
-                      + '<div style=”font-family:Inter,sans-serif;font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);”>Live AR needs Chrome or Safari. '
+                      + '<div style=”font-family:var(--font-primary);font-style:normal;font-size:1.35rem;color:rgba(247,243,236,0.9);margin-bottom:14px;”>Open in your browser</div>'
+                      + '<div style=”font-family:var(--font-primary);font-style:normal;font-size:0.86rem;line-height:1.75;color:rgba(247,243,236,0.55);”>Live AR needs Chrome or Safari. '
                       + 'Tap the <strong style=”color:rgba(247,243,236,0.8);”>⋮</strong> menu at the top of this screen and choose <strong style=”color:rgba(247,243,236,0.8);”>”Open in browser”</strong>.</div>'
                       + '</div>';
                     document.getElementById('arDimText').textContent = '';

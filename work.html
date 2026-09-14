@@ -28,7 +28,9 @@
     <meta property="og:image" content="https://www.mohithraisrivastav.com/work/Projects/Villa%20Lluvia/_DSC7368-HDR-Edit.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/fonts.css">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
@@ -199,7 +201,7 @@
         }
 
         .wo-eyebrow {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.25em;
@@ -208,8 +210,8 @@
         }
 
         .wo-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(3.6rem, 6.5vw, 8rem);
+            font-family: var(--font-primary);
+            font-size: clamp(3.1rem, 5.6vw, 6.9rem);   /* x0.86: Switzer sets ~15% wider than Cormorant */
             font-weight: 300;
             font-style: normal;
             line-height: 0.93;
@@ -219,7 +221,7 @@
         }
 
         .wo-desc {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 13px;
             line-height: 1.72;
             color: rgba(245, 237, 216, 0.76);
@@ -234,7 +236,7 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.24em;

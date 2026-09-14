@@ -30,7 +30,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
+    <link rel="preload" href="/assets/fonts/switzer/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/fonts.css">
     <link rel="stylesheet" href="assets/css/typo.css">
     <link rel="stylesheet" href="assets/css/global.css">
     <script src="assets/js/translate.js" defer></script>
@@ -40,7 +42,7 @@
         body {
             background: #F7F3ED;
             color: #1A1612;
-            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            font-family: var(--font-primary);
             min-height: 100vh;
         }
 
@@ -63,7 +65,7 @@
         }
 
         .wk-heading {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(2.4rem, 4.5vw, 3.6rem);
             font-weight: 300;
             line-height: 1.1;
@@ -98,7 +100,7 @@
         }
 
         .wk-card-title {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-primary);
             font-size: clamp(1.8rem, 3vw, 2.4rem);
             font-weight: 400;
             color: #1A1612;
@@ -135,7 +137,7 @@
             color: #F7F3ED;
             border: none;
             padding: 16px 36px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-primary);
             font-size: 0.8125rem;
             font-weight: 600;
             letter-spacing: 0.14em;

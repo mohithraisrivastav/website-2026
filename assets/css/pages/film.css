@@ -172,7 +172,7 @@
         /* ========= Closing ========= */
         .closing { padding: 20vh 5vw; text-align: center; border-top: 1px solid var(--color-accent); }
         .closing .mark { font-family: var(--font-accent) !important; font-size: 5.4688rem; font-weight: 300; font-style: normal; color: var(--color-accent); line-height: 1; margin-bottom: 40px; }
-        .closing h3 { font-size: clamp(4.2969rem, 5vw, 7.8125rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 30px; }
+        .closing h3 { font-size: clamp(3.7rem, 4.3vw, 6.72rem); font-weight: 300; font-style: normal; line-height: 0.95; letter-spacing: -0.01em; margin-bottom: 30px; }
         .closing p { font-size: 2.1485rem; font-weight: 300; color: var(--text-primary); max-width: 540px; margin: 0 auto 50px; line-height: 1.8; }
         .closing-cta { display: inline-flex; align-items: center; gap: 20px; font-size: 1.3673rem; font-weight: 700; letter-spacing: 4px; color: var(--text-primary); text-transform: uppercase; padding: 22px 44px; border: 1px solid var(--color-accent); border-radius: 6px; transition: 0.4s; cursor: pointer; }
         .closing-cta:hover { border-color: var(--text-primary); padding: 22px 60px; gap: 30px; }

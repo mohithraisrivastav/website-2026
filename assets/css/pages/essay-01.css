@@ -22,11 +22,11 @@ body .essay-hero{padding-left:5vw !important;padding-right:5vw !important;}
 .essay-hero .byline .dot{width:3px;height:3px;background:#5E6B73;border-radius:50%;}
 .essay-feat-img{max-width:72%;margin:40px auto 35px;aspect-ratio:16/9;overflow:hidden;padding:0;box-sizing:border-box;border-radius:8px;box-shadow:0 4px 24px rgba(26, 22, 18,0.1);border:1px solid rgba(26, 22, 18,0.08);position:relative;cursor:pointer;}
 .essay-feat-img::after{display:none;}
-.essay-feat-img::before{content:'Field Study';position:absolute;top:16px;left:16px;z-index:1;padding:8px 14px;font-family: var(--font-accent) !important;font-size:0.8625rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);background:rgba(0,0,0,0.28);border-radius:0;border:none;pointer-events:none;}
+.essay-feat-img::before{content:'Field Study';position:absolute;top:16px;left:16px;z-index:1;padding:8px 14px;font-family: var(--font-primary) !important;font-size:0.8625rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-primary);background:rgba(0,0,0,0.28);border-radius:0;border:none;pointer-events:none;}
 .essay-feat-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s ease;}
 .essay-feat-img:hover img{transform:scale(1.01);opacity:1;}
 }
-.essay-panel p{font-family: var(--font-accent) !important;font-size:1rem;font-weight:300;color:var(--text-secondary);line-height:1.8;margin:0;}
+.essay-panel p{font-family: var(--font-primary) !important;font-size:1rem;font-weight:300;color:var(--text-secondary);line-height:1.8;margin:0;}
 .essay-body{max-width:920px;margin:0 auto;padding:40px 4vw 100px;font-family: var(--font-main) !important;font-size:1.22rem;font-weight:300;line-height:1.95;color:var(--text-primary);}
 .essay-body p{margin-bottom:1.8em;}
 .essay-body p.drop::first-letter{float:left;font-family: var(--font-accent) !important;font-size:3.6em;line-height:0.82;font-weight:400;padding:0.02em 0.1em 0 0;color:var(--text-primary);}
@@ -34,11 +34,11 @@ body .essay-hero{padding-left:5vw !important;padding-right:5vw !important;}
 .essay-body em{color:var(--text-primary);font-style:normal;}
 .essay-body strong{color:var(--text-primary);font-weight:500;}
 .essay-body blockquote{margin:2.6em -4vw;padding:2.2em 4vw;background:rgba(26, 22, 18,0.03);font-family: var(--font-accent) !important;font-size:clamp(1.6rem,2.4vw,2.4rem);font-weight:400;font-style:normal;line-height:1.38;color:var(--text-primary);border:none;border-radius:0;box-shadow:none;border-left:3px solid rgba(26, 22, 18,0.15);}
-.essay-body blockquote cite{display:block;margin-top:1em;font-family: var(--font-accent) !important;font-size:0.8625rem;font-weight:600;letter-spacing:3px;color:#5E6B73;text-transform:uppercase;font-style:normal;}
+.essay-body blockquote cite{display:block;margin-top:1em;font-family: var(--font-primary) !important;font-size:0.8625rem;font-weight:600;letter-spacing:3px;color:#5E6B73;text-transform:uppercase;font-style:normal;}
 .essay-body figure{margin:2.4em auto;max-width:78%;overflow:hidden;border-radius:6px;box-shadow:0 4px 20px rgba(26, 22, 18,0.1);border:1px solid rgba(26, 22, 18,0.08);cursor:pointer;}
 .essay-body figure img{width:100%;display:block;transition:transform 0.7s ease;}
 .essay-body figure:hover img{transform:scale(1.01);}
-.essay-body figure figcaption{font-family: var(--font-accent) !important;font-size:0.98rem;font-style:normal;color:#5E6B73;margin-top:16px;text-align:left;pointer-events:none;}
+.essay-body figure figcaption{font-family: var(--font-primary) !important;font-size:0.98rem;font-style:normal;color:#5E6B73;margin-top:16px;text-align:left;pointer-events:none;}
 .essay-body hr{border:0;text-align:center;margin:3.4em 0;}
 .essay-body hr::before{content:'•';color:#5E6B73;letter-spacing:0.5em;font-size:1.2rem;}
 .essay-pull{margin:0;padding:2.2em 0;background:none;border:none;font-family: var(--font-accent) !important;font-size:clamp(1.8rem,2.8vw,3.2rem);font-weight:400;font-style:normal;line-height:1.3;color:var(--text-primary);text-align:left;border-top:1px solid rgba(26, 22, 18,0.1);border-bottom:1px solid rgba(26, 22, 18,0.1);}
