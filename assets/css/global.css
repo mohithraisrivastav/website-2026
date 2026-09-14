@@ -245,6 +245,14 @@ body { top: 0 !important; }
     transform: scale(1.02);
 }
 
+/* Logo drawn at 70% inside its existing box: header/footer heights and layout stay unchanged.
+   `scale` composes with the hover transform, and no page-level rule sets it. */
+img.logo,
+img.sf-logo {
+    scale: 0.7;
+    transform-origin: left center;
+}
+
 /* ── Nav Brand (centre wordmark) ─────────────────────────────────────────── */
 
 .nav-brand {
