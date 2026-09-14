@@ -126,7 +126,7 @@
             <div class="hero-top-left">
                 <span>Motion Reel</span>
                 <span class="dash"></span>
-                <span>Vol. 01 / 2022 &mdash; 2024</span>
+                <span>Vol. 01 / 2024 &mdash; 2025</span>
             </div>
             <div class="hero-top-right">
                 <span>3 Films</span>
@@ -315,9 +315,9 @@
   platform: 'vimeo',
   videoId: '900115166',
   thumbnail: '',
-  desc: 'A laterite residence documented across four seasons. The house changes, the lens stays.',
-  synopsis: 'An eighteen-month architectural document of a Goan residence. Shot in long takes across monsoon, winter, summer, and the return. A film about architecture as a record of weather.',
-  credits: 'Director &mdash; Bharath Ramamrutham\nCamera &mdash; Mohith Rai Srivastav\nSound &mdash; Epidemic Music\nColour &mdash; In-house',
+  desc: 'A residence in Goa.',
+  synopsis: 'A residence in Goa.',
+  credits: 'Director &mdash; Bharath Ramamrutham\nCamera &mdash; Mohith Rai Srivastav\nSound &mdash; Epidemic Music\nColour &mdash; In-house\nArchitecture &mdash; Amit and Associates',
   tech: 'Sony A7SIII & A7RIV &mdash; 4K &mdash; 16:9\nAudio &mdash; Binaural field\nEdit &mdash; DaVinci Resolve'
 },
 
@@ -752,7 +752,7 @@ filterBtns.forEach(btn => {
             const track = document.getElementById('reelsTrack');
             const countEl = document.getElementById('reelsCount');
             if (!track) return;
-            countEl.textContent = reels.length + ' Reels';
+            countEl.textContent = reels.length + (reels.length === 1 ? ' Reel' : ' Reels');
             track.innerHTML = reels.map(r =>
 `
                 <div class="reel-card" onclick="openReel('${r.num}')">

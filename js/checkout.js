@@ -28,8 +28,10 @@ const CONFIG = {
     'Chromatic Rupture': 'standard', // 32 × 24 in
     'After The Fall':    'standard', // 32 × 25.5 in
     'Cracked Spectrum':  'standard', // 32 × 21.3 in
-    'Still Organism':    'standard', // 24 × 32 in
-    'Forgotten Skin':    'standard', // 24 × 32 in
+    'The Still Organism': 'standard', // 24 × 32 in
+    'The Forgotten Skin': 'standard', // 24 × 32 in
+    'Still Organism':    'standard', // old title, kept for carts saved before the rename
+    'Forgotten Skin':    'standard',
     'Erosion':           'standard', // 24 × 32 in
     'Imprint':           'standard', // 24 × 32 in
   },

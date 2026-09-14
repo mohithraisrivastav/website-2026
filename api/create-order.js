@@ -17,7 +17,9 @@ const PRINT_SIZE_TIERS = {
     'Chromatic Rupture': 'standard',
     'After The Fall':    'standard', // 32 × 25.5 in
     'Cracked Spectrum':  'standard', // 32 × 21.3 in
-    'Still Organism':    'standard', // 24 × 32 in
+    'The Still Organism': 'standard', // 24 × 32 in
+    'The Forgotten Skin': 'standard',
+    'Still Organism':    'standard', // old title, kept so carts saved before the rename still check out
     'Forgotten Skin':    'standard',
     'Erosion':           'standard',
     'Imprint':           'standard',
@@ -65,9 +67,9 @@ const DIGITAL_PRODUCTS = { 'The Matter of Pause (Digital)': true };
 // calcPrintSizes() and product data in shop.html — keep in sync.
 // ============================================================
 
-// Every fine art print sells at exactly these four price points, keyed by
-// the longest edge in inches (18=Small, 24=Medium, 32=Standard, 42=Large).
-const PRINT_SIZE_PRICE = { 18: 30000, 24: 50000, 32: 85000, 42: 125000 };
+// Every fine art print is sold in one edition size (Resurface catalogue), keyed by
+// the longest edge in inches: 32 in = ₹85,000 (5 + 1 AP), 42 in = ₹1,25,000 (2 + 1 AP).
+const PRINT_SIZE_PRICE = { 32: 85000, 42: 125000 };
 
 // Fixed-price non-print catalogue items (title with size suffix stripped → price).
 const FIXED_PRICES = {
