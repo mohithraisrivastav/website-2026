@@ -16,7 +16,7 @@
 
     // Resolve logo path — Work/ subpages need one level up
     const inSubfolder = /\/Work\//i.test(window.location.href);
-    const logoSrc = (inSubfolder ? '../' : '') + 'images/Mohith LOGO.png';
+    const logoSrc = (inSubfolder ? '../' : '') + 'images/LOGO black a.png';
 
     /* ─── Styles ──────────────────────────────────────────────── */
     const css = document.createElement('style');
