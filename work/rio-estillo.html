@@ -48,7 +48,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
 body { background-color: #F2EAD8; color: #1A1612; overflow-x: hidden; }
-body.js-cursor { cursor: none; }
+.cursor { display: none !important; }
 #progress { position: fixed; top: 0; left: 0; height: 2px; background: rgba(26, 22, 18,0.35); width: 0%; z-index: 300; transition: width 0.08s linear; pointer-events: none; }
 #curtain { position: fixed; inset: 0; background: #F7F3ED; z-index: 450; pointer-events: none; transform: scaleY(0); transform-origin: top; }
 .cursor { position: fixed; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 500; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s, opacity 0.3s; mix-blend-mode: difference; }
@@ -416,7 +416,7 @@ gsap.set(['#nTitle','#nSub','#nCta','#nLabel'], { autoAlpha: 0 }); gsap.set('#nT
 ScrollTrigger.create({ trigger: '.next-project', start: 'top 88%', once: true, onEnter() { gsap.to('#nLabel', { autoAlpha: 1, duration: 0.5 }); gsap.to('#nTitle', { y: '0%', autoAlpha: 1, duration: 1.1, ease: 'power4.out', delay: 0.15 }); gsap.to('#nSub', { autoAlpha: 1, duration: 0.6, delay: 0.5 }); gsap.to('#nCta', { autoAlpha: 1, duration: 0.6, delay: 0.7 }); } });
 window.addEventListener('scroll', () => { const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100; document.getElementById('progress').style.width = pct + '%'; }, { passive: true });
 document.querySelectorAll('a[href]').forEach(a => { a.addEventListener('click', e => { const h = a.getAttribute('href'); if (!h || h.startsWith('#') || h.startsWith('mailto') || h.startsWith('tel') || h.startsWith('https') || h.startsWith('http') || a.target === '_blank' || a.hasAttribute('download') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); gsap.set('#curtain', { transformOrigin: 'bottom', scaleY: 0 }); gsap.to('#curtain', { scaleY: 1, duration: 0.65, ease: 'power3.inOut', onComplete: () => window.location.href = h }); }); });
-if (finePointer) { let mx = 0, my = 0, cx = 0, cy = 0; document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true }); (function loop() { cx += (mx-cx)*0.28; cy += (my-cy)*0.28; cur.style.left = cx+'px'; cur.style.top = cy+'px'; requestAnimationFrame(loop); })(); document.querySelectorAll('.gallery .p').forEach(f => { f.addEventListener('mouseenter', () => cur.classList.add('on')); f.addEventListener('mouseleave', () => cur.classList.remove('on')); }); }
+if (finePointer) { let mx = 0, my = 0, cx = 0, cy = 0; document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true }); document.querySelectorAll('.gallery .p').forEach(f => { f.addEventListener('mouseenter', () => cur.classList.add('on')); f.addEventListener('mouseleave', () => cur.classList.remove('on')); }); }
 const sfForm = document.getElementById('sfForm'); if (sfForm) { sfForm.addEventListener('submit', e => { e.preventDefault(); const ok = document.getElementById('sfFormOk'); if (ok) ok.style.display = 'block'; e.target.reset(); }); }
 </script>
 <script>

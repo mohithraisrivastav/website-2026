@@ -58,7 +58,7 @@ body {
   font-family: var(--font-main);
   overflow-x: hidden;
 }
-body.js-cursor { cursor: none; }
+.cursor { display: none !important; }
 
 #progress {
   position: fixed; top: 0; left: 0; height: 2px;
@@ -936,14 +936,7 @@ document.querySelectorAll('a[href]').forEach(a => {
 if (finePointer) {
   let mx = 0, my = 0, cx = 0, cy = 0;
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-  (function loop() {
-    cx += (mx - cx) * 0.28;
-    cy += (my - cy) * 0.28;
-    cur.style.left = cx + 'px';
-    cur.style.top  = cy + 'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('.gallery .p').forEach(f => {
+    document.querySelectorAll('.gallery .p').forEach(f => {
     f.addEventListener('mouseenter', () => cur.classList.add('on'));
     f.addEventListener('mouseleave', () => cur.classList.remove('on'));
   });
