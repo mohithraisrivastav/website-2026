@@ -31,7 +31,7 @@ async function main() {
     const orig = $('#gw-original');
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, COARSE_PTR ? 2.5 : 2));   // phone screens are ~3x; lettering needs the density
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 3));   // render at the screen's own density; anything less is upscaled and soft
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
     const MAX_ANISO = renderer.capabilities.getMaxAnisotropy();
@@ -117,8 +117,14 @@ async function main() {
     /* Phones in portrait: text walls are typeset as a narrow column with larger lettering */
     const COLUMN = innerWidth / innerHeight < 0.9;
     const COLUMN_W = 1.3;
-    /* wall lettering is painted at the density it is seen at: a column filling a phone needs ~1000 px per metre */
-    const PPM = COLUMN ? 1000 : 720;
+    /* Wall lettering is painted at the density it is seen at. A text wall is framed to fill the screen width,
+       so each panel gets at least one texel per screen pixel across its width, plus headroom for pinch zoom,
+       within what the GPU allows. */
+    const SCREEN_PX = Math.round(innerWidth * Math.min(devicePixelRatio, 3));
+    const HEADROOM = 1.35;
+    const MAX_TEX = Math.min(renderer.capabilities.maxTextureSize, 8192);
+    const BASE_PPM = COLUMN ? 1000 : 720;
+    let PPM = BASE_PPM;
     const SERIF = '"Cormorant Garamond", Georgia, serif', SANS = 'Inter, system-ui, sans-serif';
     const INK = a => `rgba(26,22,18,${a})`;
 
@@ -176,7 +182,8 @@ async function main() {
             });
             widthM = COLUMN_W;
         }
-        const Wpx = Math.round(widthM * PPM);
+        PPM = Math.min(MAX_TEX / widthM, Math.max(BASE_PPM, SCREEN_PX * HEADROOM / Math.max(widthM, 1.6)));   // small labels share the frame with a print
+        let Wpx = Math.round(widthM * PPM);
         const cv = document.createElement('canvas');
         cv.width = Wpx; cv.height = 8;
         let ctx = cv.getContext('2d');
@@ -199,7 +206,11 @@ async function main() {
             }
             return y;
         };
-        const h = Math.ceil(run(false)) + 6;
+        let h = Math.ceil(run(false)) + 6;
+        if (h > MAX_TEX) {                                  // a very tall wall: fit the GPU limit, keep proportions
+            PPM *= MAX_TEX / h; Wpx = Math.round(widthM * PPM); cv.width = Wpx;
+            ctx = cv.getContext('2d'); h = Math.ceil(run(false)) + 6;
+        }
         cv.height = h;
         ctx = cv.getContext('2d');
         run(true);
@@ -207,9 +218,13 @@ async function main() {
         const tex = new THREE.CanvasTexture(cv);
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = MAX_ANISO;
+        tex.premultiplyAlpha = true;                         // no dark fringe around letter edges
         const hM = h / PPM;
         const geo = new THREE.PlaneGeometry(widthM, hM).translate(widthM / 2, -hM / 2, 0);   // anchor top-left
-        const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, depthWrite: false }));
+        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, premultipliedAlpha: true, toneMapped: false, depthWrite: false });
+        /* keep the full-resolution level until the text is genuinely small; the default blend softens it at reading distance */
+        mat.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('#include <map_fragment>', 'diffuseColor *= texture2D( map, vMapUv, -0.8 );'); };
+        const mesh = new THREE.Mesh(geo, mat);
         mesh.renderOrder = 2;
         return { mesh, w: widthM, h: hM };
     }
