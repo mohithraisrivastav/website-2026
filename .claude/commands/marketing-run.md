@@ -75,7 +75,7 @@ Owns pipeline health and conversion visibility. Without this role, activity masq
 The Revenue Operations Director reads the table and asks one question: is the pipeline healthy, or are we confusing motion for progress? If leads are entering but not converting, the Sales Lead adjusts tone or targeting. If no leads are entering, the Research Lead runs harder. If proposals are sent but not closing, the follow-up cadence is wrong. This role makes the problem visible before it becomes a crisis.
 
 **Escalation protocol — fires when pipeline is thin:**
-If Photography Commissions total pipeline value is under ₹50,000 in active conversation: the Research Lead runs an emergency Goa pass — 10 local warm leads before any cold national outreach. If workshop seats are under 50% filled and July 2 is within 21 days: the Campaign Manager activates the compressed sequence (story sequence daily, not every other day; NASA India direct outreach today). If Deck units sold this month are under 5: the Community Manager runs NASA alumni reactivation before any new cold outreach.
+If Photography Commissions total pipeline value is under ₹50,000 in active conversation: the Research Lead runs an emergency Goa pass — 10 local warm leads before any cold national outreach. If workshop seats are under 50% filled and the next cohort is within 21 days: the Campaign Manager activates the compressed sequence (story sequence daily, not every other day; NASA India direct outreach today). If Deck units sold this month are under 5: the Community Manager runs NASA alumni reactivation before any new cold outreach.
 
 **Business Development Manager**
 30-day horizon. Completely distinct from the Chief Business Development Officer (who thinks in years). This role thinks in weeks.
@@ -117,9 +117,9 @@ Tracks three metrics every week: follower growth (and which content drove it), n
 Also owns audience composition: the goal is not the largest audience, but the right one. Architects and architecture students who follow are not the same as collectors who follow, and the content should attract both without collapsing them into a single addressee.
 
 **Campaign Manager**
-Owns every launch with a specific date: the July 2 workshop, Explorer's Deck releases, Resurface exhibitions, Master Series announcements. Campaigns require coordination across Sales, Content, and Partnerships simultaneously. Without a Campaign Manager, everyone assumes someone else is handling it, and launches happen reactively.
+Owns every launch with a specific date: the next workshop, Explorer's Deck releases, Resurface exhibitions, Master Series announcements. Campaigns require coordination across Sales, Content, and Partnerships simultaneously. Without a Campaign Manager, everyone assumes someone else is handling it, and launches happen reactively.
 
-For every active campaign, the Campaign Manager produces: a start date, a sequence of actions by day, who owns each action, and a go/no-go check 7 days before launch. The July 2 workshop campaign should have started 30 days ago. If it did not, this role flags it now and compresses the sequence.
+For every active campaign, the Campaign Manager produces: a start date, a sequence of actions by day, who owns each action, and a go/no-go check 7 days before launch. Each workshop campaign starts 30 days before its cohort. If it did not, this role flags it now and compresses the sequence.
 
 **Content Lead**
 Produces 7 captions and the Reels brief for the week. Content mirrors what the Sales Lead is targeting and what the Brand Governance division has flagged as needing visibility. Builds every caption from a specific scene. Applies the scene test to every line. Produces the workshop story sequence when a batch is within 30 days. Produces Resurface content when an exhibition or publication window is open.
@@ -280,7 +280,7 @@ Owns LinkedIn as a long-form publishing channel. A LinkedIn article by Mohith ab
 Every quarter this role asks: what has been written about Mohith's work externally in the past three months? Is the reputation advancing in the right direction? What critical or editorial attention is beginning to develop, and how do we respond to it?
 
 **58. Marketing Director**
-Sits above the Content Lead and Sales Lead. Owns campaign alignment across all five streams. Each week asks: is the July 2 workshop being promoted enough given the days remaining? Is Resurface visible enough given the next exhibition window? Is the Explorer's Deck appearing too often relative to the content that earns it? Is commission outreach supported by the content calendar? Catches misalignment before it appears in the output. Ensures no stream goes silent for more than two weeks, and no stream dominates for more than three consecutive weeks without a reason.
+Sits above the Content Lead and Sales Lead. Owns campaign alignment across all five streams. Each week asks: is the next workshop being promoted enough given the days remaining? Is Resurface visible enough given the next exhibition window? Is the Explorer's Deck appearing too often relative to the content that earns it? Is commission outreach supported by the content calendar? Catches misalignment before it appears in the output. Ensures no stream goes silent for more than two weeks, and no stream dominates for more than three consecutive weeks without a reason.
 
 **59. Legal & Compliance Head**
 A major role whose absence becomes more costly as the practice grows. Owns: photography contracts and licensing agreements, workshop liability and terms, image usage rights for commissions, certificates of authenticity for print editions, copyright and trademark protection for Lived Space, Explorer's Deck, and Resurface. Future scope: licensing agreements with schools who adopt the deck or workshop curriculum, international exhibition contracts, residency agreements. This role does not produce outreach. It flags: before Mohith signs anything — a commission brief, a school partnership, an exhibition agreement, a print licensing deal — this role reviews the terms. Every week it also asks: is there any IP that should be formally protected that currently is not?
@@ -498,8 +498,8 @@ When outreach or content feels generic: return here. Which of these five points 
 | October–February | Photography Commissions (heavy) | Dry season. Best light. Studios completing projects. Magazine editorial windows open. |
 | November–December | Explorer's Deck gifting push | Corporate gifting season. Design studios looking for client gifts. |
 | January–March | Residency and grant applications | Most international residencies open in January, close February–April. |
-| April–May | Workshop promotion (next batch) | Enough lead time for institutional channels (NASA, schools) to mobilise. |
-| June–July | Workshop final seat-fill | 30-day countdown. Individual registrations convert fastest here. Reels and Stories daily. |
+| Year round | Workshop seat-fill for each cohort | Cohorts run most months. Start promotion 30 days before each date. Individual registrations convert fastest in the final 2 weeks. |
+| April–May | Institutional workshop outreach | Enough lead time for NASA and schools to bring groups to the monsoon and autumn cohorts. |
 | August–September | Resurface and long-arc outreach | Quieter commercial period. Right time to write letters to Living Guides, submit to festivals, push publishing conversations. |
 
 When the current month falls in a heavy-push window for a specific stream, that stream's Phase 0 flag is elevated and the Research Lead allocates proportionally more effort to it.
@@ -518,7 +518,7 @@ When the current month falls in a heavy-push window for a specific stream, that 
 
 Photography and Architectural Film are one stream with two deliverable types and two buyer categories. Photography buyers are studios and developers who need documentation. Film buyers are often hospitality brands, tourism boards, and institutions who need a moving image artifact. Both are researched separately (Track A-Photography and Track A-Film in Phase 2) and tracked separately in Phase 0 because their pipelines, rates, and conversion timelines differ significantly.
 
-These streams are not equal in urgency. Each week the council sets the priority order explicitly. As of June 2026: Workshop (July 2) is urgent. Commissions are always running. Resurface needs consistent slow-building attention even when it produces no immediate revenue — it is the stream most likely to attract galleries, residencies, and international opportunities.
+These streams are not equal in urgency. Each week the council sets the priority order explicitly. Workshop urgency depends on how many days remain until the next cohort in `assets/js/workshop-cohorts.js`. Commissions are always running. Resurface needs consistent slow-building attention even when it produces no immediate revenue — it is the stream most likely to attract galleries, residencies, and international opportunities.
 
 ---
 
@@ -529,8 +529,8 @@ Do NOT want: real estate under ₹30,000, mass-market builders, basic interior s
 Past clients: Elevé Eco Luxury Resorts, Sawantwadi Palace, Rio Luxury Homes, Grounded, Museum of Goa, Studio Saar Design, HH Art Space, Vianaar Homes, Quattroporte Luxury Homes, Blurring Boundaries, VAN Stories.
 
 **Stream 2 — Lived Space Workshop**
-Next batch: July 2, 2026, Goa.
-Formats: 1-Day Intensive (₹3,900 + GST) / 3-Day Workshop (₹11,400 + GST) / 6-Day Residency (₹23,000 + GST).
+Next cohorts: read `assets/js/workshop-cohorts.js`. Never quote a workshop date from memory.
+Formats: One-Day Immersion (₹3,900 + GST) / Three-Day Intensive (₹11,400 + GST) / Six-Day Residency (₹23,000 + GST).
 Three distinct audiences — different messaging for each:
 - Students: observation as a trainable skill, learning to read space before you design it
 - Young architects (1–5 years): how to document your own built work, build a portfolio
@@ -583,7 +583,7 @@ When a contact appears in both maps, they are handled by the relevant division, 
 `$ARGUMENTS` = optional focus. Examples:
 - `Goa` — concentrate on warm Goa leads across all streams
 - `Mumbai` — heavy commission research on Mumbai studios
-- `workshop` — prioritise July 2 seat-filling, all workshop audiences
+- `workshop` — prioritise seat-filling for the next cohort, all workshop audiences
 - `deck` — Explorer's Deck and print sales front-and-center
 - `resurface` — Resurface exhibition, gallery, and press pipeline only
 - `collectors` — fine art print collector pipeline only
@@ -605,12 +605,12 @@ Before any research begins, the Operations Lead sets this week's targets. The Ma
 |---|---|---|---|
 | Photography Commissions | ₹1,00,000+ pipeline | Always running | Primary |
 | Architectural Film | 1 active conversation | Always running | Primary |
-| Workshop — July 2 | Fill remaining seats | [X days remaining] | Urgent if under 30 days |
+| Workshop — [next cohort] | Fill remaining seats | [X days remaining] | Urgent if under 30 days |
 | Explorer's Deck | 5+ units | Always running | Supporting |
 | Fine Art Prints | 1–2 collector conversations | Slow build | Long arc |
 | Resurface | 1 gallery / press / residency step | Slow build | Cultural capital |
 
-State days until July 2. If under 30: flag workshop as top priority across all sections.
+State days until the next cohort. If under 30: flag workshop as top priority across all sections.
 
 **Director of Photography & Film Business Development — weekly pipeline questions (answer before any research begins):**
 - Which projects in India are at or near completion and will need photography in the next 3–6 months?
@@ -624,7 +624,7 @@ These six questions set the Research Lead's priorities for Track A before any op
 
 **Escalation flags — check these before anything else:**
 - If Photography Commissions active pipeline is under ₹50,000: flag as RED. Research Lead runs Goa emergency pass first — 10 local warm leads minimum before any other cold outreach.
-- If workshop seats are under 50% filled and July 2 is within 21 days: flag as RED. Campaign Manager activates compressed sequence. Story sequence daily. NASA India direct outreach today.
+- If workshop seats are under 50% filled and the next cohort is within 21 days: flag as RED. Campaign Manager activates compressed sequence. Story sequence daily. NASA India direct outreach today.
 - If Deck units sold this month are under 5 and it is past the 15th: flag as AMBER. Community Manager runs NASA alumni reactivation before any new cold outreach.
 - If no commission has closed in 45 days: flag as RED. Business Development Manager identifies every open thread and moves the most promising one to a proposal call today.
 - If no active film commission conversation has been opened in 60 days: flag as AMBER. Director of Photography & Film Business Development identifies one hospitality property opening, architecture studio launching a project, or festival with film programming in the next 90 days. Sales Lead sends the film email today before any other cold outreach.
@@ -721,7 +721,7 @@ Under 30 words. Only for existing WhatsApp contacts, never for cold outreach.
 **Category 2 — Workshop participants and NASA alumni**
 People who attended any past Lived Space session or NASA workshop. They know Mohith's approach. They are the warmest possible deck buyers and the most credible workshop word-of-mouth.
 
-For each findable participant: check if they have bought a deck. If not, send the NASA participant deck DM. Check if the next workshop batch would suit them. If yes, mention July 2.
+For each findable participant: check if they have bought a deck. If not, send the NASA participant deck DM. Check if the next workshop batch would suit them. If yes, mention the next cohort date.
 
 **Category 3 — Recent Instagram and LinkedIn engagements**
 Anyone who commented substantively, sent a DM, or opened a conversation in the past 14 days. These people are already warm. They get a personal reply that moves toward the relevant stream.
@@ -1101,13 +1101,13 @@ Any description of what was noticed about the project. Not one word. Name the pr
 
 **To students (via faculty email):**
 
-Subject: Workshop on architectural photography — Goa, July 2
+Subject: Workshop on architectural photography — Goa, [date]
 
 > Dear [Name],
 >
 > I hope you are well. I am Mohith Rai Srivastav, an Architect turned Architectural Photographer and Filmmaker based in Goa.
 >
-> I am running a workshop on architectural photography in Goa on July 2. I would love to invite students from [institution name] to attend. Happy to share the workshop page if that would be useful.
+> I am running a workshop on architectural photography in Goa on [date]. I would love to invite students from [institution name] to attend. Happy to share the workshop page if that would be useful.
 >
 > Warm regards,
 > Mohith Rai Srivastav
@@ -1117,15 +1117,15 @@ Under 90 words. One ask. No promised outcomes.
 
 **To young architects (individual email or LinkedIn):**
 
-Subject: Workshop on photographing architecture — Goa, July 2
+Subject: Workshop on photographing architecture — Goa, [date]
 
-> Hi [Name], I'm Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. I'm running a workshop on July 2 in Goa on photographing architecture — specifically how to document your own built work. If that's useful, I'd love to have you: mohithraisrivastav.com/workshops.html
+> Hi [Name], I'm Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. I'm running a workshop on [date] in Goa on photographing architecture — specifically how to document your own built work. If that's useful, I'd love to have you: mohithraisrivastav.com/workshops.html
 
 Under 60 words. Speaks directly to their need: documenting their own projects.
 
 **To design educators:**
 
-Subject: Constraint-based observation workshop — Goa, July 2
+Subject: Constraint-based observation workshop — Goa, [date]
 
 > Dear [Name],
 >
@@ -1143,15 +1143,15 @@ Under 100 words. References educators who already use it. One offer: share detai
 
 Subject: n/a — DM only
 
-> Hi, I'm Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. Running a workshop on architectural photography on July 2 in Goa. If you'd be open to sharing it with your audience, I'd really appreciate it. mohithraisrivastav.com/workshops.html
+> Hi, I'm Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. Running a workshop on architectural photography on [date] in Goa. If you'd be open to sharing it with your audience, I'd really appreciate it. mohithraisrivastav.com/workshops.html
 
 Under 55 words.
 
 **Day 7 follow-up (with deck cross-sell where flagged):**
 
-Subject: Re: Workshop on architectural photography — Goa, July 2
+Subject: Re: Workshop on architectural photography — Goa, [date]
 
-> Just following up on my note about the July 2 workshop. I also make the Explorer's Deck — 63 observation cards used in the session, also available separately: mohithraisrivastav.com/shop
+> Just following up on my note about the next workshop. I also make the Explorer's Deck — 63 observation cards used in the session, also available separately: mohithraisrivastav.com/shop
 
 **What workshop emails never contain:**
 Em dashes. "Transform," "deepen," "a new way of seeing." Any promised outcome. "Not a photography class, but..." Stacked fragments.
@@ -1193,7 +1193,7 @@ Subject: Fine art prints — architectural photography
 If hospitality clients are the main commission target: at least 2 captions involve how built spaces hold time, light, occupation, or material change.
 If workshop outreach went to schools: 1 PROCESS caption shows what actually happens in a session.
 If deck emails went out: 1 PRODUCT caption, after 2 non-product posts.
-If July 2 is within 30 days: include the 5-slide story sequence after feed captions.
+If the next cohort is within 30 days: include the 5-slide story sequence after feed captions.
 
 **Caption formats:**
 
@@ -1254,7 +1254,7 @@ Format of the brief: concept in two sentences, footage needed, duration (30–60
 
 Example brief: "Card pull in a Fontainhas courtyard. Start on the deck in Mohith's hand. He pulls one card, reads it, walks to a wall. Ends on the wall surface. No text overlay. No music. 35 seconds."
 
-### Workshop story sequence (when July 2 is within 30 days)
+### Workshop story sequence (when the next cohort is within 30 days)
 
 Five slides. One idea per slide.
 
@@ -1288,7 +1288,7 @@ Present in this exact order. Complete every section before presenting. No partia
 |---|---|---|---|
 | Photography commission pipeline value | | ₹1,00,000+ | |
 | Active film conversations | | 1+ | |
-| Workshop seats sold — July 2 | | [target] | |
+| Workshop seats sold — [next cohort] | | [target] | |
 | Explorer's Deck units this month | | 5+ | |
 | Active collector conversations | | 1–2 | |
 | Resurface: next step taken | | Weekly | |
@@ -1333,14 +1333,14 @@ Present in this exact order. Complete every section before presenting. No partia
 |---|---|---|---|---|---|---|
 | Photography Commissions | ₹1,00,000+ | | | | | Ongoing |
 | Architectural Film | 1 active conversation | | | | | Ongoing |
-| Workshop — July 2 | Fill remaining seats | | | | | [X days] |
+| Workshop — [next cohort] | Fill remaining seats | | | | | [X days] |
 | Explorer's Deck | 5+ units | | | | | Ongoing |
 | Fine Art Prints | 1–2 collector conversations | | | | | Ongoing |
 | Resurface | 1 gallery/press/residency step | | | | | Next window: |
 
 **Pipeline verdict (Revenue Operations Director):** Is the pipeline healthy or is activity masquerading as progress? One sentence. If thin: flag which stream and what the Research Lead should prioritise today. Apply escalation protocol if any RED flags are triggered.
 
-**Campaign Manager flag:** Is there an active campaign running this week? If yes: what is the sequence, who owns each step, and is everything on track? If July 2 is within 14 days: the campaign is running. Name the remaining steps.
+**Campaign Manager flag:** Is there an active campaign running this week? If yes: what is the sequence, who owns each step, and is everything on track? If the next cohort is within 14 days: the campaign is running. Name the remaining steps.
 
 **CRM flag (Contacts at Risk of Going Cold):** Anyone who responded positively in the past 14 days and has not been moved forward? List them. These are the highest-priority contacts in the entire system.
 
@@ -1539,7 +1539,7 @@ Captions 1–7. Each:
 
 **Stream coverage check (Head 58 runs this):**
 - At least 2 captions serve commissions (observation and process posts build the photography audience)
-- At least 1 caption serves the workshop if July 2 is within 30 days
+- At least 1 caption serves the workshop if the next cohort is within 30 days
 - At least 1 caption serves Resurface or fine art if an exhibition window is open
 - No stream dominates more than 3 of the 7 posts
 - No product post appears without 2 non-product posts preceding it in the week's sequence
@@ -1549,7 +1549,7 @@ Posting schedule:
 | Day | Caption # | Format | Stream | Reason |
 |---|---|---|---|---|
 
-Then story sequence (if July 2 within 30 days): slides 1–5.
+Then story sequence (if the next cohort is within 30 days): slides 1–5.
 
 ---
 
@@ -1597,7 +1597,7 @@ Every person who appeared in this session's research and has long-term relations
 - **Pillar:** Photography Commissions / Lived Space / Explorer's Deck / Fine Art Prints / Resurface / Cross-pillar
 - **Relationship type:** Commission prospect / Education partner / Curator / Collector / Critic / Festival director / Residency director / Press / Publisher / Grants officer / Institutional partner / Peer / Cross-pillar
 - **Strength:** 0 (uncontacted) / 1 (aware of Mohith, no direct contact) / 2 (one exchange) / 3 (ongoing conversation) / 4 (active relationship) / 5 (advocate — refers work, invites, publishes)
-- **Next action:** specific, not vague. "Email re: July 2 workshop" not "follow up." "Send Resurface link after seeing their Dezeen article" not "stay in touch."
+- **Next action:** specific, not vague. "Email re: [date] workshop" not "follow up." "Send Resurface link after seeing their Dezeen article" not "stay in touch."
 
 **On the Critic relationship type — this is distinct from Press:**
 Press writes news. Critics write essays that shape discourse. Collectors often arrive after critics have already decided what matters. The Critic column in the database is for people who write serious, extended critical writing about architecture, photography, or spatial practice — not for journalists on deadline. Architecture critics: Rowan Moore (The Guardian/Observer), Owen Hatherley, Deyan Sudjic, Alexandra Lange, Kate Wagner. Photography critics and curators: Charlotte Cotton, Lucy Soutter. Cultural writers at the intersection: Ranjit Hoskote (India), Jerry Pinto (India), Girish Shahane (India). These relationships are built over years through genuine engagement with their writing, not through press releases.
@@ -1632,7 +1632,7 @@ How many contacts are currently at Strength 3 or above? That number is the real 
 - Editorial Intelligence Lead: Is any studio, property, or publication in an active documentation window right now?
 - Speaking & Lectures Lead: Is there a lecture opportunity to pursue or a faculty relationship to advance this week?
 - CRM Manager: Any contacts at risk of going cold?
-- Campaign Manager: Is the July 2 campaign on track? What is the next step and who owns it?
+- Campaign Manager: Is the next workshop campaign on track? What is the next step and who owns it?
 - Community Manager: Which community segment was re-engaged this week and what was the action? Any testimonial captured?
 - Brand Growth Manager: Is the audience growing? Which channel drove the most growth this week?
 - Performance Marketing Director: Are paid campaigns running? What is the current cost per lead, cost per registration, and cost per deck sale? Any campaign that needs to be paused or adjusted?

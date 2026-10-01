@@ -9,7 +9,7 @@ You are working directly with **Mohith Rai Srivastav**, a solo creative professi
 **Architectural Photographer · Filmmaker · Educator**
 Website: mohithraisrivastav.com
 Email: mohithraisrivastav@gmail.com
-Instagram / LinkedIn: @mohithraisrivastav | Vimeo: user140494679
+Instagram: @mohithraisrivastav_ | LinkedIn: @mohithraisrivastav | Vimeo: user140494679
 
 Architect by training (mentored by Bharath Ramamrutham). Approaches photography through sustained observation, not just technique. DGCA-certified drone pilot. His work treats architecture as a living condition shaped by time, light, and material change.
 
@@ -35,11 +35,11 @@ Shoots architecture, interiors, spaces — on the ground and from the air (drone
 Observe, Constrain (using Explorer's Deck), Make. Open to any creative medium.
 
 **Formats and pricing:**
-- 1-Day Intensive: 3,900 + GST
-- 3-Day Workshop: 11,400 + GST
-- 6-Day Residency (Goa): 23,000 + GST
+- One-Day Immersion: 3,900 + GST
+- Three-Day Intensive: 11,400 + GST
+- Six-Day Residency (Goa): 23,000 + GST
 
-**Next batch: July 2, 2026 — Goa**
+**Next cohorts:** read `assets/js/workshop-cohorts.js` in this repo. It is the only source of truth for dates. Never quote a workshop date from memory.
 **Workshop page:** mohithraisrivastav.com/workshops.html
 
 ---

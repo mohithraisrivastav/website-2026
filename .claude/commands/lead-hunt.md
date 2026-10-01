@@ -184,4 +184,4 @@ Final line every time: "Add every person who replies to a contacts list with the
 
 ## Co-founder note
 
-If the workshop date is within 4 weeks, flag it at the top of the output: "July 2 is [X] days away with no bookings confirmed. Run /workshop-fill before sending these emails." Commission leads take 2 to 6 weeks to convert. Workshop seats need to fill now.
+If the workshop date is within 4 weeks, flag it at the top of the output: "[Next cohort date] is [X] days away with no bookings confirmed. Run /workshop-fill before sending these emails." Commission leads take 2 to 6 weeks to convert. Workshop seats need to fill now.

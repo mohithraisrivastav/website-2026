@@ -17,11 +17,11 @@ Do not present partial work. Research all channels, write all outreach and story
 Workshop: Lived Space. Observe, Constrain (using Explorer's Deck), Make.
 
 **Formats and pricing:**
-- 1-Day Intensive: 3,900 + GST
-- 3-Day Workshop: 11,400 + GST
-- 6-Day Residency (Goa): 23,000 + GST
+- One-Day Immersion: 3,900 + GST
+- Three-Day Intensive: 11,400 + GST
+- Six-Day Residency (Goa): 23,000 + GST
 
-**Next batch: July 2, 2026 — Goa**
+**Next cohorts:** read `assets/js/workshop-cohorts.js` in this repo. It is the only source of truth for dates. Never quote a workshop date from memory.
 Workshop page: mohithraisrivastav.com/workshops.html
 
 **Who attends:** Architecture students, young architects, interior designers, photographers serious about spaces, design educators.
@@ -120,9 +120,9 @@ One sentence. Name the person: architecture students, photographers who want to 
 One specific tangible thing. Not "a new way of seeing." What did the last group of participants leave with that they could name?
 
 **Slide 4 — Details**
-Date: July 2, 2026
+Date: [next cohort from `assets/js/workshop-cohorts.js`]
 Location: Goa
-Price: 23,000 + GST (6-Day Residency) or 3,900 + GST (1-Day Intensive)
+Price: 23,000 + GST (Six-Day Residency) or 3,900 + GST (One-Day Immersion)
 Link: mohithraisrivastav.com/workshops.html
 
 **Slide 5 — How to join**

@@ -19,7 +19,7 @@ PHOTOGRAPHY_PIPELINE_VALUE: [e.g. ₹45,000]
 ACTIVE_FILM_CONVERSATIONS: [e.g. 0]
 WORKSHOP_SEATS_SOLD: [e.g. 8]
 WORKSHOP_CAPACITY: [e.g. 20]
-WORKSHOP_DATE: [e.g. July 2, 2026]
+WORKSHOP_DATE: [e.g. 12 October 2026]
 DECK_UNITS_THIS_MONTH: [e.g. 3]
 COLLECTOR_CONVERSATIONS: [e.g. 1]
 RESURFACE_LAST_ACTION_DATE: [e.g. 2026-06-15]
@@ -45,7 +45,7 @@ Read the inputs. Apply this logic in order.
 Run through each RED/AMBER flag from the marketing-run Phase 0 escalation protocol:
 
 - Photography pipeline under ₹50,000: RED
-- Workshop under 50% seats filled AND July 2 within 21 days: RED
+- Workshop under 50% seats filled AND the next cohort is within 21 days: RED
 - Deck under 5 units this month past the 15th: AMBER
 - No commission closed in 45 days: RED
 - No active film conversation in 60 days: AMBER
@@ -90,7 +90,7 @@ DAILY BRIEF — [Date]
 PIPELINE SNAPSHOT
 Photography: ₹[X] / Proposals open: [X] / Last close: [X] days ago
 Film: [X] active conversations
-Workshop [July 2]: [X]/[X] seats sold — [X] days remaining
+Workshop [next cohort date]: [X]/[X] seats sold — [X] days remaining
 Deck: [X] units this month
 Resurface: last action [X] days ago
 

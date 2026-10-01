@@ -73,7 +73,7 @@ The scene principle applies to every caption: do not describe a feeling. Describ
 - If hospitality is the commission target: at least 2 captions built around how buildings hold time, light, material change, occupation
 - If workshop outreach sent this week: 1 process caption showing what actually happens in a session
 - If deck emails went out: 1 product caption on the deck, earned by non-product posts before it
-- If July 2 is within 30 days: include the 5-slide story sequence
+- If the next cohort is within 30 days: include the 5-slide story sequence
 
 ---
 
@@ -149,7 +149,7 @@ Music:
 
 ---
 
-**STORY SEQUENCE** (only if July 2 within 30 days)
+**STORY SEQUENCE** (only if the next cohort is within 30 days)
 
 Slide 1 — The thing: [concrete event, not a promise]
 Slide 2 — Who it's for: [one sentence, name the person]
