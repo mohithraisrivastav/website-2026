@@ -113,7 +113,7 @@ my $SITE_FOOTER = q(
   <div class="sf-base">
     <span class="sf-copy">&copy; 2026 Mohith Rai Srivastav. All rights reserved.</span>
     <div class="sf-social">
-      <a href="https://www.instagram.com/mohithraisrivastav/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.instagram.com/mohithraisrivastav_/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.linkedin.com/in/mohithraisrivastav/" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://vimeo.com/user140494679" target="_blank" rel="noopener">Vimeo</a>
       <a href="https://wa.me/919014753403" target="_blank" rel="noopener">WhatsApp</a>
