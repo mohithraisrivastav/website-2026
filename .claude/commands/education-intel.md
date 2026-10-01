@@ -121,7 +121,7 @@ Subject: Lecture on architectural observation — [School/Event Name]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 100 words.
 
@@ -139,7 +139,7 @@ Subject: Explorer's Deck — observation tool for studio courses
 
 > Dear [Name], I hope you are well. I am Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. I've made a card set called the Explorer's Deck — 63 observation prompts for architects and spatial designers. Some faculty have been using it in studio courses to train spatial perception. If you think it might work for your students, I'd be happy to share a sample: mohithraisrivastav.com/shop
 >
-> Warm regards, Mohith Rai Srivastav, mohithraisrivastav@gmail.com
+> Warm regards, Mohith Rai Srivastav, info@mohithraisrivastav.com
 
 ---
 

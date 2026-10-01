@@ -76,7 +76,7 @@ For each channel: name, contact, reach estimate, why they are a fit.
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 100 words. No em dashes. No credential parade. One clear ask.
 
@@ -126,7 +126,7 @@ Price: 23,000 + GST (Six-Day Residency) or 3,900 + GST (One-Day Immersion)
 Link: mohithraisrivastav.com/workshops.html
 
 **Slide 5 — How to join**
-Drop me a message or email mohithraisrivastav@gmail.com.
+Drop me a message or email info@mohithraisrivastav.com.
 
 ### What the story sequence does not contain
 

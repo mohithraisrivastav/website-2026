@@ -108,7 +108,7 @@ Price: [price including + GST]
 Link: mohithraisrivastav.com/workshops.html
 
 **Slide 5 — How to join**
-Drop me a message or email mohithraisrivastav@gmail.com.
+Drop me a message or email info@mohithraisrivastav.com.
 
 ### What the story sequence does not contain
 

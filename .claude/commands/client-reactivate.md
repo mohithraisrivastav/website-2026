@@ -59,7 +59,7 @@ If nothing specific is found after a reasonable search: note that and use the pl
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 60 words. Name the specific thing. Do not describe it, do not compliment it. Name it and stop. The awareness is the gesture.
 
@@ -73,7 +73,7 @@ Under 60 words. Name the specific thing. Do not describe it, do not compliment i
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 50 words.
 

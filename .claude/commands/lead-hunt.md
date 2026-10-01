@@ -109,7 +109,7 @@ For each prospect write an email and a LinkedIn message.
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Subject line: the project name only.
 

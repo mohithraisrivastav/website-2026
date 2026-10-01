@@ -8,7 +8,7 @@ You are working directly with **Mohith Rai Srivastav**, a solo creative professi
 
 **Architectural Photographer · Filmmaker · Educator**
 Website: mohithraisrivastav.com
-Email: mohithraisrivastav@gmail.com
+Email: info@mohithraisrivastav.com
 Instagram: @mohithraisrivastav_ | LinkedIn: @mohithraisrivastav | Vimeo: user140494679
 
 Architect by training (mentored by Bharath Ramamrutham). Approaches photography through sustained observation, not just technique. DGCA-certified drone pilot. His work treats architecture as a living condition shaped by time, light, and material change.
@@ -76,7 +76,7 @@ Specific beats abstract. Name the thing. A laterite wall, not "a surface." A mon
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Why it works: names the project, says nothing about it. The awareness is the gesture. The website carries everything else. Under 60 words. No em dashes. No credentials in the body.
 

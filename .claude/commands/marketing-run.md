@@ -709,7 +709,7 @@ Subject: [Project or announcement name]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 50 words. Reference the shared history. No credentials. No project description.
 
@@ -832,7 +832,7 @@ Subject: [Project Name] — architectural film
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 80 words. Names the project. Says "architectural film" specifically. No credential parade. No description of the film style beyond "slow, observational" — the website carries the rest.
 
@@ -933,7 +933,7 @@ Subject: [Project Name]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 60 words. No project description. No credentials. No em dashes.
 
@@ -1024,7 +1024,7 @@ Subject: [Project Name] — architectural film
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 75 words.
 
@@ -1042,7 +1042,7 @@ Subject: Architectural film — [Organisation Name]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 80 words. Names the organisation. No project to name — the organisation's work is the entry point.
 
@@ -1111,7 +1111,7 @@ Subject: Workshop on architectural photography — Goa, [date]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 90 words. One ask. No promised outcomes.
 
@@ -1135,7 +1135,7 @@ Subject: Constraint-based observation workshop — Goa, [date]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 100 words. References educators who already use it. One offer: share details.
 
@@ -1166,7 +1166,7 @@ Subject: Explorer's Deck — observation tool for studio courses
 
 > Dear [Name], I hope you are well. I am Mohith Rai Srivastav, an Architect turned Architectural Photographer based in Goa. I've made a card set called the Explorer's Deck — 63 observation prompts for architects and spatial designers. Some faculty have been using it in studio courses to train spatial perception. If you think it might work for your students, I'd be happy to share a sample: mohithraisrivastav.com/shop
 >
-> Warm regards, Mohith Rai Srivastav, mohithraisrivastav@gmail.com
+> Warm regards, Mohith Rai Srivastav, info@mohithraisrivastav.com
 
 **Past NASA participants (warm — DM or WhatsApp):**
 
@@ -1180,7 +1180,7 @@ Subject: Fine art prints — architectural photography
 
 > Dear [Name], I hope you are well. I am Mohith Rai Srivastav, a Goa-based Architectural Photographer. I have a small series of archival fine art prints available: Cosmic Return, Burnt Earth, and Chromatic Rupture. Large-format, limited edition. If you work with clients who collect photography, I'd be happy to share the work: mohithraisrivastav.com/shop
 >
-> Warm regards, Mohith Rai Srivastav, mohithraisrivastav@gmail.com
+> Warm regards, Mohith Rai Srivastav, info@mohithraisrivastav.com
 
 ---
 
@@ -1266,7 +1266,7 @@ Slide 3 — What you leave with: one specific, nameable thing. Not "a new way of
 
 Slide 4 — Details: Date, Location, Price, Link.
 
-Slide 5 — How to join: Drop me a message or email mohithraisrivastav@gmail.com.
+Slide 5 — How to join: Drop me a message or email info@mohithraisrivastav.com.
 
 ---
 
@@ -1478,7 +1478,7 @@ Subject: Fine art prints — Mohith Rai Srivastav
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 80 words. No performance. The print names do the work.
 

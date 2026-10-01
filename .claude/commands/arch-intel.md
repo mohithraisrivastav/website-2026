@@ -141,7 +141,7 @@ Subject: [Project Name]
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 60 words. No description. No credentials. No em dashes.
 
@@ -161,7 +161,7 @@ Subject: [Project Name] — architectural film
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 75 words.
 

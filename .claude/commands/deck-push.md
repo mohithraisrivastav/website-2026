@@ -73,7 +73,7 @@ Under 70 words. Warm, plain. The reference to "the kind of looking we did togeth
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 100 words. No em dashes. "Some faculty have been using it" is the only credibility signal needed.
 
@@ -89,7 +89,7 @@ Under 100 words. No em dashes. "Some faculty have been using it" is the only cre
 >
 > If you're looking for something to gift your team or clients, happy to talk bulk pricing.
 >
-> mohithraisrivastav@gmail.com | mohithraisrivastav.com
+> info@mohithraisrivastav.com | mohithraisrivastav.com
 
 Under 80 words. No em dashes.
 
@@ -137,7 +137,7 @@ Plain. Price: 2,100. What it is: 63 observation cards. Where: mohithraisrivastav
 >
 > Warm regards,
 > Mohith Rai Srivastav
-> mohithraisrivastav@gmail.com
+> info@mohithraisrivastav.com
 
 Under 80 words. No em dashes. The print names do the work.
 
