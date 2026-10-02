@@ -20,7 +20,7 @@ Architect by training (mentored by Bharath Ramamrutham). Approaches photography 
 ### 1. Photography & Film Commissions (primary income)
 Shoots architecture, interiors, spaces — on the ground and from the air (drone). Also produces slow cinema and architectural films.
 
-**Published in:** Architectural Digest India, Condé Nast Traveller, Elle Decor, Architects and Interiors India
+**Published in:** The Architect's Diary (Frame.50, Jul to Aug 2026), Architectural Digest India, Condé Nast Traveller, Elle Decor, Architects and Interiors India
 **Awards:** Frame.50 2026, Architecture & Interior Photography / Cinematography (The Architect's Diary)
 **Exhibited at:** Louvre Museum Paris (2015), Goa Open Arts Festival (2026), Telangana Photography Akademi (2019)
 
