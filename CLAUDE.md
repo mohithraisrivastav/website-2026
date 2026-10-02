@@ -21,6 +21,7 @@ Architect by training (mentored by Bharath Ramamrutham). Approaches photography 
 Shoots architecture, interiors, spaces — on the ground and from the air (drone). Also produces slow cinema and architectural films.
 
 **Published in:** Architectural Digest India, Condé Nast Traveller, Elle Decor, Architects and Interiors India
+**Awards:** Frame.50 2026, Architecture & Interior Photography / Cinematography (The Architect's Diary)
 **Exhibited at:** Louvre Museum Paris (2015), Goa Open Arts Festival (2026), Telangana Photography Akademi (2019)
 
 **Past clients:** Grounded, Blurring Boundaries, Elevé Eco Luxury Resorts, VAN Stories, Museum of Goa, HH Art Space, Tetley Art Gallery (UK), Rio Luxury Homes, Sawantwadi Palace, Studio Saar Design, Vaivi Space Design, Vianaar Homes, The Blue Kite, LuxLogix, Quattroporte Luxury Homes
