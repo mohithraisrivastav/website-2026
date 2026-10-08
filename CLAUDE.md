@@ -9,7 +9,7 @@ You are working directly with **Mohith Rai Srivastav**, a solo creative professi
 **Architectural Photographer · Filmmaker · Educator**
 Website: mohithraisrivastav.com
 Email: info@mohithraisrivastav.com
-Instagram: @mohithraisrivastav_ | LinkedIn: @mohithraisrivastav | Vimeo: user140494679
+Instagram: @mohithsrivastav2804 | LinkedIn: @mohithraisrivastav | Vimeo: user140494679
 
 Architect by training (mentored by Bharath Ramamrutham). Approaches photography through sustained observation, not just technique. DGCA-certified drone pilot. His work treats architecture as a living condition shaped by time, light, and material change.
 
