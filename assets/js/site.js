@@ -211,3 +211,24 @@ window.toggleMobileDropdown = function (btn) {
     wireForm('sfForm',      'sfFormOk');
     wireForm('sfFormModal', 'sfFormModalOk');
 })();
+
+/* Photo-saving deterrents. Public images remain accessible through their URLs.
+ * Delegation also covers images inserted later by galleries and lightboxes.
+ * Mark intentional downloads with data-allow-image-download on a parent.
+ */
+(function protectPhotos() {
+    function preventPhotoSave(event) {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest('[data-allow-image-download], a[download], input, textarea, [contenteditable="true"]')) return;
+        var photo = target.closest('img, picture, #gw-canvas');
+        // Browsers can use a containing link as the drag source for linked images.
+        var linkedPhoto = event.type === 'dragstart' && target.closest('a');
+        if (photo || (linkedPhoto && linkedPhoto.querySelector('img, picture'))) {
+            event.preventDefault();
+        }
+    }
+
+    document.addEventListener('contextmenu', preventPhotoSave);
+    document.addEventListener('dragstart', preventPhotoSave);
+})();

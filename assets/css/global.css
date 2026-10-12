@@ -2413,3 +2413,19 @@ a:not([class]):focus {
 @media (max-width: 640px) {
   .cn-row { grid-template-columns: 1fr; }
 }
+
+/* Discourage native photo saving without interfering with taps or scrolling. */
+img, picture, #gw-canvas {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+[data-allow-image-download] img,
+img[data-allow-image-download],
+a[download] img {
+  -webkit-touch-callout: default;
+  -webkit-user-drag: auto;
+  -webkit-user-select: auto;
+  user-select: auto;
+}
