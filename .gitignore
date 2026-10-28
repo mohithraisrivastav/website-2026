@@ -13,3 +13,10 @@ GOAF-For Catalog/
 
 # Local junction to .agents/skills. Tracking it duplicates every skill file.
 .claude/skills/
+
+# Business files stay in Studio Brain, never in this repository (L-08).
+.claude/commands/
+business-strategy/
+_offline-notes/
+*.docx
+*.xlsx
