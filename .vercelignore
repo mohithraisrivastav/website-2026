@@ -27,3 +27,23 @@ api/verify-subscription.js
 # bring the pages back once the archive is ready.
 mapusa-market-walk.html
 mapusa-market-walk-register.html
+
+# Business files, notes, documents and tooling. Never deployed.
+# Business context and agent playbooks live in Studio Brain (L-08).
+*.md
+*.docx
+*.xlsx
+*.py
+*.pl
+*.ps1
+__pycache__/
+.claude/
+.agents/
+business-strategy/
+reviews/
+_offline-notes/
+scripts/
+tests/
+skills-lock.json
+build_shop_pages.js
+extract_inline_styles.js
