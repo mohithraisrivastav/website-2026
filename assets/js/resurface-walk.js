@@ -31,7 +31,7 @@ async function main() {
     const orig = $('#gw-original');
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 3));   // render at the screen's own density; anything less is upscaled and soft
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));   // capped at 2: 3x with antialiasing needs a very large frame buffer and crashes phones
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
     const MAX_ANISO = renderer.capabilities.getMaxAnisotropy();
@@ -120,7 +120,7 @@ async function main() {
     /* Wall lettering is painted at the density it is seen at. A text wall is framed to fill the screen width,
        so each panel gets at least one texel per screen pixel across its width, plus headroom for pinch zoom,
        within what the GPU allows. */
-    const SCREEN_PX = Math.round(innerWidth * Math.min(devicePixelRatio, 3));
+    const SCREEN_PX = Math.round(innerWidth * Math.min(devicePixelRatio, 2));
     const HEADROOM = 1.35;
     const MAX_TEX = Math.min(renderer.capabilities.maxTextureSize, 8192);
     const BASE_PPM = COLUMN ? 1000 : 720;
