@@ -18,7 +18,6 @@
             { start: '2026-09-02', end: '2026-09-02', label: '2 September 2026 – Goa' },
             { start: '2026-09-11', end: '2026-09-11', label: '11 September 2026 – Goa' },
             { start: '2026-10-12', end: '2026-10-12', label: '12 October 2026 – Goa' },
-            { start: '2026-11-09', end: '2026-11-09', label: '9 November 2026 – Goa' },
             { start: '2026-12-05', end: '2026-12-05', label: '5 December 2026 – Goa' },
             { start: '2027-02-01', end: '2027-02-01', label: '1 February 2027 – Goa' },
             { start: '2027-03-03', end: '2027-03-03', label: '3 March 2027 – Goa' }
